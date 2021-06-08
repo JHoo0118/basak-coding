@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>바삭 코딩 | 쉽게 배우는 코딩</title>
+	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
+	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+  	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+</head>
+
+<body style="background-color: #1e1e1e;">
+	<!-- Navbar -->
+	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
+	<!-- 메인 섹션 시작 -->
+	<section class="main">
+		<div class="bg-video">
+		    <div class="bg-wrapper"></div>
+		    <video class="bg-video__content" autoplay muted loop>
+		      <source th:src="@{/images/video.mp4}" type="video/mp4" />
+		      <source th:src="@{/images/video.webm}" type="video/webm" />
+		    </video>
+		</div>
+	    <div class="main__box">
+		    <h4 class="main__text">
+		        <span class="text-style-1">손</span>으로 하는&nbsp;<span class="text-style-1">진짜&nbsp;</span>
+		        <span class="text-style-2">코딩 공부</span>
+		    </h4>
+		    <h4 class="main__logo">BASAK CODING</h4>
+		    <hr class="main__hr" />
+		    <div class="
+		          d-flex
+		          justify-content-center
+		          main__bottom
+		          flex-column
+		          align-items-center
+		        ">
+		        <h4 class="main__createdBy">Created by BASAK CODING</h4>
+		        <a class="button button--rounded" style="margin-top: 12.8rem" th:href="@{/personal/dashboard}">코딩 공부 시작하기</a>
+		    </div>
+		</div>
+	</section>
+	<!-- 메인 섹션 끝 -->
+</body>
+
+</html>

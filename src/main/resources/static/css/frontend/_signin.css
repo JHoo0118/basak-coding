@@ -1,0 +1,146 @@
+.signin {
+  background-color: #1e1e1e;
+  padding-top: 7rem;
+  height: 100%;
+  min-height: 100vh;
+}
+
+.signin__container {
+  margin: 0 auto;
+  width: 55rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signin__container .signin__title {
+  padding-top: 12rem;
+  padding-bottom: 4.4rem;
+  font-size: 3.6rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+}
+
+.form__group {
+  width: 100%;
+  height: 60px;
+  margin-bottom: 6.6rem;
+}
+
+.form__group .form__input {
+  outline: 0;
+  height: 90px;
+  padding: 2rem 2.5rem;
+  background-color: transparent;
+  border: 1px solid #383a43;
+  border-radius: 6px;
+  font-size: 2.4rem;
+  color: #fff;
+}
+
+.form__group .form__input.error {
+	border-color: #ff9300 !important;
+}
+
+.form__inner {
+  margin-bottom: 5rem;
+}
+
+.form__group .form__input:focus {
+  box-shadow: none;
+}
+
+.form__group .form__input::placeholder {
+  color: #777;
+  font-size: 2rem;
+}
+
+.form__group .labe__text {
+  color: #fff;
+  font-size: 1.6rem;
+  padding-top: 4rem;
+}
+
+.form__group small {
+  color: #fff;
+  display: inline-block;
+  margin-top: .5rem;
+  font-size: 14px;
+}
+
+.form__group small.error {
+	color: #ff9300 !important;
+}
+
+.signin .signin__link {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.6rem;
+  margin-top: 10px;
+  color: #fff;
+}
+
+.signin .signin__link span {
+  color: #777;
+}
+
+.signin .signin__link a {
+  cursor: pointer;
+}
+
+.signin .signin__toSignup {
+  padding-top: 6rem;
+  cursor: pointer;
+  color: #777;
+  margin-bottom: 6rem;
+  text-decoration: underline;
+  font-size: 1.5rem;
+}
+
+.signin .signin__toSignup>span {
+  color: #f3981c;
+}
+
+.confirm__text {
+  font-size: 1.6rem;
+  color: #0fd;
+  margin-bottom: .8rem;
+}
+
+@media (max-width: 992px) {
+  .form__group small {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .form__group {
+    margin-bottom: 8rem;
+  }
+
+  .signin__container .signin__title {
+    font-size: 3rem;
+  }
+
+}
+
+@media (max-width: 576px) {
+
+  .signin__container,
+  .signup__confirm {
+    width: 90%;
+  }
+
+  .form__group {
+    margin-bottom: 5rem;
+  }
+
+  .form__group .form__input {
+    height: 70px;
+    padding: 2rem;
+  }
+
+}

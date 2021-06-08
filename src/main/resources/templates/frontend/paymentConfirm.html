@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>바삭 코딩 | 결제 완료</title>
+	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
+	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+  	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+</head>
+
+<body>
+   	<!-- Navbar -->
+	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
+
+    <section class="payment">
+        <div class="container-fluid container--main">
+            <div class="payment__result">
+                <h2 class="result__title">신중한라이언I45님! 결제가 완료되었습니다.</h2>
+                <span>이제 공부를 시작해볼까요?</span>
+            </div>
+            <div class="payment__package">
+                <img class="package__img" th:src="@{/images/image4.jpg}" />
+                <div class="package__info">
+                    <div class="info__left">
+                        <div class="info__title">Try Your Code LION!</div>
+                        <div class="info__category">ETC</div>
+                    </div>
+                    <ul class="info__right">
+                        <li>
+                            <span>강사</span>
+                            <b>정미나</b>
+                        </li>
+                        <li>
+                            <span>수강기간</span>
+                            <b>2021.06.04 ~ 2021.07.16</b>
+                        </li>
+                    </ul>
+                </div>
+                <div class="package__brand">CODE</div>
+            </div>
+            <div class="payment__summary">
+                <div class="price__box">
+                    <div class="price__left">결제일시</div>
+                    <div class="price__right text__color--green">2021.06.04 17:30:30</div>
+                </div>
+                <div class="price__box">
+                    <div class="price__left">결제 수단</div>
+                    <div class="price__right text__color--green">네이버페이</div>
+                </div>
+                <div class="price__box">
+                    <div class="price__left">결제 금액</div>
+                    <div class="price__right text__color--green">₩0원</div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <a th:href="@{/personal/dashboard}" class="button button--rounded" style="color: #0fd; margin-top: 60px">
+                        코딩공부 시작하기
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- footer -->
+    <div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
+</body>
+
+</html>

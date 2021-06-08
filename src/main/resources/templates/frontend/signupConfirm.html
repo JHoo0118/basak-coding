@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>바삭 코딩 | 이메일 인증</title>
+	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
+	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+  	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+</head>
+
+<body>
+    <!-- Navbar -->
+	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
+
+    <!-- 회원가입 시작 -->
+    <section class="signin">
+        <div class="container-fluid signin__container">
+            <h2 class="signin__title">회원가입 인증 요청</h2>
+            <form class="row">
+                <h4 class="confirm__text">이메일 인증 후 바삭 코딩을 이용해주세요!</h4>
+                <div class="form-group form__group pb-3 position-relative">
+                    <div class="col-sm-12 p-0">
+                        <input type="text" class="form-control form__input" placeholder="인증번호를 입력해주세요"
+                            name="emailValid" />
+                    </div>
+                    <!-- <small>에러 메세지</small> -->
+                </div>
+                <h5 class="signin__link">
+                    <span class="d-block">앗! 인증메일이 사라지셨나요?</span><a href="javascript:void(0)"
+                        style="text-decoration: underline;">인증 코드 재발급</a>
+                </h5>
+                <a href="javascript:void(0)" class="button button--rounded button--full"
+                    style="color: #0fd; margin-top: 60px">
+                    인증하기
+                </a>
+            </form>
+        </div>
+    </section>
+    <!-- 회원가입 끝 -->
+
+    <!-- footer -->
+    <div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
+</body>
+
+</html>

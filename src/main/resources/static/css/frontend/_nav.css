@@ -1,0 +1,105 @@
+/* 
+    검은색(배경): #1e1e1e
+    민트색(글자 및 배경): #00ffdd
+    흰색(바탕 및 글씨): #fff
+    검은 글자 색: #212224 
+*/
+
+.navbar-bg {
+  z-index: 10000;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  background-color: #1e1e1e;
+  color: #fff;
+  height: 7rem;
+  width: 100%;
+}
+
+.navbar__brand {
+  font-size: 2.8rem;
+  margin-right: 8px;
+}
+
+.navbar__item {
+  font-size: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.navbar__item:hover {
+  color: #0fd;
+}
+
+.navbar__wrapper {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar__wrapper .navbar__menu {
+  display: flex;
+  list-style: none;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar__link {
+  font-size: 1.5rem;
+  margin: 0 !important;
+}
+
+.navbar__profile {
+  width: 3.2rem;
+  border: 1px solid #777;
+  border-radius: 50px;
+  object-fit: cover;
+}
+
+.dropdown--btn {
+  border: none;
+}
+
+.dropdown--btn::after {
+  color: #fff;
+}
+
+.dropdown__menu {
+  background-color: #1e1e1e;
+  color: #fff;
+  border: 1px solid #0fd;
+  padding: 1rem 1.4rem;
+}
+
+.dropdown__item {
+  font-size: 1.4rem;
+}
+
+.dropdown__item:not(:last-child) {
+  text-align: right;
+  padding: 0;
+}
+
+.dropdown__item:hover {
+  background: transparent;
+  color: #0fd;
+}
+
+@media (max-width: 768px) {}
+
+@media (max-width: 576px) {
+  .navbar__brand {
+    font-size: 2rem;
+  }
+
+  .navbar__item {
+    font-size: 1.2rem;
+  }
+
+  .navbar__item .navbar__link.button {
+    font-size: 1.2rem;
+    padding: 0.8rem 0rem;
+    width: 7rem;
+  }
+}

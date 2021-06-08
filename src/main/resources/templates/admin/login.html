@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>바삭 코딩 | 관리자</title>
+	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" th:href="@{/css/admin/main.css}" />
+	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+  	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+</head>
+<body>
+	<div class="container container--admin">
+		<form name="loginForm" method="post" action="">
+			<h4>로그인</h4>
+			<div class="form-group row pb-2 position-relative">
+				<label for="email" class="col-sm-3 col-form-label py-3">이메일</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control py-3" id="loginEmail" placeholder="이메일" name="adminName">
+				</div>
+				<small>에러 메세지</small>
+			</div>
+			<div class="form-group row pb-2 position-relative">
+				<label for="password" class="col-sm-3 col-form-label py-3">비밀번호</label>
+				<div class="col-sm-9">
+					<input type="password" class="form-control py-3" id="loginPassword" placeholder="비밀번호" name="password">
+				</div>
+				<small>에러 메세지</small>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-12">
+					<button type="submit" class="button button--purple button--full mt-2">로그인</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

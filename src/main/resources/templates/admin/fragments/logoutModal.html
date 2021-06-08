@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+	
+	<div th:fragment="fragment-logout">
+		<!-- MODAL -->
+		<div class="modal fade" id="modalLogout">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">로그아웃</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						정말 로그아웃 하시겠습니까?
+					</div>
+					<div class="modal-footer">
+						<a class="btn" style="color:inherit;" href="javascript:void(0)">예</a>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">아니요</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- END (MODAL) -->
+	</div>
+	
+</html>

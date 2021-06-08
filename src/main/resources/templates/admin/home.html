@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>바삭 코딩 | 관리자</title>
+	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" th:href="@{/css/admin/main.css}" />
+	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+  	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+</head>
+<body>
+	<!-- Header -->
+	<div th:replace="/admin/fragments/header.html :: fragment-header"></div>
+	
+	<section class="pt-5">
+		<div class="container-fluid pt-4">
+			<div class="row">
+				<div class="col-xl-10 col-lg-9 col-md-8 ml-auto">
+					<div class="row mb-4 align-items-center">
+						<div class="col-xl-6 col-12 mb-4 mb-xl-0">
+							<div class="bg-dark text-white p-4 rounded">
+								<h4 class="mb-5">가입 연령대</h4>
+								<h6 class="mb-3">10대</h6>
+								<div class="progress mb-4" style="height: 20px">
+									<div class="progress-bar progress-bar-striped font-weight-bold"
+										style="width: 25%">25%</div>
+								</div>
+								<h6 class="mb-3">20대</h6>
+								<div class="progress mb-4" style="height: 20px">
+									<div
+										class="progress-bar progress-bar-striped font-weight-bold bg-success"
+										style="width: 40%">40%</div>
+								</div>
+								<h6 class="mb-3">30대</h6>
+								<div class="progress mb-4" style="height: 20px">
+									<div
+										class="progress-bar progress-bar-striped font-weight-bold bg-danger"
+										style="width: 15%">15%</div>
+								</div>
+								<h6 class="mb-3">40대</h6>
+								<div class="progress mb-4" style="height: 20px">
+									<div
+										class="progress-bar progress-bar-striped font-weight-bold bg-info"
+										style="width: 10%">10%</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-6 col-12">
+							<h4 class="text-muted p-3 mb-3">할 일:</h4>
+							<div class="container-fluid bg-white">
+								<div class="row py-3 mb-4 task-border align-items-center">
+									<div class="col-1">
+										<input type="checkbox" checked>
+									</div>
+									<div class="col-sm-9 col-8">사용자 관리하기.</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>edit</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-edit fa-lg text-success mr-2"></i></a>
+									</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>delete</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-trash-alt fa-lg text-danger"></i></a>
+									</div>
+								</div>
+							</div>
+							<div class="container-fluid bg-white">
+								<div class="row py-3 mb-4 task-border align-items-center">
+									<div class="col-1">
+										<input type="checkbox" checked>
+									</div>
+									<div class="col-sm-9 col-8">카테고리 관리하기.</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>edit</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-edit fa-lg text-success mr-2"></i></a>
+									</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>delete</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-trash-alt fa-lg text-danger"></i></a>
+									</div>
+								</div>
+							</div>
+							<div class="container-fluid bg-white">
+								<div class="row py-3 mb-4 task-border align-items-center">
+									<div class="col-1">
+										<input type="checkbox" checked>
+									</div>
+									<div class="col-sm-9 col-8">게시물 관리하기.</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>edit</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-edit fa-lg text-success mr-2"></i></a>
+									</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>delete</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-trash-alt fa-lg text-danger"></i></a>
+									</div>
+								</div>
+							</div>
+							<div class="container-fluid bg-white">
+								<div class="row py-3 mb-4 task-border align-items-center">
+									<div class="col-1">
+										<input type="checkbox" checked>
+									</div>
+									<div class="col-sm-9 col-8">댓글 관리하기.</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>edit</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-edit fa-lg text-success mr-2"></i></a>
+									</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>delete</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-trash-alt fa-lg text-danger"></i></a>
+									</div>
+								</div>
+							</div>
+							<div class="container-fluid bg-white">
+								<div class="row py-3 mb-4 task-border align-items-center">
+									<div class="col-1">
+										<input type="checkbox" checked>
+									</div>
+									<div class="col-sm-9 col-8">좋아요 관리하기.</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>edit</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-edit fa-lg text-success mr-2"></i></a>
+									</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>delete</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-trash-alt fa-lg text-danger"></i></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<!-- Logout -->
+	<!--  <div th:replace="/admin/fragments/header.html :: fragment-logout"></div> -->
+	
+	<!-- MODAL -->
+	<div class="modal fade" id="modalLogout">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">로그아웃</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					정말 로그아웃 하시겠습니까?
+				</div>
+				<div class="modal-footer">
+					<a class="btn" style="color:inherit;" href="javascript:void(0)">예</a>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">아니요</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END (MODAL) -->
+	
+</body>
+</html>

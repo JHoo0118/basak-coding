@@ -1,0 +1,150 @@
+/* 배경 비디오 */
+.bg-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100% !important;
+  width: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.bg-wrapper {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 100;
+  background-blend-mode: luminosity;
+  background-image: linear-gradient(180deg,
+      rgba(0, 0, 0, 0.8),
+      rgba(0, 0, 0, 0.8));
+}
+
+.bg-video__content {
+  width: 100%;
+  object-fit: cover;
+  position: absolute;
+  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* 메인 */
+.main {
+  position: relative;
+  height: 100vh;
+  padding-top: 7rem;
+  flex-grow: 1;
+}
+
+.main__box {
+  position: absolute;
+  width: 100%;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.main__hr {
+  width: 100%;
+  margin-top: 60px;
+  margin-bottom: 20px;
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #919191;
+}
+
+.main__text {
+  font-size: 5rem;
+  font-weight: 100;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.09;
+  letter-spacing: normal;
+  text-align: -webkit-center;
+  color: #fff;
+  padding-top: 200px;
+}
+
+.main__logo {
+  font-size: 4.5rem;
+  font-weight: 100;
+  margin-top: 40px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.09;
+  letter-spacing: normal;
+  text-align: -webkit-center;
+  color: #fff;
+}
+
+.main__bottom {
+  color: #fff;
+}
+
+.main__bottom .main__createdBy {
+  font-size: 20px;
+}
+
+@media (min-width: 1200px) {}
+
+@media (max-width: 992px) {
+  .bg-video {
+    height: 100vh;
+  }
+
+  .main__box {
+    transform: translate(-50%, -50%);
+  }
+
+  .main__text {
+    font-size: 42px;
+    padding-top: 100px;
+  }
+
+  .main__logo {
+    font-size: 42px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main__text {
+    font-size: 32px;
+    padding-top: 80px;
+  }
+
+  .main__box {
+    transform: translate(-50%, -40%);
+  }
+
+  .main__logo {
+    font-size: 32px;
+  }
+
+  .bg-video {
+    min-height: 600px;
+  }
+}
+
+@media (max-width: 576px) {
+  .main__text {
+    font-size: 22px;
+    padding-top: 0;
+  }
+
+  .main__logo {
+    font-size: 22px;
+  }
+
+  .bg-video {
+    height: 400px;
+  }
+}

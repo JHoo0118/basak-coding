@@ -1,0 +1,200 @@
+/* 
+    검은색(배경): #1e1e1e
+    민트색(글자 및 배경): #0fd
+    흰색(바탕 및 글씨): #fff
+    검은 글자 색: #212224 
+    주황색: #f3981c;
+*/
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+*,
+*::before *::after {
+  margin: 0;
+  padding: 0;
+}
+
+*:focus {
+  outline: none !important;
+}
+
+html {
+  box-sizing: inherit;
+  font-size: 62.5%;
+}
+
+body {
+  box-sizing: border-box;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.navbar {
+  padding: 0 15px;
+  z-index: 1000;
+}
+
+a,
+a:link,
+a:visited {
+  color: inherit;
+  text-decoration: none;
+}
+
+.container--main {
+  position: relative;
+  padding: 0 2rem;
+  max-width: 1000px;
+}
+
+.button {
+  border-radius: 4px;
+  width: 9rem;
+  color: #fff;
+  padding: 0.8rem;
+  background-color: transparent;
+  border: 1px solid #0fd;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  display: block;
+  transition: color 0.4s;
+}
+
+.button:hover {
+  text-decoration: none;
+  color: #0fd;
+}
+
+.button--rounded {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #0fd;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff !important;
+  border-radius: 40px;
+  width: 500px;
+  height: 7rem;
+  transition: background-color 0.4s;
+}
+
+.button--rounded:hover {
+  background-color: #0fd;
+  color: #1e1e1e !important;
+}
+
+.button--rounded.button--orange {
+  border: 2px solid #f3981c;
+}
+
+.button--rounded.button--orange:hover {
+  background-color: #f3981c;
+  color: #fff !important;
+}
+
+.button--rounded:disabled {
+  cursor: default;
+  border-color: #383a43 !important;
+  color: #919191 !important;
+}
+
+.button--rounded:disabled:hover {
+  color: #919191 !important;
+  background-color: transparent !important;
+  border-color: #383a43 !important;
+}
+
+.button--square {
+  border-radius: 4px;
+  width: 10rem;
+  color: #fff;
+  padding: 1rem;
+  background-color: #ff9300;
+  border: 1px solid #ff9300;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  display: block;
+  transition: color 0.4s;
+}
+
+
+.button--full {
+  width: 100% !important;
+}
+
+.button--sm {
+  width: 20rem;
+  height: 6rem;
+}
+
+.text-style-1 {
+  font-weight: 700;
+}
+
+.text-style-2 {
+  font-weight: 700;
+  color: #0fd;
+}
+
+.iine-clamp {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-line-clamp: 1;
+}
+
+.iine-clamp--3 {
+  -webkit-line-clamp: 3 !important;
+}
+
+
+.iine-clamp--4 {
+  -webkit-line-clamp: 4 !important;
+}
+
+/* 1rem = 10px */
+
+@media (max-width: 1200px) {
+  html {
+    font-size: 56.25%;
+  }
+}
+
+@media (max-width: 992px) {
+  html {
+    font-size: 50%;
+  }
+
+  .button--rounded {
+    width: 400px;
+    font-size: 18px;
+    margin-top: 60px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .button--rounded {
+    width: 200px;
+    font-size: 16px;
+    margin-top: 40px !important;
+  }
+}
+
+@media (max-width: 576px) {
+
+  .button--sm {
+    width: 15rem;
+    height: 5rem;
+  }
+}
+
+@media (min-width: 1800px) {
+  html {
+    font-size: 75%;
+  }
+}

@@ -1,0 +1,26 @@
+# 서버 포트 설정
+server:
+  port: 9090
+
+# hikari - 커넥션 풀 설정
+# username과 password는 오라클 계정 정보 입력
+spring:
+  datasource:
+    hikari:
+      driver-class-name: oracle.jdbc.OracleDriver
+      jdbc-url: jdbc:oracle:thin:@127.0.0.1:1521:xe
+      username: basak
+      password: basak
+      maximum-pool-size: 12
+      minimum-idle: 5
+      auto-commit: true
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@127.0.0.1:1521:xe
+
+# MyBatis
+# 패키지 경로에 따라 다르게 설정
+mybatis:
+  mapper-locations: mybatis/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.basakcoding.basak.service

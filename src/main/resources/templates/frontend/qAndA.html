@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>바삭 코딩 | 질문 & 댓글</title>
+	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
+	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+  	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+</head>
+
+<body style="background-color: #1e1e1e;">
+   	<!-- Navbar -->
+	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
+
+    <!-- 메인 섹션 시작 -->
+    <section class="dashboard">
+        <div class="container-fluid container--main">
+            <div class="dashboard__common">
+                <div class="common__left">
+                    <input id="userImage" type="file" accept="image/*" name="file" style="display: none;" />
+                    <label class="position-relative rounded-circle" for="userImage">
+                        <img th:src="@{/images/image4.jpg}" alt="프로필 이미지" />
+                        <i class="fa fa-plus-circle"></i>
+                    </label>
+                </div>
+                <h1 class="common__middle">신중한라이언I45</h1>
+                <div class="common__vertical"></div>
+                <div class="common__right row m-0">
+                    <div class="right__box col-6">
+                        <h4>수강 중인 코스</h4>
+                        <span>1</span>
+                    </div>
+                    <div class="right__box col-6">
+                        <h4>수강 만료 코스</h4>
+                        <span>1</span>
+                    </div>
+                    <div class="right__box col-6">
+                        <h4>나의 질문</h4>
+                        <span>2</span>
+                    </div>
+                    <div class="right__box col-6">
+                        <h4>나의 답변</h4>
+                        <span>0</span>
+                    </div>
+                </div>
+            </div>
+            <nav class="dashboard__tab">
+                <div class="nav nav-tabs" id="nav-tab">
+                    <a class="nav-link tab__link" th:href="@{/personal/dashboard}"href="/dashboard.html">나의
+                        대시보드</a>
+                    <a class="nav-link tab__link" th:href="@{/personal/profile}">나의
+                        프로필</a>
+                    <a class="nav-link tab__link active" th:href="@{/personal/qAndA/questions?page=1}">나의
+                        질문답변</a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- 나의 질문 시작 -->
+        <div class="tab-pane tab__page fade show tab__content">
+            <div class="container-fluid container--main">
+                <ul class="nav nav-pills mb-3 row" id="pills-tab">
+                    <li class="nav-item tab__menu col-4 p-0">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-question">나의
+                            질문</a>
+                        <i class="fas fa-circle"></i>
+                    </li>
+                    <li class="nav-item tab__menu col-4 p-0">
+                        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-answer">나의 문의</a>
+                        <i class="fas fa-circle"></i>
+                    </li>
+                    <li class="nav-item tab__menu col-4 p-0">
+                        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-comment">나의 댓글</a>
+                        <i class="fas fa-circle"></i>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active d-flex justify-content-center" id="pills-question">
+                        <!-- <div class="notExist">
+              <div class="notExist__inner">
+                <div class="inner__full">
+                  <p>궁금한 점이 생기면, 수강 화면 좌측 탭의<br />
+                    Ask a Question 클릭하여 질문해주세요</p>
+                </div>
+              </div>
+            </div> -->
+                        <ul class="qAndA">
+                            <li class="qAndA__box row m-0" data-toggle="modal" data-target="#questionModal">
+                                <div class="qAndA__left col-2">
+                                    <span><i class="far fa-thumbs-up"></i>6</span>
+                                </div>
+                                <div class="qAndA__middle col-8">
+                                    <span>4시간 전</span>
+                                    <h4 class="iine-clamp">강의 잘 듣고 있습니다.</h4>
+                                </div>
+                                <div class="qAndA__right col-2">
+                                    <span><i class="far fa-comment-dots"></i>2</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class=" tab-pane fade d-flex justify-content-center" id="pills-answer">
+                        <!-- <div class="notExist">
+              <div class="notExist__inner">
+                <div class="inner__full">
+                  <p>여러분이 알고 있는 지식을 다른 분들과 공유하고 싶다면,<br />
+                    수강 화면 좌측 탭의 ? 클릭하여 답변해주세요</p>
+                </div>
+              </div>
+            </div> -->
+                        <ul class="qAndA">
+                            <li class="qAndA__box row m-0" data-toggle="modal" data-target="#inquiryModal">
+                                <div class="qAndA__left col-2">
+                                    <span>문의</span>
+                                </div>
+                                <div class="qAndA__middle col-8">
+                                    <span>4시간 전</span>
+                                    <h4 class="iine-clamp">문의 제목</h4>
+                                </div>
+                                <div class="qAndA__right col-2">
+                                    <span>문의</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane fade d-flex justify-content-center" id="pills-comment">
+                        <!-- <div class="notExist">
+              <div class="notExist__inner">
+                <div class="inner__full">
+                  <p>여러분이 알고 있는 지식을 다른 분들과 공유하고 싶다면,<br />
+                    수강 화면 좌측 탭의 ? 클릭하여 답변에 댓글을 달아주세요</p>
+                </div>
+              </div>
+            </div> -->
+                        <ul class="qAndA">
+                            <li class="qAndA__box row m-0" data-toggle="modal" data-target="#questionModal">
+                                <div class="qAndA__left col-2">
+                                    <span>댓글</span>
+                                </div>
+                                <div class="qAndA__middle col-8">
+                                    <span>4시간 전</span>
+                                    <h4 class="iine-clamp">강의 잘 듣고 있습니다.</h4>
+                                </div>
+                                <div class="qAndA__right col-2">
+                                    <span><i class="far fa-comment-dots"></i></span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 나의 질문 끝 -->
+
+        <!-- 나의 질문 모달 시작 -->
+        <div class="modal fade" id="questionModal">
+            <div class="qmodal__dialog modal-dialog">
+                <div class="modal-content qModal__body">
+                    <div class="modal-header qModal__header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span style="color: #fff;">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body p-0">
+                        <div class="qModal__box">
+                            <div class="qModal__upper">
+                                <div class="comment__user">
+                                    <img th:src="@{/images/user.png}" />
+                                    <div class="user__info">
+                                        <h5>질문자</h5>
+                                        <span>4시간 전</span>
+                                    </div>
+                                </div>
+                                <h3 class="qModal__title">강의 잘 듣고 있습니다.</h3>
+                                <p class="qModal__content">안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문
+                                    삭제 기능은 어디
+                                    있나요?ㅠㅠ</p>
+                                <span class="qModal__updated">4시간 전에 수정됨</span>
+                                <div class="qModal__state">
+                                    <div class="state__left">
+                                        <div class="state__like">
+                                            <a href="javascript:void(0)"><span><i class="far fa-thumbs-up"></i>6</span></a>
+                                            <span><i class="far fa-comment-dots"></i>6</span>
+                                        </div>
+                                        <div class="state__edit">
+                                            <span data-toggle="modal" data-target="#formModal">수정하기</span>
+                                        </div>
+                                    </div>
+                                    <div class="state__right">
+                                        <span data-toggle="modal" data-target="#formModal">답변 작성하기</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="qModal__lower">
+                                <ul class="comment__list">
+                                    <li class="comment__item">
+                                        <div class="comment__user">
+                                            <img th:src="@{/images/user.png}" />
+                                            <div class="user__info">
+                                                <h5 style="color: #0fd">강사</h5>
+                                                <span>4시간 전</span>
+                                            </div>
+                                        </div>
+                                        <p class="qModal__content">안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
+                                            있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
+                                            있나요?ㅠㅠ</p>
+                                    </li>
+                                    <li class="comment__item">
+                                        <div class="comment__user">
+                                            <img th:src="@{/images/user.png}" />
+                                            <div class="user__info">
+                                                <h5>질문자</h5>
+                                                <span>4시간 전</span>
+                                            </div>
+                                        </div>
+                                        <p class="qModal__content">안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
+                                            있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
+                                            있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은
+                                            어디
+                                            있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은
+                                            어디
+                                            있나요?ㅠㅠ
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 나의 질문 모달 끝 -->
+
+        <!-- 나의 문의 모달 시작 -->
+        <div class="modal fade" id="inquiryModal">
+            <div class="qmodal__dialog modal-dialog">
+                <div class="modal-content qModal__body">
+                    <div class="modal-header qModal__header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span style="color: #fff;">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body p-0">
+                        <div class="qModal__box">
+                            <div class="qModal__upper">
+                                <div class="comment__user">
+                                    <img th:src="@{/images/user.png}" />
+                                    <div class="user__info">
+                                        <h5>질문자</h5>
+                                        <span>4시간 전</span>
+                                    </div>
+                                </div>
+                                <h3 class="qModal__title">문의 제목</h3>
+                                <p class="qModal__content">안녕하세요. 문의 내용입니다.</p>
+                                <span class="qModal__updated">4시간 전에 수정됨</span>
+                                <div class="qModal__state">
+                                    <div class="state__left">
+                                        <div class="state__like">
+                                            <span>문의 분류</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="qModal__lower">
+                                <ul class="comment__list">
+                                    <li class="comment__item">
+                                        <div class="comment__user">
+                                            <img th:src="@{/images/user.png}" />
+                                            <div class="user__info">
+                                                <h5>답변자</h5>
+                                                <span>4시간 전</span>
+                                            </div>
+                                        </div>
+                                        <p class="qModal__content">문의 답변</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 나의 문의 모달 끝 -->
+
+        <!-- 폼 모달 -->
+        <div class="modal fade" id="formModal">
+            <div class="modal-dialog fModal__dialog">
+                <div class="modal-content fModal__body">
+                    <div class="modal-header fModal__header">
+                        <h3>강의 잘 듣고 있습니다</h3>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body p-0">
+                        <div class="fModal__box">
+                            <form>
+                                <textarea class="form-control"
+                                    placeholder="수업을 진행하면서 궁금한 코딩 관련 질문을 등록해 주세요.">안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ</textarea>
+                            </form>
+                            <div class="flex__end">
+                                <button class="button--square mt-5">수정하기</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 폼 모달 끝 -->
+
+    </section>
+    <!-- 메인 섹션 끝 -->
+</body>
+
+</html>

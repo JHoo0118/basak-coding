@@ -1,0 +1,162 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<title>관리자 페이지</title>
+
+<!-- BOOTSTRAP CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+<!-- CUSTOM STYLE -->
+<link rel="stylesheet" href="/css/admin/main.css" />
+
+<!-- FONT AWESOME -->
+<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
+
+<!-- BOOTSTRAP JS -->
+<script defer src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+</head>
+<body>
+	<c:import url="/admin/header.jsp">
+		<c:param name="pageTitle" value="homePage" />
+	</c:import>
+	<section class="pt-5">
+		<div class="container-fluid pt-4">
+			<div class="row">
+				<div class="col-xl-10 col-lg-9 col-md-8 ml-auto">
+					<div class="row mb-4 align-items-center">
+						<div class="col-xl-6 col-12 mb-4 mb-xl-0">
+							<div class="bg-dark text-white p-4 rounded">
+								<h4 class="mb-5">가입 연령대</h4>
+								<h6 class="mb-3">10대</h6>
+								<div class="progress mb-4" style="height: 20px">
+									<div class="progress-bar progress-bar-striped font-weight-bold"
+										style="width: 25%">25%</div>
+								</div>
+								<h6 class="mb-3">20대</h6>
+								<div class="progress mb-4" style="height: 20px">
+									<div
+										class="progress-bar progress-bar-striped font-weight-bold bg-success"
+										style="width: 40%">40%</div>
+								</div>
+								<h6 class="mb-3">30대</h6>
+								<div class="progress mb-4" style="height: 20px">
+									<div
+										class="progress-bar progress-bar-striped font-weight-bold bg-danger"
+										style="width: 15%">15%</div>
+								</div>
+								<h6 class="mb-3">40대</h6>
+								<div class="progress mb-4" style="height: 20px">
+									<div
+										class="progress-bar progress-bar-striped font-weight-bold bg-info"
+										style="width: 10%">10%</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-6 col-12">
+							<h4 class="text-muted p-3 mb-3">할 일:</h4>
+							<div class="container-fluid bg-white">
+								<div class="row py-3 mb-4 task-border align-items-center">
+									<div class="col-1">
+										<input type="checkbox" checked>
+									</div>
+									<div class="col-sm-9 col-8">사용자 관리하기.</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>edit</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-edit fa-lg text-success mr-2"></i></a>
+									</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>delete</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-trash-alt fa-lg text-danger"></i></a>
+									</div>
+								</div>
+							</div>
+							<div class="container-fluid bg-white">
+								<div class="row py-3 mb-4 task-border align-items-center">
+									<div class="col-1">
+										<input type="checkbox" checked>
+									</div>
+									<div class="col-sm-9 col-8">카테고리 관리하기.</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>edit</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-edit fa-lg text-success mr-2"></i></a>
+									</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>delete</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-trash-alt fa-lg text-danger"></i></a>
+									</div>
+								</div>
+							</div>
+							<div class="container-fluid bg-white">
+								<div class="row py-3 mb-4 task-border align-items-center">
+									<div class="col-1">
+										<input type="checkbox" checked>
+									</div>
+									<div class="col-sm-9 col-8">게시물 관리하기.</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>edit</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-edit fa-lg text-success mr-2"></i></a>
+									</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>delete</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-trash-alt fa-lg text-danger"></i></a>
+									</div>
+								</div>
+							</div>
+							<div class="container-fluid bg-white">
+								<div class="row py-3 mb-4 task-border align-items-center">
+									<div class="col-1">
+										<input type="checkbox" checked>
+									</div>
+									<div class="col-sm-9 col-8">댓글 관리하기.</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>edit</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-edit fa-lg text-success mr-2"></i></a>
+									</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>delete</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-trash-alt fa-lg text-danger"></i></a>
+									</div>
+								</div>
+							</div>
+							<div class="container-fluid bg-white">
+								<div class="row py-3 mb-4 task-border align-items-center">
+									<div class="col-1">
+										<input type="checkbox" checked>
+									</div>
+									<div class="col-sm-9 col-8">좋아요 관리하기.</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>edit</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-edit fa-lg text-success mr-2"></i></a>
+									</div>
+									<div class="col-1">
+										<a href="javascript:void(0)" data-toggle="tooltip"
+											title="<h6>delete</h6>" data-html="true" data-placement="top"><i
+											class="fas fa-trash-alt fa-lg text-danger"></i></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+</html>

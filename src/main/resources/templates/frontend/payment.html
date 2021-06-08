@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>바삭 코딩 | 결제</title>
+	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
+	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+  	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+</head>
+
+<body>
+   	<!-- Navbar -->
+	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
+
+    <section class="payment">
+        <div class="container-fluid container--main">
+            <div class="payment__title">결제하기</div>
+            <div class="payment__subTitle">결제내역</div>
+            <div class="payment__package">
+                <img class="package__img" th:src="@{/images/image4.jpg}" />
+                <div class="package__info">
+                    <div class="info__left">
+                        <div class="info__title">Try Your Code LION!</div>
+                        <div class="info__category">ETC</div>
+                    </div>
+                    <ul class="info__right">
+                        <li>
+                            <span>강사</span>
+                            <b>정미나</b>
+                        </li>
+                        <li>
+                            <span>수강기간</span>
+                            <b>2021.06.04 ~ 2021.07.16</b>
+                        </li>
+                    </ul>
+                </div>
+                <div class="package__brand">CODE</div>
+            </div>
+            <form class="row payment__info">
+                <div class="col-sm-12 col-lg-6 payment__left">
+                    <div class="payment__subTitle">구매자 정보</div>
+                    <div class="form-group form__group p-0 position-relative">
+                        <div class="p-0">
+                            <input type="email" autocomplete="off" readonly
+                                class="form-control form__input input__payment" name="email" value="abcd@test.com" />
+                        </div>
+	                    <!-- 에러 출력용 -->
+	                    <small class="error"></small>
+                    </div>
+                    <div class="form-group form__group p-0 position-relative">
+                        <div class="p-0">
+                            <input type="text" autocomplete="off"
+                                class="form-control form__input error input__payment input__payment--border"
+                                placeholder="실명을 입력해주세요" name="name" />
+                        </div>
+	                    <!-- 에러 출력용 -->
+	                    <small class="error"></small>
+                    </div>
+                    <div class="form-group form__group p-0 position-relative">
+                        <div class="p-0">
+                            <input type="text" autocomplete="off"
+                                class="form-control form__input input__payment input__payment--border"
+                                placeholder="핸드폰 번호를 입력해주세요" name="phone" />
+                        </div>
+                        <small>결제 및 환불 정보 전달을 위해 휴대폰 번호 11자리(하이픈 제외)를 입력해주세요.</small>
+                    </div>
+
+                </div>
+                <div class="col-sm-12 col-lg-6 payment__right">
+                    <div class="payment__subTitle">결제 수단</div>
+                    <div class="form-group form__group p-0 position-relative">
+                        <div class="form-group form__group row m-0">
+                            <div class="payment__method col-4">
+                                <div class="form__check">
+                                    <input type="radio" id="creditcard" name="method" checked />
+                                    <label title for="creditcard" class="check__label">신용카드</label>
+                                </div>
+                            </div>
+                            <div class="payment__method col-4">
+                                <div class="form__check">
+                                    <input type="radio" id="naver" name="method" />
+                                    <label title for="naver" class="check__label">네이버페이</label>
+                                </div>
+                            </div>
+                            <div class="payment__method col-4">
+                                <div class="form__check">
+                                    <input type="radio" id="globalpay" name="method" />
+                                    <label title for="globalpay" class="check__label">PayPal</label>
+                                </div>
+                            </div>
+                            <div class="payment__method col-4">
+                                <div class="form__check">
+                                    <input type="radio" id="virtual" name="method" />
+                                    <label title for="virtual" class="check__label">가상계좌</label>
+                                </div>
+                            </div>
+                            <div class="payment__method col-4">
+                                <div class="form__check">
+                                    <input type="radio" id="transfer" name="method" />
+                                    <label title for="transfer" class="check__label">실시간 계좌이체</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="payment__notice">
+                        <p>실사용 도중 해지하는 경우 남은 기간에 대한 금액은 환불 정책에 따라 달라질 수 있습니다.</p>
+                    </div>
+                    <div class="payment__price">
+                        <div class="payment__subTitle">결제 정보</div>
+                        <div class="price__box">
+                            <div class="price__left">정가</div>
+                            <div class="price__right">100&nbsp;<span>원</span></div>
+                        </div>
+                        <div class="price__box">
+                            <div class="price__left">할인가(일반)</div>
+                            <div class="price__right">-0<span class="price__discount">(0%)</span>&nbsp;<span>원</span>
+                            </div>
+                        </div>
+                        <div class="payment__divider"></div>
+                        <div class="price__box">
+                            <div class="price__left">결제 금액</div>
+                            <div class="price__right"><span class="text__color--green">100</span>&nbsp;<span>원</span>
+                            </div>
+                        </div>
+                        <div class="form__check">
+                            <input class="input__label" type="checkbox" id="terms1" name="method" />
+                            <label title for="terms1" class="check__label"><a href="javascript:void(0)">결제 및 환불 규정</a>에
+                                동의합니다 (필수)</label>
+                        </div>
+                        <div class="form__check">
+                            <input class="input__label" type="checkbox" id="terms2" name="method" />
+                            <label title for="terms2" class="check__label">구매조건 확인 및 <a
+                                    href="javascript:void(0)">개인정보처리약관</a>에
+                                동의합니다 (필수)</label>
+                        </div>
+                    </div>
+                    <a th:href="@{/orders/complete?payment_gid=ASDQWEWQFSD}" class="button button--rounded button--full"
+                        style="color: #0fd; margin-top: 60px">
+                        결제하기
+                    </a>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- footer -->
+    <div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
+</body>
+
+</html>

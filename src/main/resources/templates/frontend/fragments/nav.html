@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+	<div th:fragment="fragment-nav">
+	<!-- navbar 시작 -->
+	<nav class="navbar-bg">
+	    <div class="container-fluid container--main d-flex align-items-center">
+	        <a class="navbar__brand" th:href="@{/}">BASAK CODING</a>
+	        <div class="navbar__wrapper">
+	        <a class="navbar__item" th:href="@{/catalog}">카탈로그</a>
+		        <ul class="navbar__menu">
+		            <li class="navbar__item">
+		            	<a class="navbar__link" th:href="@{/auth/signin}">로그인</a>
+		          	</li>
+			        <li class="navbar__item">
+			        	<a class="navbar__link button" style="margin-left: 24px" th:href="@{/auth/signup}">회원가입</a>
+			        </li>
+		            <li class="dropdown bg-transparent">
+			            <button class="dropdown-toggle dropdown--btn bg-transparent" type="button" id="dropdownMenuButton"
+			              style="height: 100%" data-toggle="dropdown">
+			            	<img class="navbar__profile" th:src="@{/images/user.png}" />
+			            </button>
+			            <div class="dropdown-menu dropdown__menu">
+			                <a class="dropdown-item dropdown__item" th:href="@{/personal/dashboard}">나의 대시보드</a>
+			                <a class="dropdown-item dropdown__item" th:href="@{/personal/profile}">나의 프로필</a>
+			                <a class="dropdown-item dropdown__item" th:href="@{/personal/qAndA/questions?page=1}">나의 질문 답변</a>
+			                <a class="dropdown-item dropdown__item nav-link nav__link button" style="margin-top: 10px; width: 100%"
+			                href="/logout">로그아웃</a>
+			            </div>
+		            </li>
+		        </ul>
+	      </div>
+	    </div>
+	  </nav>
+	  <!-- navbar 끝 -->
+	</div>
+</html>
