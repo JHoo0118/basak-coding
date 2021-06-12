@@ -13,8 +13,7 @@
 </head>
 <body>
 	<!-- Header -->
-	<div th:replace="/admin/fragments/header.html :: fragment-header"></div>
-	
+	<div th:replace="/admin/fragments/header.html :: fragment-header(${title})"></div>
 	<section class="pt-5">
 		<div class="container-fluid pt-4">
 			<div class="row">

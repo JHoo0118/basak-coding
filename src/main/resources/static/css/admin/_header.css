@@ -71,7 +71,6 @@
 
 @media (max-width: 768px) {
 	.sidebar {
-		position: static;
 		height: auto;
 	}
 

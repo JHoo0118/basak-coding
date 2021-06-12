@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="kr" xmlns:th="http://www.thymeleaf.org">
 
-	<div th:fragment="fragment-header">
+	<div th:fragment="fragment-header(title)">
 	<!-- HEADER -->
 	<nav class="navbar navbar-expand-md navbar-light">
 		<button class="navbar-toggler ml-auto mb-2 bg-light" type="button" data-toggle="collapse" data-target="#myNavbar">
@@ -16,14 +16,14 @@
 	   						<a th:href="@{/admin}" class="navbar-brand text-white d-block mx-auto py-3 text-center bottom-border">BASAK</a>
 	   					</div>
 	            		<ul class="navbar-nav flex-column mt-4">
-							<li class="nav-item mb-2 current">
-								<a th:href="@{/admin}" class="nav-link py-3 text-white"><i class="fas fa-home text-light fa-lg mr-3"></i>홈</a>
+							<li th:classappend="${title == '홈'} ? current" class="nav-item mb-2">
+								<a th:href="@{/admin}" th:classappend="${title != '홈'} ? sidebar-link" class="nav-link py-3 text-white"><i class="fas fa-home text-light fa-lg mr-3"></i>홈</a>
+							</li>
+							<li th:classappend="${title == '사용자 관리'} ? current" class="nav-item mb-2">
+								<a href="/admin/member/management" th:classappend="${title != '사용자 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>사용자 관리</a>
 							</li>
 							<li class="nav-item mb-2">
-								<a href="/admin/member/management" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>사용자 관리</a>
-							</li>
-							<li class="nav-item mb-2">
-								<a href="/admin/category/management" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>카테고리 관리</a>
+								<a href="/admin/category/management" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>강의 관리</a>
 							</li>
 							<li class="nav-item mb-2">
 								<a href="/admin/post/management" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>게시물 관리</a>
@@ -43,7 +43,7 @@
 	    				<div class="row align-items-center">
 	    					<div class="col-md-5">
 				            	<h4 class="mb-0 font-weight-bold">
-									홈
+									<span th:text="${title}"></span>
 								</h4>
 			            	</div>
 				            <div class="col-md-7">

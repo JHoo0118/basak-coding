@@ -52,6 +52,7 @@
 .dashboard__common .common__right {
   color: #fff;
   align-items: center;
+  width: 100%;
   height: 100%;
 }
 
