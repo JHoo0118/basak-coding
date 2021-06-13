@@ -25,7 +25,7 @@
 		SELECT * FROM members WHERE email=#{email}
 	</select>
 	
-	<!-- 사용자 생성 -->
+	<!-- 사용자 생성, selectKey로 memberId반환 -->
 	<insert id="createMember" parameterType="Map">
 		<selectKey keyProperty="memberId" resultType="int" order="BEFORE">
 			SELECT seq_members.NEXTVAL FROM dual
