@@ -4,7 +4,51 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.basakcoding.basak.mapper.MemberMapper">
-	<select id="selectList" resultType="MemberDTO" >
-		SELECT * FROM members
+
+	<!-- 테스트 -->
+	<select id="selectListWithReview" resultType="map" >
+		SELECT m.*, r.content, r.rating FROM members m JOIN review r ON m.member_id = r.member_id
 	</select>
+
+	<!-- 전체 사용자 얻기 -->
+	<select id="selectList" resultType="MemberDTO" >
+		SELECT * FROM members ORDER BY registered_at DESC
+	</select>
+	
+	<!-- 아이디로 사용자 얻기 -->
+	<select id="getMemberById" parameterType="String" resultType="MemberDTO">
+		SELECT * FROM members WHERE member_id=#{memberId}
+	</select>
+	
+	<!-- 이메일로 사용자 얻기 -->
+	<select id="getMemberByEmail" parameterType="String" resultType="MemberDTO">
+		SELECT * FROM members WHERE email=#{email}
+	</select>
+	
+	<!-- 사용자 생성 -->
+	<insert id="createMember" parameterType="Map">
+		<selectKey keyProperty="memberId" resultType="int" order="BEFORE">
+			SELECT seq_members.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO members VALUES(#{memberId}, #{email}, #{password}, #{username}, DEFAULT, DEFAULT, DEFAULT, 
+		<choose>
+			<when test="avatar != null">#{avatar},</when>
+			<otherwise>DEFAULT,</otherwise>
+		</choose>
+		null)
+	</insert>
+	
+	<!-- 사용자 수정 -->
+	<update id="updateMember" parameterType="Map">
+		UPDATE members SET username=#{username}
+		<if test="avatar != null">, avatar=#{avatar}</if> 
+		WHERE member_id=#{memberId}
+	</update>
+	
+	<delete id="deleteMultpleMember" parameterType="Map">
+		DELETE members WHERE member_id in
+		<foreach collection="target" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</delete>
 </mapper>

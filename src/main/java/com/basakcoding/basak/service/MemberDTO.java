@@ -21,4 +21,9 @@ public class MemberDTO {
     private String loginMethod;	
     private String avatar;
     private String emailSecret;
+    
+    public String getAvatarImagePath() {
+    	if (avatar == null) return "/images/user.png";
+    	return "/upload/member/" + this.memberId + "/" + this.avatar;
+    }
 }
