@@ -8,11 +8,11 @@ public class CatalogController {
 	
 	@GetMapping("/catalog")
 	public String catalog() {
-		return "/frontend/catalog";
+		return "frontend/catalog";
 	}
 	
 	@GetMapping("/catalog/{id}")
 	public String catalogDetail() {
-		return "/frontend/catalogDetail";
+		return "frontend/catalogDetail";
 	}
 }

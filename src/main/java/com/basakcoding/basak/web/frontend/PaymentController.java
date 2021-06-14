@@ -8,11 +8,11 @@ public class PaymentController {
 
 	@GetMapping("/orders/payments/{course_id}")
 	public String payment() {
-		return "/frontend/payment";
+		return "frontend/payment";
 	}
 	
 	@GetMapping("/orders/complete")
 	public String paymentResult() {
-		return "/frontend/paymentConfirm";
+		return "frontend/paymentConfirm";
 	}
 }

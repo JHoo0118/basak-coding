@@ -10,21 +10,21 @@ public class AuthController {
 	
 	@GetMapping("/signin")
 	public String signin() {
-		return "/frontend/signin";
+		return "frontend/signin";
 	}
 	
 	@GetMapping("/signup")
 	public String signup() {
-		return "/frontend/signup";
+		return "frontend/signup";
 	}
 	
 	@GetMapping("/reset-pass")
 	public String resetPassword() {
-		return "/frontend/resetPassword";
+		return "frontend/resetPassword";
 	}
 	
 	@GetMapping("/email-information")
 	public String emailValidate() {
-		return "/frontend/signupConfirm.html";
+		return "frontend/signupConfirm.html";
 	}
 }

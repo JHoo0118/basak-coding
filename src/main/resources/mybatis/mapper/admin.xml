@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.basakcoding.basak.mapper.AdminMapper">
+	<!-- 이름으로 관리자 얻기 -->
+	<select id="getAdminByEmail" parameterType="String" resultType="AdminDTO">
+		SELECT * FROM admins WHERE email=#{email}
+	</select>
+	
+	<!-- 관리자 생성 -->
+	<insert id="createAdmin" parameterType="AdminDTO">
+		INSERT INTO admins VALUES(seq_admins.NEXTVAL, 'admin@test.com', '바삭코딩', #{password}, null, DEFAULT)
+	</insert>
+	
+</mapper>

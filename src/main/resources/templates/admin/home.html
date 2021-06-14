@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 	<meta charset="UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -12,6 +13,12 @@
   	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
 </head>
 <body>
+
+	<!-- Logout Form -->
+	<form th:action="@{/admin/logout}" method="post" th:hidden="true" name="logoutForm">
+		<input type="submit" />
+	</form>
+	
 	<!-- Header -->
 	<div th:replace="/admin/fragments/header.html :: fragment-header(${title})"></div>
 	<section class="pt-5">
@@ -146,9 +153,6 @@
 		</div>
 	</section>
 	
-	<!-- Logout -->
-	<!--  <div th:replace="/admin/fragments/header.html :: fragment-logout"></div> -->
-	
 	<!-- MODAL -->
 	<div class="modal fade" id="modalLogout">
 		<div class="modal-dialog">
@@ -161,13 +165,21 @@
 					정말 로그아웃 하시겠습니까?
 				</div>
 				<div class="modal-footer">
-					<a class="btn" style="color:inherit;" href="javascript:void(0)">예</a>
+					<a id="logoutLink" class="btn" style="color:inherit;" href="">예</a>
 					<button type="button" class="btn btn-danger" data-dismiss="modal">아니요</button>
 				</div>
 			</div>
 		</div>
 	</div>
 	<!-- END (MODAL) -->
-	
+	<script>
+		$(document).ready(function() {
+			$("#logoutLink").on("click", function(e) {
+				e.preventDefault();
+				console.log(logoutForm)
+				logoutForm.submit();
+			});
+		});
+	</script>
 </body>
 </html>

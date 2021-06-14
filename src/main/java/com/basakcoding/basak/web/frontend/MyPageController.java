@@ -10,17 +10,17 @@ public class MyPageController {
 
 	@GetMapping("/dashboard")
 	public String dashboard() {
-		return "/frontend/dashboard";
+		return "frontend/dashboard";
 	}
 	
 
 	@GetMapping("/profile")
 	public String profile() {
-		return "/frontend/profile";
+		return "frontend/profile";
 	}
 	
 	@GetMapping("/qAndA/questions")
 	public String qAndA() {
-		return "/frontend/qAndA";
+		return "frontend/qAndA";
 	}
 }

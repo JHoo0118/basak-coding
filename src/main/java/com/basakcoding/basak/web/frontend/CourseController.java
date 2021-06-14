@@ -8,6 +8,6 @@ public class CourseController {
 	
 	@GetMapping("/class/{id}")
 	public String course() {
-		return "/frontend/course";
+		return "frontend/course";
 	}
 }
