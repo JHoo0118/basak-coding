@@ -1,0 +1,32 @@
+package com.basakcoding.basak.service;
+
+import java.sql.Date;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CourseDTO {
+
+	//강의 목록
+	private Integer courseId;
+	private Integer adminId;
+	private Integer categoryId;
+	private String title;
+	private String shortDescription;
+	private String description;
+	private Integer price;
+	private String difficulty;
+	private Integer courseLength;
+	private String thumbNail;
+	private Date CreatedAT;
+	private Date UpdateAT;
+	private Integer LikeCount;
+	private String period;
+	
+}
