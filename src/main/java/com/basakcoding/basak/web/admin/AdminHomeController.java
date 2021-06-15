@@ -20,14 +20,14 @@ public class AdminHomeController {
 	@GetMapping
 	public String adminHome(Model model) {
 		model.addAttribute("title", "홈");
-		return "/admin/home";
+		return "admin/home";
 	}
 	
 	@GetMapping("/login")
 	public String loginForm() {
-//		AdminDTO admin = new AdminDTO();
-//		admin.setPassword("1234");
-//		adminService.createAdmin(admin);
+//		AdminDTO admin = adminService.getAdminByEmail("admin@admin.com");
+//		adminService.passwordEncoding(admin);
+
 		return "admin/login";
 	}
 }

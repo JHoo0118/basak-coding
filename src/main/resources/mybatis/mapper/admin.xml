@@ -4,10 +4,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.basakcoding.basak.mapper.AdminMapper">
-	<!-- 이름으로 관리자 얻기 -->
+	<!-- 이메일로 관리자 얻기 -->
 	<select id="getAdminByEmail" parameterType="String" resultType="AdminDTO">
 		SELECT * FROM admins WHERE email=#{email}
 	</select>
+	
+	<!-- 관리자 비밀번호 해싱 -->
+	<update id="passwordEncoding" parameterType="AdminDTO">
+		UPDATE admins SET password = #{password} WHERE email=#{email}
+	</update>
 	
 	<!-- 관리자 생성 -->
 	<insert id="createAdmin" parameterType="AdminDTO">

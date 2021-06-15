@@ -27,4 +27,13 @@ public class AdminService {
     	String encodedPassword = passwordEncoder.encode(admin.getPassword());
     	admin.setPassword(encodedPassword);
     }
+
+	public int passwordEncoding(AdminDTO admin) {
+		encodePassword(admin);
+		return adminMapper.passwordEncoding(admin);
+	}
+
+	public AdminDTO getAdminByEmail(String string) {
+		return adminMapper.getAdminByEmail(string);
+	}
 }

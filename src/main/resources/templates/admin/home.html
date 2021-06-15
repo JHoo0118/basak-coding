@@ -14,10 +14,7 @@
 </head>
 <body>
 
-	<!-- Logout Form -->
-	<form th:action="@{/admin/logout}" method="post" th:hidden="true" name="logoutForm">
-		<input type="submit" />
-	</form>
+	
 	
 	<!-- Header -->
 	<div th:replace="/admin/fragments/header.html :: fragment-header(${title})"></div>
@@ -152,34 +149,5 @@
 			</div>
 		</div>
 	</section>
-	
-	<!-- MODAL -->
-	<div class="modal fade" id="modalLogout">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title">로그아웃</h4>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-				</div>
-				<div class="modal-body">
-					정말 로그아웃 하시겠습니까?
-				</div>
-				<div class="modal-footer">
-					<a id="logoutLink" class="btn" style="color:inherit;" href="">예</a>
-					<button type="button" class="btn btn-danger" data-dismiss="modal">아니요</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- END (MODAL) -->
-	<script>
-		$(document).ready(function() {
-			$("#logoutLink").on("click", function(e) {
-				e.preventDefault();
-				console.log(logoutForm)
-				logoutForm.submit();
-			});
-		});
-	</script>
 </body>
 </html>
