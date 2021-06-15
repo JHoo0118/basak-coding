@@ -35,7 +35,7 @@
 										<option value="del">삭제</option>
 									</select>
 									<input class="button button--light button--sm d-inline" type="submit" value="확인" />
-									<a class="button button--reverse mb-2" th:href="@{/admin/member/management/form}">사용자 추가</a>
+									<a class="button button--reverse mb-2" href="/admin/member/management/form">사용자 추가</a>
 								</div>
 							</div>
 							<div th:if="${message != null}" class="alert alert-success text-center">
@@ -48,32 +48,31 @@
 				                    <th>액션</th>
 				                    <th>#</th>
 				                    <th>아이디</th>
-				                    <th>이메일</th>
-				                    <th>사용자명</th>
-				                    <th>이메일 인증</th>
-				                    <th>회원가입 방법</th>
-				                    <th>프로필 이미지</th>
-				                    <th>가입 날짜</th>
+				                    <th>카테고리</th>
+				                    <th>강사</th>
+				                    <th>제목</th>
+				                    <th>요약</th>
+				                    <!-- 
+				                    <th>가격</th>
+				                    <th>난의도</th>
+				                    <th>좋아요 수</th>
+				                    <th>강의 길이</th>
+				                    <th>동영상 수</th>
+				                    -->
 				                  </tr>
 				                </thead>
 				                <tbody>
-									<tr th:each="member, i : ${listMembers}">
+									<tr th:each="course, i : ${listCourses}">
 										<td>
-											<input type="checkbox" class="checkbox" name="target" th:value="${member.memberId}"/>
+											<input type="checkbox" class="checkbox" name="target" th:value="${course.get('COURSE_ID')}"/>
 											<span class="checkbox__mark"></span>
 										</td>
 										<td>[[${i.index+1}]]</td>
-										<td>[[${member.memberId}]]</td>
-										<td>[[${member.email}]]</td>
-										<td>[[${member.username}]]</td>
-										<td>[[${member.emailValidate}]]</td>
-										<td>[[${member.loginMethod}]]</td>
-										<td>
-											<span></span>
-											<img th:if="${member.avatar != null}" class="rounded-circle" th:src="@{${member.getAvatarImagePath}}" style="width: 40px; height: 40px;" />
-											<img th:if="${member.avatar == null}" class="rounded-circle" th:src="@{/images/user.png}" style="width: 40px; height: 40px;" />
-										</td>
-										<td>[[${member.registeredAt}]]</td>
+										<td>[[${course.get('COURSE_ID')}]]</td>
+										<td>[[${course.get('CAT_NAME')}]]</td>
+										<td>[[${course.get('ADM_NAME')}]]</td>
+										<td>[[${course.get('TITLE')}]]</td>
+										<td>[[${course.get('SHORT_DESCRIPTION')}]]</td>
 									</tr>
 				                </tbody>
 							</table>

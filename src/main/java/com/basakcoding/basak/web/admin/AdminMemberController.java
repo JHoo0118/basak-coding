@@ -32,7 +32,7 @@ public class AdminMemberController {
 		List<MemberDTO> listMembers = memberService.selectList();
 		model.addAttribute("listMembers", listMembers);
 		model.addAttribute("title", "사용자 관리");
-		return "/admin/memberManagement";
+		return "admin/memberManagement";
 	}
 	
 	// 사용자 관리 폼 페이지
@@ -45,7 +45,7 @@ public class AdminMemberController {
 		}
 		model.addAttribute("member", member);
 		model.addAttribute("title", "사용자 관리");
-		return "/admin/memberForm";
+		return "admin/memberForm";
 	}
 	
 	// 사용자 생성 및 업데이트
