@@ -4,7 +4,7 @@
 	<meta charset="UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>바삭 코딩 | 사용자 관리</title>
+	<title>바삭 코딩 | 강의 관리</title>
 	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
 	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
 	<link rel="stylesheet" th:href="@{/css/admin/main.css}" />
@@ -25,8 +25,8 @@
 					<div class="row md-5 mb-5">
 						<div class="col-xl-12 col-12 mb-4 mb-xl-0">
 						
-						<h3 class="text-muted text-center mb-3">사용자 목록</h3>
-						<form name="actionForm" th:action="@{/admin/member/management/process}" method="post">
+						<h3 class="text-muted text-center mb-3">강의 목록</h3>
+						<form name="actionForm" th:action="@{/admin/course/management/process}" method="post">
 							<div class="form__header d-flex justify-content-between">
 								<div>
 									<select name="action">
@@ -35,7 +35,7 @@
 										<option value="del">삭제</option>
 									</select>
 									<input class="button button--light button--sm d-inline" type="submit" value="확인" />
-									<a class="button button--reverse mb-2" href="/admin/member/management/form">사용자 추가</a>
+									<a class="button button--reverse mb-2" th:href="@{/admin/course/management/form}">강의 추가</a>
 								</div>
 							</div>
 							<div th:if="${message != null}" class="alert alert-success text-center">

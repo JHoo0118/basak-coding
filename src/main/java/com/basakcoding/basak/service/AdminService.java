@@ -1,5 +1,6 @@
 package com.basakcoding.basak.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,11 @@ public class AdminService {
 	
     @Autowired
     private PasswordEncoder passwordEncoder;
+    
+    
+    public List<AdminDTO> getAdminList() {
+    	return adminMapper.getAdminList();
+    }
 
 	public int createAdmin(AdminDTO admin) {
     	encodePassword(admin);
