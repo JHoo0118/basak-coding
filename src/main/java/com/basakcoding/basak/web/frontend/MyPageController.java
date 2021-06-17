@@ -10,6 +10,7 @@ public class MyPageController {
 
 	@GetMapping("/dashboard")
 	public String dashboard() {
+		
 		return "/frontend/dashboard";
 	}
 	

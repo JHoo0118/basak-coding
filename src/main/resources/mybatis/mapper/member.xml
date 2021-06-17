@@ -7,4 +7,9 @@
 	<select id="selectList" resultType="MemberDTO" >
 		SELECT * FROM members
 	</select>
+	
+	<!-- 파일 업로드 -->
+	<update id="fileUpdate" parameterType="Map">
+		UPDATE MEMBERS SET AVATAR=#{file_name} WHERE MEMBER_ID=#{userId}
+	</update>
 </mapper>

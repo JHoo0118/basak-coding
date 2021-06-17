@@ -1,7 +1,7 @@
 # 서버 포트 설정
 server:
   port: 9090
-
+#  servlet:#    context-path: /basak-coding
 # hikari - 커넥션 풀 설정
 # username과 password는 오라클 계정 정보 입력
 spring:

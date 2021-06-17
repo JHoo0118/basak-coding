@@ -10,6 +10,43 @@
 	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
 	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
   	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+  	<script>
+  	$(document).ready(function(){
+	$('#userImage').change(function(e) {
+	  var file=$('#userImage')[0].files[0];
+	  var formData = new FormData();
+	  formData.append('userId',1);
+	  formData.append('file',file);
+	  
+	  $.ajax({
+		url:'/dashBoard/profileImgUpdate',
+		processData:false,
+		contentType:false,
+		data: formData,
+        type: 'POST',
+       	success: function(result){
+			if(result==0){alert("업로드 실패")}
+			else if(result==1){
+				console.log("파일!!!!!!!!!!!",file)
+				var reader = new FileReader();
+				reader.onload = function(e){
+					$('#userImg').attr('src',e.target.result);
+				};
+				reader.readAsDataURL(file);
+			}
+			else if(result== -1){alert("프로필사진입니다 이미지파일만 올려주세요")}
+			else if(result== -2)alert("이미지 용량이 너무커요!");
+        	alert("업로드 성공!!");
+          },
+        error:function(){
+			alert('업로드에 실패했어요');
+			}
+
+		});
+	});
+});
+  	
+  	</script>
 </head>
 
 <body style="background-color: #1e1e1e;">
@@ -23,7 +60,7 @@
                 <div class="common__left">
                     <input id="userImage" type="file" accept="image/*" name="file" style="display: none;" />
                     <label class="position-relative rounded-circle" for="userImage">
-                        <img th:src="@{/images/image4.jpg}" alt="프로필 이미지" />
+                        <img id="userImg" th:src="@{/images/image4.jpg}" alt="프로필 이미지" />
                         <i class="fa fa-plus-circle"></i>
                     </label>
                 </div>
