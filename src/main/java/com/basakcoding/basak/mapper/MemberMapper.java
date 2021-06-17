@@ -32,4 +32,8 @@ public interface MemberMapper {
 	
 	// 사용자 여러 행 한 번에 삭제
 	int deleteMultpleMember(Map map);
+	
+	//파일 업로드
+	int fileUpdate(Map map);
+	
 }

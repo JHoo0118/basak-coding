@@ -62,4 +62,10 @@ public class MemberService {
 	public List<Map> selectListWithReview() {
 		return memberMapper.selectListWithReview();
 	}
+
+    //파일 업로드
+    public int fileUpdate(Map map) {
+    	return memberMapper.fileUpdate(map);
+    }
+    
 }
