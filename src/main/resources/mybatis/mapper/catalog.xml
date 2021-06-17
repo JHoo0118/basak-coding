@@ -11,5 +11,12 @@
 	
 	</select>
 	
+	<select id="selectOne" parameterType="String" resultType="Map">
+	
+	SELECT * FROM courses WHERE course_Id=#{id}
+	
+	</select>
+	
 
+	
 </mapper>
