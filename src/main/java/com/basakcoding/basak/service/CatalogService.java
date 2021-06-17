@@ -1,6 +1,7 @@
 package com.basakcoding.basak.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,10 @@ public class CatalogService {
 	// 강의목록 리스트 가져오기
 	public List<CourseDTO> courseList(){
 		return catalogMapper.courseList();
+	}
+	
+	public Map selectOne(String id) {
+		return catalogMapper.selectOne(id);
 	}
 	
 	

@@ -12,7 +12,8 @@
 
 	<!-- 강의 리스트 가져오기 -->
 	<select id="selectList" resultType="Map">
-		SELECT ca.name CAT_NAME, co.course_id, co.title, co.short_description, a.name ADM_NAME FROM courses co
+		SELECT ca.name CAT_NAME, co.course_id, co.title, co.short_description, a.name ADM_NAME 
+		FROM courses co
 		JOIN category ca ON ca.category_id = co.category_id
 		JOIN admins a ON co.admin_id = a.admin_id
 	</select>

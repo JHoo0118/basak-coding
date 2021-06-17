@@ -22,48 +22,114 @@
             <h1 class="text-style-2">Try Your CODE LION!</h1>
             <span>코드라이언 코스 100% 활용하기</span>
         </div>
-        <div class="container-fluid container--main">
-            <div class="row" style="padding-bottom: 10rem;">
+        <div  class="container-fluid container--main">
+            <div   class="row" style="padding-bottom: 10rem; ">
+				<!-- 좋아요 -->            
                 <div class="col-md-9 detail__left">
-                    <button class="detail__like"><i class="far fa-thumbs-up"></i>&nbsp;6</button>
+                    <button class="detail__like">
+                    <i class="far fa-thumbs-up"></i> [[${course.LIKE_COUNT}]]  </button>
                     <div class="detail__info">
+                    	
+                    	<!-- 강의가격 -->   	
                         <div class="detail__price">
-                            <span>100</span>&nbsp;<span>원</span>
+                            <span>[[${course.PRICE}]]</span>&nbsp;<span>원</span>
                         </div>
+                        
+                        <!-- 상세목록 -->   
                         <div class="row info__header">
-                            <div class="col-3 detail__text detail__text--1 p-0">
-                                수강기간
-                            </div>
+                            <div class="col-3 detail__text detail__text--1 p-0">수강기간</div>
                             <div class="col-3 detail__text detail__text--1 p-0">난이도</div>
-                            <div class="col-3 detail__text detail__text--1 p-0">
-                                수업인덱스
-                            </div>
-                            <div class="col-3 detail__text detail__text--1 p-0">
-                                학습시간
-                            </div>
+                            <div class="col-3 detail__text detail__text--1 p-0">수업인덱스</div>
+                            <div class="col-3 detail__text detail__text--1 p-0">학습시간</div>
                         </div>
+                        
+                        <!-- 수강기간 -->   
                         <div class="row detail__body">
                             <div class="col-3 p-0 d-flex justify-content-center align-items-center flex-column">
                                 <span style="color: rgb(145, 145, 145); font-size: 1.4rem">결제일로부터</span><span
-                                    class="detail__text detail__text--2">2주</span>
+                                    class="detail__text detail__text--2">[[${course.PERIOD}]]</span>
                             </div>
+                          	
+                          	   <!-- 난이도 -->   
                             <div class="col-3 p-0 d-flex justify-content-center align-items-center flex-column">
                                 <div>
-                                    <i class="fas fa-circle"></i>
-                                    <i class="far fa-circle"></i>
-                                    <i class="far fa-circle"></i>
+                                    <i th:if="${course.DIFFICULTY == '쉬움'}" class="fas fa-circle"></i>
+                                    <i th:if="${course.DIFFICULTY == '쉬움'}" class="far fa-circle"></i>
+                                    <i th:if="${course.DIFFICULTY == '쉬움'}" class="far fa-circle"></i>
+                                
+                                	<i th:if="${course.DIFFICULTY == '보통'}" class="fas fa-circle"></i>
+                                    <i th:if="${course.DIFFICULTY == '보통'}" class="fas fa-circle"></i>
+                                    <i th:if="${course.DIFFICULTY == '보통'}" class="far fa-circle"></i>
+                                	
+                                	<i th:if="${course.DIFFICULTY == '어려움'}" class="fas fa-circle"></i>
+                                    <i th:if="${course.DIFFICULTY == '어려움'}" class="fas fa-circle"></i>
+                                    <i th:if="${course.DIFFICULTY == '어려움'}" class="fas fa-circle"></i>
+                                
                                 </div>
-                                <span class="detail__text detail__text--2">쉬움</span>
+                                <span class="detail__text detail__text--2">[[${course.DIFFICULTY}]]</span>
                             </div>
+
+                            <!-- 수업인덱스 -->   
                             <div class="col-3 p-0 detail__text detail__text--2">
                                 2개의 영상
                             </div>
+                            
+                                <!-- 학습시간 -->   
                             <div class="col-3 p-0 d-flex justify-content-center align-items-center flex-column">
                                 <span style="color: rgb(145, 145, 145); font-size: 1.4rem">총</span>
-                                <span class="detail__text detail__text--2">0시간 15분</span>
+                                <span id="length" class="detail__text detail__text--2">[[${course.COURSE_LENGTH}]]</span>
                             </div>
+                            <script>
+                           
+							//좋아요 기능구현
+							var likeCount = $('.detail__like').text();
+                           	console.log("likeCount:",likeCount);
+                           	var userId = 1;
+                           	
+                        
+                           	courseId= "[[${course.COURSE_ID}]]";
+							console.log("courseId:",courseId);	
+							
+														
+							$('.detail__like').click(function(){
+									
+								$.ajax({
+									
+								url : "[[@{/catalog/count_like}]]",
+								type:"post",
+								data:{userId,courseId},//userId=1,courseId=1
+								dataType:"text",
+								succcess:function(data){
+									
+									
+								}
+								
+								
+								
+								
+								})
+							})
+							
+
+  
+
+
+
+
+							
+                           
+                            //강의시간(초)를 시간/분으로 변경
+                            var courseLength = $('#length').text();
+                            console.log("length:",courseLength);
+                            var courseTime = Math.ceil(courseLength/60); 
+                             console.log("courseTime:",courseTime);
+                            $('#length').text(Math.floor(courseTime/60)+"시간"+(courseTime%60)+"분");
+                            
+                            </script>
+                            
+                            
                         </div>
-                        <a th:href="@{/orders/payments/QASIEAJ}" class="button button--cover button--full">
+                        <a th:href="@{/orders/payments/}+${course.COURSE_ID}" class="button button--cover button--full">
                             등록하기
                         </a>
                     </div>
