@@ -13,9 +13,32 @@
 	
 	<select id="selectOne" parameterType="String" resultType="Map">
 	
-	SELECT * FROM courses WHERE course_Id=#{id}
+	SELECT * FROM courses WHERE course_id=#{courseId}
 	
 	</select>
+	
+	<select id="likeCheck" parameterType="Map" resultType="Int">
+	
+	SELECT COUNT(*)
+	FROM LIKES
+	WHERE member_id=#{memberId} AND course_id=#{courseId}
+	
+	</select>
+	
+	<insert id="like" parameterType="Map">
+	
+	INSERT INTO LIKES (LIKE_ID,MEMBER_ID,COURSE_ID)
+	VALUES (SEQ_LIKES.NEXTVAL,#{memberId},${courseId})
+	
+	</insert>
+	
+	<delete id="unLike" parameterType="Map">
+	
+	DELETE FROM LIKES
+	WHERE MEMBER_ID=#{memberId} AND COURSE_ID=${courseId} 
+	
+	</delete>
+	
 	
 
 	

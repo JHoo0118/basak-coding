@@ -15,6 +15,12 @@ public interface CatalogMapper {
 	//강의 목록 리스트 가져오기
 	 List<CourseDTO> courseList();
 
-	Map selectOne(String id);
+	Map selectOne(String courseId);
+	
+	int likeCheck(Map map);
+	
+	int like(Map map);
+	int unLike(Map map);
+
 	
 }

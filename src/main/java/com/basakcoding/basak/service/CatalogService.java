@@ -20,8 +20,20 @@ public class CatalogService {
 		return catalogMapper.courseList();
 	}
 	
-	public Map selectOne(String id) {
-		return catalogMapper.selectOne(id);
+	public Map selectOne(String courseId) {
+		return catalogMapper.selectOne(courseId);
+	}
+	
+	public int likeCheck(Map map) {
+		return catalogMapper.likeCheck(map);
+	}
+	
+	public int like(Map map) {
+		return catalogMapper.like(map);
+	}
+	
+	public int unLike(Map map) {
+		return catalogMapper.unLike(map);
 	}
 	
 	

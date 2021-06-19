@@ -82,12 +82,14 @@
                             <script>
                            
 							//좋아요 기능구현
-							var likeCount = $('.detail__like').text();
+							var likeCount = Number.parseInt($('.detail__like').text());
+							
                            	console.log("likeCount:",likeCount);
-                           	var userId = 1;
+							
+							
                            	
                         
-                           	courseId= "[[${course.COURSE_ID}]]";
+                           	var courseId= "[[${course.COURSE_ID}]]";
 							console.log("courseId:",courseId);	
 							
 														
@@ -100,7 +102,6 @@
 								data:{userId,courseId},//userId=1,courseId=1
 								dataType:"text",
 								succcess:function(data){
-									
 									
 								}
 								
