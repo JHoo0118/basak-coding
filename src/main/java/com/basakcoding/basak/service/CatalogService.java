@@ -16,7 +16,7 @@ public class CatalogService {
 	private CatalogMapper catalogMapper;
 	
 	// 강의목록 리스트 가져오기
-	public List<CourseDTO> courseList(){
+	public List<Map> courseList(){
 		return catalogMapper.courseList();
 	}
 	
@@ -35,6 +35,9 @@ public class CatalogService {
 	public int unLike(Map map) {
 		return catalogMapper.unLike(map);
 	}
-	
+	public int likeCount(Map map) {
+		return catalogMapper.likeCount(map);
+	}
+
 	
 }

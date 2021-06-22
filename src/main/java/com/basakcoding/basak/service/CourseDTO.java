@@ -24,9 +24,9 @@ public class CourseDTO {
 	private String difficulty;
 	private Integer courseLength;
 	private String thumbNail;
-	private Date CreatedAT;
-	private Date UpdateAT;
-	private Integer LikeCount;
+	private Date createdAT;
+	private Date updateAT;
+	private Integer likeCount;
 	private String period;
 	
 }

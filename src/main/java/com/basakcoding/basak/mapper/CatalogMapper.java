@@ -13,7 +13,7 @@ import com.basakcoding.basak.service.CourseDTO;
 public interface CatalogMapper {
 
 	//강의 목록 리스트 가져오기
-	 List<CourseDTO> courseList();
+	 List<Map> courseList();
 
 	Map selectOne(String courseId);
 	
@@ -21,6 +21,6 @@ public interface CatalogMapper {
 	
 	int like(Map map);
 	int unLike(Map map);
-
+	int likeCount(Map map);
 	
 }
