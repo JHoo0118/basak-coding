@@ -5,15 +5,24 @@
 
 <mapper namespace="com.basakcoding.basak.mapper.CatalogMapper">
 
-	<select id="courseList" resultType="courseDTO">
+	<select id="courseList" resultType="Map">
 	
-	SELECT * FROM courses
+		SELECT co.*,ca.name,a.avatar 
+		FROM COURSES co
+		JOIN CATEGORY ca 
+		ON co.category_id = ca.category_id
+		JOIN ADMINS a ON a.admin_id = co.admin_id
 	
 	</select>
 	
 	<select id="selectOne" parameterType="String" resultType="Map">
 	
-	SELECT * FROM courses WHERE course_id=#{courseId}
+		SELECT co.*,ca.name,a.avatar 
+		FROM COURSES co
+		JOIN CATEGORY ca 
+		ON co.category_id = ca.category_id
+		JOIN ADMINS a ON a.admin_id = co.admin_id
+		WHERE co.course_id=#{courseId}
 	
 	</select>
 	
@@ -28,16 +37,28 @@
 	<insert id="like" parameterType="Map">
 	
 	INSERT INTO LIKES (LIKE_ID,MEMBER_ID,COURSE_ID)
-	VALUES (SEQ_LIKES.NEXTVAL,#{memberId},${courseId})
+	VALUES (SEQ_LIKES.NEXTVAL,#{memberId},#{courseId})
 	
 	</insert>
 	
 	<delete id="unLike" parameterType="Map">
 	
 	DELETE FROM LIKES
-	WHERE MEMBER_ID=#{memberId} AND COURSE_ID=${courseId} 
+	WHERE MEMBER_ID=#{memberId} AND COURSE_ID=#{courseId} 
 	
-	</delete>
+	</delete >
+	
+	
+	
+	<update  id = "likeCount" parameterType="Map">
+	
+	UPDATE COURSES
+	SET LIKE_COUNT = (SELECT COUNT(*) FROM LIKES WHERE COURSE_ID=#{courseId} )
+	
+	WHERE COURSE_ID=#{courseId} 
+	
+	</update>
+	
 	
 	
 

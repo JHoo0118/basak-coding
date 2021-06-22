@@ -26,24 +26,24 @@
                 
                 <li class="col-lg-4 col-md-6 col-sm-6 lecture__item">
                     <div class="lecture-wrapper">
-                        <div class="lecture-profile" style="background-image: url(/images/image4.jpg);"></div>
-                        <a th:href="@{/catalog/}+${course.courseId}">
+                        <div class="lecture-profile" style="background-image: url(/images/image10.jpg);"></div>
+                        <a th:href="@{/catalog/}+${course.COURSE_ID}">
                             <div class="card lecture">
-                                <img th:src="@{/images/image10.jpg}" class="card-img-top lecture__thumbnail"
+                                <img th:src="@{/images/}+${course.THUMBNAIL}" class="card-img-top lecture__thumbnail"
                                     alt="thumbnail" />
                                 <div class="card-body">
                                     <h5 class="card-title lecture__title iine-clamp">
-                                        [[${course.title}]]
+                                        [[${course.TITLE}]]
                                     </h5>
                                     <p class="card-text iine-clamp iine-clamp--4 lecture__text d-flex flex-columns justify-space-between">
-											[[${course.shortDescription}]] 
+											[[${course.SHORT_DESCRIPTION}]] 
                                    </p>
                                     <div class="align-items-end row">
                                         <div class="col-6 lecture__period">
-                                            <i class="far fa-clock"></i> [[${course.period}]]
+                                            <i class="far fa-clock"></i> [[${course.PERIOD}]]
                                         </div>
                                         <div class="col-6 text-center lecture__level">
-                                            [[${course.difficulty}]]
+                                            [[${course.DIFFICULTY}]]
                                         </div>
                                     </div>
                                 </div>

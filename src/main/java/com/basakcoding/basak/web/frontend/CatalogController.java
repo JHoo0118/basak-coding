@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -35,8 +36,8 @@ public class CatalogController {
 	
 	// 강의목록 페이지
 	@GetMapping("/catalog")
-	public String catalog(Model model) {
-		List<CourseDTO> courseList = catalogService.courseList();
+	public String catalog(Model model ) {
+		List<Map> courseList = catalogService.courseList();
 		
 		model.addAttribute("courseList", courseList);
 		
@@ -54,7 +55,6 @@ public class CatalogController {
 		
 		model.addAttribute("course",map);
 		
-		
 		return "/frontend/catalogDetail";
 
 	}
@@ -62,15 +62,13 @@ public class CatalogController {
 	
 	//좋아요 안좋아요
 	@PostMapping("/catalog/count_like")
-	public @ResponseBody String catalogLike(@RequestParam Map<String,String> map ,HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public @ResponseBody int catalogLike(@RequestBody Map map ,HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		
-	    String memberId = req.getSession().getAttribute("memberId").toString();	
+	    //String memberId = req.getSession().getAttribute("memberId").toString();	
+		String memberId = (String)map.get("memberId");
+		String courseId	= (String) map.get("courseId");
 		
-		String courseId	= map.get("courseId");
-		
-		System.out.println(map.get("courseId")); 
-		
-		System.out.println(memberId+courseId);
+		System.out.println("memberId:"+memberId+"\r\n"+"courseId:"+courseId);
 		
 		int affected;
 		
@@ -81,38 +79,32 @@ public class CatalogController {
 			out.println("alert('로그인 후 이용 가능합니다');");
 			out.println("history.back();");
 			out.println("</script>");
-			return "";
+			System.out.println("로그인상태가 아님");
+			return affected=2;
 			
-		}
+		}//큰 if
 		else {//로그인 했을때 
 			int likeCheck = catalogService.likeCheck(map);
 			
-			if(likeCheck == 0) {
+			if(likeCheck == 0) {//좋아요 등록이 안돼있으면
 				int like = catalogService.like(map);
+				System.out.println("likeCheck:" + likeCheck);
+				int likePlus = catalogService.likeCount(map);
+				return affected=0;
+			
+			}//작은 if
+			else {//likeCheck 결과 값이 1일떄 (이미 좋아요가 등록이 돼있을때)
 				
-			}
-			else {
 				int unLike = catalogService.unLike(map);
+				System.out.println("likeCheck:" + likeCheck);
+				int likeMinus = catalogService.likeCount(map);
+				return affected=1;
 			
-			}
+			}//작은 else
 			
-			
-			
-			/*
-			int likeCount = catalogService.likeCount();
-			//쿼리 만들어야함
-			*/
-			
-			
-			
-			return "";
-		}
+		}//큰 else
 		
-		
-			
-			
-	}
-	
+	}///catalogLike
 	
 	
 }
