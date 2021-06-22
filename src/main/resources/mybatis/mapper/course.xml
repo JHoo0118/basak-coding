@@ -23,7 +23,7 @@
 			SELECT seq_courses.NEXTVAL FROM dual
 		</selectKey>
 		INSERT INTO courses VALUES(#{courseId}, #{adminId}, #{categoryId}, #{courseTitle}, #{shortDescription}, 
-		#{description}, #{price}, #{difficulty}, DEFAULT, #{thumbnail}, DEFAULT, DEFAULT, DEFAULT, DEFAULT)
+		#{description}, #{price}, #{difficulty}, DEFAULT, #{thumbnail}, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT)
 	</insert>
 	
 	<!-- FAQ 생성 -->
@@ -44,7 +44,7 @@
 		<selectKey keyProperty="videoId" resultType="int" order="BEFORE">
 			SELECT seq_video.NEXTVAL FROM dual
 		</selectKey>
-		INSERT INTO video VALUES(#{videoId}, #{curriculumId}, #{videoUri}, DEFAULT, null, #{videoTitle})
+		INSERT INTO video VALUES(#{videoId}, #{curriculumId}, #{videoUri}, DEFAULT, null, #{videoTitle}, DEFAULT)
 	</insert>
 	
 	<!-- 파일 생성 -->

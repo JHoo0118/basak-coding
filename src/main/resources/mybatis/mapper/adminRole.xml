@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.basakcoding.basak.mapper.AdminRoleMapper">
+	<select id="getRoles" resultType="RoleDTO">
+		SELECT r.role_id, r.role_name FROM admins ad 
+		LEFT JOIN authority au ON ad.admin_id = au.admin_id
+		LEFT JOIN roles r ON r.role_id = au.role_id
+	</select>
+	
+</mapper>
