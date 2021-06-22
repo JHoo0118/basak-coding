@@ -45,6 +45,7 @@
 		WHERE member_id=#{memberId}
 	</update>
 	
+	<!-- 사용자 삭제 -->
 	<delete id="deleteMultpleMember" parameterType="Map">
 		DELETE members WHERE member_id in
 		<foreach collection="target" item="item" separator="," open="(" close=")">

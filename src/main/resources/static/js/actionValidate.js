@@ -1,4 +1,4 @@
-var form = document.forms[0];
+var form = document.forms[1];
 form.addEventListener("submit", function(e) {
 	var result = formValidate();
 	if (!result) e.preventDefault();

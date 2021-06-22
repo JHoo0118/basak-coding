@@ -22,9 +22,8 @@
             <h1 class="catalog__header">Basic Courses</h1>
             <hr class="catalog__hr" />
 
-            <ul th:each="course : ${courseList}" class="row p-0" style="list-style: none;">
-                
-                <li class="col-lg-4 col-md-6 col-sm-6 lecture__item">
+            <ul class="row p-0" style="list-style: none;">
+                <li th:each="course : ${courseList}" class="col-lg-4 col-md-6 col-sm-6 lecture__item">
                     <div class="lecture-wrapper">
                         <div class="lecture-profile" style="background-image: url(/images/image4.jpg);"></div>
                         <a th:href="@{/catalog/}+${course.courseId}">

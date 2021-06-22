@@ -10,7 +10,7 @@
 	<link rel="stylesheet" th:href="@{/css/admin/main.css}" />
 	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
   	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
-	<script defer th:src="@{/js/actionValidate.js}"></script>
+  	<script defer th:src="@{/js/actionValidate.js}"></script>
 </head>
 <body>
 <body>
@@ -26,7 +26,7 @@
 						<div class="col-xl-12 col-12 mb-4 mb-xl-0">
 						
 						<h3 class="text-muted text-center mb-3">카테고리 목록</h3>
-						<form name="actionForm" th:action="@{/admin/member/management/process}" method="post">
+						<form name="actionForm" th:action="@{/admin/category/management/process}" method="post">
 							<div class="form__header d-flex justify-content-between">
 								<div>
 									<select name="action">
@@ -35,7 +35,7 @@
 										<option value="del">삭제</option>
 									</select>
 									<input class="button button--light button--sm d-inline" type="submit" value="확인" />
-									<a class="button button--reverse mb-2" th:href="@{/admin/member/management/form}">사용자 추가</a>
+									<a class="button button--reverse mb-2" th:href="@{/admin/category/management/form}">카테고리 추가</a>
 								</div>
 							</div>
 							<div th:if="${message != null}" class="alert alert-success text-center">

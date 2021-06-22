@@ -4,7 +4,32 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.basakcoding.basak.mapper.CategoryMapper">
+
+	<!-- 카테고리 전체 리스트 -->
 	<select id="selectList" resultType="CategoryDTO">
 		SELECT * FROM category ORDER BY name
 	</select>
+	
+	<!-- 카테고리 ID로 조회 -->
+	<select id="getCategoryById" parameterType="String" resultType="CategoryDTO">
+		SELECT * FROM category WHERE category_id = #{categoryId}
+	</select>
+	
+	<!-- 카테고리 생성 -->
+	<insert id="createCategory" parameterType="Map">
+		INSERT INTO category VALUES(seq_category.NEXTVAL, #{name})
+	</insert>
+	
+	<!-- 카테고리 수정 -->
+	<update id="updateCategory" parameterType="Map">
+		UPDATE category SET name = #{name} WHERE category_id = ${categoryId}
+	</update>
+	
+	<!-- 카테고리 삭제 -->
+	<delete id="deleteMultpleCategory" parameterType="Map">
+		DELETE category WHERE category_id in
+		<foreach collection="target" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</delete>
 </mapper>
