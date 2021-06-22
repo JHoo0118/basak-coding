@@ -14,7 +14,7 @@
 <body>
 	<div class="container container--admin">
 		<div th:if="${param.error}">
-			<p class="text-danger font-weight-bold">잘못된 계정 정보입니다.</p>
+			<p class="text-danger font-weight-bold">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
 		</div>
 		<div th:if="${param.logout}">
 			<p class="text-success font-weight-bold">성공적으로 로그아웃 되었습니다.</p>

@@ -12,160 +12,162 @@
   	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
 </head>
 <body>
-	<!-- Header -->
-	<div th:replace="/admin/fragments/header.html :: fragment-header(${title})"></div>
-	<section class="col-xl-10 col-lg-9 col-md-8 mt-6 ml-auto">
+	<section class="form__section">
+		<h2>강의 등록</h2>
+		<nav>
+			<div class="nav nav-tabs" id="nav-tab" role="tablist">
+				<a class="nav-link active" id="nav-tab-1" data-toggle="tab" href="#createCourseOne">홈</a>
+				<a class="nav-link" id="nav-tab-2" data-toggle="tab" href="#createCourseTwo">썸네일</a>
+				<a class="nav-link" id="nav-tab-3" data-toggle="tab" href="#createCourseThree">커리큘럼</a>
+			</div>
+		</nav>
+	
 		<div class="container-fluid">
 			<form id="courseForm" name="courseForm" class="form" th:action="@{/admin/course/save}" method="post"
 				enctype="multipart/form-data">
 				<input type="hidden" name="courseId" th:value="${param.courseId}" />
-				
-				<div class="form-group row pb-3 position-relative">
-					<div class="col-sm-6 col-md-3">
-						<select class="custom-select border-0 post-form__category" name="categoryId">
-							<option selected value="">카테고리 선택</option>
-							<option th:each="category : ${listCategories}" 
-									th:value="${category.categoryId}"
-									th:text="${category.name}"></option>
-						</select>
-					</div>
-					<small>에러 메세지</small>
-				</div>
-				
-				<div class="form-group row pb-3 position-relative">
-					<div class="col-sm-6 col-md-3">
-						<select class="custom-select border-0 post-form__category" name="adminId">
-							<option selected value="">강사 선택</option>
-							<option th:each="admin : ${listAdmin}" 
-									th:value="${admin.adminId}"
-									th:text="${admin.name}"></option>
-						</select>
-					</div>
-					<small>에러 메세지</small>
-				</div>
-			
-				
-				<div class="form-group row pb-3 position-relative">
-					<label for="courseTitle" class="col-sm-3 col-form-label py-3">강의 제목</label>
-					<div class="col-sm-9">
-						<input type="text" th:value="${course_title}" class="form-control py-3" placeholder="강의 제목" name="courseTitle">
-					</div>
-					<small>에러 메세지</small>
-				</div>
-				
-				<div class="form-group row pb-3 position-relative">
-					<label for="shortDescription" class="col-sm-3 col-form-label py-3">강의 요약</label>
-					<div class="col-sm-9">
-						<textarea th:value="short_description" class="form-control py-3" placeholder="강의 요약" name="shortDescription"></textarea>
-					</div>
-					<small>에러 메세지</small>
-				</div>
-				
-				<div class="form-group row pb-3 position-relative">
-					<label for="description" class="col-sm-3 col-form-label py-3">강의 설명</label>
-					<div class="col-sm-9">
-						<textarea th:value="${description}" class="form-control py-3" placeholder="강의 설명" name="description"></textarea>
-					</div> 
-					<small>에러 메세지</small>
-				</div>
-				
-				<div class="form-group row pb-3 position-relative">
-					<div style="width:100%">
-						<div class="input row m-0" style="width:100%; padding:30px 0;">
-							<input type="file" name="thumbnail" class="d-none" accept="image/*" id="thumbnail">
-							<label for="thumbnail" class="image-button col-sm-3" style="margin-right: 15px; cursor:pointer;"><i class="far fa-image"></i> 썸네일 선택</label>
-							<img id="preview" class="img-fluid" alt="이미지 미리보기" style="width:100px; height:80px;" />
-						</div>
-					</div>
-					<small>에러 메세지</small>
-				</div>
-				
-				<div class="form-group row pb-3 position-relative">
-					<label for="price" class="col-sm-3 col-form-label py-3">가격</label>
-					<div class="col-sm-9">
-						<input type="text" th:value="${price}" class="form-control py-3" placeholder="가격 " name="price">
-					</div>
-					<small>에러 메세지</small>
-				</div>
-				
-				<div class="form-group row pb-3 position-relative">
-					<div class="col-sm-6 col-md-3">
-						<select class="custom-select border-0 post-form__category" name="difficulty">
-							<option selected value="">강의 난이도 선택</option>
-							<option value="쉬움">쉬움</option>
-							<option value="보통">보통</option>
-							<option value="어려움">어려움</option>
-						</select>
-					</div>
-					<small>에러 메세지</small>
-				</div>
-				
-				<!-- 
-				<div class="form-group pb-3 position-relative">
-					<label for="curriculum" class="col-form-label">커리큘럼</label>
-					<small>에러 메세지</small>
-					<div>
-						<input type="text" th:value="${curriculum}" class="form-control py-3" placeholder="커리큘럼 " name="curriculum">
-						<div>
-							<label class="col-form-label d-block">동영상 등록</label>
-							<input type="file" accept="video/*" name="video">
-							<div>
-								<label class="col-form-label d-block">파일 등록</label>
-								<input type="file" accept="*" name="video">
+				<!-- 전체 탭 시작 -->
+				<div class="tab-content" id="nav-tabContent">
+					<!-- 탭1 시작 -->
+					<div class="tab-pane fade show active" id="createCourseOne">
+						<div class="form-group row pb-3 position-relative">
+							<div class="col-sm-6 col-md-3 p-0">
+								<select class="custom-select border-0 selectpicker show-menu-arrow" name="categoryId">
+									<option selected value="">카테고리 선택</option>
+									<option th:each="category : ${listCategories}" 
+											th:value="${category.categoryId}"
+											th:text="${category.name}"></option>
+								</select>
 							</div>
 						</div>
 						
-					</div>
-				</div>
-				-->
-				
-				<!-- 커리큘럼 -->
-				<button id="addCurriculum" type="button" class="button button--purple mr-2">커리큘럼 추가</button>
-				<div class="accordion" id="accordionCurriculum">
-				  <div class="card" id="curriculum-1">
-				    <div class="card-header">
-				        <input name="curriculum-1" placeholder="커리큘럼" class="btn btn-block text-left" type="text" data-toggle="collapse" data-target="#collapse-1" />
-				    </div>
-				    
-				    <div id="collapse-1" class="collapse show" data-parent="#accordionCurriculum">
-				      <div class="card-body row px-3 position-relative">
-				      	<button id="addVideo-1" type="button" class="button button--purple mr-2 position-absolute" style="top:-10px">비디오 추가</button>
-				      	<div class="video-file col-md-6 col-lg-4">
-					        <label class="col-form-label d-block">동영상 등록</label>
-							<input name="videoTitle-1-1" type="text" placeholder="비디오 제목">
-							<input name="video-1-1" type="file" accept="video/*">
-							<div>
-								<button id="addFile-1-1" type="button" class="button button--purple">파일 추가</button>
-								<label class="col-form-label d-block">파일 등록</label>
-								<input class="d-block" name="file-1-1" type="file">
+						<div class="form-group row pb-3 position-relative">
+							<div class="col-sm-6 col-md-3 p-0">
+								<select class="custom-select border-0" name="adminId">
+									<option selected value="">강사 선택</option>
+									<option th:each="admin : ${listAdmin}" 
+											th:value="${admin.adminId}"
+											th:text="${admin.name}"></option>
+								</select>
 							</div>
 						</div>
-				      </div>
-				    </div>
-				  </div>
-				</div>
-			
-				<!-- FAQ -->
-				<button id="addFaq" type="button" class="button button--purple mr-2">FAQ 추가</button>
-				<div class="accordion" id="accordionFaq">
-				  <div class="card">
-				    <div class="card-header">
-				        <input name="faqTitle-1" placeholder="FAQ" class="btn btn-block text-left" type="text" data-toggle="collapse" data-target="#collapseFaq-1" />
-				    </div>
-				    <div id="collapseFaq-1" class="collapse show" data-parent="#accordionFaq">
-				      	<textarea class="card-body w-100" rows="3" placeholder="내용" name="faqContent-1"></textarea>
-				    </div>
-				  </div>
-				</div>
-			
-				<div class="form-group row">
-					<div class="col-sm-12">
-						<div class="btn-group d-flex justify-content-end mb-3" role="group">
-							<button th:text="${param.courseId == null} ? '등록' : '수정'" type="submit" class="button button--purple mr-2"></button>
+					
+						<div class="form-group row pb-3 position-relative">
+							<div class="col-sm-6 col-md-3 p-0">
+								<select class="custom-select border-0 post-form__category" name="difficulty">
+									<option selected value="">강의 난이도 선택</option>
+									<option value="쉬움">쉬움</option>
+									<option value="보통">보통</option>
+									<option value="어려움">어려움</option>
+								</select>
+							</div>
+							<small>에러 메세지</small>
+						</div>
+						
+						<div class="form-group row pb-3 position-relative">
+							<label for="courseTitle" class="col-sm-3 col-form-label py-3">강의 제목</label>
+							<div class="col-sm-9">
+								<input type="text" th:value="${course_title}" class="form-control py-3" placeholder="강의 제목" name="courseTitle">
+							</div>
+							<small>에러 메세지</small>
+						</div>
+						
+						<div class="form-group row pb-3 position-relative">
+							<label for="shortDescription" class="col-sm-3 col-form-label py-3">강의 요약</label>
+							<div class="col-sm-9">
+								<textarea th:value="short_description" class="form-control py-3" placeholder="강의 요약" name="shortDescription"></textarea>
+							</div>
+							<small>에러 메세지</small>
+						</div>
+						
+						<div class="form-group row pb-3 position-relative">
+							<label for="description" class="col-sm-3 col-form-label py-3">강의 설명</label>
+							<div class="col-sm-9">
+								<textarea th:value="${description}" class="form-control py-3" placeholder="강의 설명" name="description"></textarea>
+							</div> 
+							<small>에러 메세지</small>
+						</div>
+						
+						<div class="form-group row pb-3 position-relative">
+							<label for="price" class="col-sm-3 col-form-label py-3">가격</label>
+							<div class="col-sm-9">
+								<input type="text" th:value="${price}" class="form-control py-3" placeholder="가격 " name="price">
+							</div>
+							<small>에러 메세지</small>
+						</div>
+						<div class="d-flex justify-content-end">
+							<!-- <a th:text="다음으로" class="button button--purple mr-2" data-toggle="tab" href="#createCourseTwo"></a> -->
 							<button type="button" class="button button--light" onclick="javascript:history.back()">취소</button>
 						</div>
 					</div>
+					<!-- 탭1 끝 -->
+					<!-- 탭2 시작 -->
+					<div class="tab-pane fade show" id="createCourseTwo">
+						<div class="form-group row pb-3 position-relative">
+							<div style="width:100%">
+								<div class="input row m-0" style="width:100%; padding:30px 0;">
+									<input type="file" name="thumbnail" class="d-none" accept="image/*" id="thumbnail">
+									<label for="thumbnail" class="image-button col-sm-3" style="margin-right: 15px; cursor:pointer;"><i class="far fa-image"></i> 썸네일 선택</label>
+									<img id="preview" class="img-fluid" alt="이미지 미리보기" style="width:100px; height:80px;" />
+								</div>
+							</div>
+							<small>에러 메세지</small>
+						</div>
+					</div>
+					<!-- 탭2 끝 -->
+					<!-- 탭3 시작 -->
+					<div class="tab-pane fade" id="createCourseThree">
+						<!-- 커리큘럼 -->
+						<button id="addCurriculum" type="button" class="button button--purple mr-2">커리큘럼 추가</button>
+						<div class="accordion" id="accordionCurriculum">
+						  <div class="card" id="curriculum-1">
+						    <div class="card-header">
+						        <input name="curriculum-1" placeholder="커리큘럼" class="btn btn-block text-left" type="text" data-toggle="collapse" data-target="#collapse-1" />
+						    </div>
+						    
+						    <div id="collapse-1" class="collapse show" data-parent="#accordionCurriculum">
+						      <div class="card-body row px-3 position-relative">
+						      	<button id="addVideo-1" type="button" class="button button--purple mr-2 position-absolute" style="top:-10px">비디오 추가</button>
+						      	<div class="video-file col-md-6 col-lg-4">
+							        <label class="col-form-label d-block">동영상 등록</label>
+									<input name="videoTitle-1-1" type="text" placeholder="비디오 제목">
+									<input name="video-1-1" type="file" accept="video/*">
+									<div>
+										<button id="addFile-1-1" type="button" class="button button--purple">파일 추가</button>
+										<label class="col-form-label d-block">파일 등록</label>
+										<input class="d-block" name="file-1-1" type="file">
+									</div>
+								</div>
+						      </div>
+						    </div>
+						  </div>
+						</div>
+					
+						<!-- FAQ -->
+						<button id="addFaq" type="button" class="button button--purple mr-2">FAQ 추가</button>
+						<div class="accordion" id="accordionFaq">
+						  <div class="card">
+						    <div class="card-header">
+						        <input name="faqTitle-1" placeholder="FAQ" class="btn btn-block text-left" type="text" data-toggle="collapse" data-target="#collapseFaq-1" />
+						    </div>
+						    <div id="collapseFaq-1" class="collapse show" data-parent="#accordionFaq">
+						      	<textarea class="card-body w-100" rows="3" placeholder="내용" name="faqContent-1"></textarea>
+						    </div>
+						  </div>
+						</div>
+					
+						<div class="form-group row">
+							<div class="col-sm-12">
+								<div class="btn-group d-flex justify-content-end mb-3" role="group">
+									<button th:text="${param.courseId == null} ? '등록' : '수정'" type="submit" class="button button--purple mr-2"></button>
+									<button type="button" class="button button--light" onclick="javascript:history.back()">취소</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 탭3 끝 -->
 				</div>
+				<!-- 전체 탭 끝 -->
 			</form>
 		</div>
 	</section>
@@ -285,7 +287,7 @@
 			document.getElementById('accordionFaq').insertAdjacentHTML('beforeEnd', faqHtml);
 		});
 		
-		
+		// 썸네일 미리보기
 		function showImagePreview(fileInput) {
 			var file = fileInput.files[0];
 			var reader = new FileReader();

@@ -20,7 +20,7 @@ spring:
     
   servlet:    multipart:      max-file-size: -1
       max-request-size: -1
-          
+  main:    allow-bean-definition-overriding: true        
 
 # MyBatis
 # 패키지 경로에 따라 다르게 설정

@@ -20,7 +20,7 @@
     <section class="signin">
         <div class="container-fluid signin__container">
             <h2 class="signin__title">로그인</h2>
-            <form class="row">
+            <form class="row" method="post" th:action="@{/auth/signin}">
                 <div class="form-group form__group p-0 position-relative">
                     <div class="p-0">
                         <input type="email" class="form-control form__input error" placeholder="이메일을 입력해주세요." name="email" />
@@ -39,7 +39,7 @@
                 <h5 class="signin__link">
                     <span class="d-block">비밀번호를 잊으셨나요?</span><a th:href="@{/auth/reset-pass}">비밀번호 찾기</a>
                 </h5>
-                <button class="button button--rounded button--full" style="color: #0fd; margin-top: 60px">
+                <button type="submit" class="button button--rounded button--full" style="color: #0fd; margin-top: 60px">
                     로그인하기
                 </button>
             </form>

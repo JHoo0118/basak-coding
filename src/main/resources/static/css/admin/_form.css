@@ -99,3 +99,11 @@
 .custom-select {
 	height: 60px;
 }
+
+/* 새로 추가 */
+.form__section {
+	padding: 4rem 0;
+	width: 70%;
+	margin: 0 auto;
+	
+}
