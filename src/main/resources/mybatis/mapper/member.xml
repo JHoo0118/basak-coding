@@ -18,8 +18,9 @@
 	</select>
 	
 	<!-- 로그인확인용 -->
-	<select id="loginOk"  parameterType="Map" resultType="int">
-		SELECT COUNT(*) FROM members WHERE email=#{email} AND password=#{password}
+	<select id="loginOk"  parameterType="Map" resultType="String">
+		<!-- SELECT COUNT(*) FROM members WHERE email=#{email} AND password=#{password} -->
+		SELECT member_id FROM members WHERE email=#{email} AND password=#{password}
 	</select>
 	
 	<!-- 아이디로 사용자 얻기 -->

@@ -37,6 +37,6 @@ public interface MemberMapper {
 	int fileUpdate(Map map);
 	
 	//로그인 확인
-	int loginOk(Map map);
+	String loginOk(Map map);
 	
 }

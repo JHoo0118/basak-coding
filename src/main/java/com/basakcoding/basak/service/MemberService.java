@@ -70,7 +70,7 @@ public class MemberService {
     }
     
     //로그인 확인
-    public int loginOk(Map map) {
+    public String loginOk(Map map) {
     	return memberMapper.loginOk(map);
     }
     
