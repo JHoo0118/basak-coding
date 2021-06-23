@@ -5,6 +5,8 @@
 
 <mapper namespace="com.basakcoding.basak.mapper.MemberMapper">
 
+
+
 	<!-- 테스트 -->
 	<select id="selectListWithReview" resultType="map" >
 		SELECT m.*, r.content, r.rating FROM members m JOIN review r ON m.member_id = r.member_id
@@ -13,6 +15,12 @@
 	<!-- 전체 사용자 얻기 -->
 	<select id="selectList" resultType="MemberDTO" >
 		SELECT * FROM members ORDER BY registered_at DESC
+	</select>
+	
+	<!-- 로그인확인용 -->
+	<select id="loginOk"  parameterType="Map" resultType="String">
+		<!-- SELECT COUNT(*) FROM members WHERE email=#{email} AND password=#{password} -->
+		SELECT member_id FROM members WHERE email=#{email} AND password=#{password}
 	</select>
 	
 	<!-- 아이디로 사용자 얻기 -->

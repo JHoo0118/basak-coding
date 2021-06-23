@@ -11,6 +11,7 @@ import com.basakcoding.basak.mapper.MemberMapper;
 
 @Service
 public class MemberService {
+	@Autowired
 	private MemberMapper memberMapper;
     public  MemberService(MemberMapper memberMapper) {
         this.memberMapper = memberMapper;
@@ -66,6 +67,11 @@ public class MemberService {
     //파일 업로드
     public int fileUpdate(Map map) {
     	return memberMapper.fileUpdate(map);
+    }
+    
+    //로그인 확인
+    public String loginOk(Map map) {
+    	return memberMapper.loginOk(map);
     }
     
 }
