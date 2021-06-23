@@ -10,95 +10,26 @@
 	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
 	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
   	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
-  	<script>
-  	$(document).ready(function(){
-	$('#userImage').change(function(e) {
-	  var file=$('#userImage')[0].files[0];
-	  var formData = new FormData();
-	  formData.append('userId',1);
-	  formData.append('file',file);
-	  
-	  $.ajax({
-		url:'/dashBoard/profileImgUpdate',
-		processData:false,
-		contentType:false,
-		data: formData,
-        type: 'POST',
-       	success: function(result){
-			if(result==0){alert("업로드 실패")}
-			else if(result==1){
-				console.log("파일!!!!!!!!!!!",file)
-				var reader = new FileReader();
-				reader.onload = function(e){
-					$('#userImg').attr('src',e.target.result);
-				};
-				reader.readAsDataURL(file);
-			}
-			else if(result== -1){alert("프로필사진입니다 이미지파일만 올려주세요")}
-			else if(result== -2)alert("이미지 용량이 너무커요!");
-        	alert("업로드 성공!!");
-          },
-        error:function(){
-			alert('업로드에 실패했어요');
-			}
-
-		});
-	});
-});
   	
-  	</script>
 </head>
 
 <body style="background-color: #1e1e1e;">
    	<!-- Navbar -->
 	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
-
-    <!-- 메인 섹션 시작 -->
-    <section class="dashboard">
-        <div class="container-fluid container--main">
-            <div class="dashboard__common">
-                <div class="common__left">
-                    <input id="userImage" type="file" accept="image/*" name="file" style="display: none;" />
-                    <label class="position-relative rounded-circle" for="userImage">
-                        <img id="userImg" th:src="@{/images/image4.jpg}" alt="프로필 이미지" />
-                        <i class="fa fa-plus-circle"></i>
-                    </label>
-                </div>
-                <h1 class="common__middle">신중한라이언I45</h1>
-                <div class="common__vertical"></div>
-                <div class="common__right row m-0">
-                    <div class="right__box col-6">
-                        <h4>수강 중인 코스</h4>
-                        <span>1</span>
-                    </div>
-                    <div class="right__box col-6">
-                        <h4>수강 만료 코스</h4>
-                        <span>1</span>
-                    </div>
-                    <div class="right__box col-6">
-                        <h4>나의 질문</h4>
-                        <span>2</span>
-                    </div>
-                    <div class="right__box col-6">
-                        <h4>나의 답변</h4>
-                        <span>0</span>
-                    </div>
-                </div>
-            </div>
-            <nav class="dashboard__tab">
-                <div class="nav nav-tabs" id="nav-tab">
-                    <a class="nav-link tab__link active" th:href="@{/personal/dashboard}"href="/dashboard.html">나의
-                        대시보드</a>
-                    <a class="nav-link tab__link" th:href="@{/personal/profile}">나의
-                        프로필</a>
-                    <a class="nav-link tab__link" th:href="@{/personal/qAndA/questions?page=1}">나의
-                        질문답변</a>
-                </div>
-            </nav>
-        </div>
-
+	<!-- mypage -->
+	<div th:insert="/frontend/fragments/mypage.html :: fragment-mypage"></div>
+	<nav class="dashboard__tab">
+			<div class="nav nav-tabs" id="nav-tab">
+				<a class="nav-link tab__link active" th:href="@{/personal/dashboard}" href="/dashboard.html">나의
+					대시보드</a>
+				<a class="nav-link tab__link" th:href="@{/personal/profile}">나의
+					프로필</a>
+				<a class="nav-link tab__link" th:href="@{/personal/qAndA/questions?page=1}">나의
+					질문답변</a>
+			</div>
+		</nav>
         <!-- 나의 대시보드 시작 -->
-        <div class="tab-content tab__page" id="nav-tabContent">
+        <div class="tab-content tab__page" id="nav-tabContent" >
             <div class="container-fluid container--main">
                 <div class="tab-pane fade show active tab__content" id="nav-home">
                     <ul class="nav nav-pills mb-3 row" id="pills-tab">
@@ -138,8 +69,8 @@
                                     </div>
                                 </div>
                                 <div class="dashboard__footer">
-                                    <h4>코드라이언</h4>
-                                    <span>2021.05.30~2021.06.12</span>
+                                    <h4>강사이름</h4>
+                                    <span>수강기간</span>
                                 </div>
                             </div>
                             <div class="dashboard__card col-sm-6">
@@ -147,17 +78,17 @@
                                     <div class="header__left">
                                         <img th:src="@{/images/image4.jpg}" />
                                         <div class="header__info">
-                                            <span>ETC</span>
-                                            <h4>Try Your CODE LION!</h4>
+                                            <span>카테고리</span>
+                                            <h4>강의제목</h4>
                                         </div>
                                     </div>
                                     <div class="header__right">
                                         <a th:href="@{/class/SANIOQWENIWN}"><i class="fa fa-play-circle"></i></a>
                                     </div>
                                 </div>
-                                <p>코드라이언 코스 100% 활용하기</p>
+                                <p>짧은강의설명</p>
                                 <div class="dashboard__progress">
-                                    <span>100%</span>
+                                    <span>강의진행도</span>
                                     <div class="progress lecture__progress">
                                         <div class="progress-bar progress__bar bg-success" role="progressbar"
                                             style="width: 100%"></div>

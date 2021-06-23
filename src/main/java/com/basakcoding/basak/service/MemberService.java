@@ -67,5 +67,24 @@ public class MemberService {
     public int fileUpdate(Map map) {
     	return memberMapper.fileUpdate(map);
     }
-    
+    //회원정보 가져오기
+    public Map selectMyInfo(int userId) {
+    	return memberMapper.selectMyInfo(userId);
+    }
+    //사용자 아이디로 결제강의 개수가져오기
+    public int paymentCount(int userId) {
+    	return memberMapper.paymentCount(userId);
+    }
+    //사용자 아이디로 댓글 개수가져오기
+    public int commentsCount(int userId) {
+    	return memberMapper.commentsCount(userId);
+    }
+    //사용자 아이디로 질문 개수가져오기
+    public int questionCount(int userId) {
+    	return memberMapper.questionCount(userId);
+    }
+    //사용자 아이디로 닉네임 변경하기
+    public int userNameEdit(Map map) {
+    	return memberMapper.userNameEdit(map);
+    }
 }

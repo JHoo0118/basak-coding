@@ -36,4 +36,18 @@ public interface MemberMapper {
 	//파일 업로드
 	int fileUpdate(Map map);
 	
+	// 내정보 가져오기
+	Map selectMyInfo(int userId);
+	
+	//결제 강의개수가져오기
+	int paymentCount(int userId);
+	
+	//내 댓글 개수
+	int commentsCount(int userId);
+	
+	//내 질문 개수
+	int questionCount(int userId);
+
+	//내 닉네임 변경
+	int userNameEdit(Map map);
 }

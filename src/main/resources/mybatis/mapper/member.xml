@@ -51,8 +51,37 @@
 			#{item}
 		</foreach>
 	</delete>
+	
 	<!-- 파일 업로드 -->
 	<update id="fileUpdate" parameterType="Map">
 		UPDATE MEMBERS SET AVATAR=#{file_name} WHERE MEMBER_ID=#{userId}
 	</update>
+	
+	<!-- 프로필페이지 내정보 가져오기 -->
+	<select id="selectMyInfo" parameterType="int" resultType="map">
+		SELECT * FROM members WHERE member_id=#{userId}
+	</select>
+	
+	<!-- 결제한 강의 개수가져오기 -->
+	<select id="paymentCount" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM payment p JOIN members m ON (p.member_id =m.member_id) WHERE m.member_id=#{userId}
+		AND p.payment_state='결제 완료'
+	</select>
+	
+	<!-- 나의 댓글 개수-->
+	<select id="commentsCount" parameterType="int" resultType="int">
+		select count(*) from comments c JOIN members m ON (c.member_id = m.member_id) WHERE m.member_id=#{userId}
+	</select>
+	
+	<!-- 나의 질문 개수-->
+	<select id="questionCount" parameterType="int" resultType="int">
+		select count(*) from question q JOIN members m ON (q.member_id = m.member_id) WHERE m.member_id=#{userId}
+	</select>
+	
+	<!-- 나의 닉네임 변경 -->
+	<update id="userNameEdit" parameterType="Map">
+		UPDATE members SET username=#{username} WHERE member_id=#{userId}
+	</update>
+	
+	
 </mapper>
