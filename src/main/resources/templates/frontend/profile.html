@@ -10,57 +10,84 @@
 	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
 	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
   	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+  	<script>
+  	$(document).ready(function(){
+	var userId ="[[${member.MEMBER_ID}]]";
+		//닉네임 수정
+		$('#usernamebtn').click(function(){
+			var username = $('#username').val();
+			var json = {"username":username,"userId":userId};
+			$.ajax({
+				url:'/personal/userprofile/edit.do',
+				data:JSON.stringify(json),
+				type:"POST",
+				contentType:"application/json; charset=UTF-8",
+				success:function(success){
+					if(success==1){
+						alert("닉네임이 변경되었습니다");
+						$('#username').val(username);
+					}
+					else if(success== -1)
+						alert("닉네임은 최대10자리입니다");
+				},
+				error:function(){
+					alert("닉네임변경에 실패했습니다 다시시도해주세요");
+					console.log("닉네임변경에 실패했습니다 다시시도해주세요");
+				}				
+			});
+		});
+		//비밀번호 수정버튼
+		$('#passbtn').click(function(){
+			var json={"userId":userId,"editpass":pass};
+			$.ajax({
+				url:'/personal/userprofile/edit.do',
+				data:JSON.stringify(json),
+				type:"POST",
+				contentType:"application/json; charset=UTF-8",
+				success:function(success){},
+				error:function(){
+					alert("비밀번호 변경에 실패했습니다 다시시도해주세요");
+					console.log("비밀번호변경에 실패했습니다 다시시도해주세요");
+				}
+			});
+		});
+	});
+  	//비밀번호 수정
+  	var userpass ="[[${member.PASSWORD}]]";
+		function passwordedit(){
+  			var pass = $('#userpass').val();
+			console.log(pass)
+			if(userpass==pass){
+				$('#passbtn').attr("disabled",false);
+				$('#userpass').removeClass('error');
+				$('#passerror').text("");
+			}
+			else{
+				$('#passerror').text("비밀번호가 일치하지 않아요");
+				$('#userpass').addClass('error');
+				$('#passbtn').attr("disabled",true);
+			}
+		};
+  	
+  	</script>
 </head>
 
 <body style="background-color: #1e1e1e;">
    	<!-- Navbar -->
 	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
-
-    <!-- 메인 섹션 시작 -->
-    <section class="dashboard">
-        <div class="container-fluid container--main">
-            <div class="dashboard__common">
-                <div class="common__left">
-                    <input id="userImage" type="file" accept="image/*" name="file" style="display: none;" />
-                    <label class="position-relative rounded-circle" for="userImage">
-                        <img th:src="@{/images/image4.jpg}" alt="프로필 이미지" />
-                        <i class="fa fa-plus-circle"></i>
-                    </label>
-                </div>
-                <h1 class="common__middle">신중한라이언I45</h1>
-                <div class="common__vertical"></div>
-                <div class="common__right row m-0">
-                    <div class="right__box col-6">
-                        <h4>수강 중인 코스</h4>
-                        <span>1</span>
-                    </div>
-                    <div class="right__box col-6">
-                        <h4>수강 만료 코스</h4>
-                        <span>1</span>
-                    </div>
-                    <div class="right__box col-6">
-                        <h4>나의 질문</h4>
-                        <span>2</span>
-                    </div>
-                    <div class="right__box col-6">
-                        <h4>나의 답변</h4>
-                        <span>0</span>
-                    </div>
-                </div>
-            </div>
-            <nav class="dashboard__tab">
-                <div class="nav nav-tabs" id="nav-tab">
-                    <a class="nav-link tab__link" th:href="@{/personal/dashboard}"href="/dashboard.html">나의
-                        대시보드</a>
-                    <a class="nav-link tab__link active" th:href="@{/personal/profile}">나의
-                        프로필</a>
-                    <a class="nav-link tab__link" th:href="@{/personal/qAndA/questions?page=1}">나의
-                        질문답변</a>
-                </div>
-            </nav>
-        </div>
-
+	<!-- mypage -->
+	<div th:insert="/frontend/fragments/mypage.html :: fragment-mypage"></div>
         <!-- 나의 프로필 시작 -->
+        <nav class="dashboard__tab">
+			<div class="nav nav-tabs" id="nav-tab">
+				<a class="nav-link tab__link " th:href="@{/personal/dashboard}" href="/dashboard.html">나의
+					대시보드</a>
+				<a class="nav-link tab__link active" th:href="@{/personal/profile}">나의
+					프로필</a>
+				<a class="nav-link tab__link" th:href="@{/personal/qAndA/questions?page=1}">나의
+					질문답변</a>
+			</div>
+		</nav>
         <div class="tab-pane tab__page fade show tab__content">
             <div class="container-fluid container--main">
                 <!-- 나의 계정 시작 -->
@@ -81,7 +108,7 @@
                         <div class="account__info row m-0">
                             <div class="info__left col-sm-6">
                                 <h4>이메일</h4>
-                                <span>abcd@test.com</span>
+                                <span>[[${member.EMAIL}]]</span>
                             </div>
                             <div class="info__right position-relative col-sm-6">
                                 <h4>소속</h4>
@@ -93,15 +120,15 @@
                                 <div class="form-group form__group p-0 position-relative">
                                     <div class="p-0">
                                         <label class="labe__text">닉네임 변경</label>
-                                        <input type="text" autocomplete="off"
+                                        <input id="username" type="text" autocomplete="off"
                                             class="form-control form__input input__payment input__payment--border"
-                                            value="신중한라이언I45" placeholder="닉네임을 입력해 주세요" name="username" />
+                                            th:value="*{member.USERNAME}" placeholder="닉네임을 입력해 주세요" name="username" />
                                     </div>
 				                    <!-- 에러 출력용 -->
 				                    <small class="error"></small>
                                 </div>
                                 <div class="flex__end">
-                                    <button
+                                    <button id="usernamebtn"
                                         class="button button--rounded button--sm button--orange editButton">수정하기</button>
                                 </div>
                             </form>
@@ -109,16 +136,16 @@
                                 <div class="form-group form__group p-0 position-relative">
                                     <div class="p-0">
                                         <label class="labe__text">비밀번호 변경</label>
-                                        <input type="password" autocomplete="off"
-                                            class="form-control form__input input__payment input__payment--border error"
+                                        <input id="userpass" oninput="passwordedit()" type="password" autocomplete="off"
+                                            class="form-control form__input input__payment input__payment--border"
                                             placeholder="현재 비밀번호를 입력해 주세요" name="password" />
                                     </div>
 				                    <!-- 에러 출력용 -->
-                                    <small class="error">에러 메세지</small>
+                                    <small id="passerror" class="error"></small>
                                 </div>
 
                                 <div class="flex__end">
-                                    <button class="button button--rounded button--sm button--orange editButton"
+                                    <button id="passbtn" class="button button--rounded button--sm button--orange editButton"
                                         disabled>수정하기</button>
                                 </div>
                             </form>
