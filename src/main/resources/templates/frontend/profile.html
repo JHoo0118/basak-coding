@@ -75,19 +75,23 @@
 <body style="background-color: #1e1e1e;">
    	<!-- Navbar -->
 	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
+	<!-- 메인 섹션 시작 -->
+    <section class="dashboard">
+        <div class="container-fluid container--main">
 	<!-- mypage -->
-	<div th:insert="/frontend/fragments/mypage.html :: fragment-mypage"></div>
-        <!-- 나의 프로필 시작 -->
-        <nav class="dashboard__tab">
-			<div class="nav nav-tabs" id="nav-tab">
-				<a class="nav-link tab__link " th:href="@{/personal/dashboard}" href="/dashboard.html">나의
-					대시보드</a>
-				<a class="nav-link tab__link active" th:href="@{/personal/profile}">나의
-					프로필</a>
-				<a class="nav-link tab__link" th:href="@{/personal/qAndA/questions?page=1}">나의
-					질문답변</a>
-			</div>
-		</nav>
+			<div th:insert="/frontend/fragments/mypage.html :: fragment-mypage"></div>
+	        <!-- 나의 프로필 시작 -->
+	        <nav class="dashboard__tab">
+				<div class="nav nav-tabs" id="nav-tab">
+					<a class="nav-link tab__link " th:href="@{/personal/dashboard}" href="/dashboard.html">나의
+						대시보드</a>
+					<a class="nav-link tab__link active" th:href="@{/personal/profile}">나의
+						프로필</a>
+					<a class="nav-link tab__link" th:href="@{/personal/qAndA/questions?page=1}">나의
+						질문답변</a>
+				</div>
+			</nav>
+		</div>
         <div class="tab-pane tab__page fade show tab__content">
             <div class="container-fluid container--main">
                 <!-- 나의 계정 시작 -->

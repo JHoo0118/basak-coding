@@ -38,6 +38,9 @@ public class CatalogController {
 	@GetMapping("/catalog")
 	public String catalog(Model model ) {
 		List<Map> courseList = catalogService.courseList();
+		for (Map map : courseList) {
+			map.put("PATH", "/upload/course/" + map.get("COURSE_ID") + "/thumbnail/" + map.get("THUMBNAIL"));
+		}
 		model.addAttribute("courseList", courseList);
 		return "frontend/catalog";
 	}

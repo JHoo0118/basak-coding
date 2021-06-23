@@ -28,8 +28,10 @@
                         <div class="lecture-profile" style="background-image: url(/images/image10.jpg);"></div>
                         <a th:href="@{/catalog/}+${course.COURSE_ID}">
                             <div class="card lecture">
-                                <img th:src="@{/images/}+${course.THUMBNAIL}" class="card-img-top lecture__thumbnail"
+                                <img th:if="${course.THUMBNAIL != null}" th:src="@{${course.PATH}}" class="card-img-top lecture__thumbnail"
                                     alt="thumbnail" />
+                                <!-- <img th:if="${course.THUMBNAIL == null}" th:src="@{/images/image4.jpg}" class="card-img-top lecture__thumbnail"
+                                    alt="thumbnail" /> -->
                                 <div class="card-body">
                                     <h5 class="card-title lecture__title iine-clamp">
                                         [[${course.TITLE}]]
