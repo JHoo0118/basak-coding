@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,6 @@ import com.basakcoding.basak.service.CatalogService;
 import com.basakcoding.basak.service.CourseDTO;
 
 
-@SessionAttributes("memberId")
 @Controller
 public class CatalogController {
 	
@@ -38,9 +38,7 @@ public class CatalogController {
 	@GetMapping("/catalog")
 	public String catalog(Model model ) {
 		List<Map> courseList = catalogService.courseList();
-		
 		model.addAttribute("courseList", courseList);
-		
 		return "frontend/catalog";
 	}
 	
@@ -48,13 +46,13 @@ public class CatalogController {
 	
 	//강의목록 상세 페이지
 	@GetMapping("/catalog/{courseId}")
-	public String catalogDetail(@PathVariable String courseId , Model model) {
+	public  String catalogDetail(HttpSession session , @PathVariable String courseId , Model model) {
 			
 		Map map = catalogService.selectOne(courseId);
-		System.out.println("Map:"+map);
 		
+		//map.put("memberId",session.getAttribute("id"));
+		//int likeCheck = catalogService.likeCheck(map);
 		model.addAttribute("course",map);
-		
 		return "/frontend/catalogDetail";
 
 	}
@@ -74,11 +72,6 @@ public class CatalogController {
 		
 		if(memberId == null){//비로그인시
 			resp.setContentType("text/html; charset-UTF-8");
-			PrintWriter out = resp.getWriter();
-			out.println("<script>");			
-			out.println("alert('로그인 후 이용 가능합니다');");
-			out.println("history.back();");
-			out.println("</script>");
 			System.out.println("로그인상태가 아님");
 			return affected=2;
 			
@@ -87,17 +80,16 @@ public class CatalogController {
 			int likeCheck = catalogService.likeCheck(map);
 			
 			if(likeCheck == 0) {//좋아요 등록이 안돼있으면
-				int like = catalogService.like(map);
+				catalogService.like(map);
 				System.out.println("likeCheck:" + likeCheck);
-				int likePlus = catalogService.likeCount(map);
+				catalogService.likeCount(map);
 				return affected=0;
 			
 			}//작은 if
 			else {//likeCheck 결과 값이 1일떄 (이미 좋아요가 등록이 돼있을때)
-				
-				int unLike = catalogService.unLike(map);
+				catalogService.unLike(map);
 				System.out.println("likeCheck:" + likeCheck);
-				int likeMinus = catalogService.likeCount(map);
+				catalogService.likeCount(map);
 				return affected=1;
 			
 			}//작은 else

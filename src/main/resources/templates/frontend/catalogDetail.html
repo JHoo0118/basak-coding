@@ -26,7 +26,7 @@
             <div   class="row" style="padding-bottom: 10rem; ">
 				<!-- 좋아요 -->            
                 <div class="col-md-9 detail__left">
-                    <button class="detail__like" id="likeCount" ><i class="far fa-thumbs-up">
+                    <button class="detail__like" id="likeCount" ><i class="far fa-thumbs-up" >
                     </i>[[${course.LIKE_COUNT}]]</button>
                     <div class="detail__info">
                     	
@@ -86,7 +86,8 @@
 							
 							
                            	
-               				var memberId="3";
+               				//var memberId="[[${session.id}]]";
+               				var memberId="1";
                            	var courseId= "[[${course.COURSE_ID}]]";
 							console.log("courseId:",courseId);	
 							
@@ -100,7 +101,6 @@
 								url : "[[@{/catalog/count_like}]]",
 								type:"post",
 								data:JSON.stringify(data),//userId=1,courseId=1
-								
 								contentType: "application/json" ,
 								success:function(data){
 										console.log("data:",data)
@@ -108,20 +108,21 @@
 										var likeCount = Number.parseInt($('.detail__like').text());
                                         likeCount++;
                                         console.log("likeCount:",likeCount);
-										$('#likeCount').html('<i class="far fa-thumbs-up"></i>'+likeCount);
-																				
+										$('#likeCount').html('<i class="fas fa-thumbs-up" ></i>'+likeCount);
+										$('#likeCount').prop("style","color: rgb(0, 255, 255);");										
 										
 									}
 									else if(data==1){////기존에 좋아요를 눌렀놨을때
 										var likeCount = Number.parseInt($('.detail__like').text());
                                         likeCount--;
                                         console.log("likeCount:",likeCount);
-										$('#likeCount').html('<i class="far fa-thumbs-down"></i>'+likeCount);	
+										$('#likeCount').html('<i class="far fa-thumbs-up"></i>'+likeCount);	
+										$('#likeCount').prop("style","color: gray;");										
 										
 									}
 									else if(data==2){
 										console.log("로그인상태 아님 ");
-										
+										alert("로그인후 이용 하세요");
 									}
 									
 								}
