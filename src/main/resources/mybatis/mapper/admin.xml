@@ -6,12 +6,22 @@
 <mapper namespace="com.basakcoding.basak.mapper.AdminMapper">
 	<!-- 모든 관리자(강사) 얻기 -->
 	<select id="getAdminList" resultType="AdminDTO">
-		SELECT * FROM admins
+		SELECT * FROM admins ORDER BY created_at DESC
 	</select>
 	
 	<!-- 이메일로 관리자 얻기 -->
 	<select id="getAdminByEmail" parameterType="String" resultType="AdminDTO">
 		SELECT * FROM admins WHERE email=#{email}
+	</select>
+	
+	<!-- 아이디로 관리자 얻기 -->
+	<select id="getAdminById" parameterType="String" resultType="AdminDTO">
+		SELECT * FROM admins WHERE admin_id = #{adminId}
+	</select>
+	
+	<!-- 이름으로 관리자 얻기 -->
+	<select id="getAdminByName" parameterType="String" resultType="AdminDTO">
+		SELECT * FROM admins WHERE name = #{name}
 	</select>
 	
 	<!-- 관리자 비밀번호 해싱 -->
@@ -22,6 +32,20 @@
 	<!-- 관리자 생성 -->
 	<insert id="createAdmin" parameterType="AdminDTO">
 		INSERT INTO admins VALUES(seq_admins.NEXTVAL, 'admin@test.com', '바삭코딩', #{password}, null, DEFAULT, null)
+	</insert>
+	
+	<!-- 관리자 Map으로 생성 -->
+	<!-- 사용자 생성, selectKey로 adminId반환 -->
+	<insert id="createAdminByMap" parameterType="Map">
+		<selectKey keyProperty="adminId" resultType="int" order="BEFORE">
+			SELECT seq_admins.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO admins VALUES(#{adminId}, #{email}, #{name}, #{password},
+		<choose>
+			<when test="avatar != null">#{avatar},</when>
+			<otherwise>null,</otherwise>
+		</choose>
+		DEFAULT, #{bio})
 	</insert>
 	
 </mapper>

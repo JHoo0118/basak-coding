@@ -20,6 +20,9 @@
 							<li th:classappend="${title == '홈'} ? current" class="nav-item mb-2">
 								<a th:href="@{/admin}" th:classappend="${title != '홈'} ? sidebar-link" class="nav-link py-3 text-white"><i class="fas fa-home text-light fa-lg mr-3"></i>홈</a>
 							</li>
+							<li th:classappend="${title == '강사 관리'} ? current" class="nav-item mb-2">
+								<a th:href="@{/admin/admin/management}" th:classappend="${title != '강사 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>강사 관리</a>
+							</li>
 							<li th:classappend="${title == '사용자 관리'} ? current" class="nav-item mb-2">
 								<a th:href="@{/admin/member/management}" th:classappend="${title != '사용자 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>사용자 관리</a>
 							</li>

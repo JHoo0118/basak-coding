@@ -18,20 +18,30 @@ public class AdminService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     
-    
     public List<AdminDTO> getAdminList() {
     	return adminMapper.getAdminList();
     }
 
-	public int createAdmin(AdminDTO admin) {
+    // DTO를 통한 관리자 생성
+    public int createAdmin(AdminDTO admin) {
     	encodePassword(admin);
     	return adminMapper.createAdmin(admin);
-		
+	}
+    
+    // Map을 통한 관리자 생성
+	public int createAdminByMap(Map map) {
+		encodePassword(map);
+		return adminMapper.createAdminByMap(map);
 	}
 	
 	private void encodePassword(AdminDTO admin) {
     	String encodedPassword = passwordEncoder.encode(admin.getPassword());
     	admin.setPassword(encodedPassword);
+    }
+	
+	private void encodePassword(Map<String, String> map) {
+    	String encodedPassword = passwordEncoder.encode(map.get("password"));
+    	map.put("password", encodedPassword);
     }
 
 	public int passwordEncoding(AdminDTO admin) {
@@ -39,7 +49,18 @@ public class AdminService {
 		return adminMapper.passwordEncoding(admin);
 	}
 
-	public AdminDTO getAdminByEmail(String string) {
-		return adminMapper.getAdminByEmail(string);
+	// 이메일로 관리자 얻기
+	public AdminDTO getAdminByEmail(String email) {
+		return adminMapper.getAdminByEmail(email);
+	}
+
+	// 아이디로 관리자 얻기
+	public AdminDTO getAdminById(String adminId) {
+		return adminMapper.getAdminById(adminId);
+	}
+	
+	// 이름으로 관리자 얻기
+	public AdminDTO getAdminByName(String name) {
+		return adminMapper.getAdminByName(name);
 	}
 }

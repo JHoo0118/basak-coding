@@ -16,4 +16,10 @@ public class AdminDTO {
 	private String password;
 	private String avatar;
 	private Date createdAt;
+	private String bio;
+	
+	public String getAvatarImagePath() {
+    	if (avatar == null) return "/images/user.png";
+    	return "/upload/admin/" + this.adminId + "/" + this.avatar;
+    }
 }
