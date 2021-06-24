@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<html lang="kr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 	<div th:fragment="fragment-nav">
 	<!-- navbar 시작 -->
 	<nav class="navbar-bg">
@@ -9,14 +10,14 @@
 	        <a class="navbar__item" th:href="@{/catalog}">카탈로그</a>
 		        <ul class="navbar__menu">
 		          	<!-- 로그인 전 -->
-		          	<li th:if="${session.id == null}" class="navbar__item">
+		          	<li sec:authorize="isAnonymous()" th:if="${session.id == null}" class="navbar__item">
 		            	<a class="navbar__link" th:href="@{/auth/signin}">로그인</a>
 		          	</li>
-			        <li th:if="${session.id == null}" class="navbar__item">
+			        <li sec:authorize="isAnonymous()" class="navbar__item">
 			        	<a class="navbar__link button" style="margin-left: 24px" th:href="@{/auth/signup}">회원가입</a>
 			        </li>
 			        
-		            <li th:if="${session.id != null}" class="dropdown bg-transparent">
+		            <li sec:authorize="isAuthenticated()" class="dropdown bg-transparent">
 			            <button class="dropdown-toggle dropdown--btn bg-transparent" type="button" id="dropdownMenuButton"
 			              style="height: 100%" data-toggle="dropdown">
 			            	<img class="navbar__profile" th:src="@{/images/user.png}" />
