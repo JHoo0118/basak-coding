@@ -51,7 +51,7 @@ public class FrontendSecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll()
 			.and()
 			.logout()
-				.logoutUrl("/auth/logout")
+				.logoutUrl("/logout")
 				.permitAll()
 			.and()
 				.exceptionHandling()
