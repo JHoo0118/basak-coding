@@ -69,10 +69,6 @@ public class MemberService {
     	return memberMapper.fileUpdate(map);
     }
     
-    //로그인 확인
-    public String loginOk(Map map) {
-    	return memberMapper.loginOk(map);
-    }
     //회원정보 가져오기
     public Map selectMyInfo(int userId) {
     	return memberMapper.selectMyInfo(userId);

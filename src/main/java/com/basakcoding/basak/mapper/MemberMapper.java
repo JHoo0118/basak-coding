@@ -35,9 +35,6 @@ public interface MemberMapper {
 	
 	//파일 업로드
 	int fileUpdate(Map map);
-	
-	//로그인 확인
-	String loginOk(Map map);
 
 	// 내정보 가져오기
 	Map selectMyInfo(int userId);
