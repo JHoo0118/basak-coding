@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,15 +48,13 @@ public class CatalogController {
 	
 	//강의목록 상세 페이지
 	@GetMapping("/catalog/{courseId}")
-	public  String catalogDetail(HttpSession session , @PathVariable String courseId , Model model) {
+	public  String catalogDetail(Authentication auth , @PathVariable String courseId , Model model) {
 		int likeCheck=0;
-		
-		
 		Map map = catalogService.selectOne(courseId);
 		
-		if(session.getAttribute("id") != null) {
+		if(auth != null) {
 			//로그인이 됐을때
-			map.put("memberId",session.getAttribute("id"));
+			map.put("memberId",((UserDetails)auth.getPrincipal()).getUsername());
 			map.put("courseId", courseId);
 			likeCheck = catalogService.likeCheck(map);
 		}
@@ -69,19 +69,20 @@ public class CatalogController {
 	
 	//좋아요 안좋아요
 	@PostMapping("/catalog/count_like")
-	public @ResponseBody int catalogLike(@RequestBody Map map ,HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public @ResponseBody int catalogLike(Authentication auth , @RequestBody Map map ,HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		String memberId;
 		int affected;
 		int likeCheck;
 		String courseId	= (String) map.get("courseId");
 		
-		if(req.getSession().getAttribute("id") == null) {
+		if(auth == null) {
 			resp.setContentType("text/html; charset-UTF-8");
 			System.out.println("로그인상태가 아님");
 			return affected=2;
 		
 		} else {
-			memberId = (String)req.getSession().getAttribute("id");
+			memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+			map.put("memberId", memberId);
 			likeCheck = catalogService.likeCheck(map);
 			System.out.println("memberId:"+memberId+"\r\n"+"courseId:"+courseId);
 			

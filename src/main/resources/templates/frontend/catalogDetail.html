@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<meta charset="UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -101,15 +101,15 @@
 							}
 							
 						});
-						
-                           	
-               				var memberId = "[[${session.id}]]";
+			
+               				// var memberId = "[[${#authentication.principal}]]" == "anonymousUser"
                            	var courseId = "[[${course.COURSE_ID}]]";
 							console.log("courseId:",courseId);	
 							
 														
 							$('.detail__like').click(function(){
-								var data = { 'memberId' : memberId, 'courseId' : courseId };
+								// var data = { 'memberId' : memberId, 'courseId' : courseId };
+								var data = {'courseId' : courseId };
 								console.log(JSON.stringify(data)) ;	
 								
 								$.ajax({
