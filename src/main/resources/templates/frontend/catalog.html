@@ -10,6 +10,9 @@
 	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
 	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
   	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+  	<style>
+  	
+  	</style>
 </head>
 
 <body>
@@ -24,12 +27,17 @@
 
             <ul class="row p-0" style="list-style: none;">
                 <li th:each="course : ${courseList}" class="col-lg-4 col-md-6 col-sm-6 lecture__item">
-                    <div class="lecture-wrapper">
+                    <div style="position: relative;"  class="lecture-wrapper">
                         <div class="lecture-profile" style="background-image: url(/images/image10.jpg);"></div>
+                                                                                                              
                         <a th:href="@{/catalog/}+${course.COURSE_ID}">
-                            <div class="card lecture">
+                        
+                            <div class="card lecture" >
+                               
                                 <img th:src="@{/images/}+${course.THUMBNAIL}" class="card-img-top lecture__thumbnail"
                                     alt="thumbnail" />
+                                    <div style="color: white; position: absolute; left:5px; bottom: 53%; font-size: 2.5ex; font-weight: bold;">[[${course.CATEGORY_NAME}]] </div>
+								
                                 <div class="card-body">
                                     <h5 class="card-title lecture__title iine-clamp">
                                         [[${course.TITLE}]]
@@ -56,6 +64,11 @@
         </div>
     </section>
     <!-- lecture 끝 -->
+    <script>
+    
+   
+    
+    </script>
 
     <!-- footer -->
     <div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>

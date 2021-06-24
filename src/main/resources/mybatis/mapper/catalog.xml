@@ -7,7 +7,7 @@
 
 	<select id="courseList" resultType="Map">
 	
-		SELECT co.*,ca.name,a.avatar 
+		SELECT co.*,ca.name CATEGORY_NAME,a.*,a.name ADMIN_NAME 
 		FROM COURSES co
 		JOIN CATEGORY ca 
 		ON co.category_id = ca.category_id
@@ -17,7 +17,7 @@
 	
 	<select id="selectOne" parameterType="String" resultType="Map">
 	
-		SELECT co.*,ca.name,a.avatar 
+		SELECT co.*,ca.name CATEGORY_NAME,a.*,a.name ADMIN_NAME
 		FROM COURSES co
 		JOIN CATEGORY ca 
 		ON co.category_id = ca.category_id

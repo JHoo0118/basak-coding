@@ -19,7 +19,7 @@
     <!-- 강의 상세보기 시작 -->
     <section class="detail">
         <div class="detail__header">
-            <h1 class="text-style-2">Try Your CODE LION!</h1>
+            <h1 class="text-style-2"> Try Your CODE LION! </h1>
             <span>코드라이언 코스 100% 활용하기</span>
         </div>
         <div  class="container-fluid container--main">
@@ -82,13 +82,29 @@
                             <script>
                            
 							//좋아요 기능구현
+							var likeCount = Number.parseInt($('.detail__like').text());
+							
+							var likeCheck="[[${course.likeCheck}]]";
+							console.log('likeCheck',likeCheck);
+							
+							$(document).ready(function(){
+							if(likeCheck == 1){
+								console.log('기존에 좋아요 눌렀을때');
+								$('#likeCount').html('<i class="fas fa-thumbs-up" ></i>'+likeCount);
+								$('#likeCount').prop("style","color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");		
+								
+							}
+							else{
+								console.log('기존에 좋아요 눌르지 않았을때');
+								$('#likeCount').html('<i class="far fa-thumbs-up"></i>'+likeCount);	
+								$('#likeCount').prop("style","color: gray;");
+							}
+							
+						});
 						
-							
-							
                            	
-               				//var memberId="[[${session.id}]]";
-               				var memberId="1";
-                           	var courseId= "[[${course.COURSE_ID}]]";
+               				var memberId = "[[${session.id}]]";
+                           	var courseId = "[[${course.COURSE_ID}]]";
 							console.log("courseId:",courseId);	
 							
 														
@@ -105,15 +121,13 @@
 								success:function(data){
 										console.log("data:",data)
 									if(data== 0){//기존에 좋아요 누른적이 없을때
-										var likeCount = Number.parseInt($('.detail__like').text());
                                         likeCount++;
                                         console.log("likeCount:",likeCount);
 										$('#likeCount').html('<i class="fas fa-thumbs-up" ></i>'+likeCount);
-										$('#likeCount').prop("style","color: rgb(0, 255, 255);");										
+										$('#likeCount').prop("style","color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");		
 										
 									}
 									else if(data==1){////기존에 좋아요를 눌렀놨을때
-										var likeCount = Number.parseInt($('.detail__like').text());
                                         likeCount--;
                                         console.log("likeCount:",likeCount);
 										$('#likeCount').html('<i class="far fa-thumbs-up"></i>'+likeCount);	
@@ -122,11 +136,14 @@
 									}
 									else if(data==2){
 										console.log("로그인상태 아님 ");
-										alert("로그인후 이용 하세요");
+										if(confirm("로그인후 이용 하세요")){
+											location.href = "/auth/signin";//뒤로가기 가능
+										//location.replace("/auth/signin"); //뒤로가기 불가능
+										}
+										return;
 									}
 									
 								}
-								
 								
 								
 								
@@ -180,10 +197,10 @@
                     </div>
                 </div>
                 <div class="col-md-3 detail__right p-0 d-flex flex-column align-items-center">
-                    <img th:src="@{/images/image4.jpg}" class="detail__profile" />
-                    <h4>코드라이언</h4>
+                    <img th:src="@{/images/}+${course.AVATAR}" class="detail__profile" />
+                    <h4>[[${course.EMAIL}]]</h4>
                     <ul class="detail__history">
-                        <li class="history__item">멋쟁이사자처럼 / 코드라이언 팀</li>
+                        <li class="history__item">[[${course.BIO}]] /</br> 코드라이언 팀   [[${course.ADMIN_NAME}]]</li>
                     </ul>
                 </div>
             </div>

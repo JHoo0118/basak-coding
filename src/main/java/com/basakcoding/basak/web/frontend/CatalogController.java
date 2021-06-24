@@ -47,12 +47,21 @@ public class CatalogController {
 	//강의목록 상세 페이지
 	@GetMapping("/catalog/{courseId}")
 	public  String catalogDetail(HttpSession session , @PathVariable String courseId , Model model) {
-			
+		int likeCheck=0;
+		
+		
 		Map map = catalogService.selectOne(courseId);
 		
-		//map.put("memberId",session.getAttribute("id"));
-		//int likeCheck = catalogService.likeCheck(map);
+		if(session.getAttribute("id") != null) {
+			//로그인이 됐을때
+			map.put("memberId",session.getAttribute("id"));
+			map.put("courseId", courseId);
+			likeCheck = catalogService.likeCheck(map);
+		}
+		//로그인 안됐을때 likeCheck값 기본 0으로 초기화된 상태로 맵에저장
+		map.put("likeCheck", likeCheck);
 		model.addAttribute("course",map);
+		System.out.println("course"+map);
 		return "/frontend/catalogDetail";
 
 	}
@@ -61,24 +70,22 @@ public class CatalogController {
 	//좋아요 안좋아요
 	@PostMapping("/catalog/count_like")
 	public @ResponseBody int catalogLike(@RequestBody Map map ,HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		
-	    //String memberId = req.getSession().getAttribute("memberId").toString();	
-		String memberId = (String)map.get("memberId");
+		String memberId;
+		int affected;
+		int likeCheck;
 		String courseId	= (String) map.get("courseId");
 		
-		System.out.println("memberId:"+memberId+"\r\n"+"courseId:"+courseId);
-		
-		int affected;
-		
-		if(memberId == null){//비로그인시
+		if(req.getSession().getAttribute("id") == null) {
 			resp.setContentType("text/html; charset-UTF-8");
 			System.out.println("로그인상태가 아님");
 			return affected=2;
+		
+		} else {
+			memberId = (String)req.getSession().getAttribute("id");
+			likeCheck = catalogService.likeCheck(map);
+			System.out.println("memberId:"+memberId+"\r\n"+"courseId:"+courseId);
 			
-		}//큰 if
-		else {//로그인 했을때 
-			int likeCheck = catalogService.likeCheck(map);
-			
+		}
 			if(likeCheck == 0) {//좋아요 등록이 안돼있으면
 				catalogService.like(map);
 				System.out.println("likeCheck:" + likeCheck);
@@ -94,8 +101,7 @@ public class CatalogController {
 			
 			}//작은 else
 			
-		}//큰 else
-		
+	
 	}///catalogLike
 	
 	
