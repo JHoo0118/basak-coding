@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.basakcoding.basak.mapper.AdminMapper;
@@ -15,8 +14,8 @@ public class AdminService {
 	@Autowired
 	private AdminMapper adminMapper;
 	
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
     
     public List<AdminDTO> getAdminList() {
     	return adminMapper.getAdminList();
@@ -24,28 +23,28 @@ public class AdminService {
 
     // DTO를 통한 관리자 생성
     public int createAdmin(AdminDTO admin) {
-    	encodePassword(admin);
+//    	encodePassword(admin);
     	return adminMapper.createAdmin(admin);
 	}
     
     // Map을 통한 관리자 생성
 	public int createAdminByMap(Map map) {
-		encodePassword(map);
+//		encodePassword(map);
 		return adminMapper.createAdminByMap(map);
 	}
 	
-	private void encodePassword(AdminDTO admin) {
-    	String encodedPassword = passwordEncoder.encode(admin.getPassword());
-    	admin.setPassword(encodedPassword);
-    }
-	
-	private void encodePassword(Map<String, String> map) {
-    	String encodedPassword = passwordEncoder.encode(map.get("password"));
-    	map.put("password", encodedPassword);
-    }
+//	private void encodePassword(AdminDTO admin) {
+//    	String encodedPassword = passwordEncoder.encode(admin.getPassword());
+//    	admin.setPassword(encodedPassword);
+//    }
+//	
+//	private void encodePassword(Map<String, String> map) {
+//    	String encodedPassword = passwordEncoder.encode(map.get("password"));
+//    	map.put("password", encodedPassword);
+//    }
 
 	public int passwordEncoding(AdminDTO admin) {
-		encodePassword(admin);
+//		encodePassword(admin);
 		return adminMapper.passwordEncoding(admin);
 	}
 

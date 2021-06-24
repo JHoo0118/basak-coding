@@ -13,7 +13,7 @@ import com.basakcoding.basak.mapper.MemberMapper;
 public class MemberService {
 	@Autowired
 	private MemberMapper memberMapper;
-    public  MemberService(MemberMapper memberMapper) {
+    public MemberService(MemberMapper memberMapper) {
         this.memberMapper = memberMapper;
     }
     
