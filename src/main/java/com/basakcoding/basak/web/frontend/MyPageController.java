@@ -34,6 +34,7 @@ public class MyPageController {
 		Map map=memberService.selectMyInfo(userId);//로그인된 회원아이디 받아와서넣어줘야함
 		if (!map.containsKey("AVATAR"))
 			map.put("AVATAR", null);
+		
 		model.addAttribute("member",map);
 		//내댓글 개수
 		int commentsCount = memberService.commentsCount(userId);
@@ -50,7 +51,6 @@ public class MyPageController {
 		//임시 유저아이디
 		userId=1;
 		userInfo(model);
-	
 		System.out.println(model);
 		return "frontend/dashboard";
 	}
@@ -77,6 +77,12 @@ public class MyPageController {
 	public @ResponseBody int profileImgUpdate(@RequestParam int userId,@RequestParam String imgname,@RequestParam MultipartFile file) throws IllegalStateException, IOException {
 		URL url = this.getClass().getClassLoader().getResource("static/upload");
 		String _path = url.getPath();
+		//File f = new File(_path+"/upload");
+		//if (!f.exists()) f.mkdir();
+		//_path += "/upload";
+	
+//		File f = new File(_path);
+//		if (!f.exists()) f.mkdir();
 		//String path = Paths.get("").toFile().getAbsolutePath();
 	    //  System.out.println(path);
 		//String physicalPath =req.getServletContext().getRealPath("static/upload");
