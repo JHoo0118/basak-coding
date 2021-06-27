@@ -31,10 +31,6 @@ public class AdminHomeController {
 //		AdminDTO admin = adminService.getAdminByEmail("admin@admin.com");
 //		adminService.passwordEncoding(admin);
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
-			return "admin/login";
-		}
-		return "redirect:/admin";
+		return "admin/login";
 	}
 }
