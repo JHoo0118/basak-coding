@@ -43,7 +43,7 @@
     <section class="signin">
         <div class="container-fluid signin__container">
             <h2 class="signin__title">로그인</h2>
-            <form id="frm" class="row" th:action="@{/auth/signin}">
+            <form id="frm" class="row" method="POST" th:action="@{/auth/signin}">
                 <div class="form-group form__group p-0 position-relative">
                     <div class="p-0">
                         <input type="email" class="form-control form__input" placeholder="이메일을 입력해주세요." name="email" th:value="${param.email}"/>

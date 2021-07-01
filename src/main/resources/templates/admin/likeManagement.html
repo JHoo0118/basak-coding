@@ -4,7 +4,7 @@
 	<meta charset="UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>바삭 코딩 | 강사 관리</title>
+	<title>바삭 코딩 | 좋아요 관리</title>
 	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
 	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
 	<link rel="stylesheet" th:href="@{/css/admin/main.css}" />
@@ -12,7 +12,6 @@
   	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
 	<script defer th:src="@{/js/actionValidate.js}"></script>
 </head>
-<body>
 <body>
 	<!-- Header -->
 	<div th:replace="/admin/fragments/header.html :: fragment-header(${title})"></div>
@@ -25,17 +24,15 @@
 					<div class="row md-5 mb-5">
 						<div class="col-xl-12 col-12 mb-4 mb-xl-0">
 						
-						<h3 class="text-muted text-center mb-3">강사 목록</h3>
-						<form name="actionForm" th:action="@{/admin/admin/management/process}" method="post">
+						<h3 class="text-muted text-center mb-3">좋아요 관리</h3>
+						<form name="actionForm" th:action="@{/admin/like/management/change}">
 							<div class="form__header d-flex justify-content-between">
 								<div>
 									<select name="action">
-										<option value="">액션을 선택하세요</option>
-										<option value="edit">수정(1개만)</option>
-										<option value="del">삭제</option>
+										<option value="lec">강의</option>
+										<option value="qna">질문</option>
 									</select>
 									<input class="button button--light button--sm d-inline" type="submit" value="확인" />
-									<a class="button button--reverse mb-2" th:href="@{/admin/admin/management/form}">강사 추가</a>
 								</div>
 							</div>
 							<div th:if="${message != null}" class="alert alert-success text-center">
@@ -45,33 +42,16 @@
 							<table class="table table-striped bg-light text-center">
 								<thead>
 				                  <tr class="text-muted">
-				                    <th>액션</th>
 				                    <th>#</th>
-				                    <th>아이디</th>
-				                    <th>이메일</th>
-				                    <th>강사명</th>
-				                    <th>프로필 이미지</th>
-				                    <th>가입 날짜</th>
-				                    <th>강사 소개</th>
+				                    <th>제목</th>
+				                    <th>좋아요</th>
 				                  </tr>
 				                </thead>
 				                <tbody>
-									<tr th:each="admin, i : ${listAdmins}">
-										<td>
-											<input type="checkbox" class="checkbox" name="target" th:value="${admin.adminId}"/>
-											<span class="checkbox__mark"></span>
-										</td>
+									<tr th:each="like, i : ${listLikes}">
 										<td>[[${i.index+1}]]</td>
-										<td>[[${admin.adminId}]]</td>
-										<td>[[${admin.email}]]</td>
-										<td>[[${admin.name}]]</td>
-										<td>
-											<span></span>
-											<img th:if="${admin.avatar != null}" class="rounded-circle" th:src="@{${admin.getAvatarImagePath}}" style="width: 40px; height: 40px;" />
-											<img th:if="${admin.avatar == null}" class="rounded-circle" th:src="@{/images/user.png}" style="width: 40px; height: 40px;" />
-										</td>
-										<td>[[${admin.createdAt}]]</td>
-										<td>[[${admin.bio}]]</td>
+										<td>[[${like.title}]]</td>
+										<td>[[${like.likeCount}]]</td>
 									</tr>
 				                </tbody>
 							</table>
@@ -84,35 +64,9 @@
 		</div>
 	</section>
 	<script>
-	/*
-	var data = {
-		token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjIyMzkxOTc2fQ.EtPDjQIgd9SjcOITK94ouOhDhjon_JJBx2oe6qsh2EU",
-		email: $('input[name=email]').val(),
-		name: $('input[name=name]').val(),
-		username: $('input[name=username]').val(),
-		password: $('input[name=password]').val()
-	}*/
-	/*
-	var query = "query { seeFeed { caption } }";
-	var mutation = "query"
-		$("#submit").on('click', function() {
-			$.ajax({
-				type: 'POST',
-				url: "http://localhost:4000/graphql",
-				contentType: 'application/json',
-				beforeSend: function(xhr) {
-					xhr.setRequestHeader("token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJob28iLCJpYXQiOjE2MjM0NzUyNzF9.6-1fKqJdPHnWY5tLffnbTCpdKK9q_Vzndntw5W05laE");
-				},
-				data: JSON.stringify({
-					"query":query,
-				}),
-				success: function(result) {
-					console.log(result)
-				}
-			})
-			
-		})
-		*/
+		if("[[${param.action}]]"=="qna"){
+			$("option[value=qna]").attr("selected","true");
+		}
 	</script>
 </body>
 </html>
