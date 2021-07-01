@@ -15,4 +15,11 @@ public class PaymentController {
 	public String paymentResult() {
 		return "frontend/paymentConfirm";
 	}
+	
+	@GetMapping("/orders/payment")
+	public String paymentP() {
+		return "frontend/payment";
+	}
+	
+	
 }

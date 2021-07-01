@@ -197,10 +197,11 @@
                     </div>
                 </div>
                 <div class="col-md-3 detail__right p-0 d-flex flex-column align-items-center">
-                    <img th:src="@{/images/}+${course.AVATAR}" class="detail__profile" />
+                    <img th:if="${course.AVATAR == null}" th:src="@{/images/image4.jpg}" class="detail__profile" />
+                    <img th:if="${course.AVATAR != null}" th:src="@{${course.PATH}}" class="detail__profile" />
                     <h4>[[${course.EMAIL}]]</h4>
                     <ul class="detail__history">
-                        <li class="history__item">[[${course.BIO}]] /</br> 코드라이언 팀   [[${course.ADMIN_NAME}]]</li>
+                        <li class="history__item">[[${course.BIO}]] /</br> 바삭코딩 팀   [[${course.ADMIN_NAME}]]</li>
                     </ul>
                 </div>
             </div>

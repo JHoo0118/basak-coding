@@ -61,6 +61,8 @@ public class CatalogController {
 			map.put("courseId", courseId);
 			likeCheck = catalogService.likeCheck(map);
 		}
+		if (!map.containsKey("AVATAR")) map.put("AVATAR", null);
+		else map.put("PATH", "/upload/admin/" + map.get("ADMIN_ID") + "/" + map.get("AVATAR"));
 		//로그인 안됐을때 likeCheck값 기본 0으로 초기화된 상태로 맵에저장
 		map.put("likeCheck", likeCheck);
 		model.addAttribute("course",map);
