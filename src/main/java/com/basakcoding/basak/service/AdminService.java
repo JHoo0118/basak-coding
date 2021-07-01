@@ -32,6 +32,10 @@ public class AdminService {
 //		encodePassword(map);
 		return adminMapper.createAdminByMap(map);
 	}
+	public int loginAdmin(Map map) {
+//		encodePassword(map);
+		return adminMapper.loginAdmin(map);
+	}
 	
 //	private void encodePassword(AdminDTO admin) {
 //    	String encodedPassword = passwordEncoder.encode(admin.getPassword());
