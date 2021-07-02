@@ -25,12 +25,11 @@
 					<div class="row md-5 mb-5">
 						<div class="col-xl-12 col-12 mb-4 mb-xl-0">
 						
-						<h3 class="text-muted text-center mb-3">카테고리 목록</h3>
-						<form name="actionForm" th:action="@{/admin/comment/management/process}" method="post">
+						<h3 class="text-muted text-center mb-3">댓글 관리</h3>
+						<form name="actionForm" th:action="@{/admin/comment/management/change}">
 							<div class="form__header d-flex justify-content-between">
 								<div>
 									<select name="action">
-										<option value="">액션을 선택하세요</option>
 										<option value="manage">관리자</option>
 										<option value="stu">수강생</option>
 									</select>
@@ -60,9 +59,9 @@
 											<span class="checkbox__mark"></span>
 										</td>
 										<td>[[${i.index+1}]]</td>
-										<td>[[${comment.questionTitle}]]</td>
-										<td>[[${comment.commentTitle}]]</td>
-										<td>[[${comment.writter}]]</td>
+										<td>[[${comment.questionId}]]</td>
+										<td>[[${comment.content}]]</td>
+										<td>[[${comment.name}]][[${comment.username}]]</td>
 										<td>[[${comment.createdAt}]]</td>
 									</tr>
 				                </tbody>
@@ -76,35 +75,9 @@
 		</div>
 	</section>
 	<script>
-	/*
-	var data = {
-		token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjIyMzkxOTc2fQ.EtPDjQIgd9SjcOITK94ouOhDhjon_JJBx2oe6qsh2EU",
-		email: $('input[name=email]').val(),
-		name: $('input[name=name]').val(),
-		username: $('input[name=username]').val(),
-		password: $('input[name=password]').val()
-	}*/
-	/*
-	var query = "query { seeFeed { caption } }";
-	var mutation = "query"
-		$("#submit").on('click', function() {
-			$.ajax({
-				type: 'POST',
-				url: "http://localhost:4000/graphql",
-				contentType: 'application/json',
-				beforeSend: function(xhr) {
-					xhr.setRequestHeader("token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJob28iLCJpYXQiOjE2MjM0NzUyNzF9.6-1fKqJdPHnWY5tLffnbTCpdKK9q_Vzndntw5W05laE");
-				},
-				data: JSON.stringify({
-					"query":query,
-				}),
-				success: function(result) {
-					console.log(result)
-				}
-			})
-			
-		})
-		*/
+		if("[[${param.action}]]"=="stu"){
+			$("option[value=stu]").attr("selected","true");
+		}
 	</script>
 </body>
 </html>

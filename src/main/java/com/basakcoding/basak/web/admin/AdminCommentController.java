@@ -24,30 +24,31 @@ public class AdminCommentController {
 	@Autowired
 	CommentService commentService;
 	
-	// 카테고리 관리 화면으로 이동
+	//댓글 관리 화면으로 이동
 	@GetMapping("/management")
 	public String commentList(Model model) {
 		List<CommentDTO> listComments = commentService.adminSelect();
-		model.addAttribute("listLikes", listComments);
+		System.out.println(listComments.size());
+		model.addAttribute("listComments", listComments);
 		model.addAttribute("title", "관리자 댓글");
 		return "admin/commentManagement";
-	}//likeList
-//	
-//	//강의 질문 전환
-//	@GetMapping("/management/change")
-//	public String likeChange(@RequestParam Map map,Model model) {
-//		if(map.get("action").equals("lec")) {
-//		List<LikeDTO> listLikes = likeService.courseSelect();
-//		model.addAttribute("listLikes", listLikes);
-//		model.addAttribute("title", "강의 좋아요");
-//		return "admin/likeManagement";
-//		}	
-//		else {
-//			List<LikeDTO> listLikes = likeService.questionSelect();
-//			model.addAttribute("listLikes", listLikes);
-//			model.addAttribute("title", "질문 좋아요");
-//			return "admin/likeManagement";
-//		}
-//	}//likeChange
+	}//commentList
+	
+	//강의 질문 전환
+	@GetMapping("/management/change")
+	public String commentChange(@RequestParam Map map,Model model) {
+		if(map.get("action").equals("manage")) {
+		List<CommentDTO> listComments = commentService.adminSelect();
+		model.addAttribute("listComments", listComments);
+		model.addAttribute("title", "관리자");
+		return "admin/commentManagement";
+		}	
+		else {
+			List<CommentDTO> listComments = commentService.memberSelect();
+			model.addAttribute("listComments", listComments);
+			model.addAttribute("title", "회원");
+			return "admin/commentManagement";
+		}
+	}//commentList
 
 }

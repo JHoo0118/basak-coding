@@ -14,5 +14,7 @@ public interface CommentMapper {
 
 	public List<CommentDTO> adminSelect();
 
+	public List<CommentDTO> memberSelect();
+
 
 }

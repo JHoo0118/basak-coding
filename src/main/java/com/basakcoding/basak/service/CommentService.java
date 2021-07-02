@@ -12,13 +12,18 @@ import com.basakcoding.basak.mapper.LikeMapper;
 @Service
 public class CommentService {
 	
-	//라이크맵퍼 주입
+	//CommentMapper 주입
 	@Autowired
 	private CommentMapper commentMapper;
 	
-	//강의 좋아요
+	//관리자 댓글
 	public List<CommentDTO> adminSelect(){
 		return commentMapper.adminSelect();
-	}
+	}//
 	
-}
+	//회원 댓글
+	public List<CommentDTO> memberSelect(){
+		return commentMapper.memberSelect();
+	}//memberSelect
+	
+}//class
