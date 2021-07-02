@@ -23,6 +23,9 @@
 							<li th:classappend="${title == '강사 관리'} ? current" class="nav-item mb-2">
 								<a th:href="@{/admin/admin/management}" th:classappend="${title != '강사 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>강사 관리</a>
 							</li>
+							<li th:classappend="${title == '결제 관리'} ? current" class="nav-item mb-2">
+								<a th:href="@{/admin/price/management}" th:classappend="${title != '결제 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>결제 관리</a>
+							</li>
 							<li th:classappend="${title == '사용자 관리'} ? current" class="nav-item mb-2">
 								<a th:href="@{/admin/member/management}" th:classappend="${title != '사용자 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>사용자 관리</a>
 							</li>

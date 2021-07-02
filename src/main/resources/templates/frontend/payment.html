@@ -21,20 +21,21 @@
             <div class="payment__title">결제하기</div>
             <div class="payment__subTitle">결제내역</div>
             <div class="payment__package">
-                <img class="package__img" th:src="@{/images/image4.jpg}" />
+                <img th:if="${course.AVATAR} != null" class="package__img" th:src="@{${course.PATH}}" />
+                <img th:if="${course.AVATAR} == null" class="package__img" th:src="@{/images/image4.jpg}" />
                 <div class="package__info">
                     <div class="info__left">
-                        <div class="info__title">Try Your Code LION!</div>
-                        <div class="info__category">ETC</div>
+                        <div class="info__title" th:text="${course.TITLE}"></div>
+                        <div class="info__category">[[${course.CAT_NAME}]]</div>
                     </div>
                     <ul class="info__right">
                         <li>
                             <span>강사</span>
-                            <b>정미나</b>
+                            <b>[[${course.ADM_NAME}]]</b>
                         </li>
                         <li>
                             <span>수강기간</span>
-                            <b>2021.06.04 ~ 2021.07.16</b>
+                            <b>[[${course.PERIOD}]]</b>
                         </li>
                     </ul>
                 </div>
@@ -46,7 +47,7 @@
                     <div class="form-group form__group p-0 position-relative">
                         <div class="p-0">
                             <input type="email" autocomplete="off" readonly
-                                class="form-control form__input input__payment" name="email" value="abcd@test.com" />
+                                class="form-control form__input input__payment" name="email" th:value="${course.EMAIL}" />
                         </div>
 	                    <!-- 에러 출력용 -->
 	                    <small class="error"></small>
@@ -100,22 +101,21 @@
                         <div class="payment__divider"></div>
                         <div class="price__box">
                             <div class="price__left">결제 금액</div>
-                            <div class="price__right"><span class="text__color--green">100</span>&nbsp;<span>원</span>
+                            <div class="price__right"><span class="text__color--green">[[${course.PRICE}]]</span>&nbsp;<span>원</span>
                             </div>
                         </div>
                         <div class="form__check">
                             <input class="input__label" type="checkbox" id="terms1" name="method1" />
-                            <label title for="terms1" class="check__label"><a href="javascript:void(0)">결제 및 환불 규정</a>에
-                                동의합니다 (필수)</label>
+                            <label title for="terms1" class="check__label">
+                            <a href="javascript:void(0)">결제 및 환불 규정</a>에 동의합니다 (필수)</label>
                         </div>
                         <div class="form__check">
                             <input class="input__label" type="checkbox" id="terms2" name="method2" />
-                            <label title for="terms2" class="check__label">구매조건 확인 및 <a
-                                    href="javascript:void(0)">개인정보처리약관</a>에
-                                동의합니다 (필수)</label>
+                            <label title for="terms2" class="check__label">구매조건 확인 및 
+                            <a href="javascript:void(0)">개인정보처리약관</a>에 동의합니다 (필수)</label>
                         </div>
                     </div>
-                    <a class="button button--rounded button--full"
+                    <a href="javascript:void(0)" class="button button--rounded button--full"
                         style="color: #0fd; margin-top: 60px" id="check_module">
                         결제하기
                     </a>
@@ -130,12 +130,13 @@
     <div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
 </body>
 <script>
-		$("#check_module").click(function () {
-			
+		$("#check_module").click(function(){
+			var price = Number.parseInt("[[${course.PRICE}]]");
 			var name = $("#name").val();
 			var phone = $("#phone").val();
 			var checkval = $("input[name=method1]");
 			var checkval2 = $("input[name=method2]");
+			var courseId = ("[[${course.COURSE_ID}]]");
 			console.log(checkval)
 			if(name == ""){
 				alert("이름을 입력하세요");
@@ -157,46 +158,69 @@
             }
 			
 			var IMP = window.IMP; // 생략가능
-			
+			var msg;
 			IMP.init('imp73533171');
+			
 			// 'iamport' 대신 부여받은 "가맹점 식별코드"를 사용
-			// i'mport 관리자 페이지 -> 내정보 -> 가맹점식별코드
 			IMP.request_pay({
 				pg: 'inicis', // version 1.1.0부터 지원.
 				pay_method: 'card',
 				merchant_uid: 'merchant_' + new Date().getTime(),
 				
-				name: '주문명:결제테스트',
+				name: "[[${course.TITLE}]]",
+				courseId: "[[${course.COURSE_ID}]]",
 				//결제창에서 보여질 이름
-				amount: 1000,
-				//가격
+				amount: price,
 				buyer_email: 'iamport@siot.do',
-				buyer_name: '구매자이름',
-				buyer_tel: '010-1234-5678',
-				buyer_addr: '서울특별시 강남구 삼성동',
+				buyer_name: '최유경',
+				buyer_tel: '010-8350-3989',
+				buyer_addr: '경기도 화성시 병점동',
 				buyer_postcode: '123-456',
 				m_redirect_url: 'https://www.yourdomain.com/payments/complete'
 				
 			}, function (rsp) {
-				console.log(rsp);
-				if (rsp.success) {
-					var msg = '결제가 완료되었습니다.';
-					alert(msg);
-					//성공시 이동할 페이지
-                	location.href="/orders/complete?payment_gid=ASDQWEWQFSD?";
-				} else {
-					var msg = '결제에 실패하였습니다. ';
-					msg += rsp.error_msg;
-					alert(msg);
-					//실패시 이동할 페이지
-					location.href="/orders/payment";
-				}
-				
-				
-			});
+				if ( rsp.success ) {
+                //[1] 서버단에서 결제정보 조회를 위해 jQuery ajax로 imp_uid 전달하기
+                jQuery.ajax({
+                    url: "/payments/complete", //cross-domain error가 발생하지 않도록 주의해주세요
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+						courseId: '[[${course.COURSE_ID}]]',
+                        imp_uid : rsp.imp_uid,
+                        price: rsp.paid_amount,
+                        phone_number: rsp.phone_number,
+                        name: rsp.name
+                        
+                        //기타 필요한 데이터가 있으면 추가 전달
+                    }
+                }).done(function(data) {
+					if (rsp.success) {
+						msg = '결제가 완료되었습니다.';
+						alert(msg);
+						//성공시 이동할 페이지
+	                	location.href="/orders/complete/{courseId}?payment_gid=ASDQWEWQFSD?";
+					} else {
+						msg = '결제를 취소하였습니다. ';
+						msg += rsp.error_msg;
+						alert(msg);
+						//실패시 이동할 페이지
+						location.href="/orders/payments/{courseId}";
+					}
+				});
+				//성공시 이동할 페이지
+	            location.href="/orders/complete/{courseId}?payment_gid=ASDQWEWQFSD?";
 			
-			
+			}else {
+				msg = '결제에 실패하였습니다. ';
+				msg += rsp.error_msg;
+				alert(msg);
+				//실패시 이동할 페이지
+				location.href="/orders/payments/{courseId}";
+			}
 		});
+	});
+		
 </script>
 	<!-- jQuery -->
 	<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
@@ -204,4 +228,3 @@
 	<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 
 </html>
-
