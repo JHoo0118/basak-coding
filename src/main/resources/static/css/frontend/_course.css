@@ -1,0 +1,388 @@
+@charset "UTF-8";
+
+.course {
+	display: flex;
+	width: 100%;
+	padding-top: 6rem;
+	overflow-y: hidden;
+	overflow-x: hidden;
+}
+
+/* 사이드 바 */
+.course__sideNav {
+	min-height: calc(100vh - 6rem);
+	display: flex;
+	width: 54px;
+	border-right: 1px solid #5a5c65;
+	height: 100%;
+	background-color: #292a2f;
+	z-index: 10;
+}
+
+.course__sideNav .sideNav__items {
+	height: 162px;
+	padding: 0;
+}
+
+.course__sideNav .sideNav__items .sideNav__item {
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 54px;
+	height: 54px;
+}
+
+.course__sideNav .sideNav__items .sideNav__item.active {
+	border-bottom: 5px solid #fff;
+	background-color: #25262b;
+}
+
+.course__sideNav .sideNav__items .sideNav__item.active:not(:first-child) {
+	border-top: 5px solid #fff;	
+}
+
+.sideNav__item .item__button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 54px;
+	height: 54px;
+	background-color: transparent;
+	border: none;
+}
+
+.sideNav__item .item__button .item__icon {
+	font-size: 24px;
+	color: #999;
+	background-color: transparent;
+}
+
+.sideNav__item.active .item__button .item__icon {
+	color: #fff;
+}
+
+.sideNav__content {
+	-webkit-transform: translate3d(500px, 0px, 0px);
+  	transform: translate3d(-500px, 0px, 0px);
+	transition: all 0.4s ease-in-out 0s;
+	-webkit-transition: all 0.4s ease-in-out 0s;
+	width: 0;
+	height: calc(100vh - 6rem);
+	background-color: #25262b;
+	border-right: 1px solid #5a5c65;
+	overflow-y: auto;
+}
+
+.sideNav__content .content__list {
+}
+
+.sideNav__content .content__list .list__header {
+	margin-top: 18px;
+	margin-bottom: 18px;
+	padding-left: 24px;
+	padding-right: 24px;
+}
+
+
+.list__header .header__chapter {
+	display: block;
+	margin-bottom: 6px;
+	color: #919191;
+	font-size: 12px;
+	font-weight: 700;
+	line-height: 1;
+}
+.list__header .header__title--course {
+	font-size: 18px;
+    font-weight: 700;
+    line-height: 1.33;
+    color: #fff;
+}
+
+.list__horline {
+	border-top: 6px solid #1e1e1e;
+    height: 15px;
+    margin-top: 20px;
+    margin-bottom: 2px;
+	margin-left: 24px;
+	margin-right: 24px;
+    position: relative;
+}
+
+.list__horline::before {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    margin-left: -12px;
+    top: -20px;
+    left: 50%;
+    background-color: #25262b;
+    border: 6px solid #1e1e1e;
+    transform: rotate(45deg);
+    z-index: 1;
+}
+
+.list__horline::after {
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 22px;
+    margin-left: -20px;
+    top: -28px;
+    left: 50%;
+    background-color: #25262b;
+    z-index: 1;
+}
+
+.list__curr {
+	padding-left: 0;
+}
+
+.list__curr .list__items {
+	display: flex;
+	align-items: center;
+	color: #fff;
+}
+
+.list__curr .list__items.active {
+	color: #f3981c;
+}
+
+.list__curr .list__items:hover {
+	background-color: #1e1e1e;
+}
+
+.list__curr .list__items .list__icon {
+	color: #999;
+	font-size: 20px;
+	margin-right: 14px;
+}
+
+.list__curr .list__items.active .list__icon {
+	color: #f3981c;
+}
+
+.list__curr .list__items .curr__box {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex: 1;
+}
+
+.curr__box .curr__title {
+	color: inherit;
+	cursor: pointer;
+	font-size: 13px;
+	margin-bottom: 0;
+	flex: 1;
+}
+
+.curr__link {
+	width: 100%;
+	display: flex;
+	padding: 12px 24px;
+	justify-content: space-between;
+}
+
+.curr__box .curr__time {
+	color: inherit;
+	font-size: 13px;
+	margin-bottom: 0;
+}
+
+.none {
+	display: none;
+}
+
+.open {
+	width: 500px;
+	-webkit-transform: translate3d(0px, 0px, 0px);
+	transform: translate3d(0px, 0px, 0px);
+}
+
+/* 강의 메인 */
+.course__main {
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+/* 모나코 에디터 시작 twilight theme */
+
+.nav--file {
+	/* border-left: 1px solid #5a5c65; */
+	height: 100%;
+}
+
+.nav__file {
+	height: 100%;
+}
+
+.nav__file .file__folder {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 40px;
+	cursor: pointer;
+}
+
+.nav__file .file__folder .fa-chrome,
+.nav__file .file__folder .fa-circle-notch {
+	color: #919191;
+	font-size: 20px;
+}
+
+.nav__file .file__item {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-width: 100px;
+	text-align: center;
+}
+
+.nav__file .file__tab {
+	display: block;
+	background-color: #1e1e1e;
+	color: #fff;
+	width: 100%;
+	height: 100%;
+	font-size: 14px;
+	line-height: 2.7;
+	border-radius: 10px 10px 0 0;
+}
+
+.nav__file .file__tab.active {
+	background-color: #292a2f;
+}
+
+.editor {
+	/* border-left: 1px solid #5a5c65; */
+	width: 100%;
+	height: calc(100vh - 6rem - 40px);
+	display: flex;
+	box-shadow: 0 3px 9px rgba(0, 0, 0, 0.15);
+	border-left: 1px solid #5a5c65;
+}
+
+.editor__bar {
+	width: 100%;
+	background-color: #1e1e1e;
+	height: 40px;
+	
+}
+
+.editor__code {
+  position: relative;
+  border: none;
+  flex-basis: 100%;
+}
+
+.editor__preview {
+  position: relative;
+  flex-basis: 100%;
+}
+
+.editor__code>*,
+.editor__preview>*{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+/*
+.buttons {
+  text-align: center;
+}
+
+.button {
+  background: #f5df1b;
+  color: #000000;
+  padding: 0.5em 1.3em 0.6em;
+  border-radius: 6px;
+  font-weight: 100;
+  border: none;
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 16px;
+  box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.2);
+  transition: background-color .1s ease;
+}
+
+.button:hover {
+  background: #ffed4e;
+}
+
+*/
+
+/* 모나코 에디터 끝 */
+
+/* 사이브바 질문 탭 */
+.question__header {
+	display: flex;
+	height: 65px;
+	border-bottom: 1px solid #383a43;
+}
+
+.question__header .question__box {
+	display: flex;
+	width: calc(100% - 162px);
+	border-right: 1px solid #383a43;
+	padding-left: 10px;
+}
+
+.question__header .question__box .question__sIcon {
+	width: 24px;
+	border: none;
+	background-color: transparent;
+	color: #fff;
+	font-size: 16px;
+	padding-right: 0;
+}
+
+
+.question__header .question__box .question__input {
+	height: 100%;
+	width: 100%;
+	background-color: transparent;
+	border: none;
+	padding: 6px 20px 6px 10px;
+	color: #fff;
+	font-size: 16px;
+}
+
+.question__header .question__btn {
+	width: 152px;
+	border: none;
+	background-color: transparent;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.question__header .question__btn:hover {
+	color: #0fd;
+}
+
+.qModal__title-course:hover {
+	color: #ff9300;
+	cursor: pointer;
+}
+
+/* 미니 브라우저 */
+#miniBrowser {
+	/* pointer-events: none; */
+}
+
+button.btn-settings {
+  margin: 25px;
+  padding: 20px 30px;
+  font-size: 1.2em;
+  background-color: #337ab7;
+  color: white;
+}
+button.btn-settings:active {
+  color: white;
+}

@@ -135,7 +135,8 @@
 						      	<button id="addVideo-1" type="button" class="button button--purple mr-2 position-absolute" style="top:-10px">비디오 추가</button>
 						      	<div class="video-file col-md-6 col-lg-4">
 							        <label class="col-form-label d-block">동영상 등록</label>
-									<input name="videoTitle-1-1" type="text" placeholder="비디오 제목">
+									<input name="videoTitle-1-1" type="text" placeholder="비디오 제목" />
+									<textarea name="videoContent-1-1" placeholder="비디오 내용"></textarea>
 									<input name="video-1-1" type="file" accept="video/*">
 									<div>
 										<button id="addFile-1-1" type="button" class="button button--purple">파일 추가</button>
@@ -230,6 +231,7 @@
 				      	<div class="video-file col-md-6 col-lg-4">
 					        <label class="col-form-label d-block">동영상 등록</label>
 							<input name="videoTitle-${curId}-${++videoId}" type="text" placeholder="비디오 제목">
+							<textarea name="videoContent-${curId}-${videoId}" placeholder="비디오 내용"></textarea>
 							<input name="video-${curId}-${videoId}" type="file" accept="video/*">
 							<div>
 								<button id="addFile-${videoId}" type="button" class="button button--purple">파일 추가</button>
@@ -255,6 +257,7 @@
 				<div class="video-file col-md-6 col-lg-4">
 			        <label class="col-form-label d-block">동영상 등록</label>
 					<input name='videoTitle-${parentParentId}-${++videoId}' type="text" placeholder="비디오 제목">
+					<textarea name="videoContent-${parentParentId}-${videoId}" placeholder="비디오 내용"></textarea>
 					<input name="video-${parentParentId}-${videoId}" type="file" accept="video/*">
 					<div>
 						<button id="addFile-${videoId}" type="button" class="button button--purple">파일 추가</button>

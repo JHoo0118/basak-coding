@@ -1,3 +1,12 @@
+.lecture-wrapper {
+  	border-radius: 10px;
+}
+
+.lecture-wrapper:hover {
+	box-shadow: 0 0 15px 0 hsl(0deg 0% 100% / 40%);
+	
+}
+
 .lecture-wrapper a {
   position: relative;
   text-decoration: none;
@@ -41,10 +50,12 @@
   min-height: 360px;
   margin-bottom: 4rem;
   width: 18rem;
+  border-radius: 10px;
 }
 
 .lecture .lecture__thumbnail {
   height: 180px;
+  border-radius: 10px 10px 0 0;
 }
 
 .lecture .lecture__title {

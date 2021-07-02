@@ -157,6 +157,21 @@ a:visited {
   -webkit-line-clamp: 4 !important;
 }
 
+
+/* 스크롤바 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+ 
+::-webkit-scrollbar-track {
+    background-color: #25262b;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #666b7a;; 
+}
+
+
 /* 1rem = 10px */
 
 @media (max-width: 1200px) {
