@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>바삭 코딩 | 좋아요 관리</title>
+	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" th:href="@{/css/admin/main.css}" />
+	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+  	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+	<script defer th:src="@{/js/actionValidate.js}"></script>
+</head>
+<body>
+	<!-- Header -->
+	<div th:replace="/admin/fragments/header.html :: fragment-header(${title})"></div>
+	
+	<!-- 메인 -->
+	<section class="col-xl-10 col-lg-9 col-md-8 mt-6 ml-auto">
+		<div class="container-md">
+			<div class="row">
+				<div class="col-12 ml-auto">
+					<div class="row md-5 mb-5">
+						<div class="col-xl-12 col-12 mb-4 mb-xl-0">
+						
+						<h3 class="text-muted text-center mb-3">좋아요 관리</h3>
+						<form name="actionForm" th:action="@{/admin/like/management/change}">
+							<div class="form__header d-flex justify-content-between">
+								<div>
+									<select name="action">
+										<option value="lec">강의</option>
+										<option value="qna">질문</option>
+									</select>
+									<input class="button button--light button--sm d-inline" type="submit" value="확인" />
+								</div>
+							</div>
+							<div th:if="${message != null}" class="alert alert-success text-center">
+								[[${message}]]
+							</div>
+							<div class="table-responsive" style="min-width:1000px;">
+							<table class="table table-striped bg-light text-center">
+								<thead>
+				                  <tr class="text-muted">
+				                    <th>#</th>
+				                    <th>제목</th>
+				                    <th>좋아요</th>
+				                  </tr>
+				                </thead>
+				                <tbody>
+									<tr th:each="like, i : ${listLikes}">
+										<td>[[${i.index+1}]]</td>
+										<td>[[${like.title}]]</td>
+										<td>[[${like.likeCount}]]</td>
+									</tr>
+				                </tbody>
+							</table>
+							</div>
+						</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<script>
+		if("[[${param.action}]]"=="qna"){
+			$("option[value=qna]").attr("selected","true");
+		}
+	</script>
+</body>
+</html>

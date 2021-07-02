@@ -9,8 +9,49 @@
 	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
 	<link rel="stylesheet" th:href="@{/css/admin/main.css}" />
 	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
-  	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+  	<script th:src="@{/webjars/bootstrap/4.6.0/js/boots+trap.bundle.min.js}"></script>
+  	<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    
+    <script>
+      var getvalidate = 0;
+
+      $(function () {
+
+
+         $("#frm").validate({
+            errorClass: 'error',
+            rules: {
+               email: {required:true,email:true},
+               password: {required: true, minlength: 4, maxlength: 13},
+
+            },
+            messages: {
+               email: {required:"이메일을 입력해주세요",email:"이메일 형식으로 입력해주세요"},
+               password: {required: "비밀번호를 입력해 주세요", minlength: "최소 4글자 입니다", maxlength: "최대 13글자 입니다"},
+
+            }
+         });
+
+         $(":submit").on("click", function () {
+            if ($("#frm").valid()) {
+               console.log("success");
+               getvalidate = 1;
+               console.log("getvalidate :", getvalidate);
+               return;
+            } else {
+               console.log("failure");
+               getvalidate = 0;
+               console.log("getvalidate :", getvalidate);
+            }
+
+         });
+
+      });///
+   </script>
 </head>
+
+
 <body>
 	<div class="container container--admin">
 		<div th:if="${param.error}">
@@ -19,26 +60,27 @@
 		<div th:if="${param.logout}">
 			<p class="text-success font-weight-bold">성공적으로 로그아웃 되었습니다.</p>
 		</div>
-		<form name="loginForm" method="post" th:action="@{/admin/login}">
+		<form id="frm" name="loginForm" method="post" th:action="@{/admin/login}">
 			<h4>로그인</h4>
 			<div class="form-group row pb-2 position-relative">
 				<label for="email" class="col-sm-3 col-form-label py-3">이메일</label>
 				<div class="col-sm-9">
-					<input type="email" class="form-control py-3" id="loginEmail" placeholder="이메일" name="email">
+					<input type="email" class="form-control py-3" id="email" placeholder="이메일" name="email">
 				</div>
 			</div>
 			<div class="form-group row pb-2 position-relative">
 				<label for="password" class="col-sm-3 col-form-label py-3">비밀번호</label>
 				<div class="col-sm-9">
-					<input type="password" class="form-control py-3" id="loginPassword" placeholder="비밀번호" name="password">
+					<input type="password" class="form-control py-3" id="password" placeholder="비밀번호" name="password">
 				</div>
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-					<button type="submit" class="button button--purple button--full mt-2">로그인</button>
+					<button id= "btn" button type="submit" class="button button--purple button--full mt-2">로그인</button>
 				</div>
 			</div>
 		</form>
-	</div>
+	</div>	
+	
 </body>
 </html>

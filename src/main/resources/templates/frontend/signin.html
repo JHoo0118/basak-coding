@@ -10,8 +10,31 @@
 	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
 	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
   	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+  	<script th:src="@{https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js}"></script>
+  	<script>
+  	
+  		$(function(){
+			$.validator.setDefaults({
+			    onkeyup:false,
+		    	onclick:false,
+			    onfocusout:false,
+			});
+			
+			$("#frm").validate({
+				rules:{
+					email:{required:true,email:true},
+					password:{required:true,minlength:4}
+				},
+				messages:{
+					email:{required:"아이디를 입력해주세요",email:"이메일 형식으로 입력해주세요"},
+					password:{required:"비밀번호를 입력해주세요",minlength:"4자 이상"}
+				}
+			});
+			
+		});
+  	</script>
 </head>
-
+	
 <body>
     <!-- Navbar -->
 	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
@@ -20,13 +43,13 @@
     <section class="signin">
         <div class="container-fluid signin__container">
             <h2 class="signin__title">로그인</h2>
-            <form class="row" method="post" th:action="@{/auth/signin}">
+            <form id="frm" class="row" method="POST" th:action="@{/auth/signin}">
                 <div class="form-group form__group p-0 position-relative">
                     <div class="p-0">
-                        <input type="email" class="form-control form__input error" placeholder="이메일을 입력해주세요." name="email" />
+                        <input type="email" class="form-control form__input" placeholder="이메일을 입력해주세요." name="email" th:value="${param.email}"/>
                     </div>
                     <!-- 에러 출력용 -->
-                    <small class="error">에러 메세지</small>
+                    <label class="error"></label>
                 </div>
                 <div class="form-group form__group pb-3 position-relative">
                     <div class="p-0">
@@ -34,7 +57,7 @@
                             name="password" />
                     </div>
                     <!-- 에러 출력용 -->
-                    <small class="error"></small>
+                    <label class="error"><span th:if="${param.email}!=null">아이디와 비밀번호가 일치하지않습니다</span></label>
                 </div>
                 <h5 class="signin__link">
                     <span class="d-block">비밀번호를 잊으셨나요?</span><a th:href="@{/auth/reset-pass}">비밀번호 찾기</a>

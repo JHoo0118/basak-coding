@@ -19,24 +19,24 @@
     <section class="payment">
         <div class="container-fluid container--main">
             <div class="payment__result">
-                <h2 class="result__title">신중한라이언I45님! 결제가 완료되었습니다.</h2>
+                <h2 class="result__title">[[${course.USERNAME}]]님 결제가 완료되었습니다.</h2>
                 <span>이제 공부를 시작해볼까요?</span>
             </div>
             <div class="payment__package">
                 <img class="package__img" th:src="@{/images/image4.jpg}" />
                 <div class="package__info">
                     <div class="info__left">
-                        <div class="info__title">Try Your Code LION!</div>
-                        <div class="info__category">ETC</div>
+                        <div class="info__title">[[${course.TITLE}]]</div>
+                        <div class="info__category">[[${course.CAT_NAME}]]</div>
                     </div>
                     <ul class="info__right">
                         <li>
                             <span>강사</span>
-                            <b>정미나</b>
+                            <b>[[${course.ADM_NAME}]]</b>
                         </li>
                         <li>
                             <span>수강기간</span>
-                            <b>2021.06.04 ~ 2021.07.16</b>
+                            <b>[[${course.PERIOD}]]</b>
                         </li>
                     </ul>
                 </div>
@@ -45,15 +45,15 @@
             <div class="payment__summary">
                 <div class="price__box">
                     <div class="price__left">결제일시</div>
-                    <div class="price__right text__color--green">2021.06.04 17:30:30</div>
+                    <div class="price__right text__color--green">[[${course.CREATED_AT}]]</div>
                 </div>
                 <div class="price__box">
                     <div class="price__left">결제 수단</div>
-                    <div class="price__right text__color--green">네이버페이</div>
+                    <div class="price__right text__color--green">[[${course.PAYMENT_METHOD}]]</div>
                 </div>
                 <div class="price__box">
                     <div class="price__left">결제 금액</div>
-                    <div class="price__right text__color--green">₩0원</div>
+                    <div class="price__right text__color--green">[[${course.PRICE}]]</div>
                 </div>
                 <div class="d-flex justify-content-center">
                     <a th:href="@{/personal/dashboard}" class="button button--rounded" style="color: #0fd; margin-top: 60px">

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.basakcoding.basak.mapper.PaymentMapper">
+	
+	<!-- 아이디로 구매자 얻기 -->
+	<select id="getMemberById" parameterType="String" resultType="MemberDTO">
+		SELECT email,username 
+		FROM members 
+		WHERE member_id=#{memberId}
+	</select>
+	
+	<!-- 강의 courses 내용 얻기  -->
+	<select id="listAll" resultType="Map">
+		SELECT ca.name CAT_NAME, co.course_id, co.title, co.short_description, co.period, co.price, a.name ADM_NAME, a.avatar 
+		FROM courses co
+		JOIN category ca ON ca.category_id = co.category_id
+		JOIN admins a ON co.admin_id = a.admin_id
+	</select>
+	
+	<!-- 강의 결제내역 얻기  -->
+	<select id="priceList" resultType="Map">
+		SELECT pa.payment_method, pa.created_at, pa.payment_code, pa.phone_number, pa.name, pa.payment_id, pa.course_id, ca.name CAT_NAME, co.title, co.short_description, co.period, co.price, a.name ADM_NAME, a.avatar 
+		FROM courses co
+		JOIN payment pa ON pa.course_id = co.course_id
+		JOIN category ca ON ca.category_id = co.category_id
+		JOIN admins a ON co.admin_id = a.admin_id
+	</select>
+	
+	
+</mapper>
+
+
+
+

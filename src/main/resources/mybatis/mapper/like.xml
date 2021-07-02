@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.basakcoding.basak.mapper.LikeMapper">
+	<select id="courseSelect" resultType="LikeDTO">
+		SELECT title,like_count FROM courses
+	</select>
+	<select id="questionSelect" resultType="LikeDTO">
+		SELECT title,like_count FROM question
+	</select>
+	
+</mapper>
