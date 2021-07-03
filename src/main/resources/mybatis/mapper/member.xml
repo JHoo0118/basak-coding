@@ -41,6 +41,20 @@
 		null)
 	</insert>
 	
+	<!--  -->
+	
+	<insert id="registerMember" parameterType="Map">
+		<selectKey keyProperty="memberId" resultType="int" order="BEFORE">
+			SELECT seq_members.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO members VALUES(#{memberId}, #{email}, #{password}, #{username}, DEFAULT, DEFAULT, DEFAULT, 
+		<choose>
+			<when test="avatar != null">#{avatar},</when>
+			<otherwise>DEFAULT,</otherwise>
+		</choose>
+		#{emailSecret})
+	</insert>
+	
 	<!-- 사용자 수정 -->
 	<update id="updateMember" parameterType="Map">
 		UPDATE members SET username=#{username}
@@ -147,5 +161,12 @@
 		select m.username,co.title
 	</select>
 	 -->
+	
+	
+	<!-- 이메일로 emailvalidate값 얻기 -->
+	<update id="updateEmailValidate" parameterType="Map" >
+		UPDATE members SET email_validate='Y' WHERE email_Secret=#{code}
+	</update>
+	
 	
 </mapper>

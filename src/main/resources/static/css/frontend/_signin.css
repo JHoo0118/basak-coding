@@ -67,7 +67,7 @@
   color: #fff;
   display: inline-block;
   margin-top: .5rem;
-  font-size: 14px;
+  font-size: 14px !important;
 }
 
 .form__group label.error {
@@ -111,8 +111,8 @@
 }
 
 @media (max-width: 992px) {
-  .form__group small {
-    font-size: 1.8rem;
+  .form__group label {
+    font-size: 1.6rem !important;
   }
 }
 

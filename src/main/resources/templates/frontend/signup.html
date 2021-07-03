@@ -1,68 +1,167 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-	<meta charset="UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>바삭 코딩 | 회원가입</title>
-	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
-	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
-	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
-	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
-  	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+   <meta charset="UTF-8" />
+   <meta http-equiv="X-UA-Compatible" contenlt="IE=edge" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>바삭 코딩 | 회원가입</title>
+   <link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
+   <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}" />
+   <link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
+   <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+   <script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+   <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+
 </head>
-
 <body>
-    <!-- Navbar -->
-	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
 
-    <!-- 회원가입 시작 -->
-    <section class="signin">
-        <div class="container-fluid signin__container">
-            <h2 class="signin__title">회원가입</h2>
-            <form class="row">
-                <div class="form-group form__group position-relative">
-                    <div class="col-sm-12 p-0">
-                        <input type="email" class="form-control form__input error" placeholder="이메일을 입력해주세요." name="email" />
-                    </div>
-                    <small class="error">에러 메세지</small>
-                </div>
-                <div class="form-group form__group p-0 position-relative">
-                    <div class="p-0">
-                        <input type="text" class="form-control form__input" placeholder="사용자명을 입력해주세요." name="username" />
-                    </div>
-                    <!-- 에러 출력용 -->
-                    <small class="error"></small>
-                </div>
-                <div class="form-group form__group pb-3 position-relative">
-                    <div class="col-sm-12 p-0">
-                        <input type="password" class="form-control form__input" placeholder="비밀번호를 입력해주세요."
-                            name="password" />
-                    </div>
-                    <!-- 에러 출력용 -->
-                    <small class="error"></small>
-                </div>
-                <div class="form-group form__group pb-3 position-relative">
-                    <div class="col-sm-12 p-0">
-                        <input type="password" class="form-control form__input" placeholder="비밀번호를 다시 한번 입력해주세요"
-                            name="passwordConfirm" />
-                    </div>
-                    <!-- 에러 출력용 -->
-                    <small class="error"></small>
-                </div>
+<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
 
-                <a th:href="@{/auth/email-information?email=}" class="button button--rounded button--full"
-                    style="color: #0fd; margin-top: 60px">
-                    바로 시작하기
-                </a>
-            </form>
-            <a class="signin__toSignup" th:href="@{/auth/signin}">이미 가입하셨나요?&nbsp;<span>로그인하기</span></a>
-        </div>
-    </section>
-    <!-- 회원가입 끝 -->
 
-    <!-- footer -->
-    <div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
+<section class="signin" style="background-color: black;">
+   <div class="container-fluid signin__container">
+      <h2 class="signin__title">회원가입</h2>
+      <form class="row" id="frm"  th:action="@{/auth/signup}" method="POST" onSubmit="return checkemail(this)"  >
+         <div class="form-group form__group position-relative">
+            <div class="col-sm-12 p-0">
+               <input type="email" style="color: white;" class="form-control form__input"
+                  placeholder="이메일을 입력해주세요." name="email" id="email" />
+               <label id="firstName-error" class="error" for="email" style="font-size:50px;">[[${errormsg}]]</label>
+            </div>
+
+         </div>
+         <div class="form-group form__group p-0 position-relative">
+            <div class="p-0">
+               <input type="text" style="color: white;" class="form-control form__input"
+                  placeholder="사용자명을 입력해주세요." name="username" id="username" />
+            </div>
+
+         </div>
+         <div class="form-group form__group pb-3 position-relative">
+            <div class="col-sm-12 p-0">
+               <input type="password" style="color: white;" class="form-control form__input"
+                  placeholder="비밀번호를 입력해주세요." name="password" id="password" />
+            </div>
+
+         </div>
+         <div class="form-group form__group pb-3 position-relative">
+            <div class="col-sm-12 p-0">
+               <input type="password" style="color: white;" class="form-control form__input"
+                  placeholder="비밀번호를 다시 한번 입력해주세요" name="passwordConfirm" />
+            </div>
+
+         </div>
+
+         <button type="submit" id="btnSubmit" class="button button--rounded button--full"
+            style="color: #0fd; margin-top: 1px"  >바로시작하기</button>
+      </form>
+      <a class="signin__toSignup" th:href="@{/auth/signin}">이미 가입하셨나요?&nbsp;<span>로그인하기</span></a>
+   </div>
+</section>
+
+<div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
+
+
+   <script>
+   $(function () {
+		var emailError = document.getElementById("firstName-error");
+		/*
+		$("#email").on("input", function() {
+			if (!validateEmail($("#email").val().trim())) {
+				document.getElementById("email").classList.add("error");
+				emailError.innerText = "이메일 형식으로 입력해 주세요.";
+			} else {
+				document.getElementById("email").classList.remove("error");
+				emailError.innerText = "";
+			}
+		});
+		
+		$("#email").on("blur", function() {
+			if ($("#email").val().trim() === "") {
+				document.getElementById("email").classList.add("error");
+				emailError.innerText = "이메일을 입력해 주세요.";
+			}
+			
+			if (!validateEmail($("#email").val().trim())) {
+				document.getElementById("email").classList.add("error");
+				emailError.innerText = "이메일 형식으로 입력해 주세요.";
+			} else {
+				document.getElementById("email").classList.remove("error");
+				emailError.innerText = "";
+			}
+		});
+		*/
+
+         $("#frm").validate({
+            errorClass: 'error',
+            rules: {
+               email: {required: true, email: true},
+               username: {required: true, minlength: 3, maxlength: 12},
+               password: {required: true, minlength: 4, maxlength: 13},
+               passwordConfirm: {required: true, equalTo: "#password"}
+            },
+            messages: {
+               email: {required: "이메일을 입력해 주세요", email: "이메일 형식으로 입력해 주세요."},
+               username: {required: "닉네임을 입력해 주세요", minlength: "최소 3글자 입니다", maxlength: "최대 12글자 입니다"},
+               password: {required: "비밀번호를 입력해 주세요", minlength: "최소 4글자 입니다", maxlength: "최대 13글자 입니다"},
+               passwordConfirm: {required: "비밀번호 확인을 입력해 주세요", equalTo: "비밀번호와 일치하지 않습니다"}
+            }
+         });//validate
+         
+         });//function
+
+     	           //이메일 중복 유효성 검사
+     function checkemail(form){
+		event.preventDefault();
+    	var email = $("#email").val().trim();
+    	var username =$("#email").val().trim();
+    	var password =$("#password").val().trim();
+    	var passwordConfirm =$("input[name=passwordConfirm]").val().trim();
+    	
+    	if (email === '' || username === '' || password === '' || passwordConfirm === '') {
+			return false;
+		}
+		
+		if (password !== passwordConfirm) {
+			return false;
+		}
+
+      //컨트롤러로 보내기
+         
+	         $.ajax({
+	            url: "[[@{/auth/signup2}]]",
+	            type: "post",
+	            data: {
+					'email': email
+				},
+	            success: function (data) {
+	            	if(data=="-1"){
+					
+						form.submit();
+					}
+	                else if(data=="1"){
+							console.log(data);
+	                	alert("이메일 중복");         
+	                }
+					else {
+						alert("오류");
+					}
+				}//success
+	
+			}); //ajax
+	
+			return false;
+		};
+
+		/*
+		function validateEmail(email) {
+		    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		    return re.test(String(email).toLowerCase());
+		}
+		*/
+   </script>
 </body>
 
 </html>

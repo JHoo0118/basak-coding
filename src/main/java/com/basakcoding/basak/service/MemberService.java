@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.basakcoding.basak.mapper.MemberMapper;
+import com.basakcoding.basak.util.SHA256;
 
 @Service
 public class MemberService {
@@ -30,6 +31,14 @@ public class MemberService {
     	encodePassword(map);
     	return memberMapper.createMember(map);
     }
+    
+    public int registerMember(Map map) {
+    	encodePassword(map);
+    	map.put("emailSecret", SHA256.getSHA256(map.get("email").toString()));  
+    	return memberMapper.registerMember(map);
+    }
+    
+   
     
     
     // 비밀번호 해싱
@@ -56,6 +65,7 @@ public class MemberService {
 
 	// 사용자 여러 행 한 번에 삭제
 	public int deleteMultpleMember(Map map) {
+		
 		return memberMapper.deleteMultpleMember(map);
 	}
 
@@ -122,5 +132,11 @@ public class MemberService {
 	public Map commentsDetails(String userId, String commenTitle) {
 		return memberMapper.commentsDetails(userId,commenTitle);
 	}
+	
+    //사용자의 이메일벨리데이트 값 업데이트
+    public int updateEmailValidate(Map map) {
+    	return memberMapper.updateEmailValidate(map);
+    }
+
 
 }

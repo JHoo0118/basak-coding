@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -21,6 +20,7 @@ public class MemberDTO {
     private String loginMethod;	
     private String avatar;
     private String emailSecret;
+    
     
     public String getAvatarImagePath() {
     	if (avatar == null) return "/images/user.png";
