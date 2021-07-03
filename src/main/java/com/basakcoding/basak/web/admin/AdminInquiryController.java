@@ -24,7 +24,7 @@ public class AdminInquiryController {
 	@Autowired
 	InquiryMapper inquiryMapper;
 	
-	// 질문 관리 화면으로 이동
+	//문의 관리 화면으로 이동
 	@GetMapping("/management")
 	public String inquiryList(Model model) {
 		List<InquiryDTO> listInquirys = inquiryMapper.inquirySelect();
@@ -33,21 +33,12 @@ public class AdminInquiryController {
 		return "admin/inquiryManagement";
 	}//likeList
 	
-//	//강의 질문 전환
-//	@GetMapping("/management/change")
-//	public String likeChange(@RequestParam Map map,Model model) {
-//		if(map.get("action").equals("lec")) {
-//		List<LikeDTO> listLikes = likeService.courseSelect();
-//		model.addAttribute("listLikes", listLikes);
-//		model.addAttribute("title", "강의 좋아요");
-//		return "admin/questionManagement";
-//		}	
-//		else {
-//			List<LikeDTO> listLikes = likeService.questionSelect();
-//			model.addAttribute("listLikes", listLikes);
-//			model.addAttribute("title", "질문 좋아요");
-//			return "admin/questionManagement";
-//		}
-//	}//likeChange
+	@RequestMapping("/management/view")
+	public String inquiryView(@RequestParam Map map,Model model) {
+		InquiryDTO dto = inquiryMapper.selectOne(map);
+		model.addAttribute("inquiry", dto);
+		model.addAttribute("title", "문의 관리");
+		return"admin/inquiryView";
+	}//문의 상세보기
 
-}
+}//class

@@ -60,7 +60,7 @@
 										</td>
 										<td>[[${i.index+1}]]</td>
 										<td>[[${inquiry.classification}]]</td>
-										<td>[[${inquiry.Title}]]</td>
+										<td><a th:href="@{/admin/inquiry/management/view(no=${inquiry.inquiryId})}">[[${inquiry.Title}]]</a></td>
 										<td>[[${inquiry.userName}]]</td>
 										<td>[[${inquiry.createdAt}]]</td>
 									</tr>

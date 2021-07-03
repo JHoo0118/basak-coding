@@ -29,11 +29,6 @@
 						<form name="actionForm" th:action="@{/admin/comment/management/change}">
 							<div class="form__header d-flex justify-content-between">
 								<div>
-									<select name="action">
-										<option value="manage">관리자</option>
-										<option value="stu">수강생</option>
-									</select>
-									<input class="button button--light button--sm d-inline" type="submit" value="확인" />
 									<a class="button button--reverse mb-2" th:href="@{/admin/category/management/form}">삭제</a>
 								</div>
 							</div>

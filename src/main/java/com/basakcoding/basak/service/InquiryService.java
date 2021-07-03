@@ -16,8 +16,13 @@ public class InquiryService {
 	@Autowired
 	private InquiryMapper inquiryMapper;
 	
-	//질문 리스트 가져오기
+	//문의 리스트 가져오기
 	public List<InquiryDTO> inquirySelect(){
 		return inquiryMapper.inquirySelect();
+	}
+	
+	//문의 상세보기 가져오기
+	public InquiryDTO selectOne(Map map) {
+		return inquiryMapper.selectOne(map);
 	}
 }
