@@ -36,7 +36,7 @@ public class AdminPriceController {
 	public String memberList(Model model) {
 		List<AdminDTO> listAdmins = adminService.getAdminList();
 		model.addAttribute("listAdmins", listAdmins);
-		model.addAttribute("title", "강사 관리");
+		model.addAttribute("title", "결제 관리");
 		return "admin/priceManagement";
 	}
 	
@@ -51,7 +51,7 @@ public class AdminPriceController {
 		List<RoleDTO> listRoles = adminRoleService.selectList();
 		model.addAttribute("listRoles", listRoles);
 		model.addAttribute("admin", admin);
-		model.addAttribute("title", "강사 관리");
+		model.addAttribute("title", "결제 관리");
 		return "admin/priceForm";
 	}
 	
