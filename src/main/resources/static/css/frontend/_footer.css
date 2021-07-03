@@ -3,3 +3,8 @@
   background-color: #212224;
   min-height: 10rem;
 }
+
+.footer__item {
+	display: block;
+	color: #fff !important;
+}

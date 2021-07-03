@@ -12,7 +12,7 @@ public class VideoDTO {
 	private Integer curriculumId;
 	private String videoUri;
 	private String videoLength;
-	private String clob;
+	private String videoAnswer;
 	private String videoTitle;
 	private char seen;
 	private String videoContent;

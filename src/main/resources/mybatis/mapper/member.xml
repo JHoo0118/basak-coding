@@ -108,10 +108,10 @@
 	
 	<!-- 내 강의 가져오기 -->
 	<select id="myCourses" parameterType="int" resultType="Map">
-		select co.title,co.short_description,co.period,cu.name,a.name admin_name
+		select co.title,co.course_id,co.short_description,co.period,ca.*,a.email,a.name admin_name
 		from members m JOIN payment p ON m.member_id=p.member_id
 		JOIN courses co ON p.course_id=co.course_id 
-		JOIN curriculum cu ON co.course_id=cu.course_id
+		JOIN category ca ON co.category_id=ca.category_id
 		JOIN admins a ON co.admin_id=a.admin_id
 		where p.payment_state='결제 완료' AND m.member_id=#{userId}
 	</select>

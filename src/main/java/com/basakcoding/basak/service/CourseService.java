@@ -67,4 +67,8 @@ public class CourseService {
 	public VideoDTO getVideo(String videoId) {
 		return courseMapper.getVideo(videoId);
 	}
+
+	public List<CurriculumDTO> getCurriculumList(String courseId) {
+		return courseMapper.getCurriculumList(courseId);
+	}
 }
