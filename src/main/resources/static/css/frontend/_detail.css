@@ -56,6 +56,7 @@
 }
 
 .detail .detail__left .detail__like .fa-thumbs-up {
+  
   margin-right: .5rem;
 }
 
@@ -126,6 +127,8 @@
   display: flex;
   justify-content: space-evenly;
 }
+
+
 
 .button--cover {
   border: 0;

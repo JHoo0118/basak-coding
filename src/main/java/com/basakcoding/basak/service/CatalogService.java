@@ -24,6 +24,37 @@ public class CatalogService {
 		return catalogMapper.selectOne(courseId);
 	}
 	
+	public String getClobText(String courseId) {
+		return catalogMapper.getClobText(courseId);
+
+	}
+	
+	public List<Map> reviewList(String courseId) {
+		return catalogMapper.reviewList(courseId);
+	}
+	public int reviewCount(String courseId) {
+		return catalogMapper.reviewCount(courseId);
+	}
+	
+	public int checkPayment(Map map) {
+		return catalogMapper.checkPayment(map);
+	}
+
+	public int reviewCheck(Map map) {
+		return catalogMapper.reviewCheck(map);
+	}
+	
+	public int reviewInsert(Map map) {
+		return catalogMapper.reviewInsert(map);
+		
+	}
+	
+	
+	
+	
+	
+	
+	
 	public int likeCheck(Map map) {
 		return catalogMapper.likeCheck(map);
 	}

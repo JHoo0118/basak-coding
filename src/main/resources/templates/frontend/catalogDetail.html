@@ -1,74 +1,37 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
 	<meta charset="UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>바삭 코딩 | 카탈로그 제목</title>
 	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
-	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}" />
 	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
 	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
-  	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
 </head>
 
 <body>
-   	<!-- Navbar -->
+	<!-- Navbar -->
 	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
 
-    <!-- 강의 상세보기 시작 -->
-    <section class="detail">
-        <div class="detail__header">
-            <h1 class="text-style-2"> Try Your CODE LION! </h1>
-            <span>코드라이언 코스 100% 활용하기</span>
-        </div>
-        <div  class="container-fluid container--main">
-            <div   class="row" style="padding-bottom: 10rem; ">
-				<!-- 좋아요 -->            
-                <div class="col-md-9 detail__left">
-                    <button class="detail__like" id="likeCount" ><i class="far fa-thumbs-up" >
-                    </i>[[${course.LIKE_COUNT}]]</button>
-                    <div class="detail__info">
-                    	
-                    	<!-- 강의가격 -->   	
-                        <div class="detail__price">
-                            <span>[[${course.PRICE}]]</span>&nbsp;<span>원</span>
-                        </div>
-                        
-                        <!-- 상세목록 -->   
-                        <div class="row info__header">
-                            <div class="col-3 detail__text detail__text--1 p-0">수강기간</div>
-                            <div class="col-3 detail__text detail__text--1 p-0">난이도</div>
-                            <div class="col-3 detail__text detail__text--1 p-0">수업인덱스</div>
-                            <div class="col-3 detail__text detail__text--1 p-0">학습시간</div>
-                        </div>
-                        
-                        <!-- 수강기간 -->   
-                        <div class="row detail__body">
-                            <div class="col-3 p-0 d-flex justify-content-center align-items-center flex-column">
-                                <span style="color: rgb(145, 145, 145); font-size: 1.4rem">결제일로부터</span><span
-                                    class="detail__text detail__text--2">[[${course.PERIOD}]]</span>
-                            </div>
-                          	
-                          	   <!-- 난이도 -->   
-                            <div class="col-3 p-0 d-flex justify-content-center align-items-center flex-column">
-                                <div>
-                                    <i th:if="${course.DIFFICULTY == '쉬움'}" class="fas fa-circle"></i>
-                                    <i th:if="${course.DIFFICULTY == '쉬움'}" class="far fa-circle"></i>
-                                    <i th:if="${course.DIFFICULTY == '쉬움'}" class="far fa-circle"></i>
-                                
-                                	<i th:if="${course.DIFFICULTY == '보통'}" class="fas fa-circle"></i>
-                                    <i th:if="${course.DIFFICULTY == '보통'}" class="fas fa-circle"></i>
-                                    <i th:if="${course.DIFFICULTY == '보통'}" class="far fa-circle"></i>
-                                	
-                                	<i th:if="${course.DIFFICULTY == '어려움'}" class="fas fa-circle"></i>
-                                    <i th:if="${course.DIFFICULTY == '어려움'}" class="fas fa-circle"></i>
-                                    <i th:if="${course.DIFFICULTY == '어려움'}" class="fas fa-circle"></i>
-                                
-                                </div>
-                                <span class="detail__text detail__text--2">[[${course.DIFFICULTY}]]</span>
-                            </div>
+	<!-- 강의 상세보기 시작 -->
+	<section class="detail">
+		<div class="detail__header">
+			<h1 class="text-style-2"> [[${course.TITLE}]] </h1>
+			<span>[[${course.SHORT_DESCRIPTION}]]</span>
+		</div>
+		<div class="container-fluid container--main">
+			<div class="row" style="padding-bottom: 10rem; ">
+				<!-- 좋아요 -->
+				<div class="col-md-9 detail__left">
+					<button class="detail__like" id="likeCount"><i class="far fa-thumbs-up">
+						</i>[[${course.LIKE_COUNT}]]</button>
+					<div class="detail__info">
 
+<<<<<<< HEAD
                             <!-- 수업인덱스 -->   
                             <div class="col-3 p-0 detail__text detail__text--2">
                                 2개의 영상
@@ -127,74 +90,569 @@
 										$('#likeCount').html('<i class="fas fa-thumbs-up" ></i>'+likeCount);
 										$('#likeCount').prop("style","color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");		
 										
+=======
+						<!-- 강의가격 -->
+						<div class="detail__price">
+							<span>[[${course.PRICE}]]</span>&nbsp;<span>원</span>
+						</div>
+
+						<!-- 상세목록 -->
+						<div class="row info__header">
+							<div class="col-3 detail__text detail__text--1 p-0">수강기간</div>
+							<div class="col-3 detail__text detail__text--1 p-0">난이도</div>
+							<div class="col-3 detail__text detail__text--1 p-0">수업인덱스</div>
+							<div class="col-3 detail__text detail__text--1 p-0">학습시간</div>
+						</div>
+
+						<!-- 수강기간 -->
+						<div class="row detail__body">
+							<div class="col-3 p-0 d-flex justify-content-center align-items-center flex-column">
+								<span style="color: rgb(145, 145, 145); font-size: 1.4rem">결제일로부터</span><span
+									class="detail__text detail__text--2">[[${course.PERIOD}]]</span>
+							</div>
+
+							<!-- 난이도 -->
+							<div class="col-3 p-0 d-flex justify-content-center align-items-center flex-column">
+								<div style="position: relative; top: -20px;">
+									<i th:if="${course.DIFFICULTY == '쉬움'}" class="fas fa-circle"></i>
+									<i th:if="${course.DIFFICULTY == '쉬움'}" class="far fa-circle"></i>
+									<i th:if="${course.DIFFICULTY == '쉬움'}" class="far fa-circle"></i>
+
+									<i th:if="${course.DIFFICULTY == '보통'}" class="fas fa-circle"></i>
+									<i th:if="${course.DIFFICULTY == '보통'}" class="fas fa-circle"></i>
+									<i th:if="${course.DIFFICULTY == '보통'}" class="far fa-circle"></i>
+
+									<i th:if="${course.DIFFICULTY == '어려움'}" class="fas fa-circle"></i>
+									<i th:if="${course.DIFFICULTY == '어려움'}" class="fas fa-circle"></i>
+									<i th:if="${course.DIFFICULTY == '어려움'}" class="fas fa-circle"></i>
+
+								</div>
+								<span style="position: absolute; bottom: 25px;"
+									class="detail__text detail__text--2">[[${course.DIFFICULTY}]]</span>
+							</div>
+
+							<!-- 수업인덱스 -->
+							<div class="col-3 p-0 d-flex justify-content-center align-items-center flex-column">
+								<span style="color: rgb(145, 145, 145); font-size: 1.4rem">강의 영상</span>
+								<span class="detail__text detail__text--2">[[${course.VIDEO_COUNT}]]개의 영상</span>
+							</div>
+
+							<!-- 학습시간 -->
+							<div class="col-3 p-0 d-flex justify-content-center align-items-center flex-column">
+								<span style="color: rgb(145, 145, 145); font-size: 1.4rem">총</span>
+								<span id="length"
+									class="detail__text detail__text--2">[[${course.COURSE_LENGTH}]]</span>
+							</div>
+							<script>
+
+								//좋아요 기능구현
+								var likeCount = Number.parseInt($('.detail__like').text());
+
+								var likeCheck = "[[${course.likeCheck}]]";
+								console.log('likeCheck', likeCheck);
+
+								$(document).ready(function () {
+									if (likeCheck == 1) {
+										console.log('기존에 좋아요 눌렀을때');
+										$('#likeCount').html('<i class="fas fa-thumbs-up" ></i>' + likeCount);
+										$('#likeCount').prop("style", "color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");
+
+>>>>>>> refs/heads/ksg
 									}
-									else if(data==1){////기존에 좋아요를 눌렀놨을때
-                                        likeCount--;
-                                        console.log("likeCount:",likeCount);
-										$('#likeCount').html('<i class="far fa-thumbs-up"></i>'+likeCount);	
-										$('#likeCount').prop("style","color: gray;");										
-										
+									else {
+										console.log('기존에 좋아요 눌르지 않았을때');
+										$('#likeCount').html('<i class="far fa-thumbs-up"></i>' + likeCount);
+										$('#likeCount').prop("style", "color: gray;");
 									}
-									else if(data==2){
-										console.log("로그인상태 아님 ");
-										if(confirm("로그인후 이용 하세요")){
-											location.href = "/auth/signin";//뒤로가기 가능
-										//location.replace("/auth/signin"); //뒤로가기 불가능
+
+								});
+
+								// var memberId = "[[${#authentication.principal}]]" == "anonymousUser"
+								var courseId = "[[${course.COURSE_ID}]]";
+								console.log("courseId:", courseId);
+
+
+								$('.detail__like').click(function () {
+									// var data = { 'memberId' : memberId, 'courseId' : courseId };
+									var data = {'courseId': courseId};
+									console.log(JSON.stringify(data));
+
+									$.ajax({
+
+										url: "[[@{/catalog/count_like}]]",
+										type: "post",
+										data: JSON.stringify(data),//courseId=1
+										contentType: "application/json",
+										success: function (data) {
+											console.log("data:", data)
+											if (data == 0) {//기존에 좋아요 누른적이 없을때
+												likeCount++;
+												console.log("likeCount:", likeCount);
+												$('#likeCount').html('<i class="fas fa-thumbs-up" ></i>' + likeCount);
+												$('#likeCount').prop("style", "color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");
+
+											}
+											else if (data == 1) {////기존에 좋아요를 눌렀놨을때
+												likeCount--;
+												console.log("likeCount:", likeCount);
+												$('#likeCount').html('<i class="far fa-thumbs-up"></i>' + likeCount);
+												$('#likeCount').prop("style", "color: gray;");
+
+											}
+											else if (data == 2) {
+												console.log("로그인상태 아님 ");
+												if(confirm("로그인 후 이용가능\r\r로그인 페이지로 이동하시겠습니까?")){
+													location.href = "/auth/signin";//뒤로가기 가능
+													//location.replace("/auth/signin"); //뒤로가기 불가능
+												}
+												return;
+											}
+
 										}
-										return;
+
+
+
+									})
+								})
+
+
+
+
+								//강의시간(초)를 시간/분으로 변경
+								var courseLength = $('#length').text();
+								console.log("length:", courseLength);
+								var courseTime = Math.ceil(courseLength / 60);
+								console.log("courseTime:", courseTime);
+								$('#length').text(Math.floor(courseTime / 60) + "시간" + (courseTime % 60) + "분");
+
+							</script>
+
+
+						</div>
+						<a th:href="@{/orders/payments/}+${course.COURSE_ID}" class="button button--cover button--full">
+							등록하기
+						</a>
+					</div>
+					<div class="description">
+
+						<h1 class="description__title">[[${course.DESCRIPTION}]]</h1>
+
+					</div>
+				</div>
+				<div class="col-md-3 detail__right p-0 d-flex flex-column align-items-center">
+					<img th:src="@{/images/}+${course.AVATAR}" class="detail__profile" />
+					<h4>[[${course.EMAIL}]]</h4>
+					<ul class="detail__history">
+						<li class="history__item">[[${course.BIO}]] /</br> 코드라이언 팀 [[${course.ADMIN_NAME}]]</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="curriculum">
+		<div class="container-fluid container--main">
+			<h1 class="detail__title">커리큘럼</h1>
+
+			<div class="accordion curriculum__accordion" id="accordionExample">
+				<div class="card">
+					<div class="card-header" id="headingOne">
+						<h2 class="mb-0">
+							<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+								data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+								<span class="curriculum__number">01</span>
+								<span class="curriculum__subTitle">코드라이언 정복 가이드</span>
+								<span><i class="fas fa-chevron-right"></i></span>
+							</button>
+						</h2>
+					</div>
+
+					<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+						<div class="card-body">
+							<div class="card__video">
+								<span class="video__icon"><i class="fab fa-youtube"></i></span>
+								<span class="video__text">Some placeholder content for the first
+									accordion panel.
+									<code>.show</code> class.
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" id="headingTwo">
+						<h2 class="mb-0">
+							<button class="btn btn-link btn-block text-left collapsed" type="button"
+								data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+								aria-controls="collapseTwo">
+								<span class="curriculum__number">02</span>
+								<span class="curriculum__subTitle">Collapsible Group Item #2</span>
+								<span><i class="fas fa-chevron-right"></i></span>
+							</button>
+						</h2>
+					</div>
+					<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+						<div class="card-body">
+							<div class="card__video">
+								<span class="video__icon"><i class="fab fa-youtube"></i></span>
+								<span class="video__text">Some placeholder content for the first
+									accordion panel.
+									<code>.show</code> class.
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" id="headingThree">
+						<h2 class="mb-0">
+							<button class="btn btn-link btn-block text-left collapsed" type="button"
+								data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
+								aria-controls="collapseThree">
+								<span class="curriculum__number">03</span>
+								<span class="curriculum__subTitle">Collapsible Group Item #3</span>
+								<span><i class="fas fa-chevron-right"></i></span>
+							</button>
+						</h2>
+					</div>
+					<div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+						data-parent="#accordionExample">
+						<div class="card-body">
+							<div class="card__video">
+								<span class="video__icon"><i class="fab fa-youtube"></i></span>
+								<span class="video__text">Some placeholder content for the first
+									accordion panel.
+									<code>.show</code> class.
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- 강의 상세보기 끝 -->
+
+	<!-- 강의 후기작성 버튼-->
+	<section class="review">
+		<div class="container-fluid container--main">
+			<h1 class="detail__title d-flex justify-content-between align-items-center">강의후기
+				<button id="reviewWrite" class="button--square review__button" data-target="#reviewModal">
+				후기	작성하기</button>
+			</h1>
+	
+	<!--강의후기 내용들 뿌려주기-->
+
+			<ul class="review__list row m-0 justify-content-between">
+				<li th:each="review : ${reviewList}" class="review__card col-md-6">
+					<div class="review__header">
+						<div class="review__user">
+							<img th:src="@{/images/user.png}" alt="사용자 이미지" />
+							<div class="review__ubox">
+								<p>[[${review.NAME}]]</p>
+								<span id="postDate" class="review__date">[[${review.POSTDATE}]]</span>
+							</div>
+						</div>
+
+			<!--별점 갯수별로 뿌려주기 -->			
+			<div th:with="rating=${review.RATING}" class="review__rating">
+				<i th:unless="${review.RATING}==0" th:each="num: ${#numbers.sequence(1,rating)}" class ="fas fa-star"></i><i th:unless="${review.RATING}==5" th:each="num: ${#numbers.sequence(4,rating)}" class ="far fa-star"></i>
+			</div>
+			
+					</div>
+					
+					<div class="review__description">
+						[[${review.CONTENT}]]
+					</div>
+				</li>
+
+			</ul>
+		</div>
+	</section>
+
+	<script>
+		//후기
+		/*	
+		
+		
+		var starCount ="[[${reviewList[0].RATING}]]";		 
+		 console.log("starCount",starCount);
+		 */
+		 
+		 /*
+		var star = $("#star").html();
+		console.log("star", star);
+
+		var starCount = $('#star').text();
+		console.log("starCount", starCount);
+		*/
+
+		/*		
+				$(document).ready(function(){
+			
+					$("#star i:lt("+star+")").attr('class','fas fa-star');		
+				
+			});
+			
+		
+ var listSize = Number.parseInt("[[${reviewList.size}]]");
+		 console.log("listSize",listSize);
+
+	*/
+	
+	
+		
+	/*
+	$(document).ready(function(){
+		
+		for(var i=0;i<listSize;i++){
+		
+		var innerHtml = "";
+
+		for (var i = 0; i < 5; i++) {
+
+			if (i < starCount) {
+
+				innerHtml += '<i class="fas fa-star"></i>';
+
+			} else {
+
+				innerHtml += '<i class="far fa-star"></i>';
+
+		}	
+			
+		$('#star').html(innerHtml);
+
+		}
+	}
+		
+	});
+		
+		
+		*/		
+	
+	
+
+        //forEach에 items=reviewList 집어넣어서 .키값으로 가져옴 
+
+	</script>
+
+
+
+	<!-- FAQ -->
+	<section class="faq">
+		<div class="container-fluid container--main">
+			<h1 class="detail__title">FAQ</h1>
+			<div class="accordion curriculum__accordion" id="accordionFAQ">
+				<div class="card">
+					<div class="card-header" id="headingOne">
+						<h2 class="mb-0">
+							<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+								data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+								<span class="curriculum__number">01</span>
+								<span class="curriculum__subTitle">코스를 듣기 전 미리 알아야 할 내용이 있나요?</span>
+								<span><i class="fas fa-chevron-right"></i></span>
+							</button>
+						</h2>
+					</div>
+
+					<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionFAQ">
+						<div class="card-body faq__body">
+							<div class="faq__box">
+								<span class="faq__text">기본적인 파이썬 지식을 알고 있어야 수강할 수 있어요. 바삭 코딩의
+									<code>일단 만드는 Python, [기초] 같이 푸는 Python, [심화] 같이 푸는 Python</code>을 수강하신 후 수강하시는 것을
+									추천드려요.
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" id="headingTwo">
+						<h2 class="mb-0">
+							<button class="btn btn-link btn-block text-left collapsed" type="button"
+								data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+								aria-controls="collapseTwo">
+								<span class="curriculum__number">02</span>
+								<span class="curriculum__subTitle">Collapsible Group Item #2</span>
+								<span><i class="fas fa-chevron-right"></i></span>
+							</button>
+						</h2>
+					</div>
+					<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionFAQ">
+						<div class="card-body faq__body">
+							<div class="faq__box">
+								<span class="faq__text">Some placeholder content for the first
+									accordion panel.
+									<code>.show</code> class.
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" id="headingThree">
+						<h2 class="mb-0">
+							<button class="btn btn-link btn-block text-left collapsed" type="button"
+								data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
+								aria-controls="collapseThree">
+								<span class="curriculum__number">03</span>
+								<span class="curriculum__subTitle">Collapsible Group Item #3</span>
+								<span><i class="fas fa-chevron-right"></i></span>
+							</button>
+						</h2>
+					</div>
+					<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionFAQ">
+						<div class="card-body faq__body">
+							<div class="faq__box">
+								<span class="faq__text">Some placeholder content for the first
+									accordion panel.
+									<code>.show</code> class.
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+
+	<!-- 폼 모달 -->
+	<div class="modal fade" id="reviewModal">
+		<div class="modal-dialog fModal__dialog">
+			<div class="modal-content fModal__body">
+				<div style="margin-top: 10px;" class="modal-header fModal__header">
+					<h3 >후기 작성</h3>
+					<button  type="button" class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-0">
+					<div class="fModal__box">
+						<form>
+
+							<textarea id="content" class="form-control" placeholder="후기를 작성해주세요."></textarea>
+							<span class="rating mt-3">
+								<input type="radio" class="rating-input" id="rating-input-5" name="rating-input" />
+								<label for="rating-input-5" class="rating-star"></label>
+								<input type="radio" class="rating-input" id="rating-input-4" name="rating-input" />
+								<label for="rating-input-4" class="rating-star"></label>
+								<input type="radio" class="rating-input" id="rating-input-3" name="rating-input" />
+								<label for="rating-input-3" class="rating-star"></label>
+								<input type="radio" class="rating-input" id="rating-input-2" name="rating-input" />
+								<label for="rating-input-2" class="rating-star"></label>
+								<input type="radio" class="rating-input" id="rating-input-1" name="rating-input" />
+								<label for="rating-input-1" class="rating-star"></label>
+							</span>
+						</form>
+						<div class="flex__end">
+							<button id="reviewComplete" class="button--square mt-5">후기 작성</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 폼 모달 끝 -->
+
+
+	<!-- footer -->
+	<div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
+
+	<script>
+
+		//리뷰	
+				$('#reviewWrite').click(function(){
+					var data = {'courseId':courseId}
+				
+				$.ajax({
+					
+						url: "[[@{/catalog/reviewWrite}]]",
+						type: "POST",
+						data: JSON.stringify(data),//courseId=1
+						contentType: "application/json",
+						success: function (data) {				
+						
+						console.log("data:", data)
+							if (data == 0) {//로그인 후 미결제된 아이디
+									console.log("로그인 후 강의결제 완료하지않은 아이디");
+									if(confirm("강의 등록 후 이용가능\r\r강의등록 페이지로 이동하시겠습니까?")){
+									location.href = "/orders/payments/"+courseId+"";//로그인창으로 페이지 이동
+									}//if
+									else{
+									console.log("결제 안된 아이디");
+									$('#reviewModal').modal('hide');
 									}
-									
+								
+							}//바깥 if
+							else if (data == 1) {////로그인 후 결제완료된 아이디
+							
+								console.log("로그인 후 결제 완료된 아이디");
+								$('#reviewModal').modal('show');	
+							}//else if 1
+							
+							else if (data == 2) {//로그인 안된 아이디
+								console.log("로그인 되지 않은 상황 ");
+								if(confirm("로그인 후 이용가능\r\r로그인 페이지로 이동하시겠습니까?")){//컨펌 확인 눌렀을때
+									location.href = "/auth/signin";//로그인창으로 페이지 이동
+									//location.replace("/auth/signin"); //뒤로가기 불가능
+								}//if
+								else{//취소 버튼 눌렀을시
+									console.log("취소버튼누름");
+									$('#reviewModal').modal('hide');
 								}
 								
-								
-								
-								})
-							})
+							}//else if 2
 
+				
+						}//success
+				})
+		
+				
+				$("input.rating-input").click(function () {
+				name = $(this).attr('name');
+				$("input[name='" + name + "']").val(""); // remove value from all radio's (with this name)
+				$("input[name='" + name + "']:checked").val($(this).attr('id')); // add value to checked radio
+				// console 참고
+				//console.log($("input[name='" + name + "']:checked").val())
+				var selectedStar = $("input[name='" + name + "']:checked").val();
+				
+			
+				$("#reviewComplete").click(function(){
+				var content= $('#content').val();
+				var data = {'courseId':courseId,'content':content ,"selectedStar":selectedStar};
+				console.log("data:",JSON.stringify(data));			
+				/*
+				if(content==""){
+					alert("내용을 입력해주세요");
+					$('#content').focus();					
+				}
+				else if(selectedStar == ""){
+					alert("별점을 선택해주세요");
+					$('#rating-input-1').focus();		
+				}
+				*/
+				
+					$.ajax({
 
+						url: "[[@{/catalog/reviewInsert}]]",
+						type: "post",
+						data: JSON.stringify(data),//courseId=1
+						contentType: "application/json",
+						success: function (data) {
+							console.log("컨트롤로에서 넘어온 데이터값:",data)
+						
+							if(data==0){
+								alert("강의후기 등록완료");
+							}
 							
-                           
-                            //강의시간(초)를 시간/분으로 변경
-                            var courseLength = $('#length').text();
-                            console.log("length:",courseLength);
-                            var courseTime = Math.ceil(courseLength/60); 
-                             console.log("courseTime:",courseTime);
-                            $('#length').text(Math.floor(courseTime/60)+"시간"+(courseTime%60)+"분");
-                            
-                            </script>
-                            
-                            
-                        </div>
-                        <a th:href="@{/orders/payments/}+${course.COURSE_ID}" class="button button--cover button--full">
-                            등록하기
-                        </a>
-                    </div>
-                    <div class="description">
-                        <h1 class="description__title">Welcome to Codelion</h1>
-                        <p>손으로 하는 진짜 코딩, 코드라이언에 오신 여러분 환영합니다.</p>
-                        <p>눈으로 보고 귀로 듣기만 하는 일방통행 온라인 강의는 이제 그만. 코드라이언으로 직접 강의에 뛰어들어 보세요.</p>
-                        <br />
-                        <h1 class="description__title">고생했어요 눈님, 어서 오세요 손님</h1>
-                        <p>코드라이언의 강의는 코스, 챕터, 스텝으로 구성되어 있어요.</p>
-                        <p>여러 개의 스텝이 모여 챕터가 되고, 여러 개의 챕터가 모여 코스가 되죠.</p>
-                        <p>여기서 핵심, 코드라이언은 3가지 종류의 스텝으로 구성되어 있어요.</p>
-                        <br />
-                        <h1 class="description__title">✔️ 첫 번째! Video Step</h1>
-                        <br />
-                        <p>여러분께 알려드리면 좋은 팁들을 video로 준비했어요.</p>
-                        <p>배울 내용을 미리 볼 수도 있고, 이해하기 어려운 개념들을 재밌게 익힐 수 있어요.</p>
-                        <h1 class="description__title">✔️ 두 번째! Viditing Step</h1>
-                        <br />
-                        <p>본격 실습 타임이네요! 코드라이언의 핵심, viditing coding입니다.</p>
-                        <p>수업 도중 선생님이 작성한 코드를 여러분들이 언제든지 수정할 수 있어요!</p>
-                        <p>여러분들의 실습이 코스의 일부가 되는 거에요. 정말 멋지지 않나요?</p>
-                        <br />
-                        <h1 class="description__title">✔️ 세 번째! Quiz Step</h1>
-                        <br />
-                        <p>여태껏 열심히 공부했던 내용이 quiz로 출제됩니다.</p>
-                        <p>배운 내용이 증발하기 전에 quiz를 통해 진짜 내 것으로 만드는 습관이 중요해요.</p>
-                        <p>앗, 틀리셨나요? 괜찮아요. 제공되는 힌트를 이용해 정답에 다가가 봅시다!</p>
+							
+							
+							
+						}//success
 
+<<<<<<< HEAD
                     </div>
                 </div>
                 <div class="col-md-3 detail__right p-0 d-flex flex-column align-items-center">
@@ -208,298 +666,20 @@
             </div>
         </div>
     </section>
+=======
+					})//ajax	
+					
+							
+				});//clickComplete
+				
+				});//clickStar
+		
+				});//clickWrite
+		
+		
+>>>>>>> refs/heads/ksg
 
-    <section class="curriculum">
-        <div class="container-fluid container--main">
-            <h1 class="detail__title">커리큘럼</h1>
-
-            <div class="accordion curriculum__accordion" id="accordionExample">
-                <div class="card">
-                    <div class="card-header" id="headingOne">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
-                                data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                <span class="curriculum__number">01</span>
-                                <span class="curriculum__subTitle">코드라이언 정복 가이드</span>
-                                <span><i class="fas fa-chevron-right"></i></span>
-                            </button>
-                        </h2>
-                    </div>
-
-                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                        <div class="card-body">
-                            <div class="card__video">
-                                <span class="video__icon"><i class="fab fa-youtube"></i></span>
-                                <span class="video__text">Some placeholder content for the first
-                                    accordion panel.
-                                    <code>.show</code> class.
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header" id="headingTwo">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left collapsed" type="button"
-                                data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
-                                aria-controls="collapseTwo">
-                                <span class="curriculum__number">02</span>
-                                <span class="curriculum__subTitle">Collapsible Group Item #2</span>
-                                <span><i class="fas fa-chevron-right"></i></span>
-                            </button>
-                        </h2>
-                    </div>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                        <div class="card-body">
-                            <div class="card__video">
-                                <span class="video__icon"><i class="fab fa-youtube"></i></span>
-                                <span class="video__text">Some placeholder content for the first
-                                    accordion panel.
-                                    <code>.show</code> class.
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header" id="headingThree">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left collapsed" type="button"
-                                data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
-                                aria-controls="collapseThree">
-                                <span class="curriculum__number">03</span>
-                                <span class="curriculum__subTitle">Collapsible Group Item #3</span>
-                                <span><i class="fas fa-chevron-right"></i></span>
-                            </button>
-                        </h2>
-                    </div>
-                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
-                        data-parent="#accordionExample">
-                        <div class="card-body">
-                            <div class="card__video">
-                                <span class="video__icon"><i class="fab fa-youtube"></i></span>
-                                <span class="video__text">Some placeholder content for the first
-                                    accordion panel.
-                                    <code>.show</code> class.
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- 강의 상세보기 끝 -->
-
-    <!-- 강의 후기 -->
-    <section class="review">
-        <div class="container-fluid container--main">
-            <h1 class="detail__title d-flex justify-content-between align-items-center">강의후기
-            	<button class="button--square review__button" data-toggle="modal" data-target="#reviewModal">후기 작성하기</button>
-            </h1>
-            <ul class="review__list row m-0 justify-content-between">
-	            <li class="review__card col-md-6">
-					<div class="review__header">
-						<div class="review__user">
-							<img th:src="@{/images/user.png}" alt="사용자 이미지" />
-							<div class="review__ubox">
-								<p>가길동</p>
-								<span class="review__date">2021년 6월 7일</span>
-							</div>
-						</div>
-						<div class="review__rating">
-							<i class="fas fa-star"></i>
-							<i class="fas fa-star"></i>
-							<i class="fas fa-star"></i>
-							<i class="fas fa-star"></i>
-							<i class="far fa-star"></i>
-						</div>
-					</div>
-					<div class="review__description">
-						아주 좋은 강의입니다.
-					</div>
-				</li>
-				<li class="review__card col-md-6">
-					<div class="review__header">
-						<div class="review__user">
-							<img th:src="@{/images/user.png}" alt="사용자 이미지" />
-							<div class="review__ubox">
-								<p>가길동</p>
-								<span class="review__date">2021년 6월 7일</span>
-							</div>
-						</div>
-						<div class="review__rating">
-							<i class="fas fa-star"></i>
-							<i class="fas fa-star"></i>
-							<i class="fas fa-star"></i>
-							<i class="fas fa-star"></i>
-							<i class="far fa-star"></i>
-						</div>
-					</div>
-					<div class="review__description">
-						아주 좋은 강의입니다.
-					</div>
-				</li>
-				<li class="review__card col-md-6">
-					<div class="review__header">
-						<div class="review__user">
-							<img th:src="@{/images/user.png}" alt="사용자 이미지" />
-							<div class="review__ubox">
-								<p>가길동</p>
-								<span class="review__date">2021년 6월 7일</span>
-							</div>
-						</div>
-						<div class="review__rating">
-							<i class="fas fa-star"></i>
-							<i class="fas fa-star"></i>
-							<i class="fas fa-star"></i>
-							<i class="fas fa-star"></i>
-							<i class="far fa-star"></i>
-						</div>
-					</div>
-					<div class="review__description">
-						아주 좋은 강의입니다.
-					</div>
-				</li>
-			</ul>
-        </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="faq">
-        <div class="container-fluid container--main">
-            <h1 class="detail__title">FAQ</h1>
-            <div class="accordion curriculum__accordion" id="accordionFAQ">
-                <div class="card">
-                    <div class="card-header" id="headingOne">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
-                                data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                <span class="curriculum__number">01</span>
-                                <span class="curriculum__subTitle">코스를 듣기 전 미리 알아야 할 내용이 있나요?</span>
-                                <span><i class="fas fa-chevron-right"></i></span>
-                            </button>
-                        </h2>
-                    </div>
-
-                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionFAQ">
-                        <div class="card-body faq__body">
-                            <div class="faq__box">
-                                <span class="faq__text">기본적인 파이썬 지식을 알고 있어야 수강할 수 있어요. 바삭 코딩의
-                                    <code>일단 만드는 Python, [기초] 같이 푸는 Python, [심화] 같이 푸는 Python</code>을 수강하신 후 수강하시는 것을 추천드려요.
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header" id="headingTwo">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left collapsed" type="button"
-                                data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
-                                aria-controls="collapseTwo">
-                                <span class="curriculum__number">02</span>
-                                <span class="curriculum__subTitle">Collapsible Group Item #2</span>
-                                <span><i class="fas fa-chevron-right"></i></span>
-                            </button>
-                        </h2>
-                    </div>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionFAQ">
-                        <div class="card-body faq__body">
-                            <div class="faq__box">
-                                <span class="faq__text">Some placeholder content for the first
-                                    accordion panel.
-                                    <code>.show</code> class.
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header" id="headingThree">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left collapsed" type="button"
-                                data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
-                                aria-controls="collapseThree">
-                                <span class="curriculum__number">03</span>
-                                <span class="curriculum__subTitle">Collapsible Group Item #3</span>
-                                <span><i class="fas fa-chevron-right"></i></span>
-                            </button>
-                        </h2>
-                    </div>
-                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
-                        data-parent="#accordionFAQ">
-                        <div class="card-body faq__body">
-                            <div class="faq__box">
-                                <span class="faq__text">Some placeholder content for the first
-                                    accordion panel.
-                                    <code>.show</code> class.
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- 폼 모달 -->
-        <div class="modal fade" id="reviewModal">
-            <div class="modal-dialog fModal__dialog">
-                <div class="modal-content fModal__body">
-                    <div class="modal-header fModal__header">
-                        <h3>후기 작성</h3>
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span>&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body p-0">
-                        <div class="fModal__box">
-                            <form>
-                            	
-                                <textarea class="form-control"
-                                    placeholder="후기를 작성해주세요."></textarea>
-                                 <span class="rating mt-3">
-						            <input type="radio" class="rating-input" id="rating-input-5" name="rating-input"/>
-						            <label for="rating-input-5" class="rating-star"></label>
-						            <input type="radio" class="rating-input" id="rating-input-4" name="rating-input"/>
-						            <label for="rating-input-4" class="rating-star"></label>
-						            <input type="radio" class="rating-input" id="rating-input-3" name="rating-input"/>
-						            <label for="rating-input-3" class="rating-star"></label>
-						            <input type="radio" class="rating-input" id="rating-input-2" name="rating-input"/>
-						            <label for="rating-input-2" class="rating-star"></label>
-						            <input type="radio" class="rating-input" id="rating-input-1" name="rating-input"/>
-						            <label for="rating-input-1" class="rating-star"></label>
-						        </span>
-                            </form>
-                            <div class="flex__end">
-                                <button class="button--square mt-5">후기 작성</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- 폼 모달 끝 -->
-
-    
-    <!-- footer -->
-    <div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
-    
-    <script>
-    	// 별점
-	    $( document ).ready(function() {
-	    	$( "input.rating-input" ).click(function() {
-	    		name=$(this).attr('name');
-	    		$("input[name='"+name+"']").val(""); // remove value from all radio's (with this name)
-	    		$("input[name='"+name+"']:checked").val($(this).attr('id')); // add value to checked radio
-	    		// console 참고
-	    		console.log($("input[name='"+name+"']:checked").val())
-	    	});
-	    });
-    
-    </script>
+	</script>
 </body>
 
 </html>
