@@ -20,6 +20,7 @@ public interface MemberMapper {
 	
 	// 사용자 생성
 	int createMember(Map map);
+	int registerMember(Map map);
 	
 	// 사용자 이메일로 얻기(One)
 	MemberDTO getMemberByEmail(String email);
@@ -50,4 +51,10 @@ public interface MemberMapper {
 
 	//내 닉네임 변경
 	int userNameEdit(Map map);
+	
+	//사용자 시크릿 값 가져오기
+		String getEmailSecret(String email);
+		
+	//사용자 emailvalidate 값 가져오기
+		int getEmailValidate(Map map);
 }

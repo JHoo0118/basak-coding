@@ -12,32 +12,35 @@
   	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
 </head>
 
+<script>
+	$(function() {
+  $("#emailOk").on("click",function(e) {
+		$("#emailfrm").submit();
+  });
+});
+	
+
+
+
+
+</script>
+
 <body>
     <!-- Navbar -->
 	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
 
     <!-- 회원가입 시작 -->
-    <section class="signin">
+    <section class="signin" >
         <div class="container-fluid signin__container">
             <h2 class="signin__title">회원가입 인증 요청</h2>
-            <form class="row">
-                <h4 class="confirm__text">이메일 인증 후 바삭 코딩을 이용해주세요!</h4>
-                <div class="form-group form__group pb-3 position-relative">
-                    <div class="col-sm-12 p-0">
-                        <input type="text" class="form-control form__input" placeholder="인증번호를 입력해주세요"
-                            name="emailValid" />
-                    </div>
-                    <!-- <small>에러 메세지</small> -->
-                </div>
+            <div class="row" >
+                <h4 class="confirm__text mt-5 pt-5">이메일 인증 후 바삭 코딩을 이용해주세요!</h4>
+              
                 <h5 class="signin__link">
-                    <span class="d-block">앗! 인증메일이 사라지셨나요?</span><a href="javascript:void(0)"
+                    <span class="d-block">앗! 인증메일이 사라지셨나요?</span><a href="javascript:void(0)" id="retry"
                         style="text-decoration: underline;">인증 코드 재발급</a>
                 </h5>
-                <a href="javascript:void(0)" class="button button--rounded button--full"
-                    style="color: #0fd; margin-top: 60px">
-                    인증하기
-                </a>
-            </form>
+            </div>
         </div>
     </section>
     <!-- 회원가입 끝 -->

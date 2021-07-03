@@ -12,6 +12,7 @@
   	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
 </head>
 
+
 <body>
     <!-- Navbar -->
 	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
@@ -42,14 +43,16 @@
                 <button type="submit" class="button button--rounded button--full" style="color: #0fd; margin-top: 60px">
                     로그인하기
                 </button>
+                
+                    <a href="https://kauth.kakao.com/oauth/authorize?client_id=702e704b386e7afd4fdd82adab67d698&redirect_uri=http://localhost:9090/auth/doLogin&response_type=code" style="margin-top: 20px; "><img src="/images/kakao_login_button.png"/>
+
+
             </form>
             <a class="signin__toSignup" th:href="@{/auth/signup}">아직 코드라이언 회원이 아니신가요?&nbsp;<span>회원가입하기</span></a>
         </div>
     </section>
     <!-- 로그인 끝 -->
-<script>
-	
-</script>
+
     <!-- footer -->
     <div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
 </body>
