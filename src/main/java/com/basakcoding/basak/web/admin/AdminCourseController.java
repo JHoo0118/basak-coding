@@ -1,5 +1,6 @@
 package com.basakcoding.basak.web.admin;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -132,12 +133,16 @@ public class AdminCourseController {
 						if (!video.containsKey(temp[2]))
 							video.put(temp[2], new HashMap());
 						video.get(temp[2]).put("videoTitle", map.get(key));
+						video.get(temp[2]).put("videoContent", map.get(key));
 						video.get(temp[2]).put("curriculumId", curriId.get(temp[1]));
 					}
 				}
 			}
 			
 			// 비디오 로컬 저장
+			int videoCnt = 0;
+			long videoDuration = 0;
+			
 			for (String key : multipartFiles.keySet()) {
 				String[] temp;
 				if (key.startsWith("video")) {
@@ -154,9 +159,16 @@ public class AdminCourseController {
 
 			// Video INSERT
 			for (String key : video.keySet()) {
+				videoCnt++;
 				courseService.createVideo(video.get(key));
 				videoId.put(key, video.get(key).get("videoId"));
 			}
+			
+			// 강의 비디오 총 개수 업데이트
+//			Map updateForVideoCnt = new HashMap();
+//			map.put("videoCnt", videoCnt);
+//			map.put("courseId", courseId);
+//			courseService.updateVideoCnt(map);
 			
 
 			// 파일 로컬 저장
@@ -174,6 +186,7 @@ public class AdminCourseController {
 					
 					String uploadFileDir = "upload/course/" + courseId +"/file";
 					FileUploadUtil.saveFile(uploadFileDir, fileUri, fileMulti);
+					FileUploadUtil.saveFile(uploadFileDir, "copy-"+fileUri, fileMulti);
 				}
 			}
 			

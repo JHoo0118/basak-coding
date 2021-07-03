@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<meta charset="UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -8,16 +8,694 @@
 	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
 	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
 	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
+	
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.10.2/video-js.min.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.10.2/video.min.js"></script>
+	
 	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+	<script th:src="@{https://code.jquery.com/ui/1.12.1/jquery-ui.min.js}"></script>
   	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+  	<script th:src="@{https://cdn.jsdelivr.net/npm/monaco-editor/min/vs/loader.js}"></script>
+  	<!-- <script defer th:src="@{/js/monaco.js}"></script> -->
 </head>
 
-<body style="background-color: #1e1e1e;">
-    <!-- Navbar -->
-	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
+<body style="background-color: #1e1e1e; overflow:hidden">
+	<!-- navbar 시작 -->
+	<nav class="navbar-bg" style="border-bottom: 1px solid #5a5c65;">
+	    <div class="container-fluid container--main d-flex align-items-center" style="max-width: 100%;">
+	        <a class="navbar__brand" th:href="@{/}">BASAK CODING</a>
+	        <div class="navbar__wrapper">
+	        <a class="navbar__item" th:href="@{/catalog}">카탈로그</a>
+		        <ul class="navbar__menu">
+		          	<!-- 로그인 전 -->
+		          	<li sec:authorize="isAnonymous()" th:if="${session.id == null}" class="navbar__item">
+		            	<a class="navbar__link" th:href="@{/auth/signin}">로그인</a>
+		          	</li>
+			        <li sec:authorize="isAnonymous()" class="navbar__item">
+			        	<a class="navbar__link button" style="margin-left: 24px" th:href="@{/auth/signup}">회원가입</a>
+			        </li>
+			        
+		            <li sec:authorize="isAuthenticated()" class="dropdown bg-transparent">
+			            <button class="dropdown-toggle dropdown--btn bg-transparent" type="button" id="dropdownMenuButton"
+			              style="height: 100%" data-toggle="dropdown">
+			            	<img class="navbar__profile" th:src="@{/images/user.png}" />
+			            </button>
+			            <div class="dropdown-menu dropdown__menu dropdown__courese">
+			                <a class="dropdown-item dropdown__item" th:href="@{/personal/dashboard}">나의 대시보드</a>
+			                <a class="dropdown-item dropdown__item" th:href="@{/personal/profile}">나의 프로필</a>
+			                <a class="dropdown-item dropdown__item" th:href="@{/personal/qAndA/questions?page=1}">나의 질문 답변</a>
+			                <a class="dropdown-item dropdown__item nav-link nav__link button" style="margin-top: 10px; width: 100%"
+			                th:href="@{/logout}">로그아웃</a>
+			            </div>
+		            </li>
+		        </ul>
+	      </div>
+	    </div>
+	</nav>
+	<!-- navbar 끝 -->
+
 
     <!-- 메인 섹션 시작 -->
-    <!-- 메인 섹션 끝 -->
+    <section class="course">
+    	<!-- 사이드 Navbar -->
+    	<div class="course__sideNav">
+    		<ul class="sideNav__items">
+    			<li class="sideNav__item active">
+	    			<button class="item__button active" id="tab-1">
+	    				<i class="item__icon far fa-list-alt"></i>
+    				</button>
+    			</li>
+    			<li class="sideNav__item">
+	    			<button class="item__button" data-toggle="pill" id="tab-2" >
+	    				<i class="item__icon far fa-question-circle"></i>
+    				</button>
+    			</li>
+    			<li class="sideNav__item">
+	    			<button class="item__button" data-toggle="pill" id="tab-3">
+	    				<i class="item__icon far fa-address-card"></i>
+    				</button>
+    			</li>
+    		</ul>
+    	</div>
+    	
+   		<div class="sideNav__content open" id="sideContent">
+   			<!-- 컨텐츠 목록 -->
+   			<!-- 탭1 -->
+   			<div class="" id="target-1">
+	   			<div class="content__list">
+	   				<div class="list__wrapper">
+		   				<div class="list__header">
+		   					<small class="header__chapter">Chapter 1</small>
+		   					<h3 class="header__title--course">바삭 코딩 정복 가이드</h3>
+		   				</div>
+		   				<hr class="list__horline" />
+		   				<ul class="list__curr">
+		   					<li class="list__items active">
+		   						<a class="curr__link" th:href="@{/class/SANIOQWENIWN}">
+			   						<i class="list__icon fab fa-youtube"></i>
+				   					<div class="curr__box">
+				   						<h3 class="curr__title">컴퓨터와 수다 떠는 법</h3>
+				   						<h3 class="curr__time">01:38</h3>
+				   					</div>
+	   							</a>
+		   					</li>
+			   				<li class="list__items">
+		   						<a class="curr__link" th:href="@{/class/SANIOQWENIWN}">
+			   						<i class="list__icon fab fa-youtube"></i>
+				   					<div class="curr__box">
+				   						<h3 class="curr__title">코라 정복하기-python편</h3>
+				   						<h3 class="curr__time">05:59</h3>
+				   					</div>
+	   							</a>
+		   					</li>
+		   					<li class="list__items">
+		   						<a class="curr__link" th:href="@{/class/SANIOQWENIWN}">
+			   						<i class="list__icon fab fa-youtube"></i>
+				   					<div class="curr__box">
+				   						<h3 class="curr__title">코라 정복하기-html/css편</h3>
+				   						<h3 class="curr__time">06:24</h3>
+				   					</div>
+	   							</a>
+		   					</li>
+		   				</ul>
+	   				</div>
+	   				
+	   				<div class="list__wrapper">
+		   				<div class="list__header">
+		   					<small class="header__chapter">Chapter 2</small>
+		   					<h3 class="header__title--course">바삭 코딩 정복 두번째</h3>
+		   				</div>
+		   				<hr class="list__horline" />
+		   				<ul class="list__curr">
+		   					<li class="list__items">
+		   						<a class="curr__link" th:href="@{/class/SANIOQWENIWN}">
+			   						<i class="list__icon fab fa-youtube"></i>
+				   					<div class="curr__box">
+				   						<h3 class="curr__title">컴퓨터와 수다 떠는 법</h3>
+				   						<h3 class="curr__time">01:38</h3>
+				   					</div>
+	   							</a>
+		   					</li>
+			   				<li class="list__items">
+		   						<a class="curr__link" th:href="@{/class/SANIOQWENIWN}">
+			   						<i class="list__icon fab fa-youtube"></i>
+				   					<div class="curr__box">
+				   						<h3 class="curr__title">코라 정복하기-python편</h3>
+				   						<h3 class="curr__time">05:59</h3>
+				   					</div>
+	   							</a>
+		   					</li>
+		   					<li class="list__items">
+		   						<a class="curr__link" th:href="@{/class/SANIOQWENIWN}">
+			   						<i class="list__icon fab fa-youtube"></i>
+				   					<div class="curr__box">
+				   						<h3 class="curr__title">코라 정복하기-html/css편</h3>
+				   						<h3 class="curr__time">06:24</h3>
+				   					</div>
+	   							</a>
+		   					</li>
+		   				</ul>
+	  				</div>
+	   			</div>
+   			</div>
+			<!-- 탭1 끝 -->
+	  		<!-- 탭2 시작 -->
+			<div class="none" id="target-2">
+				<div class="question__header">
+					<div class="question__box">
+						<button id="questionBackBtn" class="question__sIcon none"><i class="fas fa-arrow-alt-circle-left"></i></button>
+						<button id="questionSearchBtn" class="question__sIcon"><i class="fas fa-search"></i></button>
+						<input onkeydown="queryQuestion()" class="question__input" placeholder="질문 제목 및 내용" type="text" />
+					</div>
+					<button class="question__btn" data-toggle="modal" data-target="#formModal">
+						Q&nbsp;&nbsp;질문하기
+					</button>
+				</div>
+				
+				<!-- 질문 목록 -->
+				<div class="qModal__box" id="questionList">
+					<!-- 목록 1 -->
+					<div class="qModal__upper">
+						<div class="comment__user">
+							<img th:src="@{/images/user.png}" />
+							<div class="user__info">
+								<h5>질문자</h5>
+								<span>4시간 전</span>
+							</div>
+						</div>
+						<h3 class="qModal__title qModal__title-course" onclick="seeQuestionDetail(this)">강의 잘 듣고 있습니다.</h3>
+						
+						<div class="qModal__state">
+							<div class="state__left">
+								<div class="state__like">
+									<a href="javascript:void(0)"><span><i class="far fa-thumbs-up"></i>6</span></a>
+								</div>
+								<div class="state__edit">
+									<span data-toggle="modal" data-target="#formModal">수정하기</span>
+								</div>
+							</div>
+							<div class="state__right">
+								<span data-toggle="modal" data-target="#formModal">답변 작성하기</span>
+							</div>
+						</div>
+					</div>
+					
+					<!-- 목록 2 -->
+					<div class="qModal__upper">
+						<div class="comment__user">
+							<img th:src="@{/images/user.png}" />
+							<div class="user__info">
+								<h5>질문자</h5>
+								<span>4시간 전</span>
+							</div>
+						</div>
+						<h3 class="qModal__title qModal__title-course" onclick="seeQuestionDetail(this)">강의 잘 듣고 있습니다.</h3>
+						
+						<div class="qModal__state">
+							<div class="state__left">
+								<div class="state__like">
+									<a href="javascript:void(0)"><span><i class="far fa-thumbs-up"></i>6</span></a>
+								</div>
+								<div class="state__edit">
+									<span data-toggle="modal" data-target="#formModal">수정하기</span>
+								</div>
+							</div>
+							<div class="state__right">
+								<span data-toggle="modal" data-target="#formModal">답변 작성하기</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- 질문 상세보기 -->
+				<div class="qModal__box none" id="questionDetail">
+					<div class="qModal__upper">
+						<div class="comment__user">
+							<img th:src="@{/images/user.png}" />
+							<div class="user__info">
+								<h5>질문자</h5>
+								<span>4시간 전</span>
+							</div>
+						</div>
+						<h3 class="qModal__title">강의 잘 듣고 있습니다.</h3>
+						<p class="qModal__content">안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문
+							삭제 기능은 어디
+							있나요?ㅠㅠ</p>
+						<span class="qModal__updated">4시간 전에 수정됨</span>
+						<div class="qModal__state">
+							<div class="state__left">
+								<div class="state__like">
+									<a href="javascript:void(0)"><span><i class="far fa-thumbs-up"></i>6</span></a>
+									<span><i class="far fa-comment-dots"></i>6</span>
+								</div>
+								<div class="state__edit">
+									<span data-toggle="modal" data-target="#formModal">수정하기</span>
+								</div>
+							</div>
+							<div class="state__right">
+								<span data-toggle="modal" data-target="#formModal">답변 작성하기</span>
+							</div>
+						</div>
+					</div>
+					<div class="qModal__lower">
+						<ul class="comment__list">
+							<li class="comment__item">
+								<div class="comment__user">
+									<img th:src="@{/images/user.png}" />
+									<div class="user__info">
+										<h5 style="color: #0fd">강사</h5>
+										<span>4시간 전</span>
+									</div>
+								</div>
+								<p class="qModal__content">안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
+									있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
+									있나요?ㅠㅠ</p>
+							</li>
+							<li class="comment__item">
+								<div class="comment__user">
+									<img th:src="@{/images/user.png}" />
+									<div class="user__info">
+										<h5>질문자</h5>
+										<span>4시간 전</span>
+									</div>
+								</div>
+								<p class="qModal__content">안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
+									있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
+									있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은
+									어디
+									있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은
+									어디
+									있나요?ㅠㅠ
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				
+				<!-- 질문 상세보기 끝 -->
+				
+				<!-- 질문 검색 시작 -->
+				<div class="qModal__box" id="questionSearchList">
+					
+				</div>
+				<!-- 질문 검색 끝 -->
+			</div>
+	  		<!-- 탭2 끝 -->
+	  		<!-- 탭3 시작 -->
+	  		<div class="none" id="target-3">
+				<div>
+					<h1>으아으</h1>
+				</div>
+			</div>
+	  		<!-- 탭3 끝 -->
+		</div>
+    	<!-- 사이드 Navbar 끝-->
+    		
+    	<!-- 강의 메인 시작 -->
+    	<div class="course__main">
+    		<div class="row">
+    			<div class="col-md-6 pr-0">
+    				<!-- 비디오 -->
+					<div id="sublime_text">
+					  <video id="my_video_1" class="video-js vjs-sublime-skin" width="100%" height="100%"
+					      controls preload="none" th:poster="@{/images/image4.jpg}"
+					      data-setup='{ "aspectRatio":"16:9", "playbackRates": [0.5, 1, 1.25, 1.5, 2] }'>
+					    <source th:src="@{/images/video.mp4}" type='video/mp4' />
+					    <source src="https://vjs.zencdn.net/v/oceans.webm" type='video/webm' />
+					  </video>
+					</div>
+					<!-- 비디오 끝 -->
+					
+					<!-- 비디오 내용 -->
+				</div>
+				<!-- 모나코 에디터 시작 -->
+    			<div class="col-md-6 pl-0">
+    				<div class="editor__bar">
+    					<nav class="nav--file">
+						  <ul class="nav nav__file">
+							<!-- 미니브라우저 열기 버튼 -->
+						  	<li onclick="toggleMinibrowserModal()" class="file__folder" style="border-bottom: 1px solid #5a5c65;"><i class="fab fa-chrome"></i></li>
+						    <li class="file__item" th:each="file, i : ${fileList}">
+						    	<a th:onclick="getFileContent(this, [[${file.FILENAME}]], [[${file.FILE_EXTENSION}]])" th:classappend="${i.index == 0} ? active" class="file__tab" href="javascript:void(0)">[[${file.FILENAME}]]</a>
+						    
+						    </li>
+						    <li onclick="initializationCode()" class="file__folder">
+						    	<i class="fas fa-circle-notch"></i>
+						    </li>
+						    <!--
+						    <li id="file-1" class="file__item"><a class="file__tab" href="javascript:void(0)">index.html</a></li>
+						    <li id="file-2" class="file__item"><a class="file__tab" href="javascript:void(0)">styles.css</a></li>
+						    <li id="file-3" class="file__item"><a class="file__tab" href="javascript:void(0)">script.js</a></li>
+						  	-->
+						  </ul>
+						</nav>
+    				</div>
+					<div class="editor">
+				      <div class="editor__code">
+				        <div class="" id="editorCode"></div>
+				      </div>
+				    </div>
+				    
+				      <!-- 
+				    <div class="buttons">
+				      <button class="button" id="editorCopyClipboard">Copy HTML</button>
+				    </div>
+				      -->
+				</div>
+				<!-- 모나코 에디터 끝 -->
+    		</div>
+    	</div>
+    	<!-- 강의 메인 끝 -->
+    </section>
+    
+    <!-- 폼 모달 -->
+	<div class="modal fade" id="formModal">
+		<div class="modal-dialog fModal__dialog">
+			<div class="modal-content fModal__body">
+				<div class="modal-header fModal__header">
+					<h3>강의 잘 듣고 있습니다</h3>
+					<button type="button" class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-0">
+					<div class="fModal__box">
+						<form>
+							<textarea class="form-control" placeholder="수업을 진행하면서 궁금한 코딩 관련 질문을 등록해 주세요.">안녕하세요. 질문 삭제
+								기능은 어디 있나요?ㅠㅠ</textarea>
+						</form>
+						<div class="flex__end">
+							<button class="button--square mt-5">수정하기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 폼 모달 끝 -->
+	
+	<!-- 미니 브라우저 시작 -->
+	
+	<div id="miniBrowser" class="none" style="z-index:10000; position: absolute; user-select: auto; width: 454px; height: 382px; top: 200px; right: 100px; cursor: auto; background-color: rgb(255, 255, 255); max-width: 9.0072e+15px; max-height: 9.0072e+15px; min-width: 200px; min-height: 200px; box-sizing: border-box; flex-shrink: 0;">
+		<div class="h-100 d-flex flex-column position-relative">
+			<div class="handle position-relative" style="background-color:#ebebeb;">
+			    <button type="button" class="position-absolute border-0 btn btn-link">
+			    	<hr class="my-0">
+		    	</button>
+		    	<div class="position-relative w-100 text-center py-2">
+			    	<span onclick="closeMinibrowserModal()" class="d-block" style="font-size: 14px; cursor:pointer; position:absolute; top:-5px; left:8px; padding:2px 0;"><i class="far fa-window-minimize"></i></span>
+			    	<span>Basak-browser</span>
+		    	</div>
+			    <form class="address-container d-flex pr-2">
+			    	<button type="button" class="mr-2 btn btn-link">
+			    		<svg width="14" height="14" viewBox="0 0 14 14" class="d-block"><path fill="#919191" fill-rule="evenodd" d="M7 0c1.9 0 3.654.763 4.943 2.057L13.3.7v4.2H9.1l1.854-1.854C9.924 2.01 8.52 1.4 7 1.4 3.912 1.4 1.4 3.913 1.4 7c0 3.088 2.512 5.6 5.6 5.6 3.088 0 5.6-2.512 5.6-5.6H14c0 3.86-3.14 7-7 7s-7-3.14-7-7 3.14-7 7-7"></path></svg>
+			    	</button>
+			    	<input class="px-2 py-0 text-truncate flex-grow-1 form-control" value="/">
+		    	</form>
+			</div>
+			<div class="editor__preview">
+				<iframe id="editorPreview" frameborder="0"></iframe>
+			</div>
+		</div>
+  </div>
+	<!-- 미니 브라우저 끝 -->
+    <script>
+		var INITIAL_CODE = `[(${fileList.get(0).INITIAL_CODE})]`;
+		var FILE_EXTENSION = `[(${fileList.get(0).FILE_EXTENSION})]`;
+		var FILENAME = `[(${fileList.get(0).FILENAME})]`;
+		var editor;
+    
+    	// 미니브라우저 드래그 가능하게 하기
+    	var miniBrowser = document.getElementById("miniBrowser");
+    	var chrome = document.querySelector(".file__folder .fa-chrome");
+    	$( function() {
+    		$("#miniBrowser").draggable({
+    		    containment: 'parent'
+    		});
+	  	});
+    	
+    	// 미니브라우저 열기
+    	function toggleMinibrowserModal() {
+    		miniBrowser.classList.toggle("none");
+    		if (!miniBrowser.classList.contains("none")) {
+    			chrome.style.color = "#fff";
+    		} else {
+    			chrome.style.color = "#919191";
+    		}
+    	}
+    	
+    	// 미니브라우저 닫기
+    	function closeMinibrowserModal() {
+    		miniBrowser.classList.add("none");
+    		chrome.style.color = "#919191";
+    	}
+
+    
+    	// 사이드바 처리
+    	var sideContent = document.getElementById("sideContent");
+    	var menuBtns = document.querySelectorAll('.item__button');
+    	Array.prototype.slice.call(menuBtns).forEach(function(btn) {
+    		btn.addEventListener("click", function() {
+    			if (btn.classList.contains("active")) {
+    				sideContent.classList.toggle("open");
+    			} else {
+   					Array.prototype.slice.call(menuBtns).forEach(function(other) {
+	   					if (btn == other) {
+	        				btn.classList.add("active");
+	        				btn.parentElement.classList.add("active");
+	        				var currentEle = document.getElementById("target-"+btn.getAttribute("id").split("-")[1]);
+	        				currentEle.classList.remove("none");
+       					} else {
+       						var otherEle = document.getElementById("target-"+other.getAttribute("id").split("-")[1]);
+	        				other.classList.remove("active");
+	        				other.parentElement.classList.remove("active");
+	        				otherEle.classList.add("none");
+	    				}
+	    			})
+
+    				sideContent.classList.add("open");
+	    		}
+    		});
+    	});
+    	
+    	
+    	///////////////////////////////////////////////////////////////////////////////////
+    	var questionBackBtn = document.getElementById("questionBackBtn");
+    	var questionSearchBtn = document.getElementById("questionSearchBtn");
+    	var questionList = document.getElementById("questionList");
+    	var questionSearchList = document.getElementById("questionSearchList");
+    	var questionSearchInput = document.querySelector(".question__input");
+    	
+    	// 질문 검색 시작
+    	function queryQuestion() {
+    		var questionHtml = `
+    			<div class="qModal__upper">
+					<div class="comment__user">
+						<img src="/images/user.png" />
+						<div class="user__info">
+							<h5>질문자</h5>
+							<span>12시간 전</span>
+						</div>
+					</div>
+					<h3 class="qModal__title qModal__title-course" onclick="seeQuestionDetail(this)">테스트 제목.</h3>
+					
+					<div class="qModal__state">
+						<div class="state__left">
+							<div class="state__like">
+								<a href="javascript:void(0)"><span><i class="far fa-thumbs-up"></i>6</span></a>
+							</div>
+							<div class="state__edit">
+								<span data-toggle="modal" data-target="#formModal">수정하기</span>
+							</div>
+						</div>
+						<div class="state__right">
+							<span data-toggle="modal" data-target="#formModal">답변 작성하기</span>
+						</div>
+					</div>
+				</div>
+    		`;
+    		
+    		// 엔터 입력 시
+    		if (event.keyCode === 13) {
+    			questionSearchList.innerHTML = "";
+    			questionSearchBtn.classList.add("none");
+    			questionBackBtn.classList.remove("none");
+    			// 검색 쿼리
+    			questionList.classList.add("none");
+    			
+    			// ajax 쿼리
+    			// 작성 해야함
+    			
+    			questionSearchList.insertAdjacentHTML('beforeEnd', questionHtml);
+    			
+    		}
+    	}
+    	// 질문 검색 끝
+    	
+    	// 질문 상세보기 처리
+    	function seeQuestionDetail(aTag) {
+    		questionList.classList.add("none");
+    		questionSearchList.classList.add("none");
+    		document.getElementById("questionDetail").classList.remove("none");
+    		questionBackBtn.classList.remove("none");
+    		questionSearchBtn.classList.add("none")
+    		questionSearchInput.classList.add("none");
+    	}
+    	
+    	questionBackBtn.addEventListener("click", function() {
+    		questionList.classList.remove("none");
+    		questionSearchList.classList.add("none");
+       		document.getElementById("questionDetail").classList.add("none");
+       		questionBackBtn.classList.add("none");
+       		questionSearchBtn.classList.remove("none")
+       		questionSearchInput.classList.remove("none");
+       		questionSearchInput.value = "";
+       	});
+    	// 질문 상세보기 끝
+    	
+    	
+    	/////////////////////////////////////////////////////////////////////////////
+    	
+    	// 모나코 에디터
+    	// Initial data
+		
+		const CSS_LINKS = [
+		  `https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css`,
+		];
+		
+		// Elements
+		const editorCode = document.getElementById('editorCode');
+		const editorPreview = document.getElementById('editorPreview').contentWindow.document;
+		// const editorCopyButton = document.getElementById('editorCopyClipboard');
+		
+		// <iframe> inject CSS
+		CSS_LINKS.forEach((linkURL) => {
+		  const link = document.createElement('link');
+		  link.href = linkURL;
+		  link.rel = 'stylesheet';
+		  editorPreview.head.appendChild(link);
+		});
+		
+		// Monaco loader
+		require.config({
+		  paths: {
+		    vs: 'https://cdn.jsdelivr.net/npm/monaco-editor/min/vs',
+		  },
+		});
+		
+		window.MonacoEnvironment = {
+		  getWorkerUrl: function (workerId, label) {
+		    return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
+		        self.MonacoEnvironment = {
+		          baseUrl: 'https://cdn.jsdelivr.net/npm/monaco-editor/min/'
+		        };
+		        importScripts('https://cdn.jsdelivr.net/npm/monaco-editor/min/vs/base/worker/workerMain.js');`)}`;
+		  },
+		};
+		
+		// Monaco init
+		require(['vs/editor/editor.main'], function () {
+		  createEditor(editorCode, INITIAL_CODE);
+		});
+		
+		function createEditor(editorContainer, code) {
+			fetch('/js/monacoTheme.json')
+		    .then(data => data.json())
+		    .then(data => {
+			    monaco.editor.defineTheme('monokai', data);
+			    monaco.editor.setTheme('monokai');
+			})
+	  		editor = monaco.editor.create(editorContainer, {
+			    value: code,
+			    language: FILE_EXTENSION,
+			    minimap: {
+			      enabled: false,
+			    },
+			    automaticLayout: true,
+			    roundedSelection: true,
+			    contextmenu: false,
+			    scrollBeyondLastLine: false,
+			    fontSize: 17,
+			    scrollbar: {
+			      useShadows: false,
+			      vertical: 'visible',
+			      horizontal: 'visible',
+			      horizontalScrollbarSize: 18,
+			      verticalScrollbarSize: 18,
+			    },
+	  		});
+		  
+		  editorPreview.body.innerHTML = `[(${fileList.get(0).INITIAL_CODE})]`;
+		  editor.onDidChangeModelContent(() => {
+				editorPreview.body.innerHTML = editor.getValue();
+		  });
+		
+		/*
+		  editorCopyButton.onclick = () => {
+		    copyToClipboard(editor.getValue());
+		  };
+		*/
+		}
+		
+		// 파일 탭 처리
+    	var fileBtns = document.querySelectorAll('.file__tab');
+    	var fileArray = Array.prototype.slice.call(fileBtns);
+    	
+    	function getFileContent(btn, filename, fileExtension) {
+			monaco.editor.setModelLanguage(editor.getModel(), fileExtension);
+			if (btn.classList.contains("active")) {
+				return;
+			}
+    		fileArray.forEach(function(other) {
+				if (btn == other) {
+    				other.classList.add("active");
+    				$.post({
+    					url:"[[@{/class/autosave-code}]]",
+    					data: {
+    						"videoId" : "[[${videoId}]]",
+    						"currFilename": FILENAME,
+    						"currFileContent": editor.getValue(),
+    						"nextFilename": filename,
+    					},
+    					success: function(data) {
+    			    		editor.setValue(data);
+    					},
+    				})
+    				
+				} else {
+					other.classList.remove("active");
+				}
+			});
+    		FILENAME = filename;
+    		FILE_EXTENSION = fileExtension;
+    	}
+    	
+    	// 코드 초기화
+    	function initializationCode() {
+    		if (confirm(FILENAME+"을 초기화 하시겠습니까?")) {
+        		$.post({
+        			// 나중에 videoId로 고쳐야함
+    				url:"[[@{/class/initial-code}]]",
+    				data: {
+    					"videoId" : "[[${videoId}]]",
+    					"filename": FILENAME
+    				},
+    				success: function() {
+    					location.reload();
+    				},
+    			});
+    		}
+    	}
+
+		function copyToClipboard(str) {
+		  const el = document.createElement('textarea');
+		  el.value = str;
+		  document.body.appendChild(el);
+		  el.select();
+		  document.execCommand('copy');
+		  document.body.removeChild(el);
+		}
+    </script>
 </body>
 
 </html>

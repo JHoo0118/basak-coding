@@ -62,7 +62,7 @@
 }
 
 .dashboard__common .common__right .right__box h4 {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
 }
 
 .dashboard__common .common__right .right__box span {
@@ -541,8 +541,8 @@
 }
 
 .qModal__upper {
-  padding: 24px;
-  min-height: 200px;
+  padding: 14px 24px;
+  min-height: 150px;
   border-bottom: 2px solid #fff;
   color: #fff;
 }
@@ -550,6 +550,7 @@
 .qModal__lower {
   height: auto;
   padding: 24px;
+  border-radius: 0 0 10px 10px;
 }
 
 .qModal__item {
@@ -560,7 +561,7 @@
 }
 
 .qModal__title {
-  font-size: 18px;
+  font-size: 16px;
   margin-bottom: 20px;
 }
 
@@ -577,7 +578,7 @@
 
 .qModal__upper .qModal__state {
   border-top: 1px solid #5a5c65;
-  padding-top: 20px;
+  padding-top: 14px;
   display: flex;
   justify-content: space-between;
 }

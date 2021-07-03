@@ -16,10 +16,14 @@ public interface AdminMapper {
 	AdminDTO getAdminByEmail(String email);
 	int createAdmin(AdminDTO admin);
 	int createAdminByMap(Map map);
+	int loginAdmin(Map map);
 	int passwordEncoding(AdminDTO admin);
 	AdminDTO getAdminById(String adminId);
 	AdminDTO getAdminByName(String name);
+
 	
 	//관리자페이지- 결제관리  
 	List<AdminDTO> getPriceList();
+
+	//xml 아이디 일치
 }

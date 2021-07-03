@@ -12,7 +12,7 @@
   align-items: center;
   background-color: #1e1e1e;
   color: #fff;
-  height: 7rem;
+  height: 6rem;
   width: 100%;
 }
 
@@ -72,6 +72,10 @@
   padding: 1rem 1.4rem;
 }
 
+.dropdown__menu.show {
+	transform: translate3d(-46px, 40px, 0px) !important;
+}
+
 .dropdown__item {
   font-size: 1.4rem;
 }
@@ -84,6 +88,10 @@
 .dropdown__item:hover {
   background: transparent;
   color: #0fd;
+}
+
+.dropdown__courese.show {
+	transform: translate3d(-46px, 40px, 0px) !important;
 }
 
 @media (max-width: 768px) {}

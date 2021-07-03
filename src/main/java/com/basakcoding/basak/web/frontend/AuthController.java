@@ -42,6 +42,6 @@ public class AuthController {
 	
 	@GetMapping("/email-information")
 	public String emailValidate() {
-		return "frontend/signupConfirm.html";
+		return "frontend/signupConfirm";
 	}
 }

@@ -12,13 +12,23 @@ import com.basakcoding.basak.service.CourseDTO;
 @Mapper
 public interface CatalogMapper {
 
-	//강의 목록 리스트 가져오기
+	//강의 상세보기
 	 List<Map> courseList();
-
 	Map selectOne(String courseId);
+	String getClobText(String courseId);
 	
+	//강의 후기 기능
+	List<Map> reviewList(String courseId);
+	int reviewCount(String courseId);
+	int checkPayment(Map map);
+	
+	int reviewCheck(Map map);
+	int reviewInsert(Map map);
+	
+	
+	
+	//강의상세보기 좋아요 기능
 	int likeCheck(Map map);
-	
 	int like(Map map);
 	int unLike(Map map);
 	int likeCount(Map map);

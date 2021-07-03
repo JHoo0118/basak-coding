@@ -18,7 +18,7 @@
 <body>
    	<!-- Navbar -->
 	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
-
+	
     <!-- lecture 시작 -->
     <section class="catalog">
         <div class="container-fluid container--main d-flex flex-column align-items-between">
@@ -35,7 +35,7 @@
                         
                             <div class="card lecture" >
                                
-                                <img th:src="@{${course.PATH}}" class="card-img-top lecture__thumbnail"
+                                <img th:src ="@{${course.PATH}}" class="card-img-top lecture__thumbnail"
 
                                     alt="thumbnail" />
 
@@ -69,7 +69,8 @@
     </section>
     <!-- lecture 끝 -->
     <script>
-   
+  
+    
    </script>
 
     <!-- footer -->

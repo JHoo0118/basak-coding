@@ -38,9 +38,14 @@ public class AdminPriceController {
 	
 	@GetMapping("/management")
 	public String memberList(Model model) {
+
 		List<AdminDTO> listPrices = priceService.getPriceList();
 		model.addAttribute("listPrices", listPrices);
 		model.addAttribute("title", "강사 관리");
+
+		List<AdminDTO> listAdmins = priceService.getPriceList();
+		model.addAttribute("listAdmins", listAdmins);
+		model.addAttribute("title", "결제 관리");
 		return "admin/priceManagement";
 	}
 	
@@ -56,7 +61,7 @@ public class AdminPriceController {
 		List<RoleDTO> priceRoles = priceRoleService.selectList();
 		model.addAttribute("priceRoles", priceRoles);
 		model.addAttribute("admin", admin);
-		model.addAttribute("title", "강사 관리");
+		model.addAttribute("title", "결제 관리");
 		return "admin/priceForm";
 	}
 	*/

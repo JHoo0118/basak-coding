@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.basakcoding.basak.mapper.CommentMapper">
+	<select id="adminSelect" resultType="CommentDTO">
+		SELECT comment_id,c.question_id,c.admin_id,name,title,c.content,c.created_at
+		FROM comments c
+		JOIN question q ON c.question_id=q.question_id
+		JOIN admins a ON c.admin_id=a.admin_id
+	</select>
+	<select id="memberSelect" resultType="CommentDTO">
+		SELECT comment_id,c.question_id,c.member_id,username,title,c.content,c.created_at
+		FROM comments c
+		JOIN question q ON c.question_id=q.question_id
+		JOIN members m ON c.member_id=m.member_id
+	</select>
+</mapper>

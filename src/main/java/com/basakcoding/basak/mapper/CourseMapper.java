@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.basakcoding.basak.service.CategoryDTO;
+import com.basakcoding.basak.service.FileDTO;
 
 @Repository
 @Mapper
@@ -28,4 +29,10 @@ public interface CourseMapper {
 	int createVideo(Map map);
 
 	int createFile(Map map);
+	
+	int updateVideoCnt(Map map);
+
+	List<Map> getFileList(String videoId);
+
+	String getCourseId(String videoId);
 }

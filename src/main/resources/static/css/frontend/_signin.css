@@ -63,14 +63,14 @@
   padding-top: 4rem;
 }
 
-.form__group small {
+.form__group label {
   color: #fff;
   display: inline-block;
   margin-top: .5rem;
   font-size: 14px;
 }
 
-.form__group small.error {
+.form__group label.error {
 	color: #ff9300 !important;
 }
 
