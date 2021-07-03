@@ -108,7 +108,7 @@
 	
 	<!-- 내 강의 가져오기 -->
 	<select id="myCourses" parameterType="int" resultType="Map">
-		select co.title,co.short_description,co.period,cu.name,a.name admin_name
+		select co.title,co.course_id,co.short_description,co.period,cu.name,a.name admin_name
 		from members m JOIN payment p ON m.member_id=p.member_id
 		JOIN courses co ON p.course_id=co.course_id 
 		JOIN curriculum cu ON co.course_id=cu.course_id
@@ -136,17 +136,28 @@
 	
 	<!-- 내 문의 제목,시간 -->
 	<select id="myInquiry" parameterType="int" resultType="Map">
-		select i.title,i.created_at
+		select i.*
 		from members m JOIN inquiry i ON m.member_id=i.member_id
 		WHERE m.member_id=#{userId}
 	</select>
 	
 	<!-- 내 문의 상세보기 -->
 	<select id="inquDetails" parameterType="String" resultType="Map">
-		select i.*,m.username,c.name 
+		
+		select i.*,m.username,c.name,an.*,ad.avatar,ad.admin_id,an.answer_id,an.content ans_content,ad.name admin_name,an.created_at answer_created
 		from members m JOIN inquiry i ON m.member_id=i.member_id
 		JOIN classification c ON i.cl_id = c.cl_id
-		WHERE m.member_id=#{userId} AND i.title=#{title}
+		JOIN answer an ON an.inquiry_id=i.inquiry_id
+		JOIN admins ad ON ad.admin_id=an.admin_id
+		WHERE m.member_id=#{userId} AND i.inquiry_id=#{inquiry_id}
+	</select>
+	
+	<!-- 내 문의 답변 없을 때 상세보기 -->
+	<select id="inquDetailNotExist" parameterType="String" resultType="Map">
+		select i.*,m.username,c.name
+		from members m JOIN inquiry i ON m.member_id=i.member_id
+		JOIN classification c ON i.cl_id = c.cl_id
+		WHERE m.member_id = #{userId} AND i.inquiry_id = #{inquiry_id}
 	</select>
 	
 	<!-- 내 댓글 제목,시간 -->

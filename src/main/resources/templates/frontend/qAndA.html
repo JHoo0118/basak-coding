@@ -13,12 +13,13 @@
 	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
 	<script>
 		//문의 상세보기
-		function inquDetails() {
-			var title = $('#title').text();
-			console.log("제목"+title);
+		function inquDetails(inquiry) {
+			
+			var inquiry_id = inquiry.querySelectorAll("span")[1].innerText;
+			console.log("문의아이디"+inquiry_id)
 			$.ajax({
 				url: '/personal/inquDetails.do',
-				data: {"title": title},
+				data: {"inquiry_id": inquiry_id},
 				type: 'post',
 				dataType: "json",
 				success: function (data) {
@@ -27,6 +28,19 @@
 					$('#inqtitle').text(data.TITLE);
 					$('#inqcontent').text(data.CONTENT);
 					$('#clname').text(data.NAME);
+					if(data.ANSWER_ID !=null){
+						document.querySelector(".inquiry__list").style.display = "block";
+						document.querySelector(".inquiry__noAnswer").style.display = "none";
+						
+						$('#admin').text(data.ADMIN_NAME);
+						$('#admintime').text(data.ANSWER_CREATED);
+						$('#adminAnswer').text(data.ANS_CONTENT);
+					}
+					else {
+						document.querySelector(".inquiry__list").style.display = "none";
+						document.querySelector(".inquiry__noAnswer").style.display = "block";
+					}
+					
 				},
 				error: function () {
 					alert("오류가 발생했습니다.다시시도해주세요");
@@ -134,16 +148,16 @@
 						<th:block th:if="${myInquiry}!=null">
 							<ul class="qAndA">
 								<li class="qAndA__box row m-0" data-toggle="modal" data-target="#inquiryModal"
-									th:each="myInquirys :${myInquiry}">
-
+									th:each="myInquirys :${myInquiry}" onclick="inquDetails(this)">
 									<div class="qAndA__left col-2">
 										<span>문의</span>
+										<span id="inquiry_id" style="display:none">[[${myInquirys.INQUIRY_ID}]]</span>
 									</div>
 									<div class="qAndA__middle col-8">
 										<span>[[${myInquirys.CREATED_AT}]]</span>
 										<h4 id="title" class="iine-clamp">[[${myInquirys.TITLE}]]</h4>
 									</div>
-									<div class="qAndA__right col-2" onclick="inquDetails()">
+									<div class="qAndA__right col-2" >
 										<span>상세보기</span>
 									</div>
 								</li>
@@ -309,36 +323,38 @@
 						<div class="qModal__box">
 							<div class="qModal__upper">
 								<div class="comment__user">
-									<img th:src="@{/images/user.png}" />
+									<img th:src="@{${PATH}}" />
 									<div class="user__info">
-										<h5 id="inqmem">질문자</h5>
-										<span id="inqtime">4시간 전</span>
+										<h5 id="inqmem"></h5>
+										<span id="inqtime"></span>
 									</div>
 								</div>
-								<h3 class="qModal__title" id="inqtitle">문의 제목</h3>
-								<p class="qModal__content" id="inqcontent">안녕하세요. 문의 내용입니다.</p>
+								<h3 class="qModal__title" id="inqtitle"></h3>
+								<p class="qModal__content" id="inqcontent"></p>
 								<!-- <span class="qModal__updated">수정시간</span> -->
 								<div class="qModal__state">
 									<div class="state__left">
 										<div class="state__like">
-											<span id="clname">문의 분류</span>
+											<span id="clname"></span>
 										</div>
 									</div>
 								</div>
 							</div>
 							<div class="qModal__lower">
-								<ul class="comment__list">
+								<ul class="comment__list inquiry__list">
 									<li class="comment__item">
 										<div class="comment__user">
-											<img th:src="@{/images/user.png}" />
+											<img th:if="${admin_path != null}" th:src="@{${admin_path}}" />
+											<img th:if="${admin_path == null}" th:src="@{/images/image4.jpg}" />
 											<div class="user__info">
-												<h5>답변자</h5>
-												<span>4시간 전</span>
+												<h5 id="admin"></h5>
+												<span id="admintime"></span>
 											</div>
 										</div>
-										<p class="qModal__content">문의 답변</p>
+										<p id="adminAnswer" class="qModal__content"></p>
 									</li>
 								</ul>
+								<h2 class="qModal__updated inquiry__noAnswer" style="display:none;">아직 등록된 답변이 없습니다.</h2>
 							</div>
 						</div>
 					</div>

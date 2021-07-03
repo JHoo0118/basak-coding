@@ -55,10 +55,10 @@ public class MyPageController {
 	public Model userInfo(Model model, Authentication auth) {
 		int userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
 		// 내결제정보
-		int paymentCount = memberService.paymentCount(userId);// 로그인된 회원아이디 받아와서넣어줘야함
+		int paymentCount = memberService.paymentCount(userId);
 		model.addAttribute("paymentCount", paymentCount);
 		// 뿌려줄 내정보 가져오기
-		Map map = memberService.selectMyInfo(userId);// 로그인된 회원아이디 받아와서넣어줘야함
+		Map map = memberService.selectMyInfo(userId);
 		if (!map.containsKey("AVATAR"))
 			map.put("AVATAR", null);
 		else {
@@ -113,6 +113,7 @@ public class MyPageController {
 		List<Map> map1 = memberService.myComments(userId);
 		if (!map1.isEmpty())
 			model.addAttribute("myComments", map1);
+		
 		return "frontend/qAndA";
 	}
 
@@ -191,10 +192,19 @@ public class MyPageController {
 
 	// 문의 상세보기
 	@RequestMapping(value = "/inquDetails.do", method = RequestMethod.POST)
-	public @ResponseBody Map inquDetails(@RequestParam("title") String title, Model model, Authentication auth) {
+	public @ResponseBody Map inquDetails(@RequestParam("inquiry_id") String inquiry_id, Model model, Authentication auth) {
 		String userId = ((UserDetails) auth.getPrincipal()).getUsername();
-		Map map = memberService.inquDetails(userId, title);
-		System.out.println("문의맵"+map);
+		Map map = memberService.inquDetails(userId, inquiry_id);
+		
+		if (map == null) {
+			map = memberService.inquDetailNotExist(userId, inquiry_id);
+		} 
+		else {
+			if (!map.containsKey("ANSWER_ID"))
+				map.put("ANSWER_ID", null);
+			else model.addAttribute("admin_path","/upload/admin/" + map.get("ADMIN_ID") + "/" + map.get("AVATAR"));
+			
+		}
 		return map;
 	}
 

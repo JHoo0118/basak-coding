@@ -121,8 +121,8 @@ public class MemberService {
 		return memberMapper.viewDetails(userId,pay_code);
 	}
 	//내 문의 상세보기
-	public Map inquDetails(String userId, String title) {
-		return memberMapper.inquDetails(userId,title);
+	public Map inquDetails(String userId, String inquiry_id) {
+		return memberMapper.inquDetails(userId,inquiry_id);
 	}
 	//내 댓글 제목,시간
 	public List<Map> myComments(int userId) {
@@ -138,5 +138,9 @@ public class MemberService {
     	return memberMapper.updateEmailValidate(map);
     }
 
+
+	public Map inquDetailNotExist(String userId, String inquiry_id) {
+		return memberMapper.inquDetailNotExist(userId, inquiry_id);
+	}
 
 }
