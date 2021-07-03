@@ -67,12 +67,14 @@ public interface MemberMapper {
 	Map viewDetails(String userId,String pay_code);
 
 	//내 문의 상세
-	Map inquDetails(String userId, String title);
+	Map inquDetails(String userId, String inquiry_id);
 
 	//내 댓글 제목,시간
 	List<Map> myComments(int userId);
 
 	//내 댓글 상세보기
 	Map commentsDetails(String userId, String commenTitle);
+
+	Map inquDetailNotExist(String userId, String inquiry_id);
 
 }
