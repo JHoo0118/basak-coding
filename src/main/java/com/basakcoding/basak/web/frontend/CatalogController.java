@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -39,12 +40,17 @@ public class CatalogController {
 	// 강의목록 페이지
 	@GetMapping("/catalog")
 	public String catalog(Model model ) {
+		
 		List<Map> courseList = catalogService.courseList();
 		for (Map map : courseList) {
 			map.put("PATH", "/upload/course/" + map.get("COURSE_ID") + "/thumbnail/" + map.get("THUMBNAIL"));
+			
 		}
 		model.addAttribute("courseList", courseList);
+		System.out.println("courseList"+courseList);
 		return "frontend/catalog";
+	
+	
 	}
 	
 	
@@ -52,19 +58,34 @@ public class CatalogController {
 	//강의목록 상세 페이지
 	@GetMapping("/catalog/{courseId}")
 	public  String catalogDetail(Authentication auth , @PathVariable String courseId , Model model) {
+		//로그인 안됐을때 likeCheck값 기본 0으로 초기화된 상태로 맵에저장
 		int likeCheck=0;
-		Map map = catalogService.selectOne(courseId);
+		
+		Map map = catalogService.selectOne(courseId);//강의 상세보기에 필요한 값 받아오기
+		List<Map> map1 = catalogService.reviewList(courseId);//강의후기 리스트에 필요한 값 받아오기
+		int reviewCount = catalogService.reviewCount(courseId);//총 리뷰갯수 카운트
+		String getClob = catalogService.getClobText(courseId);//강의설명(DESCRIPTION) 받아오기
+		
 		
 		if(auth != null) {
 			//로그인이 됐을때
 			map.put("memberId",((UserDetails)auth.getPrincipal()).getUsername());
-			map.put("courseId", courseId);
+			map.put("courseId",courseId);
 			likeCheck = catalogService.likeCheck(map);
 		}
-		//로그인 안됐을때 likeCheck값 기본 0으로 초기화된 상태로 맵에저장
-		map.put("likeCheck", likeCheck);
+		map.put("likeCheck", likeCheck);//비로그인시 기본 0으로 초기화된 값 맵에 셋팅
+		map.put("DESCRIPTION", getClob);	
+		
 		model.addAttribute("course",map);
-		System.out.println("course"+map);
+		System.out.println("course:"+map);
+		
+		
+		
+		model.addAttribute("reviewList",map1);
+		System.out.println("reviewList:"+map1);
+		model.addAttribute(reviewCount);
+		System.out.println("reviewCount:"+reviewCount);
+		
 		return "/frontend/catalogDetail";
 
 	}
@@ -72,14 +93,13 @@ public class CatalogController {
 	
 	//좋아요 안좋아요
 	@PostMapping("/catalog/count_like")
-	public @ResponseBody int catalogLike(Authentication auth , @RequestBody Map map ,HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public @ResponseBody int catalogLike(Authentication auth , @RequestBody Map map) throws IOException {
 		String memberId;
-		int affected;
 		int likeCheck;
+		int affected;
 		String courseId	= (String) map.get("courseId");
 		
 		if(auth == null) {
-			resp.setContentType("text/html; charset-UTF-8");
 			System.out.println("로그인상태가 아님");
 			return affected=2;
 		
@@ -105,8 +125,100 @@ public class CatalogController {
 			
 			}//작은 else
 			
-	
 	}///catalogLike
 	
+	//리뷰 작성 컨트롤러
+	@PostMapping("/catalog/reviewInsert")
+	public @ResponseBody int reviewInsert(Authentication auth  ,@RequestBody Map map) {
+		int affected;
+		String memberId;
+		memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+
+		String content = (String) map.get("content");
+		String courseId	= (String) map.get("courseId");
+		String selectedStar= (String) map.get("selectedStar");
+		    String rating =selectedStar.split("-")[2];
+		    System.out.println("rating:"+rating);
+		
+		System.out.println("content:"+content);
+		System.out.println("courseId:"+courseId);
+		System.out.println("selectedStar:"+selectedStar);
+		
+		map.put("memberId",memberId );
+		map.put("content", content);
+		map.put("courseId", courseId);
+		map.put("rating", rating);
+		
+		catalogService.reviewCheck(map);
+		catalogService.reviewInsert(map);
+		
+		if(catalogService.reviewCheck(map) == 0 ) {
+			catalogService.reviewInsert(map);
+			return 0;
+			
+		}
+		else {// catalogService.reviewCheck(map) ==1
+			return 1;
+		}
+		
+		
+		
 	
-}
+		
+		/*
+		if(auth == null){//로그인 돼있지 않을시
+			
+			
+			return affected=2;	
+		}
+		else {
+			memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+			map.put("memberId", memberId);
+			map.put("courseId",courseId);
+			checkPayment = catalogService.checkPayment(map);
+		}
+			if(checkPayment==0) {//로그인 후 미결제된 아이디일때
+				System.out.println("checkPayment:"+checkPayment);
+				
+			return affected=0;
+			}
+			else {//로그인 후 결제가 된 아이디일때 //checkPayment 값이 1일때
+				System.out.println("checkPayment:"+checkPayment);
+			
+			return affected=1;
+			}
+			*/
+	
+	
+	}
+	
+	@PostMapping("/catalog/reviewWrite")
+	public @ResponseBody int reviewWrite(Authentication auth  ,@RequestBody Map map) {
+		int affected;
+		int checkPayment;
+		String memberId;
+		String courseId	= (String) map.get("courseId");
+		
+		if(auth == null){//로그인 돼있지 않을시
+			
+			return affected=2;	
+		}
+		else {//로그인 돼있을시
+			memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+			map.put("memberId", memberId);
+			map.put("courseId",courseId);
+			checkPayment = catalogService.checkPayment(map);
+		}
+		if(checkPayment==0) 
+			return affected=0;//결제한 이력이 없으면 0반환
+ 		
+		else return affected=1;//결제한 이력이 있으면 1반환
+		
+		
+		
+	}
+
+	
+	
+	
+}//////

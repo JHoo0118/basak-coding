@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.basakcoding.basak.mapper.CatalogMapper">
-
+	<!-- 강의목록 -->
 	<select id="courseList" resultType="Map">
 	
 		SELECT co.*,ca.name CATEGORY_NAME,a.*,a.name ADMIN_NAME 
@@ -12,9 +12,10 @@
 		JOIN CATEGORY ca 
 		ON co.category_id = ca.category_id
 		JOIN ADMINS a ON a.admin_id = co.admin_id
-	
+		
 	</select>
 	
+	<!-- 강의상세보기 -->
 	<select id="selectOne" parameterType="String" resultType="Map">
 	
 		SELECT co.*,ca.name CATEGORY_NAME,a.*,a.name ADMIN_NAME
@@ -23,9 +24,20 @@
 		ON co.category_id = ca.category_id
 		JOIN ADMINS a ON a.admin_id = co.admin_id
 		WHERE co.course_id=#{courseId}
-	
+		
 	</select>
 	
+	<!-- 강의상세보기 강의설명 -->
+	<select id="getClobText" parameterType="String" resultType="String">
+	
+		SELECT to_char(DESCRIPTION) AS CONTENTS FROM COURSES WHERE COURSE_ID=#{courseId}
+		
+	</select>
+	
+	
+	
+	<!-- 좋아요 관련 쿼리 시작 -->
+	<!-- 이전 좋아요 누른기록 체크용 -->
 	<select id="likeCheck" parameterType="Map" resultType="Int">
 	
 	SELECT COUNT(*)
@@ -34,6 +46,7 @@
 	
 	</select>
 	
+	<!-- 좋아요 등록 -->
 	<insert id="like" parameterType="Map">
 	
 	INSERT INTO LIKES (LIKE_ID,MEMBER_ID,COURSE_ID)
@@ -41,6 +54,7 @@
 	
 	</insert>
 	
+	<!-- 좋아요 삭제 -->
 	<delete id="unLike" parameterType="Map">
 	
 	DELETE FROM LIKES
@@ -48,19 +62,51 @@
 	
 	</delete >
 	
-	
-	
+	<!--강의별 좋아요 개수 확인 -->
 	<update  id = "likeCount" parameterType="Map">
 	
 	UPDATE COURSES
 	SET LIKE_COUNT = (SELECT COUNT(*) FROM LIKES WHERE COURSE_ID=#{courseId} )
-	
+
 	WHERE COURSE_ID=#{courseId} 
 	
 	</update>
-	
-	
-	
+	<!-- 좋아요 관련 쿼리 끝 -->
 
+	
+	<!-- 리뷰 관련 쿼리 시작 -->	
+	<!-- 강의후기 리스트 -->
+	<select id="reviewList" parameterType="String" resultType="Map">
+	
+	SELECT M.USERNAME NAME, R.* 
+	FROM members M 
+	JOIN review R 
+	ON M.MEMBER_ID = R.MEMBER_ID
+    WHERE R.COURSE_ID=#{courseId}
+	
+	</select>
+	
+	<!-- 강의후기 갯수 -->	
+	<select id="reviewCount" parameterType="String" resultType="Int" >
+	
+	SELECT COUNT(*) FROM review WHERE COURSE_ID=#{courseId} 
+	
+	</select>
+	
+	<!-- 강의 결제여부 확인 -->
+	<select id="checkPayment" parameterType="Map" resultType="Int">
+	select count(*) FROM PAYMENT WHERE MEMBER_ID=#{memberId} and COURSE_ID=#{courseId} 
+	</select>
+	
+	<select id="reviewCheck" parameterType="Map" resultType="Int">
+	select count(*) FROM review WHERE MEMBER_ID=#{memberId} and COURSE_ID=#{courseId} 
+	</select>
+	
+	<insert id="reviewInsert" parameterType="Map">
+	INSERT INTO REVIEW
+	VALUES (SEQ_REVIEW.NEXTVAL,#{courseId},#{memberId},#{content},#{rating},default)
+	
+	</insert>
+	
 	
 </mapper>
