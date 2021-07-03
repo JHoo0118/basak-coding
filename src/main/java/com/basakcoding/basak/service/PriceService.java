@@ -7,21 +7,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.basakcoding.basak.mapper.AdminMapper;
+import com.basakcoding.basak.mapper.PaymentMapper;
 
 @Service
 public class PriceService {
 	
 	@Autowired
-	private AdminMapper adminMapper;
+	private PaymentMapper paymentMapper;
 	
 //    @Autowired
 //    private PasswordEncoder passwordEncoder;
     
-    public List<AdminDTO> getPriceList() {
-		return adminMapper.getPriceList();
+    public List<Map> getPriceList() {
+		return paymentMapper.getPriceList();
 	}
-
+    
+    
     /*
+    // 아이디로 관리자 얻기
+ 	public AdminDTO getAdminById(String adminId) {
+ 		return adminMapper.getAdminById(adminId);
+ 	}
+
+    
     // DTO를 통한 관리자 생성
     public int createAdmin(AdminDTO admin) {
 //    	encodePassword(admin);
@@ -54,10 +62,7 @@ public class PriceService {
 		return adminMapper.getAdminByEmail(email);
 	}
 
-	// 아이디로 관리자 얻기
-	public AdminDTO getAdminById(String adminId) {
-		return adminMapper.getAdminById(adminId);
-	}
+	
 	
 	// 이름으로 관리자 얻기
 	public AdminDTO getAdminByName(String name) {

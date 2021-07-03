@@ -1,5 +1,6 @@
 package com.basakcoding.basak.mapper;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -23,5 +24,9 @@ public interface PaymentMapper {
 	int insertPayment(Map map);
 
 	int alreadyPayment(Map map);
+	
+	//관리자페이지- 결제관리  
+	List<Map> getPriceList();
+		
 
 }

@@ -45,6 +45,14 @@
 	</insert>
 	
 	
+	<!-- 어드민 페이지 전체사용자 결제내역 불러오기 -->
+	<select id="getPriceList" resultType="Map">
+		SELECT pa.payment_id, pa.payment_code, pa.name, pa.price, pa.payment_state, pa.payment_method, pa.created_at, co.title
+		FROM payment pa
+		JOIN courses co ON pa.price = co.price
+	</select>
+	
+	
 </mapper>
 
 
