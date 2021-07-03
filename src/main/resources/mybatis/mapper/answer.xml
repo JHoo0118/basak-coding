@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.basakcoding.basak.mapper.AnswerMapper">
+	
+	<select id="answerSelect" resultType="AnswerDTO">
+		SELECT answer_id,i.name classification,i.title inquirytitle,a.title answertitle,ad.name,a.created_at
+		FROM answer a
+		JOIN admins ad ON ad.admin_id = a.admin_id
+		JOIN (SELECT * FROM inquiry i JOIN classification c ON c.cl_id=i.cl_id ) i ON i.inquiry_id = a.inquiry_id
+	</select>
+	
+</mapper>
