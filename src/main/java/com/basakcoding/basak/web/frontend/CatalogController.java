@@ -72,17 +72,20 @@ public class CatalogController {
 			map.put("memberId",((UserDetails)auth.getPrincipal()).getUsername());
 			map.put("courseId",courseId);
 			likeCheck = catalogService.likeCheck(map);
+		
 		}
-<<<<<<< HEAD
 		if (!map.containsKey("AVATAR")) map.put("AVATAR", null);
 		else map.put("PATH", "/upload/admin/" + map.get("ADMIN_ID") + "/" + map.get("AVATAR"));
+
+
 		//로그인 안됐을때 likeCheck값 기본 0으로 초기화된 상태로 맵에저장
 		map.put("likeCheck", likeCheck);
-=======
-		map.put("likeCheck", likeCheck);//비로그인시 기본 0으로 초기화된 값 맵에 셋팅
+		
+		//CLOB형 자료 스트링화 하여 맵에 저장
 		map.put("DESCRIPTION", getClob);	
 		
->>>>>>> refs/heads/ksg
+
+
 		model.addAttribute("course",map);
 		System.out.println("course:"+map);
 		

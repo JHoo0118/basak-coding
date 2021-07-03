@@ -8,15 +8,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.basakcoding.basak.service.MemberDTO;
 import com.basakcoding.basak.service.PaymentService;
 
-=======
-import org.springframework.web.bind.annotation.PostMapping;
->>>>>>> refs/heads/ksg
+
 
 @Controller
 public class PaymentController {

@@ -31,66 +31,7 @@
 						</i>[[${course.LIKE_COUNT}]]</button>
 					<div class="detail__info">
 
-<<<<<<< HEAD
-                            <!-- 수업인덱스 -->   
-                            <div class="col-3 p-0 detail__text detail__text--2">
-                                2개의 영상
-                            </div>
-                            
-                                <!-- 학습시간 -->   
-                            <div class="col-3 p-0 d-flex justify-content-center align-items-center flex-column">
-                                <span style="color: rgb(145, 145, 145); font-size: 1.4rem">총</span>
-                                <span id="length" class="detail__text detail__text--2">[[${course.COURSE_LENGTH}]]</span>
-                            </div>
-                            <script>
-                           
-							//좋아요 기능구현
-							var likeCount = Number.parseInt($('.detail__like').text());
-							
-							var likeCheck="[[${course.likeCheck}]]";
-							console.log('likeCheck',likeCheck);
-							
-							$(document).ready(function(){
-							if(likeCheck == 1){
-								console.log('기존에 좋아요 눌렀을때');
-								$('#likeCount').html('<i class="fas fa-thumbs-up" ></i>'+likeCount);
-								$('#likeCount').prop("style","color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");		
-								
-							}
-							else{
-								console.log('기존에 좋아요 눌르지 않았을때');
-								$('#likeCount').html('<i class="far fa-thumbs-up"></i>'+likeCount);	
-								$('#likeCount').prop("style","color: gray;");
-							}
-							
-						});
-			
-               				// var memberId = "[[${#authentication.principal}]]" == "anonymousUser"
-                           	var courseId = "[[${course.COURSE_ID}]]";
-							console.log("courseId:",courseId);	
-							
-														
-							$('.detail__like').click(function(){
-								// var data = { 'memberId' : memberId, 'courseId' : courseId };
-								var data = {'courseId' : courseId };
-								console.log(JSON.stringify(data)) ;	
-								
-								$.ajax({
-									
-								url : "[[@{/catalog/count_like}]]",
-								type:"post",
-								data:JSON.stringify(data),//userId=1,courseId=1
-								contentType: "application/json" ,
-								success:function(data){
-										console.log("data:",data);
-										console.log("datatype",typeof(data));
-									if(data== 0){//기존에 좋아요 누른적이 없을때
-                                        likeCount++;
-                                        console.log("likeCount:",likeCount);
-										$('#likeCount').html('<i class="fas fa-thumbs-up" ></i>'+likeCount);
-										$('#likeCount').prop("style","color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");		
-										
-=======
+
 						<!-- 강의가격 -->
 						<div class="detail__price">
 							<span>[[${course.PRICE}]]</span>&nbsp;<span>원</span>
@@ -143,6 +84,7 @@
 								<span id="length"
 									class="detail__text detail__text--2">[[${course.COURSE_LENGTH}]]</span>
 							</div>
+							
 							<script>
 
 								//좋아요 기능구현
@@ -157,7 +99,7 @@
 										$('#likeCount').html('<i class="fas fa-thumbs-up" ></i>' + likeCount);
 										$('#likeCount').prop("style", "color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");
 
->>>>>>> refs/heads/ksg
+
 									}
 									else {
 										console.log('기존에 좋아요 눌르지 않았을때');
@@ -237,18 +179,19 @@
 
 						<h1 class="description__title">[[${course.DESCRIPTION}]]</h1>
 
-					</div>
-				</div>
-				<div class="col-md-3 detail__right p-0 d-flex flex-column align-items-center">
-					<img th:src="@{/images/}+${course.AVATAR}" class="detail__profile" />
-					<h4>[[${course.EMAIL}]]</h4>
-					<ul class="detail__history">
-						<li class="history__item">[[${course.BIO}]] /</br> 코드라이언 팀 [[${course.ADMIN_NAME}]]</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</section>
+				     </div>
+                </div>
+                <div class="col-md-3 detail__right p-0 d-flex flex-column align-items-center">
+                    <img th:if="${course.AVATAR == null}" th:src="@{/images/image4.jpg}" class="detail__profile" />
+                    <img th:if="${course.AVATAR != null}" th:src="@{${course.PATH}}" class="detail__profile" />
+                    <h4>[[${course.EMAIL}]]</h4>
+                    <ul class="detail__history">
+                        <li class="history__item">[[${course.BIO}]] /</br> 바삭코딩 팀   [[${course.ADMIN_NAME}]]</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
 	<section class="curriculum">
 		<div class="container-fluid container--main">
@@ -652,21 +595,6 @@
 							
 						}//success
 
-<<<<<<< HEAD
-                    </div>
-                </div>
-                <div class="col-md-3 detail__right p-0 d-flex flex-column align-items-center">
-                    <img th:if="${course.AVATAR == null}" th:src="@{/images/image4.jpg}" class="detail__profile" />
-                    <img th:if="${course.AVATAR != null}" th:src="@{${course.PATH}}" class="detail__profile" />
-                    <h4>[[${course.EMAIL}]]</h4>
-                    <ul class="detail__history">
-                        <li class="history__item">[[${course.BIO}]] /</br> 바삭코딩 팀   [[${course.ADMIN_NAME}]]</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-=======
 					})//ajax	
 					
 							
@@ -677,7 +605,7 @@
 				});//clickWrite
 		
 		
->>>>>>> refs/heads/ksg
+
 
 	</script>
 </body>
