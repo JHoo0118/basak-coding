@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.basakcoding.basak.service.CourseService;
 import com.basakcoding.basak.service.FileDTO;
+import com.basakcoding.basak.service.VideoDTO;
 
 @Controller
 public class CourseController {
@@ -44,6 +45,10 @@ public class CourseController {
 		
 		String videoId = ""+7;
 		String courseId = courseService.getCourseId(videoId);
+		VideoDTO video = courseService.getVideo(videoId);
+		video.setCourseId(courseId);
+		
+		
 		// 비디오 파일들 가져오기
 		List<Map> fileList = courseService.getFileList(videoId);
 		for (int i=0; i<fileList.size(); i++) {
@@ -80,7 +85,7 @@ public class CourseController {
 		}
 		
 		model.addAttribute("fileList", fileList);
-		model.addAttribute("videoId", videoId);
+		model.addAttribute("video", video);
 		
 //		// 파일 내용 가져오기 테스트
 //		String dirName = "upload/course/2/file/test.html";

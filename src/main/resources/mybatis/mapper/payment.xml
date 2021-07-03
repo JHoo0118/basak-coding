@@ -17,6 +17,7 @@
 		FROM courses co
 		JOIN category ca ON ca.category_id = co.category_id
 		JOIN admins a ON co.admin_id = a.admin_id WHERE co.course_id = #{courseId}
+
 	</select>
 	
 	<!-- 강의 결제내역 얻기  -->

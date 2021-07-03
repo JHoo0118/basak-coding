@@ -133,8 +133,9 @@ public class AdminCourseController {
 						if (!video.containsKey(temp[2]))
 							video.put(temp[2], new HashMap());
 						video.get(temp[2]).put("videoTitle", map.get(key));
-						video.get(temp[2]).put("videoContent", map.get(key));
 						video.get(temp[2]).put("curriculumId", curriId.get(temp[1]));
+					} else if (temp[0].equals("videoContent")) {
+						video.get(temp[2]).put("videoContent", map.get(key));
 					}
 				}
 			}

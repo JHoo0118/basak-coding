@@ -30,9 +30,9 @@ public class AdminHomeController {
 	private AdminService adminService;
 	
 	@GetMapping("")
-	public String adminHome(HttpSession session) {
+	public String adminHome(HttpSession session, Model model) {
 		if(session.getAttribute("loginEmail")!=null){ 
-			
+			model.addAttribute("title", "홈");
             return "admin/home";
         }
 		else{
