@@ -72,7 +72,7 @@ public class PaymentController {
 	//
 	@PostMapping("/payments/complete")
 	@ResponseBody
-	public String pymentsComplete (@RequestParam Map map, Authentication auth) {
+	public String paymentsComplete (@RequestParam Map map, Authentication auth) {
 		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
 		map.put("memberId", memberId);
 
@@ -84,7 +84,7 @@ public class PaymentController {
 	
 	@PostMapping("/payments/check")
 	@ResponseBody
-	public String pymentsCheck (@RequestParam Map map, Authentication auth) {
+	public String paymentsCheck (@RequestParam Map map, Authentication auth) {
 		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
 		map.put("memberId", memberId);
 		int count = paymentService.alreadyPayment(map);

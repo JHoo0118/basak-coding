@@ -35,7 +35,7 @@
 										<option value="del">삭제</option>
 									</select>
 									<input class="button button--light button--sm d-inline" type="submit" value="확인" />
-									<a class="button button--reverse mb-2" th:href="@{/admin/price/management/form}">사용자 추가</a>
+									
 								</div>
 							</div>
 							<div th:if="${message != null}" class="alert alert-success text-center">
@@ -46,34 +46,28 @@
 								<thead>
 				                  <tr class="text-muted">
 				                    <th>액션</th>
-				                    <th>#</th>
-				                    <th>아이디</th>
-				                    <th>이메일</th>
+				                    <th>결제번호</th>
 				                    <th>사용자명</th>
-				                    <th>이메일 인증</th>
-				                    <th>회원가입 방법</th>
-				                    <th>프로필 이미지</th>
-				                    <th>가입 날짜</th>
+				                    <th>강의명</th>
+				                    <th>결제 금액</th>
+				                    <th>결제 상태</th>
+				                    <th>결제 방법</th>
+				                    <th>결제 날짜</th>
 				                  </tr>
 				                </thead>
 				                <tbody>
-									<tr th:each="member, i : ${listMembers}">
+									<tr th:each="price, i : ${listPrices}">
 										<td>
-											<input type="checkbox" class="checkbox" name="target" th:value="${member.memberId}"/>
+											<input type="checkbox" class="checkbox" name="target" th:value="${price.PAYMENT_ID}"/>
 											<span class="checkbox__mark"></span>
 										</td>
-										<td>[[${i.index+1}]]</td>
-										<td>[[${member.memberId}]]</td>
-										<td>[[${member.email}]]</td>
-										<td>[[${member.username}]]</td>
-										<td>[[${member.emailValidate}]]</td>
-										<td>[[${member.loginMethod}]]</td>
-										<td>
-											<span></span>
-											<img th:if="${member.avatar != null}" class="rounded-circle" th:src="@{${member.getAvatarImagePath}}" style="width: 40px; height: 40px;" />
-											<img th:if="${member.avatar == null}" class="rounded-circle" th:src="@{/images/user.png}" style="width: 40px; height: 40px;" />
-										</td>
-										<td>[[${member.registeredAt}]]</td>
+										<td>[[${price.PAYMENT_CODE}]]</td>
+										<td>[[${price.NAME}]]</td>
+										<td>[[${price.TITLE}]]</td>
+										<td>[[${price.PRICE}]]</td>
+										<td>[[${price.PAYMENT_STATE}]]</td>
+										<td>[[${price.PAYMENT_METHOD}]]</td>
+										<td>[[${price.CREATED_AT}]]</td>
 									</tr>
 				                </tbody>
 							</table>
