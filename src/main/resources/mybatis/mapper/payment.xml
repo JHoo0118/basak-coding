@@ -13,7 +13,7 @@
 	
 	<!-- 강의 courses 내용 얻기  -->
 	<select id="listAll" parameterType="String" resultType="Map">
-		SELECT ca.name CAT_NAME, co.course_id, co.title, co.short_description, co.period, co.price, a.name ADM_NAME, a.avatar 
+		SELECT ca.name CAT_NAME, co.course_id, co.title, co.short_description, co.period, co.price, co.thumbnail, a.name ADM_NAME, a.avatar 
 		FROM courses co
 		JOIN category ca ON ca.category_id = co.category_id
 		JOIN admins a ON co.admin_id = a.admin_id WHERE co.course_id = #{courseId}
@@ -22,7 +22,7 @@
 	
 	<!-- 강의 결제내역 얻기  -->
 	<select id="priceList" parameterType="Map" resultType="Map">
-		SELECT pa.payment_method, pa.created_at, pa.payment_code, pa.phone_number, pa.name, pa.payment_id, pa.course_id, ca.name CAT_NAME, co.title, co.short_description, co.period, co.price, a.name ADM_NAME, a.avatar 
+		SELECT pa.payment_method, pa.created_at, pa.payment_code, pa.phone_number, pa.name, pa.payment_id, pa.course_id, ca.name CAT_NAME, co.title, co.short_description, co.thumbnail, co.period, co.price, a.name ADM_NAME, a.avatar 
 		FROM courses co
 		JOIN payment pa ON pa.course_id = co.course_id
 		JOIN category ca ON ca.category_id = co.category_id

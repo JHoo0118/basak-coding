@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.basakcoding.basak.service.CategoryDTO;
+import com.basakcoding.basak.service.CurriculumDTO;
 import com.basakcoding.basak.service.FileDTO;
 import com.basakcoding.basak.service.VideoDTO;
 
@@ -25,17 +26,27 @@ public interface CourseMapper {
 	// FAQ 만들기
 	int createFaq(Map map);
 
+	// 커리큘럼 만들기
 	int createCurri(Map map);
 
+	// 비디오 만들기
 	int createVideo(Map map);
 
+	// 파일 만들기
 	int createFile(Map map);
 	
+	// 비디오 개수 업데이트
 	int updateVideoCnt(Map map);
 
+	// 파일 목록 얻기
 	List<Map> getFileList(String videoId);
 
+	// 강의 아이디 얻기
 	String getCourseId(String videoId);
 
+	// 비디오 하나 얻기
 	VideoDTO getVideo(String videoId);
+
+	// 커리큘럼 및 비디오 목록 얻기
+	List<CurriculumDTO> getCurriculumList(String courseId);
 }

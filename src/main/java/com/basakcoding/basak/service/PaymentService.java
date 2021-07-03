@@ -35,10 +35,4 @@ public class PaymentService {
 	public int alreadyPayment(Map map) {
 		return paymentMapper.alreadyPayment(map);
 	}
-	
-	
-
-	
-	
-
 }
