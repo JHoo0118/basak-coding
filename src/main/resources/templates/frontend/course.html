@@ -9,13 +9,16 @@
 	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
 	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
 	
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.10.2/video-js.min.css" rel="stylesheet">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.10.2/video.min.js"></script>
+	<!-- videojs -->
+	<link href="https://unpkg.com/video.js/dist/video-js.min.css" rel="stylesheet">
+	<script src="https://unpkg.com/video.js/dist/video.min.js"></script>
 	
 	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
 	<script th:src="@{https://code.jquery.com/ui/1.12.1/jquery-ui.min.js}"></script>
   	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+	<!-- 모나코 에디터 -->
   	<script th:src="@{https://cdn.jsdelivr.net/npm/monaco-editor/min/vs/loader.js}"></script>
+  	
   	<!-- <script defer th:src="@{/js/monaco.js}"></script> -->
 </head>
 
@@ -314,16 +317,20 @@
     	<!-- 강의 메인 시작 -->
     	<div class="course__main">
     		<div class="row">
-    			<div class="col-md-6 pr-0">
+    			<div class="col-md-6 pr-0 ">
     				<!-- 비디오 -->
-					<div id="sublime_text">
-					  <video id="my_video_1" class="video-js vjs-sublime-skin" width="100%" height="100%"
-					      controls preload="none" th:poster="@{/images/image4.jpg}"
-					      data-setup='{ "aspectRatio":"16:9", "playbackRates": [0.5, 1, 1.25, 1.5, 2] }'>
+					  <video id="my_video_1" class="video-js vjs-fluid vjs-sublime-skin vjs-big-play-centered" width="100%" height="100%"
+					      controls preload="auto" th:poster="@{/images/image4.jpg}"
+					      data-setup='{ "aspectRatio":"16:9", "playbackRates": [0.5, 1, 1.25, 1.5, 2]}'>
+					    
+					    <source th:src="@{${video.getVideoPath}}" type='video/mp4' />
+					    <source src="@{/images/video.mp4}" type='video/webm' />
+					    <!--
 					    <source th:src="@{/images/video.mp4}" type='video/mp4' />
 					    <source src="https://vjs.zencdn.net/v/oceans.webm" type='video/webm' />
+					    -->
 					  </video>
-					</div>
+					  <div class="video__wrapper"></div>
 					<!-- 비디오 끝 -->
 					
 					<!-- 비디오 내용 -->
@@ -420,6 +427,7 @@
   </div>
 	<!-- 미니 브라우저 끝 -->
     <script>
+    
 		var INITIAL_CODE = `[(${fileList.get(0).INITIAL_CODE})]`;
 		var FILE_EXTENSION = `[(${fileList.get(0).FILE_EXTENSION})]`;
 		var FILENAME = `[(${fileList.get(0).FILENAME})]`;
@@ -449,9 +457,8 @@
     		miniBrowser.classList.add("none");
     		chrome.style.color = "#919191";
     	}
-
-    
-    	// 사이드바 처리
+    	
+  	    // 사이드바 처리
     	var sideContent = document.getElementById("sideContent");
     	var menuBtns = document.querySelectorAll('.item__button');
     	Array.prototype.slice.call(menuBtns).forEach(function(btn) {
@@ -485,7 +492,7 @@
     	var questionList = document.getElementById("questionList");
     	var questionSearchList = document.getElementById("questionSearchList");
     	var questionSearchInput = document.querySelector(".question__input");
-    	
+
     	// 질문 검색 시작
     	function queryQuestion() {
     		var questionHtml = `
@@ -627,6 +634,7 @@
 		  
 		  editorPreview.body.innerHTML = `[(${fileList.get(0).INITIAL_CODE})]`;
 		  editor.onDidChangeModelContent(() => {
+			  if (FILE_EXTENSION == 'html')
 				editorPreview.body.innerHTML = editor.getValue();
 		  });
 		
@@ -642,7 +650,6 @@
     	var fileArray = Array.prototype.slice.call(fileBtns);
     	
     	function getFileContent(btn, filename, fileExtension) {
-			monaco.editor.setModelLanguage(editor.getModel(), fileExtension);
 			if (btn.classList.contains("active")) {
 				return;
 			}
@@ -652,13 +659,14 @@
     				$.post({
     					url:"[[@{/class/autosave-code}]]",
     					data: {
-    						"videoId" : "[[${videoId}]]",
+    						"videoId" : "[[${video.videoId}]]",
     						"currFilename": FILENAME,
     						"currFileContent": editor.getValue(),
     						"nextFilename": filename,
     					},
     					success: function(data) {
     			    		editor.setValue(data);
+    						monaco.editor.setModelLanguage(editor.getModel(), fileExtension);
     					},
     				})
     				
@@ -677,7 +685,7 @@
         			// 나중에 videoId로 고쳐야함
     				url:"[[@{/class/initial-code}]]",
     				data: {
-    					"videoId" : "[[${videoId}]]",
+    					"videoId" : "[[${video.videoId}]]",
     					"filename": FILENAME
     				},
     				success: function() {

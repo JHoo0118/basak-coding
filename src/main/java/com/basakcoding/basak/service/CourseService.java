@@ -1,6 +1,5 @@
 package com.basakcoding.basak.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,5 +62,9 @@ public class CourseService {
 
 	public String getCourseId(String videoId) {
 		return courseMapper.getCourseId(videoId);
+	}
+
+	public VideoDTO getVideo(String videoId) {
+		return courseMapper.getVideo(videoId);
 	}
 }

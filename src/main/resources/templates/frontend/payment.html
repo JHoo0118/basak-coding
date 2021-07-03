@@ -55,11 +55,11 @@
                     <div class="form-group form__group p-0 position-relative">
                         <div class="p-0">
                             <input type="text" autocomplete="off"
-                                class="form-control form__input error input__payment input__payment--border"
+                                class="form-control form__input input__payment input__payment--border"
                                 placeholder="실명을 입력해주세요" name="name" id="name"/>
                         </div>
 	                    <!-- 에러 출력용 -->
-	                    <small class="error"></small>
+	                    <small></small>
                     </div>
                     <div class="form-group form__group p-0 position-relative">
                         <div class="p-0">
@@ -67,7 +67,7 @@
                                 class="form-control form__input input__payment input__payment--border"
                                 placeholder="핸드폰 번호를 입력해주세요" name="phone" id="phone"/>
                         </div>
-                        <small>결제 및 환불 정보 전달을 위해 휴대폰 번호 11자리(하이픈 제외)를 입력해주세요.</small>
+                        <small style="color:#fff;">결제 및 환불 정보 전달을 위해 휴대폰 번호 11자리(하이픈 제외)를 입력해주세요.</small>
                     </div>
 
                 </div>
@@ -179,7 +179,9 @@
 				m_redirect_url: 'https://www.yourdomain.com/payments/complete'
 				
 			}, function (rsp) {
+				var payment_code;
 				if ( rsp.success ) {
+					payment_code = rsp.imp_uid;
                 //[1] 서버단에서 결제정보 조회를 위해 jQuery ajax로 imp_uid 전달하기
                 jQuery.ajax({
                     url: "/payments/complete", //cross-domain error가 발생하지 않도록 주의해주세요
@@ -199,24 +201,26 @@
 						msg = '결제가 완료되었습니다.';
 						alert(msg);
 						//성공시 이동할 페이지
-	                	location.href="/orders/complete/{courseId}?payment_gid=ASDQWEWQFSD?";
+	                	location.href="/orders/complete/" + "[[${course.COURSE_ID}]]" + "?payment_gid=" + payment_code;
 					} else {
 						msg = '결제를 취소하였습니다. ';
 						msg += rsp.error_msg;
 						alert(msg);
 						//실패시 이동할 페이지
-						location.href="/orders/payments/{courseId}";
+						location.href="/orders/payments/" + "[[${course.COURSE_ID}]]";
+
 					}
 				});
-				//성공시 이동할 페이지
-	            location.href="/orders/complete/{courseId}?payment_gid=ASDQWEWQFSD?";
+				// 성공시 이동할 페이지
+	            // location.href="/orders/complete/{courseId}?payment_gid=" + payment_code;
 			
-			}else {
+			} else {
 				msg = '결제에 실패하였습니다. ';
 				msg += rsp.error_msg;
 				alert(msg);
 				//실패시 이동할 페이지
-				location.href="/orders/payments/{courseId}";
+				location.href="/orders/payments/" + "[[${course.COURSE_ID}]]";
+	
 			}
 		});
 	});

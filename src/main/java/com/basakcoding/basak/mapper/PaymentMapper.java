@@ -12,7 +12,7 @@ import com.basakcoding.basak.service.MemberDTO;
 public interface PaymentMapper {
 
 	//강의 내용
-	Map listAll();
+	Map listAll(String courseId);
 	
 	//결제 내역
 	Map priceList();

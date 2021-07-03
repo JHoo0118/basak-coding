@@ -24,7 +24,7 @@ public class PaymentController {
 	//로그인 아이디로 구매자 이메일 얻어오고 강사명, 수강기간등 얻어오기 
 	@GetMapping("/orders/payments/{courseId}")
 	public String payment(@PathVariable String courseId, Model model, Authentication auth) {
-		Map map = paymentService.listAll();
+		Map map = paymentService.listAll(courseId);
 		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
 		
 		MemberDTO memberDto = paymentService.getMemberById(memberId);

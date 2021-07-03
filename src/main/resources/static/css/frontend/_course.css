@@ -4,8 +4,10 @@
 	display: flex;
 	width: 100%;
 	padding-top: 6rem;
+	/*
 	overflow-y: hidden;
 	overflow-x: hidden;
+	*/
 }
 
 /* 사이드 바 */
@@ -206,9 +208,21 @@
 .course__main {
 	width: 100%;
 	height: 100%;
+	/*
 	overflow-x: hidden;
 	overflow-y: hidden;
+	*/
 }
+
+/* 비디오 부분 */
+.video__wrapper {
+	position:relative;
+	background-color: orange;
+	height: 300vh;
+	overflow-y: scroll !important;;
+}
+
+
 
 /* 모나코 에디터 시작 twilight theme */
 

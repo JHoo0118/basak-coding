@@ -13,8 +13,8 @@ public class PaymentService {
 	private PaymentMapper paymentMapper;
 	
 	//강의 내용
-	public Map listAll() {
-		return paymentMapper.listAll();
+	public Map listAll(String courseId) {
+		return paymentMapper.listAll(courseId);
 	}
 
 	//결제 내역

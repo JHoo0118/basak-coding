@@ -38,10 +38,10 @@
 }
 
 /* 메인 */
-.main {
+.main--home {
   position: relative;
   height: 100vh;
-  padding-top: 7rem;
+  padding-top: 6rem;
   flex-grow: 1;
 }
 
