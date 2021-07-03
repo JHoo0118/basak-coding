@@ -82,7 +82,6 @@ public class AuthController {
    }
    
  
-   
     @GetMapping("/doLogin")
       public @ResponseBody String kakaoCallback(String code) {//Data를 리턴해주는 컨트롤러 함수
          
@@ -164,9 +163,7 @@ public class AuthController {
          return response2.getBody();
          
       }
-    
-         
-   
+ 
     
     @PostMapping("/signup")
     public 	String signup(@RequestParam Map map , Model model) throws IOException{
@@ -243,16 +240,7 @@ public class AuthController {
       		return "frontend/signup";
       	}//else
     }/////signup
-    
-    @PostMapping("/signup3")
-    
-    
-    
-    @GetMapping("/email-information?code=")
-    public String emailvalidate() {
-    	
-    	return "redirect:/auth/personal/dashboard";
-    }
+   
     	
 
 	@PostMapping("/signup2")

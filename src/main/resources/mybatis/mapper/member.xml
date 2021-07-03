@@ -165,8 +165,10 @@
 	
 	<!-- 이메일로 emailvalidate값 얻기 -->
 	<update id="updateEmailValidate" parameterType="Map" >
-		UPDATE members SET email_validate='Y' WHERE email_Secret=#{code}
+		UPDATE members SET email_validate='Y',email_Secret=null WHERE email_Secret=#{code}
 	</update>
+	
+	
 	
 	
 </mapper>
