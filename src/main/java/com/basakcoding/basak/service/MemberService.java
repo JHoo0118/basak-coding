@@ -89,5 +89,38 @@ public class MemberService {
     public int userNameEdit(Map map) {
     	return memberMapper.userNameEdit(map);
     }
+    //비밀번호 변경하기
+    public int passwordEdit(Map map) {
+    	encodePassword(map);
+    	return memberMapper.passwordEdit(map);
+    }
+    //내 강의 가져오기
+	public List<Map> myCourses(int userId) {
+		return memberMapper.myCourses(userId);
+	}
+	//내 결제 정보
+	public List<Map> myPayment(int userId) {
+		return memberMapper.myPayment(userId);
+	}
+	//내 문의 제목,시간
+	public List<Map> myInquiry(int userId) {
+		return memberMapper.myInquiry(userId);
+	}
+	//내 결제 상세보기
+	public Map viewDetails(String userId,String pay_code) {
+		return memberMapper.viewDetails(userId,pay_code);
+	}
+	//내 문의 상세보기
+	public Map inquDetails(String userId, String title) {
+		return memberMapper.inquDetails(userId,title);
+	}
+	//내 댓글 제목,시간
+	public List<Map> myComments(int userId) {
+		return memberMapper.myComments(userId);
+	}
+	//내 댓글 상세보기
+	public Map commentsDetails(String userId, String commenTitle) {
+		return memberMapper.commentsDetails(userId,commenTitle);
+	}
 
 }

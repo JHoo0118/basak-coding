@@ -87,5 +87,65 @@
 		UPDATE members SET username=#{username} WHERE member_id=#{userId}
 	</update>
 	
+	<!-- 비밀번호 변경 -->
+	<update id="passwordEdit" parameterType="Map">
+		UPDATE members SET password=#{password} WHERE member_id=#{userId}
+	</update>
+	
+	<!-- 내 강의 가져오기 -->
+	<select id="myCourses" parameterType="int" resultType="Map">
+		select co.title,co.short_description,co.period,cu.name,a.name admin_name
+		from members m JOIN payment p ON m.member_id=p.member_id
+		JOIN courses co ON p.course_id=co.course_id 
+		JOIN curriculum cu ON co.course_id=cu.course_id
+		JOIN admins a ON co.admin_id=a.admin_id
+		where p.payment_state='결제 완료' AND m.member_id=#{userId}
+	</select>
+	
+	<!-- 내 결제정보 가져오기 -->
+	<select id="myPayment" parameterType="int" resultType="Map">
+		select p.*,co.period,co.title,p.created_at payment_created
+		from members m 
+		JOIN payment p ON m.member_id=p.member_id
+		JOIN courses co ON p.course_id=co.course_id
+		where p.payment_state='결제 완료' and m.member_id=#{userId}
+	</select>
+	
+	<!-- 내 결제 상세보기 -->
+	<select id="viewDetails" parameterType="String" resultType="Map">
+		select p.payment_code,co.title,co.period,m.email,p.created_at,
+		p.payment_method,p.price
+		from members m JOIN payment p ON m.member_id=p.member_id
+		JOIN courses co ON p.course_id=co.course_id
+		WHERE m.member_id=#{userId} AND p.payment_code=#{pay_code}
+	</select>
+	
+	<!-- 내 문의 제목,시간 -->
+	<select id="myInquiry" parameterType="int" resultType="Map">
+		select i.title,i.created_at
+		from members m JOIN inquiry i ON m.member_id=i.member_id
+		WHERE m.member_id=#{userId}
+	</select>
+	
+	<!-- 내 문의 상세보기 -->
+	<select id="inquDetails" parameterType="String" resultType="Map">
+		select i.*,m.username,c.name 
+		from members m JOIN inquiry i ON m.member_id=i.member_id
+		JOIN classification c ON i.cl_id = c.cl_id
+		WHERE m.member_id=#{userId} AND i.title=#{title}
+	</select>
+	
+	<!-- 내 댓글 제목,시간 -->
+	<select id="myComments" parameterType="int" resultType="Map">
+		 select co.content,co.created_at
+		 from members m JOIN comments co ON m.member_id=co.member_id
+		 WHERE m.member_id=${userId}
+	</select>
+	<!-- 
+	 댓글 상세보기
+	<select id="commentsDetails" parameterType="String" resultType="Map">
+		select m.username,co.title
+	</select>
+	 -->
 	
 </mapper>

@@ -53,86 +53,54 @@
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active row m-0 d-flex justify-content-between"
-                            id="pills-lecture">
-                            <div class="dashboard__card col-sm-6">
-                                <div class="card__header">
-                                    <div class="header__left">
-                                        <img th:src="@{/images/image4.jpg}" />
-                                        <div class="header__info">
-                                            <span>ETC</span>
-                                            <h4>Try Your CODE LION!</h4>
-                                        </div>
-                                    </div>
-                                    <div class="header__right">
-                                        <a th:href="@{/class/SANIOQWENIWN}"><i class="fa fa-play-circle"></i></a>
-                                    </div>
-                                </div>
-                                <p>코드라이언 코스 100% 활용하기</p>
-                                <div class="dashboard__progress">
-                                    <span>100%</span>
-                                    <div class="progress lecture__progress">
-                                        <div class="progress-bar progress__bar bg-success" role="progressbar"
-                                            style="width: 100%"></div>
-                                    </div>
-                                </div>
-                                <div class="dashboard__footer">
-                                    <h4>코드라이언</h4>
-                                    <span>2021.05.30~2021.06.12</span>
-                                </div>
-                            </div>
-                            <div class="dashboard__card col-sm-6">
-                                <div class="card__header">
-                                    <div class="header__left">
-                                        <img th:src="@{/images/image4.jpg}" />
-                                        <div class="header__info">
-                                            <span>ETC</span>
-                                            <h4>Try Your CODE LION!</h4>
-                                        </div>
-                                    </div>
-                                    <div class="header__right">
-                                        <a th:href="@{/class/SANIOQWENIWN}"><i class="fa fa-play-circle"></i></a>
-                                    </div>
-                                </div>
-                                <p>코드라이언 코스 100% 활용하기</p>
-                                <div class="dashboard__progress">
-                                    <span>100%</span>
-                                    <div class="progress lecture__progress">
-                                        <div class="progress-bar progress__bar bg-success" role="progressbar"
-                                            style="width: 100%"></div>
-                                    </div>
-                                </div>
-                                <div class="dashboard__footer">
-                                    <h4>코드라이언</h4>
-                                    <span>2021.05.30~2021.06.12</span>
-                                </div>
-                            </div>
-                            <div class="dashboard__card col-sm-6">
-                                <div class="card__header">
-                                    <div class="header__left">
-                                        <img th:src="@{/images/image4.jpg}" />
-                                        <div class="header__info">
-                                            <span>ETC</span>
-                                            <h4>Try Your CODE LION!</h4>
-                                        </div>
-                                    </div>
-                                    <div class="header__right">
-                                        <a th:href="@{/class/SANIOQWENIWN}"><i class="fa fa-play-circle"></i></a>
-                                    </div>
-                                </div>
-                                <p>코드라이언 코스 100% 활용하기</p>
-                                <div class="dashboard__progress">
-                                    <span>100%</span>
-                                    <div class="progress lecture__progress">
-                                        <div class="progress-bar progress__bar bg-success" role="progressbar"
-                                            style="width: 100%"></div>
-                                    </div>
-                                </div>
-                                <div class="dashboard__footer">
-                                    <h4>코드라이언</h4>
-                                    <span>2021.05.30~2021.06.12</span>
-                                </div>
-                            </div>
+                            id="pills-lecture" >
+                            <th:block th:if="${myCourses}!=null">
+	                            <div class="dashboard__card col-sm-6" th:each="myCourse :${myCourses}">
+	                                <div class="card__header" >
+	                                    <div class="header__left">
+	                                        <img th:src="@{/images/image4.jpg}" />
+	                                        <div class="header__info">
+	                                            <span>[[${myCourse.NAME}]]</span>
+	                                            <h4>[[${myCourse.TITLE}]]</h4>
+	                                        </div>
+	                                    </div>
+	                                    <div class="header__right">
+	                                        <a th:href="@{/class/SANIOQWENIWN}"><i class="fa fa-play-circle"></i></a>
+	                                    </div>
+	                                </div>
+	                                <p>[[${myCourse.SHORT_DESCRIPTION}]]</p>
+	                                <div class="dashboard__progress">
+	                                    <span>0%</span>
+	                                    <div class="progress lecture__progress">
+	                                        <div class="progress-bar progress__bar bg-success" role="progressbar"
+	                                            style="width: 100%"></div>
+	                                    </div>
+	                                </div>
+	                                <div class="dashboard__footer">
+	                                    <h4>[[${myCourse.ADMIN_NAME}]]</h4>
+	                                    <span>[[${myCourse.PERIOD}]]</span>
+	                                </div>
+	                            </div>
+	                        </th:block>
+                            <div class="d-flex justify-content-center w-100">
+	                            <div class="notExist" th:if="${myCourses}==null">
+	                                <div class="notExist__inner">
+	                                    <div class="inner__upper">
+	                                        <p>수강중인 강의가 없습니다.<br />
+	                                            오늘부터 학습을 시작해보세요!</p>
+	                                    </div>
+	                                    <div class="inner__lower">
+	                                        <a th:href="@{/catalog}">
+	                                            <i class="fas fa-angle-double-right"></i>
+	                                            <span>&nbsp;강의 둘러보기&nbsp;</span>
+	                                            <i class="fas fa-angle-double-right"></i>
+	                                        </a>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
                         </div>
+                        
                         <div class="tab-pane fade d-flex justify-content-center" id="pills-lecture-over">
                             <div class="notExist">
                                 <div class="notExist__inner">
