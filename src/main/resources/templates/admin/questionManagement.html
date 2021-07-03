@@ -25,7 +25,7 @@
 					<div class="row md-5 mb-5">
 						<div class="col-xl-12 col-12 mb-4 mb-xl-0">
 						
-						<h3 class="text-muted text-center mb-3">댓글 관리</h3>
+						<h3 class="text-muted text-center mb-3">질문 관리</h3>
 						<form name="actionForm" th:action="@{/admin/comment/management/change}">
 							<div class="form__header d-flex justify-content-between">
 								<div>
@@ -46,23 +46,23 @@
 				                  <tr class="text-muted">
 				                    <th>액션</th>
 				                    <th>#</th>
-				                    <th>질문</th>
-				                    <th>댓글</th>
+				                    <th>강의명</th>
+				                    <th>제목</th>
 				                    <th>작성자</th>
 				                    <th>작성 날짜</th>
 				                  </tr>
 				                </thead>
 				                <tbody>
-									<tr th:each="comment, i : ${listComments}">
+									<tr th:each="question, i : ${listQuestions}">
 										<td>
-											<input type="checkbox" class="checkbox" name="target" th:value="${comment.commentId}"/>
+											<input type="checkbox" class="checkbox" name="target" th:value="${question.questionId}"/>
 											<span class="checkbox__mark"></span>
 										</td>
 										<td>[[${i.index+1}]]</td>
-										<td>[[${comment.questionId}]]</td>
-										<td>[[${comment.content}]]</td>
-										<td>[[${comment.name}]][[${comment.username}]]</td>
-										<td>[[${comment.createdAt}]]</td>
+										<td>[[${question.courseTitle}]]</td>
+										<td>[[${question.questionTitle}]]</td>
+										<td>[[${question.userName}]]</td>
+										<td>[[${question.createdAt}]]</td>
 									</tr>
 				                </tbody>
 							</table>
@@ -74,10 +74,6 @@
 			</div>
 		</div>
 	</section>
-	<script>
-		if("[[${param.action}]]"=="stu"){
-			$("option[value=stu]").attr("selected","true");
-		}
-	</script>
+	
 </body>
 </html>

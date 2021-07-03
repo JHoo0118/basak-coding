@@ -30,7 +30,7 @@ public class AdminCommentController {
 		List<CommentDTO> listComments = commentService.adminSelect();
 		System.out.println(listComments.size());
 		model.addAttribute("listComments", listComments);
-		model.addAttribute("title", "관리자 댓글");
+		model.addAttribute("title", "댓글 관리");
 		return "admin/commentManagement";
 	}//commentList
 	
@@ -40,13 +40,13 @@ public class AdminCommentController {
 		if(map.get("action").equals("manage")) {
 		List<CommentDTO> listComments = commentService.adminSelect();
 		model.addAttribute("listComments", listComments);
-		model.addAttribute("title", "관리자");
+		model.addAttribute("title", "댓글 관리");
 		return "admin/commentManagement";
 		}	
 		else {
 			List<CommentDTO> listComments = commentService.memberSelect();
 			model.addAttribute("listComments", listComments);
-			model.addAttribute("title", "회원");
+			model.addAttribute("title", "댓글 관리");
 			return "admin/commentManagement";
 		}
 	}//commentList

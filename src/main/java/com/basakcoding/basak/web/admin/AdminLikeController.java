@@ -30,7 +30,7 @@ public class AdminLikeController {
 	public String likeList(Model model) {
 		List<LikeDTO> listLikes = likeService.courseSelect();
 		model.addAttribute("listLikes", listLikes);
-		model.addAttribute("title", "강의 좋아요");
+		model.addAttribute("title", "좋아요 관리");
 		return "admin/likeManagement";
 	}//likeList
 	
@@ -40,13 +40,13 @@ public class AdminLikeController {
 		if(map.get("action").equals("lec")) {
 		List<LikeDTO> listLikes = likeService.courseSelect();
 		model.addAttribute("listLikes", listLikes);
-		model.addAttribute("title", "강의 좋아요");
+		model.addAttribute("title", "좋아요 관리");
 		return "admin/likeManagement";
 		}	
 		else {
 			List<LikeDTO> listLikes = likeService.questionSelect();
 			model.addAttribute("listLikes", listLikes);
-			model.addAttribute("title", "질문 좋아요");
+			model.addAttribute("title", "좋아요 관리");
 			return "admin/likeManagement";
 		}
 	}//likeChange

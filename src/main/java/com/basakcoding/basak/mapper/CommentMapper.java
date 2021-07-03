@@ -12,8 +12,9 @@ import com.basakcoding.basak.service.CommentDTO;
 @Mapper
 public interface CommentMapper {
 
+	//관리자 댓글 정보 가져오기
 	public List<CommentDTO> adminSelect();
-
+	//회원 댓글 정보 가져오기
 	public List<CommentDTO> memberSelect();
 
 

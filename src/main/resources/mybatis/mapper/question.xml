@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.basakcoding.basak.mapper.QuestionMapper">
+	
+	<select id="questionSelect" resultType="QuestionDTO">
+		SELECT question_id,username,c.title coursetitle,q.title questiontitle,q.created_at
+		FROM question q
+		JOIN courses c ON c.course_id=q.course_id
+		JOIN members m ON q.member_id=m.member_id
+	</select>
+	
+</mapper>
