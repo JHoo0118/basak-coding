@@ -13,18 +13,27 @@ public class PaymentService {
 	private PaymentMapper paymentMapper;
 	
 	//강의 내용
-	public Map listAll() {
-		return paymentMapper.listAll();
+	public Map listAll(String courseId) {
+		return paymentMapper.listAll(courseId);
 	}
 
 	//결제 내역
-	public Map priceList() {
-		return paymentMapper.priceList();
+	public Map priceList(Map map) {
+		return paymentMapper.priceList(map);
 	}
 	
 	//구매자 아이디로 이메일 얻기
 	public MemberDTO getMemberById(String memberId) {
 		return paymentMapper.getMemberById(memberId);
+	}
+
+	public int insertPayment(Map map) {
+		return paymentMapper.insertPayment(map);
+		
+	}
+
+	public int alreadyPayment(Map map) {
+		return paymentMapper.alreadyPayment(map);
 	}
 	
 	

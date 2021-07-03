@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.basakcoding.basak.mapper.AdminMapper;
 
 @Service
-public class AdminService {
+public class PriceService {
 	
 	@Autowired
 	private AdminMapper adminMapper;
@@ -17,10 +17,11 @@ public class AdminService {
 //    @Autowired
 //    private PasswordEncoder passwordEncoder;
     
-    public List<AdminDTO> getAdminList() {
-    	return adminMapper.getAdminList();
-    }
+    public List<AdminDTO> getPriceList() {
+		return adminMapper.getPriceList();
+	}
 
+    /*
     // DTO를 통한 관리자 생성
     public int createAdmin(AdminDTO admin) {
 //    	encodePassword(admin);
@@ -63,6 +64,6 @@ public class AdminService {
 		return adminMapper.getAdminByName(name);
 	}
 
-
-
+     */
+	
 }

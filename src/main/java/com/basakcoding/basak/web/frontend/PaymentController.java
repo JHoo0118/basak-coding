@@ -1,5 +1,6 @@
 package com.basakcoding.basak.web.frontend;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.basakcoding.basak.service.MemberDTO;
 import com.basakcoding.basak.service.PaymentService;
@@ -24,7 +28,7 @@ public class PaymentController {
 	//로그인 아이디로 구매자 이메일 얻어오고 강사명, 수강기간등 얻어오기 
 	@GetMapping("/orders/payments/{courseId}")
 	public String payment(@PathVariable String courseId, Model model, Authentication auth) {
-		Map map = paymentService.listAll();
+		Map map = paymentService.listAll(courseId);
 		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
 		
 		MemberDTO memberDto = paymentService.getMemberById(memberId);
@@ -35,8 +39,6 @@ public class PaymentController {
 		} else {
 			map.put("AVATAR", null);
 		}
-		System.out.println(map);
-		System.out.println(courseId);
 		model.addAttribute("course", map);
 		
 		return "frontend/payment";
@@ -47,8 +49,11 @@ public class PaymentController {
 	//구매자 이름과 강사명, 결제 내역 얻어오기
 	@GetMapping("/orders/complete/{courseId}")
 	public String paymentResult(@PathVariable String courseId, Model model, Authentication auth) {
-		Map map = paymentService.priceList();
+		Map map2 = new HashMap();
 		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+		map2.put("courseId", courseId);
+		map2.put("memberId", memberId);
+		Map map = paymentService.priceList(map2);
 		
 		MemberDTO memberDto = paymentService.getMemberById(memberId);
 		map.put("USERNAME", memberDto.getUsername());
@@ -58,14 +63,33 @@ public class PaymentController {
 		} else {
 			map.put("AVATAR", null);
 		}
-		System.out.println(map);
-		System.out.println(courseId);
-		System.out.println(model);
 		model.addAttribute("course", map);
 		
 		return "frontend/paymentConfirm";
 	}
 	
+	//
+	@PostMapping("/payments/complete")
+	@ResponseBody
+	public String pymentsComplete (@RequestParam Map map, Authentication auth) {
+		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+		map.put("memberId", memberId);
+
+		int affected = paymentService.insertPayment(map);
+		if (affected == 1)
+			return "1";
+		return "-1";
+	}
 	
+	@PostMapping("/payments/check")
+	@ResponseBody
+	public String pymentsCheck (@RequestParam Map map, Authentication auth) {
+		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+		map.put("memberId", memberId);
+		int count = paymentService.alreadyPayment(map);
+		if (count >= 1)
+			return "-1";
+		return "1";
+	}
 	
 }

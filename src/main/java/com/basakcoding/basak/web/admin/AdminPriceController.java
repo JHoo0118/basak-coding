@@ -1,6 +1,7 @@
 package com.basakcoding.basak.web.admin;
 
 import java.io.IOException;
+
 import java.util.List;
 import java.util.Map;
 
@@ -19,41 +20,46 @@ import com.basakcoding.basak.service.AdminDTO;
 import com.basakcoding.basak.service.AdminRoleService;
 import com.basakcoding.basak.service.AdminService;
 import com.basakcoding.basak.service.MemberDTO;
+import com.basakcoding.basak.service.PriceRoleService;
+import com.basakcoding.basak.service.PriceService;
 import com.basakcoding.basak.service.RoleDTO;
 import com.basakcoding.basak.util.FileUploadUtil;
+
 //AdminPriceController
 @Controller
 @RequestMapping("/admin/price")
 public class AdminPriceController {
 
 	@Autowired
-	private AdminService adminService;
+	private PriceService priceService;
 	
 	@Autowired
-	private AdminRoleService adminRoleService;
+	private PriceRoleService priceRoleService;
 	
 	@GetMapping("/management")
 	public String memberList(Model model) {
-		List<AdminDTO> listAdmins = adminService.getAdminList();
-		model.addAttribute("listAdmins", listAdmins);
+		List<AdminDTO> listPrices = priceService.getPriceList();
+		model.addAttribute("listPrices", listPrices);
 		model.addAttribute("title", "강사 관리");
 		return "admin/priceManagement";
 	}
 	
+	/*
 	// 사용자 관리 폼 페이지
 	@GetMapping("/management/form")
 	public String memberForm(@RequestParam Map<String, String> map, Model model) {
 		String adminId = map.get("adminId");
 		AdminDTO admin = new AdminDTO();
 		if (adminId != null) {
-			admin = adminService.getAdminById(adminId);
+			admin = priceService.getAdminById(adminId);
 		}
-		List<RoleDTO> listRoles = adminRoleService.selectList();
-		model.addAttribute("listRoles", listRoles);
+		List<RoleDTO> priceRoles = priceRoleService.selectList();
+		model.addAttribute("priceRoles", priceRoles);
 		model.addAttribute("admin", admin);
 		model.addAttribute("title", "강사 관리");
 		return "admin/priceForm";
 	}
+	*/
 	
 	/*
 	// 사용자 생성 및 업데이트

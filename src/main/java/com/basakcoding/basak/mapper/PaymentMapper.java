@@ -12,12 +12,16 @@ import com.basakcoding.basak.service.MemberDTO;
 public interface PaymentMapper {
 
 	//강의 내용
-	Map listAll();
+	Map listAll(String courseId);
 	
 	//결제 내역
-	Map priceList();
+	Map priceList(Map map);
 	
 	//구매자 아이디로 이메일 얻기
 	MemberDTO getMemberById(String memberId);
+
+	int insertPayment(Map map);
+
+	int alreadyPayment(Map map);
 
 }

@@ -19,4 +19,7 @@ public interface AdminMapper {
 	int passwordEncoding(AdminDTO admin);
 	AdminDTO getAdminById(String adminId);
 	AdminDTO getAdminByName(String name);
+	
+	//관리자페이지- 결제관리  
+	List<AdminDTO> getPriceList();
 }

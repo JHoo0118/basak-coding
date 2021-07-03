@@ -137,6 +137,8 @@
 			var checkval = $("input[name=method1]");
 			var checkval2 = $("input[name=method2]");
 			var courseId = ("[[${course.COURSE_ID}]]");
+		
+			
 			console.log(checkval)
 			if(name == ""){
 				alert("이름을 입력하세요");
@@ -156,6 +158,22 @@
               alert(" 개인정보처리약관을 체크해주세요");
               return false;
             }
+            
+            $.post({
+                url: "/payments/check", //cross-domain error가 발생하지 않도록 주의해주세요
+                data: {
+					courseId: courseId,
+                    //기타 필요한 데이터가 있으면 추가 전달
+                },
+                success: function(data) {
+					if (data == "-1" ) {
+						msg = '이미 결제한 강의입니다.';
+						alert(msg);
+						//실패시 이동할 페이지
+						location.href="/personal/dashboard";
+					}
+				}
+			});
 			
 			var IMP = window.IMP; // 생략가능
 			var msg;
@@ -168,7 +186,7 @@
 				merchant_uid: 'merchant_' + new Date().getTime(),
 				
 				name: "[[${course.TITLE}]]",
-				courseId: "[[${course.COURSE_ID}]]",
+				courseId: courseId,
 				//결제창에서 보여질 이름
 				amount: price,
 				buyer_email: 'iamport@siot.do',
@@ -181,42 +199,41 @@
 			}, function (rsp) {
 				if ( rsp.success ) {
                 //[1] 서버단에서 결제정보 조회를 위해 jQuery ajax로 imp_uid 전달하기
-                jQuery.ajax({
+                var imp_uid = rsp.imp_uid;
+                $.post({
                     url: "/payments/complete", //cross-domain error가 발생하지 않도록 주의해주세요
-                    type: 'POST',
-                    dataType: 'json',
                     data: {
-						courseId: '[[${course.COURSE_ID}]]',
+						courseId: courseId,
                         imp_uid : rsp.imp_uid,
-                        price: rsp.paid_amount,
-                        phone_number: rsp.phone_number,
-                        name: rsp.name
+                        price: price,
+                        phone_number: phone,
+                        name: name
                         
                         //기타 필요한 데이터가 있으면 추가 전달
-                    }
-                }).done(function(data) {
-					if (rsp.success) {
-						msg = '결제가 완료되었습니다.';
-						alert(msg);
-						//성공시 이동할 페이지
-	                	location.href="/orders/complete/{courseId}?payment_gid=ASDQWEWQFSD?";
-					} else {
-						msg = '결제를 취소하였습니다. ';
-						msg += rsp.error_msg;
-						alert(msg);
-						//실패시 이동할 페이지
-						location.href="/orders/payments/{courseId}";
-					}
-				});
+                    },
+                    success: (function(data) {
+						if (data == "1") {
+							msg = '결제가 완료되었습니다.';
+							alert(msg);
+							//성공시 이동할 페이지
+		                	location.href="/orders/complete/"+"[[${course.COURSE_ID}]]"+"?payment_gid=" + imp_uid;						
+						} else {
+							msg = '결제에 실패하였습니다.';
+							alert(msg);
+							//실패시 이동할 페이지
+							location.href="/orders/payments/"+"[[${course.COURSE_ID}]]";
+						}
+					})
+                });
 				//성공시 이동할 페이지
-	            location.href="/orders/complete/{courseId}?payment_gid=ASDQWEWQFSD?";
+	            // location.href="/orders/complete/"+"[[${course.COURSE_ID}]]"+"?payment_gid=" + imp_uid;
 			
 			}else {
 				msg = '결제에 실패하였습니다. ';
 				msg += rsp.error_msg;
 				alert(msg);
 				//실패시 이동할 페이지
-				location.href="/orders/payments/{courseId}";
+				location.href="/orders/payments/"+"[[${course.COURSE_ID}]]";
 			}
 		});
 	});
