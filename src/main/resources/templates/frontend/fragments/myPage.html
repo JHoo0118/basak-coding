@@ -8,12 +8,11 @@
 				<label class="position-relative rounded-circle" for="userImage">
 					
 					<img th:if="${member.AVATAR == null}" id="userImg" th:src="@{/images/image4.jpg}" alt="프로필 이미지" />
-					<img th:if="${member.AVATAR != null}" id="userImg" th:src="@{/upload/}+${member.AVATAR}"
-						alt="프로필 이미지" />
+					<img th:if="${member.AVATAR != null}" id="userImg" th:src="@{${PATH}}"/>
 					<i class="fa fa-plus-circle"></i>
 				</label>
 			</div>
-			<h1 class="common__middle" th:text="${member.USERNAME}"></h1>
+			<h1 id="navusername" class="common__middle" th:text="${member.USERNAME}"></h1>
 			<div class="common__vertical"></div>
 			<div class="common__right row m-0">
 				<div class="right__box col-6">
@@ -36,8 +35,8 @@
 		</div>
 	<script>
 		$(document).ready(function () {
+			var upload = "[[${paymentCount}]]"	;		
 			var imgname = "[[${member.AVATAR}]]";
-			//console.log("userId:", "[[${member.AVATAR}]]");
 			$('#userImage').change(function (e) {
 				if($('#userImage')[0].files[0]==null) return;
 				var file = $('#userImage')[0].files[0];

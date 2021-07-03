@@ -11,7 +11,7 @@ import com.basakcoding.basak.service.MemberDTO;
 @Repository
 @Mapper
 public interface MemberMapper {
-	
+
 	// 테스트용
 	List<Map> selectListWithReview();
 	
@@ -50,4 +50,29 @@ public interface MemberMapper {
 
 	//내 닉네임 변경
 	int userNameEdit(Map map);
+
+	//비밀번호 변경
+	int passwordEdit(Map map);
+
+	//내 강의 가져오기 
+	List<Map> myCourses(int userId);
+
+	//내 결제 정보가져오기
+	List<Map> myPayment(int userId);
+
+	//내 문의 제목,시간
+	List<Map> myInquiry(int userId);
+	
+	//내 결제 상세
+	Map viewDetails(String userId,String pay_code);
+
+	//내 문의 상세
+	Map inquDetails(String userId, String title);
+
+	//내 댓글 제목,시간
+	List<Map> myComments(int userId);
+
+	//내 댓글 상세보기
+	Map commentsDetails(String userId, String commenTitle);
+
 }

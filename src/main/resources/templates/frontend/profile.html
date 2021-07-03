@@ -1,87 +1,203 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head>
 	<meta charset="UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>바삭 코딩 | 프로필</title>
 	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
-	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}" />
 	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
 	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
-  	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
-  	<script>
-  	$(document).ready(function(){
-	var userId ="[[${member.MEMBER_ID}]]";
-		//닉네임 수정
-		$('#usernamebtn').click(function(){
-			var username = $('#username').val();
-			var json = {"username":username,"userId":userId};
-			$.ajax({
-				url:'/personal/userprofile/edit.do',
-				data:JSON.stringify(json),
-				type:"POST",
-				contentType:"application/json; charset=UTF-8",
-				success:function(success){
-					if(success==1){
-						alert("닉네임이 변경되었습니다");
-						$('#username').val(username);
+	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+	<style>
+		.pModal__title {
+			font-size: 24px;
+			padding-top: 12px;
+			margin-left: 15px;
+		}
+
+		.pModal__close {
+			font-size: 24px;
+		}
+
+		.pForm__box {
+			position: relative;
+		}
+
+		.pForm__box .error {
+			position: absolute;
+			left: 0;
+			bottom: -20px;
+			font-size: 14px;
+			color: #f3981c;
+		}
+
+		.pass__input {
+			width: 100%;
+			height: 60px;
+			margin-bottom: 20px;
+			border-radius: 4px;
+			font-size: 18px;
+			padding-left: 12px;
+		}
+
+		.pass__input:focus {
+			border: 0;
+			box-shadow: none;
+			border: 1px solid #ced4da;
+		}
+
+		.pass__btn {
+			border: 2px solid #f3981c !important;
+			padding: 1.2rem 4rem;
+			background-color: transparent;
+			border-radius: 6px;
+			font-size: 1.8rem;
+			transition: all .4s;
+		}
+
+		.pass__btn:hover {
+			background-color: #f3981c;
+			color: #fff;
+
+		}
+
+		.btn__box {
+			display: flex;
+			justify-content: flex-end;
+		}
+	</style>
+	<script>
+
+		$(document).ready(function () {
+			var userId = "[[${member.MEMBER_ID}]]";
+			//닉네임 수정
+			$('#usernamebtn').click(function () {
+				var username = $('#username').val();
+				var json = {"username": username, "userId": userId};
+				$.ajax({
+					url: '/personal/userprofile/edit.do',
+					data: JSON.stringify(json),
+					type: "POST",
+					contentType: "application/json; charset=UTF-8",
+					success: function (success) {
+						if (success == 1) {
+							$('#username').val(username);
+							$('#navusername').text(username);
+							alert("닉네임이 변경되었습니다");
+						}
+						else if (success == -1)
+							alert("닉네임은 최대10자리입니다");
+					},
+					error: function () {
+						alert("닉네임변경에 실패했습니다 다시시도해주세요");
 					}
-					else if(success== -1)
-						alert("닉네임은 최대10자리입니다");
-				},
-				error:function(){
-					alert("닉네임변경에 실패했습니다 다시시도해주세요");
-					console.log("닉네임변경에 실패했습니다 다시시도해주세요");
-				}				
-			});
-		});
-		//비밀번호 수정버튼
-		$('#passbtn').click(function(){
-			var json={"userId":userId,"editpass":pass};
-			$.ajax({
-				url:'/personal/userprofile/edit.do',
-				data:JSON.stringify(json),
-				type:"POST",
-				contentType:"application/json; charset=UTF-8",
-				success:function(success){},
-				error:function(){
-					alert("비밀번호 변경에 실패했습니다 다시시도해주세요");
-					console.log("비밀번호변경에 실패했습니다 다시시도해주세요");
+				});
+			});//////////////////닉네임수정
+			//비밀번호 일치확인
+			$('#passbtn').click(function () {
+				if (oldpass != null) {
+					pass = {"pass": oldpass};
 				}
-			});
-		});
-	});
-  	//비밀번호 수정
-  	var userpass ="[[${member.PASSWORD}]]";
-		function passwordedit(){
-  			var pass = $('#userpass').val();
-			console.log(pass)
-			if(userpass==pass){
-				$('#passbtn').attr("disabled",false);
+				$.ajax({
+					url: '/personal/password/edit.do',
+					data: JSON.stringify(pass),
+					type: 'post',
+					contentType: "application/json; charset=UTF-8",
+					success: function (booleanpass) {
+						if (booleanpass == true) {
+							//비밀번호 변경 모달
+							$('#passwordModal').modal();
+						}
+						else if (booleanpass == false) {
+							alert("현재 비밀번호가 일치하지 않아요");
+						}
+					},
+					error: function () {
+						alert("오류가 발생했습니다 다시시도해주세요");
+					}
+				});
+			});////////////////비밀번호일치확인
+
+		});/////////////////document
+
+
+		//비밀번호 입력
+		var pass, oldpass;
+		function passwordedit() {
+			oldpass = $('#userpass').val();
+			if ((oldpass.length) < 4) {
+				$('#passerror').text("비밀번호는 4자이상입니다");
+				$('#userpass').addClass('error');
+				$('#passbtn').attr("disabled", true);
+			}
+			else if (oldpass.length >= 4) {
+				$('#passbtn').attr("disabled", false);
 				$('#userpass').removeClass('error');
 				$('#passerror').text("");
 			}
-			else{
-				$('#passerror').text("비밀번호가 일치하지 않아요");
-				$('#userpass').addClass('error');
-				$('#passbtn').attr("disabled",true);
+		};///////////비밀번호 입력
+		//비밀번호 변경 모달
+		function newpass() {
+			var newpass1 = $('#newpass1').val();
+			if (newpass1.length < 4) {
+				$('#newpasserror1').text("비밀번호는 4자이상입력해주세요.");
+
+				return false;
 			}
-		};
-  	
-  	</script>
+			else if (newpass1.length >= 4) {
+				$('#newpasserror1').text("");
+			}
+			var newpass2 = $('#newpass2').val();
+			if (newpass2 != "") {
+				if (newpass1 != newpass2) {
+					$('#newpasserror2').text("비밀번호가 일치하지 않습니다.");
+					return false;
+				}
+				else {
+					$('#newpasserror2').text("");
+				}
+			}
+			else return false;
+		};//////////비밀번호변경모달
+		//상세보기 정보
+		function detailsView() {
+			var payment_code = $('#viewDetails').text();
+			$.ajax({
+				url: '/personal/viewDetails.do',
+				data: {"payment_code": payment_code},
+				type: 'post',
+				dataType : "json",
+				success: function (data) {
+					$('#payCode').text(data.PAYMENT_CODE);
+					$('#coTitle').text(data.TITLE);
+					$('#payPeriod').text(data.PERIOD);
+					$('#memEmail').text(data.EMAIL);
+					$('#payCreated_at').text(data.CREATED_AT);
+					$('#payMethod').text(data.PAYMENT_METHOD);
+					$('#payPrice').text(data.PRICE);
+				},
+				error: function () {
+					alert("오류가 발생했습니다.다시시도해주세요");
+				}
+			});
+		}//상세보기
+
+	</script>
 </head>
 
 <body style="background-color: #1e1e1e;">
-   	<!-- Navbar -->
+	<!-- Navbar -->
 	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
 	<!-- 메인 섹션 시작 -->
-    <section class="dashboard">
-        <div class="container-fluid container--main">
-	<!-- mypage -->
+	<section class="dashboard">
+		<div class="container-fluid container--main">
+			<!-- mypage -->
 			<div th:insert="/frontend/fragments/mypage.html :: fragment-mypage"></div>
-	        <!-- 나의 프로필 시작 -->
-	        <nav class="dashboard__tab">
+			<!-- 나의 프로필 시작 -->
+			<nav class="dashboard__tab">
 				<div class="nav nav-tabs" id="nav-tab">
 					<a class="nav-link tab__link " th:href="@{/personal/dashboard}" href="/dashboard.html">나의
 						대시보드</a>
@@ -92,231 +208,247 @@
 				</div>
 			</nav>
 		</div>
-        <div class="tab-pane tab__page fade show tab__content">
-            <div class="container-fluid container--main">
-                <!-- 나의 계정 시작 -->
-                <ul class="nav nav-pills mb-3 row" id="pills-tab">
-                    <li class="nav-item tab__menu col-6 p-0">
-                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-account">나의
-                            계정</a>
-                        <i class="fas fa-circle"></i>
-                    </li>
-                    <li class="nav-item tab__menu col-6 p-0">
-                        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-payment">나의
-                            결제</a>
-                        <i class="fas fa-circle"></i>
-                    </li>
-                </ul>
-                <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active row m-0" id="pills-account">
-                        <div class="account__info row m-0">
-                            <div class="info__left col-sm-6">
-                                <h4>이메일</h4>
-                                <span>[[${member.EMAIL}]]</span>
-                            </div>
-                            <div class="info__right position-relative col-sm-6">
-                                <h4>소속</h4>
-                                <span>소속 없음</span>
-                            </div>
-                        </div>
-                        <div class="account__edit row m-0">
-                            <form class="col-md-6 edit__username">
-                                <div class="form-group form__group p-0 position-relative">
-                                    <div class="p-0">
-                                        <label class="labe__text">닉네임 변경</label>
-                                        <input id="username" type="text" autocomplete="off"
-                                            class="form-control form__input input__payment input__payment--border"
-                                            th:value="*{member.USERNAME}" placeholder="닉네임을 입력해 주세요" name="username" />
-                                    </div>
-				                    <!-- 에러 출력용 -->
-				                    <small class="error"></small>
-                                </div>
-                                <div class="flex__end">
-                                    <button id="usernamebtn"
-                                        class="button button--rounded button--sm button--orange editButton">수정하기</button>
-                                </div>
-                            </form>
-                            <form class="col-md-6 edit__password">
-                                <div class="form-group form__group p-0 position-relative">
-                                    <div class="p-0">
-                                        <label class="labe__text">비밀번호 변경</label>
-                                        <input id="userpass" oninput="passwordedit()" type="password" autocomplete="off"
-                                            class="form-control form__input input__payment input__payment--border"
-                                            placeholder="현재 비밀번호를 입력해 주세요" name="password" />
-                                    </div>
-				                    <!-- 에러 출력용 -->
-                                    <small id="passerror" class="error"></small>
-                                </div>
+		<div class="tab-pane tab__page fade show tab__content">
+			<div class="container-fluid container--main">
+				<!-- 나의 계정 시작 -->
+				<ul class="nav nav-pills mb-3 row" id="pills-tab">
+					<li class="nav-item tab__menu col-6 p-0">
+						<a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-account">나의
+							계정</a>
+						<i class="fas fa-circle"></i>
+					</li>
+					<li class="nav-item tab__menu col-6 p-0">
+						<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-payment">나의
+							결제</a>
+						<i class="fas fa-circle"></i>
+					</li>
+				</ul>
+				<div class="tab-content" id="pills-tabContent">
+					<div class="tab-pane fade show active row m-0" id="pills-account">
+						<div class="account__info row m-0">
+							<div class="info__left col-sm-6">
+								<h4>이메일</h4>
+								<span>[[${member.EMAIL}]]</span>
+							</div>
+							<div class="info__right position-relative col-sm-6">
+								<h4>소속</h4>
+								<span>소속 없음</span>
+							</div>
+						</div>
+						<div class="account__edit row m-0">
+							<div class="col-md-6 edit__username" method="post">
+								<div class="form-group form__group p-0 position-relative">
+									<div class="p-0">
+										<label class="labe__text">닉네임 변경</label>
+										<input id="username" type="text" autocomplete="off"
+											class="form-control form__input input__payment input__payment--border"
+											th:value="*{member.USERNAME}" placeholder="닉네임을 입력해 주세요" name="username" />
+									</div>
+									<!-- 에러 출력용 -->
+									<small class="error"></small>
+								</div>
+								<div class="flex__end">
+									<button id="usernamebtn"
+										class="button button--rounded button--sm button--orange editButton">수정하기</button>
+								</div>
+							</div>
+							<div class="col-md-6 edit__password">
+								<div class="form-group form__group p-0 position-relative">
+									<div class="p-0">
+										<label class="labe__text">비밀번호 변경</label>
+										<input id="userpass" oninput="passwordedit()" type="password" autocomplete="off"
+											class="form-control form__input input__payment input__payment--border"
+											placeholder="현재 비밀번호를 입력해 주세요" name="password" />
+									</div>
+									<!-- 에러 출력용 -->
+									<small id="passerror" class="error"></small>
+								</div>
 
-                                <div class="flex__end">
-                                    <button id="passbtn" class="button button--rounded button--sm button--orange editButton"
-                                        disabled>수정하기</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- 나의 계정 끝 -->
-                    <!-- 나의 결제 시작 -->
-                    <div class="tab-pane fade" id="pills-payment">
-                        <div class="payement__card row">
-                            <div class="payment__state col-sm-2">
-                                <div class="state__upper">
-                                    <span>결제완료</span></div>
-                                <div class="state__lower">
-                                    <h4>주문번호</h4>
-                                    <span>210530_7ddo8</span>
-                                </div>
-                            </div>
-                            <div class="payment__body col-sm-8">
-                                <div class="body__upper">
-                                    <div class="state__set">
-                                        <h4>코스정보</h4>
-                                        <span>Try Your CODE LION!</span>
-                                    </div>
-                                    <div class="state__set">
-                                        <h4>수강기간</h4>
-                                        <span>21.05.30 ~21.06.12</span>
-                                    </div>
-                                </div>
-                                <div class="body__lower">
-                                    <div class="state__set">
-                                        <h4>결제일자</h4>
-                                        <span>21.05.30</span>
-                                    </div>
-                                    <div class="state__set">
-                                        <h4>결제방법</h4>
-                                        <span>네이버페이</span>
-                                    </div>
-                                    <div class="state__set">
-                                        <h4>결제금액</h4>
-                                        <span>₩100</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="payment__detail col-sm-2">
-                                <a class="payment__modal" data-toggle="modal" data-target="#paymentModal">
-                                    상세보기
-                                </a>
-                            </div>
-                        </div>
-                        <div class="payement__card row">
-                            <div class="payment__state col-sm-2">
-                                <div class="state__upper">
-                                    <span>결제완료</span></div>
-                                <div class="state__lower">
-                                    <h4>주문번호</h4>
-                                    <span>210530_7ddo8</span>
-                                </div>
-                            </div>
-                            <div class="payment__body col-sm-8">
-                                <div class="body__upper">
-                                    <div class="state__set">
-                                        <h4>코스정보</h4>
-                                        <span>Try Your CODE LION!</span>
-                                    </div>
-                                    <div class="state__set">
-                                        <h4>수강기간</h4>
-                                        <span>21.05.30 ~21.06.12</span>
-                                    </div>
-                                </div>
-                                <div class="body__lower">
-                                    <div class="state__set">
-                                        <h4>결제일자</h4>
-                                        <span>21.05.30</span>
-                                    </div>
-                                    <div class="state__set">
-                                        <h4>결제방법</h4>
-                                        <span>네이버페이</span>
-                                    </div>
-                                    <div class="state__set">
-                                        <h4>결제금액</h4>
-                                        <span>₩100</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="payment__detail col-sm-2">
-                                <a class="payment__modal" data-toggle="modal" data-target="#paymentModal">
-                                    상세보기
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+								<div class="flex__end">
+									<button id="passbtn"
+										class="button button--rounded button--sm button--orange editButton"
+										disabled>수정하기</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 나의 계정 끝 -->
+					<!-- 나의 결제 시작 -->
+					<div class="tab-pane fade" id="pills-payment">
+						<th:block th:if="${myPayment}!=null">
+							<div class="payement__card row" th:each="myPayments :${myPayment}">
+								<div class="payment__state col-sm-2">
+									<div class="state__upper">
+										<span>[[${myPayments.PAYMENT_STATE}]]</span></div>
+									<div class="state__lower">
+										<h4>주문번호</h4>
+										<span id="viewDetails">[[${myPayments.PAYMENT_CODE}]]</span>
+									</div>
+								</div>
+								<div class="payment__body col-sm-8">
+									<div class="body__upper">
+										<div class="state__set">
+											<h4>코스정보</h4>
+											<span>[[${myPayments.TITLE}]]</span>
+										</div>
+										<div class="state__set">
+											<h4>수강기간</h4>
+											<span>[[${myPayments.PERIOD}]]</span>
+										</div>
+									</div>
+									<div class="body__lower">
+										<div class="state__set">
+											<h4>결제일자</h4>
+											<span>[[${myPayments.PAYMENT_CREATED}]]</span>
+										</div>
+										<div class="state__set">
+											<h4>결제방법</h4>
+											<span>[[${myPayments.PAYMENT_METHOD}]]</span>
+										</div>
+										<div class="state__set">
+											<h4>결제금액</h4>
+											<span>₩[[${myPayments.PRICE}]]</span>
+										</div>
+									</div>
+								</div>
+								<div class="payment__detail col-sm-2">
+									<a class="payment__modal" data-toggle="modal" data-target="#paymentModal"
+										onclick="detailsView()">
+										상세보기
+									</a>
+								</div>
+							</div>
+						</th:block>
+						<div class="d-flex justify-content-center w-100">
+							<div class="notExist" th:if="${myPayment}==null">
+								<div class="notExist__inner">
+									<div class="inner__upper">
+										<p>결제 내역이 없습니다.<br />
+											오늘부터 학습을 시작해보세요!</p>
+									</div>
+									<div class="inner__lower">
+										<a th:href="@{/catalog}">
+											<i class="fas fa-angle-double-right"></i>
+											<span>&nbsp;강의 둘러보기&nbsp;</span>
+											<i class="fas fa-angle-double-right"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- 나의 결제 끝 -->
+					</div>
+				</div>
+			</div>
+			<!-- 나의 프로필 끝 -->
+	</section>
+	<!-- 메인 섹션 끝 -->
 
-                    <!-- 나의 결제 끝 -->
-                </div>
-            </div>
-        </div>
-        <!-- 나의 프로필 끝 -->
-    </section>
-    <!-- 메인 섹션 끝 -->
+	<!-- footer -->
+	<footer class="footer">
+		<div class="d-flex justify-content-center align-items-center">
+			<p class="text-light py-4 m-0">
+				Copyright &copy;&nbsp;<span id="year"></span> by LIKE LION
+			</p>
+		</div>
+	</footer>
 
-    <!-- footer -->
-    <footer class="footer">
-        <div class="d-flex justify-content-center align-items-center">
-            <p class="text-light py-4 m-0">
-                Copyright &copy;&nbsp;<span id="year"></span> by LIKE LION
-            </p>
-        </div>
-    </footer>
+	<!-- 결제 정보 모달 시작 -->
+	<div class="modal fade" id="paymentModal">
+		<div class="modal-dialog pModal__dialog">
+			<div class="modal-content">
+				<div class="modal-header" style="border: none;">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body pModal__body">
+					<div class="pModal__header">
+						결제 상세 내역
+					</div>
+					<div class="pModal__receipt">
+						<h4 class="receipt__title">강의 및 구독 정보</h4>
+						<div class="receipt__row row m-0">
+							<div class="row__left col-4">주문번호</div>
+							<div id="payCode" class="row__right col-8"></div>
+						</div>
+						<div class="receipt__row row m-0">
+							<div class="row__left col-4">강의 및 구독명</div>
+							<div id="coTitle" class="row__right col-8"></div>
+						</div>
+						<div class="receipt__row row m-0">
+							<div class="row__left col-4">강의 및 구독 기간</div>
+							<div id="payPeriod" class="row__right col-8"></div>
+						</div>
+					</div>
+					<div class="pModal__receipt">
+						<h4 class="receipt__title">구매자 정보</h4>
+						<div class="receipt__row row m-0">
+							<div class="row__left col-4">이메일 주소</div>
+							<div id="memEmail" class="row__right col-8"></div>
+						</div>
+					</div>
+					<div class="pModal__receipt">
+						<h4 class="receipt__title">결제 정보</h4>
+						<div class="receipt__row row m-0">
+							<div class="row__left col-4">결제일</div>
+							<div id="payCreated_at" class="row__right col-8"></div>
+						</div>
+						<div class="receipt__row row m-0">
+							<div class="row__left col-4">결제 방법</div>
+							<div id="payMethod" class="row__right col-8"></div>
+						</div>
+						<div class="receipt__row row m-0">
+							<div class="row__left col-4">최종 결제 금액</div>
+							<div id="payPrice" class="row__right col-8"></div>
+						</div>
+					</div>
+					<div class="pModal__footer">
+						<h4>※ 환불은 페이지 하단 <span>[문의하기]</span>를 통해 이메일로 접수해주세요.</h4>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 결제 정보 모달 끝 -->
+	<!-- 변경할 비밀번호 받는 모달 -->
+	<div class="modal fade" id="passwordModal">
+		<div class="modal-dialog fModal__dialog">
+			<div class="modal-content fModal__body">
+				<div class="modal-header fModal__header">
+					<h3 class="pModal__title">비밀번호 변경</h3>
+					<button type="button" class="close" data-dismiss="modal">
+						<span class=pModal__close>&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-0">
+					<div class="fModal__box pass__box">
+						<form method="post" th:action="@{/personal/newpass/edit.do(userId=${member.MEMBER_ID})}"
+							onsubmit="return newpass()">
+							<div class="pForm__box">
+								<input oninput="newpass()" type="password" id="newpass1" name="newpass1"
+									class="form-control pass__input" autocomplete="off"
+									placeholder="변경할 비밀번호를 입력해 주세요" />
+								<span class="error" id="newpasserror1"></span>
+							</div>
 
-    <!-- 결제 정보 모달 시작 -->
-    <div class="modal fade" id="paymentModal">
-        <div class="modal-dialog pModal__dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="border: none;">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body pModal__body">
-                    <div class="pModal__header">
-                        결제 상세 내역
-                    </div>
-                    <div class="pModal__receipt">
-                        <h4 class="receipt__title">강의 및 구독 정보</h4>
-                        <div class="receipt__row row m-0">
-                            <div class="row__left col-4">주문번호</div>
-                            <div class="row__right col-8">210530_7ddo8</div>
-                        </div>
-                        <div class="receipt__row row m-0">
-                            <div class="row__left col-4">강의 및 구독명</div>
-                            <div class="row__right col-8">Try Your CODE LION!</div>
-                        </div>
-                        <div class="receipt__row row m-0">
-                            <div class="row__left col-4">강의 및 구독 기간</div>
-                            <div class="row__right col-8">21.05.30 ~ 21.06.12</div>
-                        </div>
-                    </div>
-                    <div class="pModal__receipt">
-                        <h4 class="receipt__title">구매자 정보</h4>
-                        <div class="receipt__row row m-0">
-                            <div class="row__left col-4">이메일 주소</div>
-                            <div class="row__right col-8">kik3078@naver.com</div>
-                        </div>
-                    </div>
-                    <div class="pModal__receipt">
-                        <h4 class="receipt__title">결제 정보</h4>
-                        <div class="receipt__row row m-0">
-                            <div class="row__left col-4">결제일</div>
-                            <div class="row__right col-8">2021.05.30 00:14:00</div>
-                        </div>
-                        <div class="receipt__row row m-0">
-                            <div class="row__left col-4">결제 방법</div>
-                            <div class="row__right col-8">무료 코스</div>
-                        </div>
-                        <div class="receipt__row row m-0">
-                            <div class="row__left col-4">최종 결제 금액</div>
-                            <div class="row__right col-8">₩0</div>
-                        </div>
-                    </div>
-                    <div class="pModal__footer">
-                        <h4>※ 환불은 페이지 하단 <span>[문의하기]</span>를 통해 이메일로 접수해주세요.</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- 결제 정보 모달 끝 -->
+							<div class="pForm__box">
+								<input oninput="newpass()" type="password" id="newpass2" name="newpass2"
+									class="form-control pass__input" autocomplete="off" placeholder="비밀번호 확인" />
+								<span class="error" id="newpasserror2"></span>
+							</div>
+							<div class="btn__box">
+								<button type="submit" id="passbtn" class="pass__btn">
+									<span>변경하기</span>
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 변경할 비밀번호 모달끝 -->
 </body>
 
 </html>
