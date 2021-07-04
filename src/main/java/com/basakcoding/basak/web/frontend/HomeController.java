@@ -16,7 +16,7 @@ public class HomeController {
 	public String home(Map map) {
 		/*
 		map.put("password", "1234");
-		map.put("userId", 1);
+		map.put("userId", 2);
 		int newpass=memberService.passwordEdit(map);
 		System.out.println("성공햇는가"+newpass);
 		*/

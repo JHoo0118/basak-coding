@@ -79,7 +79,11 @@ public interface MemberMapper {
 		
 	//사용자 emailvalidate 값 업데이트
 	int updateEmailValidate(Map map);
-
+	
+	//내 문의 상세답변없을때
 	Map inquDetailNotExist(String userId, String inquiry_id);
+
+	//내 질문
+	List<Map> myQuestion(int userId);
 
 }

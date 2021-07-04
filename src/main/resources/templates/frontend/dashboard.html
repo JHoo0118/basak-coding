@@ -58,7 +58,7 @@
 	                            <div class="dashboard__card col-sm-6" th:each="myCourse :${myCourses}">
 	                                <div class="card__header" >
 	                                    <div class="header__left">
-	                                        <img th:src="@{/images/image4.jpg}" />
+	                                        <img th:src="@{${myCourse.thumbnail}}" />
 	                                        <div class="header__info">
 	                                            <span>[[${myCourse.NAME}]]</span>
 	                                            <h4>[[${myCourse.TITLE}]]</h4>

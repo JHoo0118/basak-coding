@@ -84,6 +84,11 @@ public class MyPageController {
 		// 내강의
 		int userId = (int) model.getAttribute("userId");
 		List<Map> map = memberService.myCourses(userId);
+		for(Map map1:map) {
+			String thumbnail=("/upload/course/" + map1.get("COURSE_ID") + "/thumbnail/" + map1.get("THUMBNAIL"));
+			map1.put("thumbnail", thumbnail);
+		}
+		System.out.println("맵"+map);
 		if (!map.isEmpty())
 			model.addAttribute("myCourses", map);
 
@@ -104,19 +109,23 @@ public class MyPageController {
 	@GetMapping("/qAndA/questions")
 	public String qAndA(Model model, Authentication auth) {
 		userInfo(model, auth);
-		// 내 문의 제목,시간
 		int userId = (int) model.getAttribute("userId");
-		List<Map> map = memberService.myInquiry(userId);
+		//내 강의
+		List<Map> map =memberService.myQuestion(userId);
 		if (!map.isEmpty())
-			model.addAttribute("myInquiry", map);
-		// 내 댓글 제목,시간
-		List<Map> map1 = memberService.myComments(userId);
+			model.addAttribute("myQuestion",map);
+		// 내 문의 제목,시간
+		List<Map> map1 = memberService.myInquiry(userId);
 		if (!map1.isEmpty())
-			model.addAttribute("myComments", map1);
+			model.addAttribute("myInquiry", map1);
+		// 내 댓글 제목,시간
+		List<Map> map2 = memberService.myComments(userId);
+		if (!map2.isEmpty())
+			model.addAttribute("myComments", map2);
 		
 		return "frontend/qAndA";
 	}
-
+	//내 프로필 이미지 
 	@RequestMapping("/dashBoard/profileImgUpdate")
 	public @ResponseBody int profileImgUpdate(@RequestParam String imgname, @RequestParam MultipartFile file,
 			Authentication auth) throws IllegalStateException, IOException {
@@ -157,7 +166,7 @@ public class MyPageController {
 
 		return success;
 	}
-
+	//비밀번호 변경
 	@PostMapping("/newpass/edit.do")
 	public String newPass(@RequestParam Map map, Model model) {
 		map.put("password", map.get("newpass1"));
@@ -165,7 +174,7 @@ public class MyPageController {
 		model.addAttribute("passedit", newpass);
 		return "forward:/logout";
 	}
-
+	//로그아웃처리
 	@Controller
 	public class LogoutController {
 
@@ -179,8 +188,7 @@ public class MyPageController {
 		}
 
 	}//////////// LogoutController
-		// 상세보기 정보가져오기
-
+	//결제 상세보기 정보가져오기
 	@RequestMapping(value = "/viewDetails.do", method = RequestMethod.POST)
 	public @ResponseBody Map viewDetails(@RequestParam("payment_code") String payment_code, Model model,
 			Authentication auth) {
