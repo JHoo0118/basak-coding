@@ -16,6 +16,8 @@ public interface InquiryMapper {
 	public List<InquiryDTO> inquirySelect();
 	//문의 상세보기 가져오기 
 	public InquiryDTO selectOne(Map map);
+	//문의 삭제하기(1개)
+	public int deleteOne(Map map);
 
 
 }

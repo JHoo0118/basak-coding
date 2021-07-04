@@ -25,4 +25,9 @@ public class InquiryService {
 	public InquiryDTO selectOne(Map map) {
 		return inquiryMapper.selectOne(map);
 	}
+	
+	//문의 삭제하기(1개)
+	public int deleteOne(Map map) {
+		return inquiryMapper.deleteOne(map);
+	}
 }

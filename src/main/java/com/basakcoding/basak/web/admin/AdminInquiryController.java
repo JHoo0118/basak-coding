@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.basakcoding.basak.mapper.InquiryMapper;
 import com.basakcoding.basak.service.InquiryDTO;
+import com.basakcoding.basak.service.InquiryService;
 
 
 @Controller
@@ -22,12 +23,12 @@ import com.basakcoding.basak.service.InquiryDTO;
 public class AdminInquiryController {
 
 	@Autowired
-	InquiryMapper inquiryMapper;
+	InquiryService inquiryService;
 	
 	//문의 관리 화면으로 이동
 	@GetMapping("/management")
 	public String inquiryList(Model model) {
-		List<InquiryDTO> listInquirys = inquiryMapper.inquirySelect();
+		List<InquiryDTO> listInquirys = inquiryService.inquirySelect();
 		model.addAttribute("listInquirys", listInquirys);
 		model.addAttribute("title", "문의 관리");
 		return "admin/inquiryManagement";
@@ -35,10 +36,15 @@ public class AdminInquiryController {
 	
 	@RequestMapping("/management/view")
 	public String inquiryView(@RequestParam Map map,Model model) {
-		InquiryDTO dto = inquiryMapper.selectOne(map);
+		InquiryDTO dto = inquiryService.selectOne(map);
 		model.addAttribute("inquiry", dto);
 		model.addAttribute("title", "문의 관리");
-		return"admin/inquiryView";
+		return "admin/inquiryView";
 	}//문의 상세보기
 
+	@RequestMapping("/management/deleteone")
+	public String deleteInquiryOne(@RequestParam Map map) {
+		int flag = inquiryService.deleteOne(map);
+		return "forward:/admin/inquiry/management";
+	}
 }//class

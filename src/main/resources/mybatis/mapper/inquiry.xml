@@ -19,7 +19,12 @@
 		FROM inquiry i
 		JOIN classification c ON c.cl_id=i.cl_id
 		JOIN members m ON i.member_id=m.member_id
-		WHERE inquiry_id=1
+		WHERE inquiry_id=#{no}
 	</select>
+	
+	<!-- 상세보기 -->
+	<delete id="deleteOne" parameterType="Map">
+		DELETE inquiry WHERE inquiry_id=#{no}
+	</delete>
 	
 </mapper>
