@@ -49,4 +49,7 @@ public interface CourseMapper {
 
 	// 커리큘럼 및 비디오 목록 얻기
 	List<CurriculumDTO> getCurriculumList(String courseId);
+
+	// 봤는지 여부 파악
+	int isSeen(Map params);
 }

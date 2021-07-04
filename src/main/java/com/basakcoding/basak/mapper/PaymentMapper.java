@@ -27,6 +27,14 @@ public interface PaymentMapper {
 	
 	//관리자페이지- 결제관리  
 	List<Map> getPriceList();
+
+	// 강의 아이디로 모든 비디오 아이디 가져오기
+	List<String> getAllVideoIds(String courseId);
+
+	// 비디오 기록용
+	int insertVideoRecord(Map params);
+
+	List<String> getFilenameList(String videoId);
 		
 
 }

@@ -192,7 +192,7 @@ public class AdminCourseController {
 					
 					String uploadFileDir = "upload/course/" + courseId +"/file";
 					FileUploadUtil.saveFile(uploadFileDir, fileUri, fileMulti);
-					FileUploadUtil.saveFile(uploadFileDir, "copy-"+fileUri, fileMulti);
+//					FileUploadUtil.saveFile(uploadFileDir, "copy-"+fileUri, fileMulti);
 				}
 			}
 			

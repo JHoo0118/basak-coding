@@ -254,8 +254,8 @@
 	cursor: pointer;
 }
 
-.nav__file .file__folder .fa-chrome,
-.nav__file .file__folder .fa-circle-notch {
+.nav__file .file__folder .fas,
+.nav__file .file__folder .fab {
 	color: #919191;
 	font-size: 20px;
 }

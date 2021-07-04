@@ -84,18 +84,36 @@ public class MyPageController {
 		// 내강의
 		int userId = (int) model.getAttribute("userId");
 		List<Map> map = memberService.myCourses(userId);
+		Map params = new HashMap();
+		params.put("memberId", userId);
 		for(Map map1:map) {
 			String courseId= map1.get("COURSE_ID").toString();
+			params.put("courseId", courseId);
 			//다본 동영상 개수 가져오기
-			int videoCount= memberService.videoCount(courseId);
+			
+			int videoCount= memberService.videoCount(params);
 			String thumbnail=("/upload/course/" + courseId + "/thumbnail/" + map1.get("THUMBNAIL"));
-			String courseVideoid= memberService.courseVideo(courseId);
-			if(courseVideoid!=null) {
-				map1.put("courseVideoid",courseVideoid);
+
+			String courseVideoId = null;
+			List<String> curriculumIds = memberService.getCurriculum(courseId);
+			
+			// 마지막 커리큘럼의 아이디
+			String lastCurriculumId = curriculumIds.get(curriculumIds.size()-1);
+			
+			// 마지막 비디오 아이디
+			String lastVideoId = memberService.getLastVideo(lastCurriculumId);
+
+			for (int i=0; i<curriculumIds.size(); i++) {
+				params.put("curriculumId", curriculumIds.get(i));
+				courseVideoId = memberService.getVideo(params);
+				if (courseVideoId != null) break;
+			}
+			
+			if(courseVideoId!=null) {
+				map1.put("courseVideoid",courseVideoId);
 			}
 			else {
 				//마지막 동영상 아이디
-				String lastVideoId=memberService.lastVideoId(courseId);
 				map1.put("courseVideoid", lastVideoId);
 			}
 			map1.put("progress",(int)(Math.ceil(videoCount*100/Double.parseDouble((map1.get("VIDEO_COUNT").toString())))));

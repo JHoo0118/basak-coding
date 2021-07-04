@@ -1,5 +1,12 @@
 package com.basakcoding.basak.util;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -55,5 +62,33 @@ public class FileUploadUtil {
 			return;
 		}
 		Files.delete(Paths.get(dir));
+	}
+	
+	public static void copyFile(String originDir, String copyDir) throws IOException {
+		Path copyFileDir = Paths.get(copyDir);
+		Path originFileDir = Paths.get(originDir);
+		
+		String copyFilePath = copyFileDir.toFile().getAbsolutePath();
+		String originFilePath = originFileDir.toFile().getAbsolutePath();
+		
+		File copyFile = new File(copyFilePath);
+		File originFile = new File(originFilePath);
+		
+		// 현재 파일 내용 초기화
+		
+		BufferedReader br = new BufferedReader(new FileReader(originFile.getAbsolutePath()));
+		BufferedWriter bw = new BufferedWriter(new FileWriter(copyFile.getAbsolutePath()));
+		
+		String data;
+		StringBuilder sb = new StringBuilder();
+		while ((data=br.readLine()) != null) {
+			bw.write(data);
+			bw.newLine();
+			sb.append(data);
+			sb.append("\r\n");
+			bw.flush();
+		}
+		bw.close();
+		br.close();
 	}
 }
