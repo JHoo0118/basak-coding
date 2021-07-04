@@ -4,12 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.basakcoding.basak.mapper.FileMapper">
-	<select id="videoSelect" resultType="VideoDTO">
-		SELECT video_id,c.name curriculumName,video_length,video_title
-		FROM video v
-		JOIN curriculum c ON c.curriculum_id=v.curriculum_id
-	</select>
-	<select id="FileSelect" resultType="FileDTO">
+	<select id="fileSelect" resultType="FileDTO">
 		SELECT file_id,v.name curriculumname,filename,video_title
 		FROM files f
 		JOIN (SELECT * FROM video v JOIN curriculum c ON v.curriculum_id=c.curriculum_id) v ON v.video_id=f.video_id

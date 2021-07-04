@@ -13,24 +13,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.basakcoding.basak.service.VideoDTO;
-import com.basakcoding.basak.service.VideoService;
+import com.basakcoding.basak.service.FileDTO;
+import com.basakcoding.basak.service.FileService;
 import com.basakcoding.basak.util.FileUploadUtil;
 
 @Controller
-@RequestMapping("/admin/video")
-public class AdminVideoController {
+@RequestMapping("/admin/file")
+public class AdminFileController {
 
 	@Autowired
-	VideoService videoService;
+	FileService fileService;
 	
 	// 비디오 관리 화면으로 이동
 	@GetMapping("/management")
-	public String videoList(Model model) {
-		List<VideoDTO> listVideos = videoService.videoSelect();
-		model.addAttribute("listVideos", listVideos);
-		model.addAttribute("title", "동영상 관리");
-		return "admin/videoManagement";
+	public String fileList(Model model) {
+		List<FileDTO> listFiles = fileService.fileSelect();
+		model.addAttribute("listFiles", listFiles);
+		model.addAttribute("title", "파일 관리");
+		return "admin/fileManagement";
 	}//videoList
 	
 	

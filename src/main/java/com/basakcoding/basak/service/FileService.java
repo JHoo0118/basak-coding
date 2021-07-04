@@ -6,18 +6,18 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.basakcoding.basak.mapper.VideoMapper;
+import com.basakcoding.basak.mapper.FileMapper;
 
 @Service
-public class VideoService {
+public class FileService {
 	
 	//맵퍼 주입
 	@Autowired
-	private VideoMapper videoMapper;
+	private FileMapper fileMapper;
 	
 	//비디오
-	public List<VideoDTO> videoSelect(){
-		return videoMapper.videoSelect();
+	public List<FileDTO> fileSelect(){
+		return fileMapper.fileSelect();
 	}
 	
 }
