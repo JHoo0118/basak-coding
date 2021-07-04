@@ -45,7 +45,7 @@
 		<selectKey keyProperty="videoId" resultType="int" order="BEFORE">
 			SELECT seq_video.NEXTVAL FROM dual
 		</selectKey>
-		INSERT INTO video VALUES(#{videoId}, #{curriculumId}, #{videoUri}, #{videoLength}, null, #{videoTitle}, DEFAULT, #{videoContent})
+		INSERT INTO video VALUES(#{videoId}, #{curriculumId}, #{videoUri}, #{videoLength}, null, #{videoTitle}, #{videoContent})
 	</insert>
 	
 	<!-- 파일 생성 -->
@@ -65,7 +65,7 @@
 	
 	<!-- 비디오 아이디로 강의 아이디 가져오기 -->
 	<select id="getCourseId" parameterType="String" resultType="String">
-		SELECT cu.course_id FROM video v RIGHT JOIN curriculum cu 
+		SELECT cu.course_id FROM video v JOIN curriculum cu 
 		ON v.curriculum_id = cu.curriculum_id WHERE video_id = #{videoId}
 	</select>
 	
@@ -93,5 +93,9 @@
        	SELECT * FROM video WHERE curriculum_id = #{curriculums} ORDER BY video_id
     </select>
     
+    <select id="isSeen" parameterType="map" resultType="int">
+    	SELECT COUNT(*) FROM videoMember WHERE 
+    	video_id = #{videoId} AND member_id = #{memberId} AND seen = 'Y'
+    </select>
 	
 </mapper>

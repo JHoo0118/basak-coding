@@ -1,6 +1,8 @@
 package com.basakcoding.basak.web.frontend;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.basakcoding.basak.service.MemberDTO;
 import com.basakcoding.basak.service.PaymentService;
+import com.basakcoding.basak.util.FileUploadUtil;
 
 
 
@@ -78,13 +81,28 @@ public class PaymentController {
 	//
 	@PostMapping("/payments/complete")
 	@ResponseBody
-	public String paymentsComplete (@RequestParam Map map, Authentication auth) {
+	public String paymentsComplete (@RequestParam Map map, Authentication auth) throws IOException {
 		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
 		map.put("memberId", memberId);
 
 		int affected = paymentService.insertPayment(map);
-		if (affected == 1)
+		if (affected == 1) {
+			String courseId = map.get("courseId").toString();
+			List<String> videoIds = paymentService.getAllVideoIds(courseId);
+			Map params = new HashMap();
+			params.put("memberId", memberId);
+			for (int i=0; i<videoIds.size(); i++) {
+				params.put("videoId", videoIds.get(i));
+				int result = paymentService.insertVideoRecord(params);
+				List<String> filenameList = paymentService.getFilenameList(videoIds.get(i));
+				for (String filename : filenameList) {
+					String copyFileDirName = "upload/course/" + courseId + "/file/copy-" + memberId + "-" + filename;
+					String originFileDirName =  "upload/course/" + courseId + "/file/" + filename;
+					FileUploadUtil.copyFile(originFileDirName, copyFileDirName);
+				}
+			}
 			return "1";
+		}
 		return "-1";
 	}
 	

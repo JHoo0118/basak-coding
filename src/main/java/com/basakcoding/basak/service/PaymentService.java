@@ -1,5 +1,6 @@
 package com.basakcoding.basak.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +35,17 @@ public class PaymentService {
 
 	public int alreadyPayment(Map map) {
 		return paymentMapper.alreadyPayment(map);
+	}
+
+	public List<String> getAllVideoIds(String courseId) {
+		return paymentMapper.getAllVideoIds(courseId);
+	}
+
+	public int insertVideoRecord(Map params) {
+		return paymentMapper.insertVideoRecord(params);
+	}
+
+	public List<String> getFilenameList(String videoId) {
+		return paymentMapper.getFilenameList(videoId);
 	}
 }

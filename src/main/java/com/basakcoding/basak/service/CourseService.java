@@ -71,4 +71,8 @@ public class CourseService {
 	public List<CurriculumDTO> getCurriculumList(String courseId) {
 		return courseMapper.getCurriculumList(courseId);
 	}
+
+	public int isSeen(Map params) {
+		return courseMapper.isSeen(params);
+	}
 }

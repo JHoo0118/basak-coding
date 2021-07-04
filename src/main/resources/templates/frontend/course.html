@@ -332,14 +332,26 @@
     					<nav class="nav--file">
 						  <ul class="nav nav__file">
 							<!-- 미니브라우저 열기 버튼 -->
-						  	<li onclick="toggleMinibrowserModal()" class="file__folder" style="border-bottom: 1px solid #5a5c65;"><i class="fab fa-chrome"></i></li>
+						  	<li onclick="toggleMinibrowserModal()" class="file__folder" style="border-bottom: 1px solid #5a5c65;" ><i class="fab fa-chrome"></i></li>
 						    <li class="file__item" th:each="file, i : ${fileList}">
 						    	<a th:onclick="getFileContent(this, [[${file.FILENAME}]], [[${file.FILE_EXTENSION}]])" th:classappend="${i.index == 0} ? active" class="file__tab" href="javascript:void(0)">[[${file.FILENAME}]]</a>
+						    </li>
 						    
-						    </li>
-						    <li onclick="initializationCode()" class="file__folder">
-						    	<i class="fas fa-circle-notch"></i>
-						    </li>
+						    <li class="dropdown bg-transparent">
+					            <button class="dropdown--btn file__folder bg-transparent" type="button" id="dropdownMenuButton"
+					              style="height: 100%" data-toggle="dropdown">
+					            	<i class="fas fa-ellipsis-v dropdown--btn file__folder bg-transparent"></i>
+					            </button>
+					            <div class="dropdown-menu dropdown__menu" style="width:auto">
+					                <a href="javascript:void(0)" onclick="initializationCode()" class="file__folder d-inline-block">
+								    	<i class="fas fa-save"></i>
+								    </a>
+					                <a href="javascript:void(0)" onclick="initializationCode()" class="file__folder d-inline-block">
+								    	<i class="fas fa-circle-notch"></i>
+								    </a>
+					            </div>
+				            </li>
+						    
 						    <!--
 						    <li id="file-1" class="file__item"><a class="file__tab" href="javascript:void(0)">index.html</a></li>
 						    <li id="file-2" class="file__item"><a class="file__tab" href="javascript:void(0)">styles.css</a></li>
@@ -486,6 +498,11 @@
 	<!-- 문의 작성 모달 끝 -->
 	
     <script>
+    
+    	// 툴팁
+    	$(function () {
+			$('[data-toggle="tooltip"]').tooltip()
+		})
     
 		var INITIAL_CODE = `[(${fileList.get(0).INITIAL_CODE})]`;
 		var FILE_EXTENSION = `[(${fileList.get(0).FILE_EXTENSION})]`;
