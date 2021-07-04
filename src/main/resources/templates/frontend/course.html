@@ -102,7 +102,7 @@
 			   						<i th:classappend="${video.seen} == 'N' ? none" class="list__icon fas fa-check-circle" style="color:#0fd"></i>
 				   					<div class="curr__box">
 				   						<h3 class="curr__title">[[${video.videoTitle}]]</h3>
-				   						<h3 class="curr__time">[[${video.videoLength}]]</h3>
+				   						<h3 class="curr__time" >[[${video.videoLength}]]</h3>
 				   					</div>
 	   							</a>
 		   					</li>
@@ -332,7 +332,7 @@
     					<nav class="nav--file">
 						  <ul class="nav nav__file">
 							<!-- 미니브라우저 열기 버튼 -->
-						  	<li onclick="toggleMinibrowserModal()" class="file__folder" style="border-bottom: 1px solid #5a5c65;" ><i class="fab fa-chrome"></i></li>
+						  	<li onclick="toggleMinibrowserModal()" class="file__folder" style="border-bottom: 1px solid #5a5c65;" ><i class="fab fa-chrome" data-toggle="tooltip" data-placement="bottom" title="미니 브라우저"></i></li>
 						    <li class="file__item" th:each="file, i : ${fileList}">
 						    	<a th:onclick="getFileContent(this, [[${file.FILENAME}]], [[${file.FILE_EXTENSION}]])" th:classappend="${i.index == 0} ? active" class="file__tab" href="javascript:void(0)">[[${file.FILENAME}]]</a>
 						    </li>
@@ -340,13 +340,13 @@
 						    <li class="dropdown bg-transparent">
 					            <button class="dropdown--btn file__folder bg-transparent" type="button" id="dropdownMenuButton"
 					              style="height: 100%" data-toggle="dropdown">
-					            	<i class="fas fa-ellipsis-v dropdown--btn file__folder bg-transparent"></i>
+					            	<i class="fas fa-ellipsis-v dropdown--btn file__folder bg-transparent" data-toggle="tooltip" data-placement="bottom" title="여러가지 기능"></i>
 					            </button>
-					            <div class="dropdown-menu dropdown__menu" style="width:auto">
-					                <a href="javascript:void(0)" onclick="initializationCode()" class="file__folder d-inline-block">
+					            <div class="dropdown-menu dropdown__menu p-0" style="width:auto">
+					                <a href="javascript:void(0)" onclick="saveCode()" class="file__folder file__dropmenu" data-toggle="tooltip" data-placement="top" title="저장하기">
 								    	<i class="fas fa-save"></i>
 								    </a>
-					                <a href="javascript:void(0)" onclick="initializationCode()" class="file__folder d-inline-block">
+					                <a href="javascript:void(0)" onclick="initializationCode()" class="file__folder file__dropmenu"  data-toggle="tooltip" data-placement="top" title="코드 초기화">
 								    	<i class="fas fa-circle-notch"></i>
 								    </a>
 					            </div>
@@ -769,6 +769,19 @@
     				},
     			});
     		}
+    	}
+    	
+    	// 코드 저장
+    	function saveCode() {
+    		$.post({
+    			// 나중에 videoId로 고쳐야함
+				url:"[[@{/class/save-code}]]",
+				data: {
+					"videoId" : "[[${currVideo.videoId}]]",
+					"currFilename": FILENAME,
+					"currFileContent": editor.getValue(),
+				}
+			});
     	}
 
 		function copyToClipboard(str) {

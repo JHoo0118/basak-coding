@@ -34,6 +34,7 @@ import com.basakcoding.basak.service.CourseService;
 import com.basakcoding.basak.service.CurriculumDTO;
 import com.basakcoding.basak.service.FileDTO;
 import com.basakcoding.basak.service.VideoDTO;
+import com.basakcoding.basak.util.FileUploadUtil;
 
 @Controller
 public class CourseController {
@@ -58,6 +59,11 @@ public class CourseController {
 		for (int i=0; i<curriculumList.size(); i++) {
 			for (VideoDTO v : curriculumList.get(i).getVideos()) {
 				params.put("videoId", v.getVideoId());
+				int videoLength = Integer.parseInt(v.getVideoLength());
+				int mins = videoLength/60;
+				int secs = videoLength%60;
+				String timeFormat = "" + (mins < 10 ? "0" + mins : mins) + ":" + (secs < 10 ? "0" + secs : secs);
+				v.setVideoLength(timeFormat);
 				int result = courseService.isSeen(params);
 				if (result == 1) v.setSeen('Y');
 				else v.setSeen('N');
@@ -187,5 +193,22 @@ public class CourseController {
 		br.close();
 		bw.close();
 		return nextFileContent.toString();
+	}
+	
+	@PostMapping("/class/save-code")
+	@ResponseBody
+	public void saveCode(@RequestParam Map<String, String> map, Authentication auth) throws IOException {
+		String courseId = courseService.getCourseId(map.get("videoId"));
+		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+		
+		String currFilename = map.get("currFilename");
+		String currFileDirName = "upload/course/" + courseId + "/file/copy-" + memberId + "-" + currFilename;
+	
+		Path currFileDir = Paths.get(currFileDirName);
+		String currFilePath = currFileDir.toFile().getAbsolutePath();
+		File currFile = new File(currFilePath);
+		BufferedWriter bw = new BufferedWriter(new FileWriter(currFile.getAbsolutePath()));
+		bw.write(map.get("currFileContent"));
+		bw.close();
 	}
 }

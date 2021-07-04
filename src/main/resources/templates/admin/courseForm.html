@@ -211,11 +211,11 @@
 			var fileURL = URL.createObjectURL(this.files[0]);
 			vid.src = fileURL;
 			vid.ondurationchange = function() {
-				alert(this.duration);
+				// alert(this.duration);
 				var array = name.split("-");
 				var videoLengthInputName = "videoLength" + '-' + array[1] + '-' + array[2];
 				var videoLengthInput = document.querySelector("input[name="+videoLengthInputName+"]")
-				videoLengthInput.value = Math.ceil(this.duration);
+				videoLengthInput.value = Math.floor(this.duration);
 			};
 		 });
 	
