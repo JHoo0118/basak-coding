@@ -50,9 +50,9 @@ public class CourseService {
 		return courseMapper.createFile(map);
 	}
 	
-	// 강의 비디오 총 개수 업데이트
-	public int updateVideoCnt(Map map) {
-		return courseMapper.updateVideoCnt(map);
+	// 강의 비디오 총 개수 및 총 길이 업데이트
+	public int updateVideoCntAndLength(Map map) {
+		return courseMapper.updateVideoCntAndLength(map);
 	}
 
 	// 파일 목록 가져오기

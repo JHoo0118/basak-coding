@@ -476,10 +476,6 @@
 		                    <!-- 에러 출력용 -->
 		                    <label class="error"></label>
 		                </div>
-		                <div class="flex__end mb-2">
-							<button type="submit" class="button--square">후기 작성</button>
-							<button type="button" data-dismiss="modal" class="button--square button--square--cancel ml-3">취소</button>
-						</div>
 					</form>
 					
 				</div>
@@ -527,7 +523,7 @@
     	Array.prototype.slice.call(menuBtns).forEach(function(btn) {
     		btn.addEventListener("click", function() {
     			if (btn.classList.contains("active")) {
-    				sideContent.classList.toggle("open");
+        			sideContent.classList.toggle("open");
     			} else {
    					Array.prototype.slice.call(menuBtns).forEach(function(other) {
 	   					if (btn == other) {

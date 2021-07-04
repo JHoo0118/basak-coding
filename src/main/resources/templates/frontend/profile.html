@@ -344,15 +344,6 @@
 	</section>
 	<!-- 메인 섹션 끝 -->
 
-	<!-- footer -->
-	<footer class="footer">
-		<div class="d-flex justify-content-center align-items-center">
-			<p class="text-light py-4 m-0">
-				Copyright &copy;&nbsp;<span id="year"></span> by LIKE LION
-			</p>
-		</div>
-	</footer>
-
 	<!-- 결제 정보 모달 시작 -->
 	<div class="modal fade" id="paymentModal">
 		<div class="modal-dialog pModal__dialog">
@@ -449,6 +440,8 @@
 		</div>
 	</div>
 	<!-- 변경할 비밀번호 모달끝 -->
+	<!-- footer -->
+    <div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
 </body>
 
 </html>

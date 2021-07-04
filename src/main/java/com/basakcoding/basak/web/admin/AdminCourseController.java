@@ -124,6 +124,7 @@ public class AdminCourseController {
 				curriId.put(key, curri.get(key).get("curriculumId"));
 			}
 			
+			int totalVideoLength = 0;
 			for (String key : map.keySet()) {
 				String[] temp;
 				if (key.startsWith("video")) {
@@ -136,13 +137,16 @@ public class AdminCourseController {
 						video.get(temp[2]).put("curriculumId", curriId.get(temp[1]));
 					} else if (temp[0].equals("videoContent")) {
 						video.get(temp[2]).put("videoContent", map.get(key));
+					} else if (temp[0].equals("videoLength")) {
+						int videoLength = Integer.parseInt(map.get(key).toString());
+						totalVideoLength += videoLength;
+						video.get(temp[2]).put("videoLength", videoLength);
 					}
 				}
 			}
 			
 			// 비디오 로컬 저장
 			int videoCnt = 0;
-			long videoDuration = 0;
 			
 			for (String key : multipartFiles.keySet()) {
 				String[] temp;
@@ -165,11 +169,12 @@ public class AdminCourseController {
 				videoId.put(key, video.get(key).get("videoId"));
 			}
 			
-			// 강의 비디오 총 개수 업데이트
-//			Map updateForVideoCnt = new HashMap();
-//			map.put("videoCnt", videoCnt);
-//			map.put("courseId", courseId);
-//			courseService.updateVideoCnt(map);
+			// 강의 비디오 총 개수 및 비디오 총 길이 업데이트
+			Map updateForVideoCntAndLength = new HashMap();
+			updateForVideoCntAndLength.put("totalVideoLength", totalVideoLength);
+			updateForVideoCntAndLength.put("videoCnt", videoCnt);
+			updateForVideoCntAndLength.put("courseId", courseId);
+			courseService.updateVideoCntAndLength(updateForVideoCntAndLength);
 			
 
 			// 파일 로컬 저장
