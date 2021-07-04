@@ -16,6 +16,8 @@ public class VideoDTO {
 	private String videoTitle;
 	private char seen;
 	private String videoContent;
+	private String curriculumName;
+	
 	
 	// path용
 	private String courseId;
