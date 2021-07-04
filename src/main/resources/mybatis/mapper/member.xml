@@ -179,7 +179,11 @@
 		UPDATE members SET email_validate='Y',email_Secret=null WHERE email_Secret=#{code}
 	</update>
 	
-	
+	<!-- 내 질문 -->
+	<select id="myQuestion" parameterType="int" resultType="Map">
+		select q.* from question q JOIN members m ON m.member_id=q.member_id
+		where m.member_id=${userId}
+	</select>
 	
 	
 </mapper>

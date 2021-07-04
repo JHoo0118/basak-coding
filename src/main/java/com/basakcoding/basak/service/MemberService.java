@@ -138,9 +138,13 @@ public class MemberService {
     	return memberMapper.updateEmailValidate(map);
     }
 
-
+    //내 문의 상세보기에서 답변없을때
 	public Map inquDetailNotExist(String userId, String inquiry_id) {
 		return memberMapper.inquDetailNotExist(userId, inquiry_id);
+	}
+	//내 질문
+	public List<Map> myQuestion(int userId) {
+		return memberMapper.myQuestion(userId);
 	}
 
 }

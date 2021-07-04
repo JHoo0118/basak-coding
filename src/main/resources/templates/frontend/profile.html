@@ -165,7 +165,6 @@
 		//상세보기 정보
 		function detailsView(payment) {
 			var payment_code = payment.querySelectorAll("span")[1].innerText;
-			console.log(payment)
 			$.ajax({
 				url: '/personal/viewDetails.do',
 				data: {"payment_code": payment_code},
@@ -262,7 +261,7 @@
 											placeholder="현재 비밀번호를 입력해 주세요" name="password" />
 									</div>
 									<!-- 에러 출력용 -->
-									<small id="passerror" class="error"></small>
+									<label id="passerror" class="error"></label>
 								</div>
 
 								<div class="flex__end">
