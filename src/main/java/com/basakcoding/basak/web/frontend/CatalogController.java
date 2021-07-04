@@ -42,10 +42,12 @@ public class CatalogController {
 	public String catalog(Model model ) {
 		
 		List<Map> courseList = catalogService.courseList();
+		
+		
 		for (Map map : courseList) {
 			map.put("PATH", "/upload/course/" + map.get("COURSE_ID") + "/thumbnail/" + map.get("THUMBNAIL"));
-			
 		}
+		
 		model.addAttribute("courseList", courseList);
 		System.out.println("courseList"+courseList);
 		return "frontend/catalog";
@@ -60,31 +62,40 @@ public class CatalogController {
 	public  String catalogDetail(Authentication auth , @PathVariable String courseId , Model model) {
 		//로그인 안됐을때 likeCheck값 기본 0으로 초기화된 상태로 맵에저장
 		int likeCheck=0;
+		int reviewCheck=0;
 		
 		Map map = catalogService.selectOne(courseId);//강의 상세보기에 필요한 값 받아오기
+		
 		List<Map> map1 = catalogService.reviewList(courseId);//강의후기 리스트에 필요한 값 받아오기
+		
 		int reviewCount = catalogService.reviewCount(courseId);//총 리뷰갯수 카운트
+		
 		String getClob = catalogService.getClobText(courseId);//강의설명(DESCRIPTION) 받아오기
 		
 		
-		if(auth != null) {
-			//로그인이 됐을때
+		if(auth != null) {//로그인이 됐을때
+		
 			map.put("memberId",((UserDetails)auth.getPrincipal()).getUsername());
 			map.put("courseId",courseId);
+			//이전 좋아요 여부 확인
 			likeCheck = catalogService.likeCheck(map);
+			//이전 리뷰등록 여부 확인
+			reviewCheck = catalogService.reviewCheck(map);
 		
 		}
+		
 		if (!map.containsKey("AVATAR")) map.put("AVATAR", null);
 		else map.put("PATH", "/upload/admin/" + map.get("ADMIN_ID") + "/" + map.get("AVATAR"));
 
 
-		//로그인 안됐을때 likeCheck값 기본 0으로 초기화된 상태로 맵에저장
+		//비로그인 시 likeCheck값/reviewCheck값 기본 0으로 초기화된 상태로 맵에저장
 		map.put("likeCheck", likeCheck);
+		map.put("reviewCheck", reviewCheck);
 		
 		//CLOB형 자료 스트링화 하여 맵에 저장
 		map.put("DESCRIPTION", getClob);	
+		//
 		
-
 
 		model.addAttribute("course",map);
 		System.out.println("course:"+map);
@@ -93,8 +104,12 @@ public class CatalogController {
 		
 		model.addAttribute("reviewList",map1);
 		System.out.println("reviewList:"+map1);
-		model.addAttribute(reviewCount);
+		model.addAttribute("reviewCount",reviewCount);
 		System.out.println("reviewCount:"+reviewCount);
+		
+		String notPost ="현재 등록된 글이 없습니다. 강의등록 후 후기를 남겨주세요!";
+		model.addAttribute("notPost", notPost);
+		
 		
 		return "/frontend/catalogDetail";
 
@@ -137,12 +152,50 @@ public class CatalogController {
 			
 	}///catalogLike
 	
+	
+	
+	@PostMapping("/catalog/reviewWrite")//후기작성
+	public @ResponseBody int reviewWrite(Authentication auth  ,@RequestBody Map map, Model model) {
+		int affected;
+		int checkPayment;
+		String memberId;
+		String courseId	= (String) map.get("courseId");
+		
+		if(auth == null){//로그인 돼있지 않을시
+			
+			return affected=2;	
+		}
+		else {//로그인 돼있을시
+			memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+			map.put("memberId", memberId);
+			map.put("courseId",courseId);
+			checkPayment = catalogService.checkPayment(map);
+		}
+		
+		if(checkPayment==0) {//결제한 이력이 없으면 0반환
+			
+			return affected=0;
+		}
+ 		
+		else {//결제한 이력이 있으면 1반환
+			
+			//String reviewContent = catalogService.reviewContent(map);
+			//model.addAttribute("reviewContent",reviewContent);
+			//System.out.println("reviewContent:"+reviewContent);
+			return affected=1;
+		}
+		
+	}
+	
+	
+	
 	//리뷰 작성 컨트롤러
 	@PostMapping("/catalog/reviewInsert")
 	public @ResponseBody int reviewInsert(Authentication auth  ,@RequestBody Map map) {
 		int affected;
 		String memberId;
 		memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+
 
 		String content = (String) map.get("content");
 		String courseId	= (String) map.get("courseId");
@@ -159,74 +212,29 @@ public class CatalogController {
 		map.put("courseId", courseId);
 		map.put("rating", rating);
 		
-		catalogService.reviewCheck(map);
-		catalogService.reviewInsert(map);
+
 		
-		if(catalogService.reviewCheck(map) == 0 ) {
+		
+		if(	 catalogService.reviewCheck(map) == 0 ) {//이전에 강의후기를 작성하지 않았을 경우
+			//리뷰테이블에 강의후기 등록
 			catalogService.reviewInsert(map);
-			return 0;
-			
-		}
-		else {// catalogService.reviewCheck(map) ==1
-			return 1;
-		}
-		
-		
-		
-	
-		
-		/*
-		if(auth == null){//로그인 돼있지 않을시
-			
-			
-			return affected=2;	
-		}
-		else {
-			memberId = ((UserDetails)auth.getPrincipal()).getUsername();
-			map.put("memberId", memberId);
-			map.put("courseId",courseId);
-			checkPayment = catalogService.checkPayment(map);
-		}
-			if(checkPayment==0) {//로그인 후 미결제된 아이디일때
-				System.out.println("checkPayment:"+checkPayment);
-				
+			//ajax : data값 0반환
 			return affected=0;
-			}
-			else {//로그인 후 결제가 된 아이디일때 //checkPayment 값이 1일때
-				System.out.println("checkPayment:"+checkPayment);
 			
-			return affected=1;
-			}
-			*/
-	
-	
+		}
+		else {//이전에 강의후기를 작성했을 경우
+			
+			// 업데이트  작성
+			catalogService.reviewUpdate(map);
+			
+		return affected =1;
+		}
+		
+		
+		
+			
 	}
 	
-	@PostMapping("/catalog/reviewWrite")
-	public @ResponseBody int reviewWrite(Authentication auth  ,@RequestBody Map map) {
-		int affected;
-		int checkPayment;
-		String memberId;
-		String courseId	= (String) map.get("courseId");
-		
-		if(auth == null){//로그인 돼있지 않을시
-			
-			return affected=2;	
-		}
-		else {//로그인 돼있을시
-			memberId = ((UserDetails)auth.getPrincipal()).getUsername();
-			map.put("memberId", memberId);
-			map.put("courseId",courseId);
-			checkPayment = catalogService.checkPayment(map);
-		}
-		if(checkPayment==0) 
-			return affected=0;//결제한 이력이 없으면 0반환
- 		
-		else return affected=1;//결제한 이력이 있으면 1반환
-		
-		
-		
-	}
 
 	
 	
