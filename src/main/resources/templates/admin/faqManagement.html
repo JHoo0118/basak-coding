@@ -4,7 +4,7 @@
 	<meta charset="UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>바삭 코딩 | 문의 답변 관리</title>
+	<title>바삭 코딩 | FAQ 관리</title>
 	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
 	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
 	<link rel="stylesheet" th:href="@{/css/admin/main.css}" />
@@ -25,13 +25,8 @@
 					<div class="row md-5 mb-5">
 						<div class="col-xl-12 col-12 mb-4 mb-xl-0">
 						
-						<h3 class="text-muted text-center mb-3">문의 답변 관리</h3>
-						<form name="actionForm" th:action="@{/admin/comment/management/change}">
-							<div class="form__header d-flex justify-content-between">
-								<div>
-									<a class="button button--reverse mb-2" th:href="@{/admin/category/management/form}">삭제</a>
-								</div>
-							</div>
+						<h3 class="text-muted text-center mb-3">FAQ 관리</h3>
+						<form name="actionForm">
 							<div th:if="${message != null}" class="alert alert-success text-center">
 								[[${message}]]
 							</div>
@@ -39,27 +34,16 @@
 							<table class="table table-striped bg-light text-center">
 								<thead>
 				                  <tr class="text-muted">
-				                    <th>액션</th>
 				                    <th>#</th>
-				                    <th>문의 분류</th>
-				                    <th>문의</th>
-				                    <th>답변</th>
-				                    <th>작성자</th>
-				                    <th>작성 날짜</th>
+				                    <th>강의</th>
+				                    <th>제목</th>	
 				                  </tr>
 				                </thead>
 				                <tbody>
-									<tr th:each="answer, i : ${listAnswers}">
-										<td>
-											<input type="checkbox" class="checkbox" name="target" th:value="${answer.answerId}"/>
-											<span class="checkbox__mark"></span>
-										</td>
+									<tr th:each="faq, i : ${listFAQs}">
 										<td>[[${i.index+1}]]</td>
-										<td>[[${answer.classification}]]</td>
-										<td>[[${answer.inquiryTitle}]]</td>
-										<td>[[${answer.answerTitle}]]</td>
-										<td>[[${answer.name}]]</td>
-										<td>[[${answer.createdAt}]]</td>
+										<td>[[${faq.courseTitle}]]</td>
+										<td>[[${faq.faqTitle}]]</a></td>
 									</tr>
 				                </tbody>
 							</table>

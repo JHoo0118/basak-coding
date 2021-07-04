@@ -27,16 +27,7 @@
 						
 						<h3 class="text-muted text-center mb-3">문의 관리</h3>
 						<form name="actionForm" th:action="@{/admin/comment/management/change}">
-							<div class="form__header d-flex justify-content-between">
-								<div>
-									<select name="action">
-										<option value="manage">관리자</option>
-										<option value="stu">수강생</option>
-									</select>
-									<input class="button button--light button--sm d-inline" type="submit" value="확인" />
-									<a class="button button--reverse mb-2" th:href="@{/admin/category/management/form}">삭제</a>
-								</div>
-							</div>
+							
 							<div th:if="${message != null}" class="alert alert-success text-center">
 								[[${message}]]
 							</div>
@@ -60,7 +51,7 @@
 										</td>
 										<td>[[${i.index+1}]]</td>
 										<td>[[${inquiry.classification}]]</td>
-										<td>[[${inquiry.Title}]]</td>
+										<td><a th:href="@{/admin/inquiry/management/view(no=${inquiry.inquiryId})}">[[${inquiry.Title}]]</a></td>
 										<td>[[${inquiry.userName}]]</td>
 										<td>[[${inquiry.createdAt}]]</td>
 									</tr>
