@@ -108,7 +108,7 @@
 	
 	<!-- 내 강의 가져오기 -->
 	<select id="myCourses" parameterType="int" resultType="Map">
-		select co.title,co.course_id,co.short_description,co.period,ca.*,a.email,a.name admin_name
+		select co.title,co.course_id,co.short_description,co.period,co.thumbnail,co.video_count,ca.*,a.email,a.name admin_name
       	from members m JOIN payment p ON m.member_id=p.member_id
       	JOIN courses co ON p.course_id=co.course_id 
       	JOIN category ca ON co.category_id=ca.category_id
@@ -164,7 +164,7 @@
 	<select id="myComments" parameterType="int" resultType="Map">
 		 select co.content,co.created_at
 		 from members m JOIN comments co ON m.member_id=co.member_id
-		 WHERE m.member_id=${userId}
+		 WHERE m.member_id=#{userId}
 	</select>
 	<!-- 
 	 댓글 상세보기
@@ -182,8 +182,28 @@
 	<!-- 내 질문 -->
 	<select id="myQuestion" parameterType="int" resultType="Map">
 		select q.* from question q JOIN members m ON m.member_id=q.member_id
-		where m.member_id=${userId}
+		where m.member_id=#{userId}
 	</select>
 	
+	<!-- 내 강의 안본비디오 -->
+	<select id="courseVideo" parameterType="String" resultType="String">
+		select v.video_id from curriculum cu join video v on v.curriculum_id=cu.curriculum_id
+		where course_id=#{course_id} and v.seen='N' and rownum=1
+		order by v.video_id desc
+	</select>
+	
+	<!-- 다본동영상개수 -->
+	<select id="videoCount" parameterType="String" resultType="int">
+		select count(*) from curriculum cu join video v on v.curriculum_id=cu.curriculum_id
+		where course_id=#{course_id} and v.seen='Y'
+	</select>
+	
+	<!-- 마지막 동영상 아이디 -->
+	<select id="lastVideoId" parameterType="String" resultType="String">
+		select v.video_id from curriculum cu join video v on v.curriculum_id=cu.curriculum_id
+		where course_id=#{course_id} and rownum=1
+		order by v.video_id desc
+	
+	</select>
 	
 </mapper>

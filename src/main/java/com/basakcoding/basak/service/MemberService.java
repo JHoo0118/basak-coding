@@ -146,5 +146,17 @@ public class MemberService {
 	public List<Map> myQuestion(int userId) {
 		return memberMapper.myQuestion(userId);
 	}
+	//내 강의 안본 비디오가져오기
+	public String courseVideo(String courseId) {
+		return memberMapper.courseVideo(courseId);
+	}
+	//비디오 개수
+	public int videoCount(String courseId) {
+		return memberMapper.videoCount(courseId);
+	}
+	//마지막 동영상 아이디
+	public String lastVideoId(String courseId) {
+		return memberMapper.lastVideoId(courseId);
+	}
 
 }

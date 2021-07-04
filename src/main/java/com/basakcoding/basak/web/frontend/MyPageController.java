@@ -85,10 +85,23 @@ public class MyPageController {
 		int userId = (int) model.getAttribute("userId");
 		List<Map> map = memberService.myCourses(userId);
 		for(Map map1:map) {
-			String thumbnail=("/upload/course/" + map1.get("COURSE_ID") + "/thumbnail/" + map1.get("THUMBNAIL"));
+			String courseId= map1.get("COURSE_ID").toString();
+			//다본 동영상 개수 가져오기
+			int videoCount= memberService.videoCount(courseId);
+			String thumbnail=("/upload/course/" + courseId + "/thumbnail/" + map1.get("THUMBNAIL"));
+			String courseVideoid= memberService.courseVideo(courseId);
+			if(courseVideoid!=null) {
+				map1.put("courseVideoid",courseVideoid);
+			}
+			else {
+				//마지막 동영상 아이디
+				String lastVideoId=memberService.lastVideoId(courseId);
+				map1.put("courseVideoid", lastVideoId);
+			}
+			map1.put("progress",(int)(Math.ceil(videoCount*100/Double.parseDouble((map1.get("VIDEO_COUNT").toString())))));
+			
 			map1.put("thumbnail", thumbnail);
 		}
-		System.out.println("맵"+map);
 		if (!map.isEmpty())
 			model.addAttribute("myCourses", map);
 
@@ -110,7 +123,7 @@ public class MyPageController {
 	public String qAndA(Model model, Authentication auth) {
 		userInfo(model, auth);
 		int userId = (int) model.getAttribute("userId");
-		//내 강의
+		//내 질문
 		List<Map> map =memberService.myQuestion(userId);
 		if (!map.isEmpty())
 			model.addAttribute("myQuestion",map);
