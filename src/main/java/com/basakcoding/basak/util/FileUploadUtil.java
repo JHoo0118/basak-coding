@@ -27,8 +27,11 @@ public class FileUploadUtil {
 	}
 	
 	// 디렉토리 안의 파일만 삭제
-	public static void cleanDir(String dir) {
+	public static void cleanDir(String dir) throws IOException {
 		Path dirPath = Paths.get(dir);
+		if (!Files.exists(dirPath)) {
+			return;
+		}
 		try {
 			Files.list(dirPath).forEach(file -> {
 				if (!Files.isDirectory(file)) {
@@ -48,6 +51,9 @@ public class FileUploadUtil {
 	// 디렉토리 삭제
 	public static void deleteDir(String dir) throws IOException {
 		cleanDir(dir);
+		if (!Files.exists(Paths.get(dir))) {
+			return;
+		}
 		Files.delete(Paths.get(dir));
 	}
 }

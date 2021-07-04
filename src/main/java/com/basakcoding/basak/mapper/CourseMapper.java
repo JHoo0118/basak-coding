@@ -35,8 +35,8 @@ public interface CourseMapper {
 	// 파일 만들기
 	int createFile(Map map);
 	
-	// 비디오 개수 업데이트
-	int updateVideoCnt(Map map);
+	// 비디오 개수 및 비디오 총 길이 업데이트
+	int updateVideoCntAndLength(Map map);
 
 	// 파일 목록 얻기
 	List<Map> getFileList(String videoId);

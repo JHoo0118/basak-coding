@@ -45,7 +45,7 @@
 		<selectKey keyProperty="videoId" resultType="int" order="BEFORE">
 			SELECT seq_video.NEXTVAL FROM dual
 		</selectKey>
-		INSERT INTO video VALUES(#{videoId}, #{curriculumId}, #{videoUri}, DEFAULT, null, #{videoTitle}, DEFAULT, #{videoContent})
+		INSERT INTO video VALUES(#{videoId}, #{curriculumId}, #{videoUri}, #{videoLength}, null, #{videoTitle}, DEFAULT, #{videoContent})
 	</insert>
 	
 	<!-- 파일 생성 -->
@@ -53,9 +53,9 @@
 		INSERT INTO files VALUES(seq_files.NEXTVAL, #{videoId}, #{fileName}, #{fileUri})
 	</insert>
 	
-	<!-- 강의 비디오 총 개수 업데이트 -->
-	<update id="updateVideoCnt" parameterType="map">
-		UPDATE courses SET video_cnt = #{videoCnt} WHERE course_id = #{courseId}
+	<!-- 강의 비디오 총 개수 및 총 길이 업데이트 -->
+	<update id="updateVideoCntAndLength" parameterType="map">
+		UPDATE courses SET video_count = #{videoCnt}, course_length = #{totalVideoLength}  WHERE course_id = #{courseId}
 	</update>
 	
 	<!-- 파일 목록 가져오기 -->
@@ -90,7 +90,7 @@
 	</select>
 	
     <select id="getVideoList" resultType="VideoDTO">
-       	SELECT * FROM video WHERE curriculum_id = #{curriculums}
+       	SELECT * FROM video WHERE curriculum_id = #{curriculums} ORDER BY video_id
     </select>
     
 	
