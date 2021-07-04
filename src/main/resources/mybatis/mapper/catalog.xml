@@ -86,11 +86,16 @@
 	
 	</select>
 	
+	<!-- 모달안 후기내용 가져오기 -->
+	<select id="reviewContent" parameterType="Map" resultType="String">
+		SELECT content FROM review
+		WHERE member_id = #{memberId} and course_id= #{courseId}
+	
+	</select>
+	
 	<!-- 강의후기 갯수 -->	
 	<select id="reviewCount" parameterType="String" resultType="Int" >
-	
 	SELECT COUNT(*) FROM review WHERE COURSE_ID=#{courseId} 
-	
 	</select>
 	
 	<!-- 강의 결제여부 확인 -->
@@ -105,8 +110,16 @@
 	<insert id="reviewInsert" parameterType="Map">
 	INSERT INTO REVIEW
 	VALUES (SEQ_REVIEW.NEXTVAL,#{courseId},#{memberId},#{content},#{rating},default)
-	
 	</insert>
+	
+	<update id="reviewUpdate" parameterType="Map">
+	
+	UPDATE review
+	SET content = #{content},
+	    rating  = #{rating}
+	WHERE COURSE_ID= #{courseId} and MEMBER_ID= #{memberId} 
+	
+	</update>	
 	
 	
 </mapper>

@@ -19,12 +19,14 @@ public interface CatalogMapper {
 	
 	//강의 후기 기능
 	List<Map> reviewList(String courseId);
+	String reviewContent(Map map);
+	
 	int reviewCount(String courseId);
 	int checkPayment(Map map);
 	
 	int reviewCheck(Map map);
 	int reviewInsert(Map map);
-	
+	int reviewUpdate(Map map);
 	
 	
 	//강의상세보기 좋아요 기능

@@ -32,6 +32,12 @@ public class CatalogService {
 	public List<Map> reviewList(String courseId) {
 		return catalogMapper.reviewList(courseId);
 	}
+	
+	public String  reviewContent(Map map) {
+		return catalogMapper.reviewContent(map);
+	}
+	
+	
 	public int reviewCount(String courseId) {
 		return catalogMapper.reviewCount(courseId);
 	}
@@ -47,6 +53,9 @@ public class CatalogService {
 	public int reviewInsert(Map map) {
 		return catalogMapper.reviewInsert(map);
 		
+	}
+	public int reviewUpdate(Map map) {
+		return catalogMapper.reviewUpdate(map);
 	}
 	
 	
