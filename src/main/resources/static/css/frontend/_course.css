@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
 .course {
+	max-height: calc(100vh - 6rem);
 	display: flex;
 	width: 100%;
 	padding-top: 6rem;
@@ -148,7 +149,11 @@
 	color: #fff;
 }
 
-.list__curr .list__items.active {
+.list__curr .list__items .curr__link.active {
+	color: #f3981c;
+}
+
+.list__curr .list__items .curr__link.active .fa-youtube {
 	color: #f3981c;
 }
 
@@ -207,19 +212,25 @@
 /* 강의 메인 */
 .course__main {
 	width: 100%;
-	height: 100%;
+	height: calc(100vh - 6rem);
 	/*
 	overflow-x: hidden;
 	overflow-y: hidden;
 	*/
 }
 
+.video__flex-box {
+	height: calc(100vh - 6rem);
+}
+
 /* 비디오 부분 */
 .video__wrapper {
 	position:relative;
-	background-color: orange;
-	height: 300vh;
-	overflow-y: scroll !important;;
+	overflow-y: auto !important;
+	background-color: #1e1e1e;
+	padding: 2rem 2rem;
+	height: 100%;
+	color: #fff;
 }
 
 
@@ -399,4 +410,79 @@ button.btn-settings {
 }
 button.btn-settings:active {
   color: white;
+}
+
+/* 문의 모달 */
+.iModal__header {
+	text-transform: uppercase;
+}
+
+.iForm__group {
+	margin-top: 10px;
+}
+
+.iForm__label {
+	font-size: 16px;
+	color: #919191;
+	font-weight: 700;
+}
+
+.iForm__input {
+	border: 0;
+	border-bottom: 5px solid #ebebeb;
+	padding: 10px 5px;
+	font-size: 16px;
+}
+
+.iForm__input:focus {
+	border-color: #212224;
+	box-shadow: none;
+	color: #212224;
+}
+
+.inquiry__type {
+	display: flex;
+	width: 100%;
+}
+
+.iForm__check {
+	padding-right: 12px;
+}
+
+.inquiry__type input[name='classification'] {
+    appearance: none;
+    outline: none;
+    min-width: 1.5rem;
+    min-height: 1.5rem;
+    border-radius: 100%;
+    margin-right: .6rem;
+    border: 1px solid #919191;
+}
+
+.inquiry__type input[name='classification']:checked {
+    background: #333;
+    border: 1px solid #333;
+}
+
+.inquiry__type .iForm__check {
+    display: flex;
+    align-items: center;
+}
+
+.iCheck__label {
+	color: #161616 !important;
+	margin: 0 !important;
+}
+
+.iForm__textarea {
+	padding: 1rem;
+	border: 5px solid #ebebeb;
+	min-height: 300px;
+	font-size: 16px;
+}
+
+.iForm__textarea:focus {
+	border-color: #212224;
+	box-shadow: none;
+	color: #212224;
 }

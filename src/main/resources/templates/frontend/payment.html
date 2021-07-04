@@ -21,8 +21,8 @@
             <div class="payment__title">결제하기</div>
             <div class="payment__subTitle">결제내역</div>
             <div class="payment__package">
-                <img th:if="${course.AVATAR} != null" class="package__img" th:src="@{${course.PATH}}" />
-                <img th:if="${course.AVATAR} == null" class="package__img" th:src="@{/images/image4.jpg}" />
+                <img th:if="${course.THUMBNAIL} != null" class="package__img" th:src="@{${course.THUMB_PATH}}" />
+                <img th:if="${course.THUMBNAIL} == null" class="package__img" th:src="@{/images/image4.jpg}" />
                 <div class="package__info">
                     <div class="info__left">
                         <div class="info__title" th:text="${course.TITLE}"></div>
@@ -59,7 +59,7 @@
                                 placeholder="실명을 입력해주세요" name="name" id="name"/>
                         </div>
 	                    <!-- 에러 출력용 -->
-	                    <small></small>
+	                    <label></label>
                     </div>
                     <div class="form-group form__group p-0 position-relative">
                         <div class="p-0">
@@ -67,7 +67,7 @@
                                 class="form-control form__input input__payment input__payment--border"
                                 placeholder="핸드폰 번호를 입력해주세요" name="phone" id="phone"/>
                         </div>
-                        <small style="color:#fff;">결제 및 환불 정보 전달을 위해 휴대폰 번호 11자리(하이픈 제외)를 입력해주세요.</small>
+                        <label style="color:#fff;">결제 및 환불 정보 전달을 위해 휴대폰 번호 11자리(하이픈 제외)를 입력해주세요.</label>
                     </div>
 
                 </div>
@@ -91,7 +91,7 @@
                         <div class="payment__subTitle">결제 정보</div>
                         <div class="price__box">
                             <div class="price__left">정가</div>
-                            <div class="price__right">100&nbsp;<span>원</span></div>
+                            <div class="price__right">[[${course.PRICE}]]&nbsp;<span>원</span></div>
                         </div>
                         <div class="price__box">
                             <div class="price__left">할인가(일반)</div>
@@ -190,8 +190,8 @@
 				//결제창에서 보여질 이름
 				amount: price,
 				buyer_email: 'iamport@siot.do',
-				buyer_name: '최유경',
-				buyer_tel: '010-8350-3989',
+				buyer_name: name,
+				buyer_tel: phone,
 				buyer_addr: '경기도 화성시 병점동',
 				buyer_postcode: '123-456',
 				m_redirect_url: 'https://www.yourdomain.com/payments/complete'

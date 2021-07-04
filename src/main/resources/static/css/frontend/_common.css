@@ -117,9 +117,19 @@ a:visited {
   text-align: center;
   cursor: pointer;
   display: block;
-  transition: color 0.4s;
+  transition: all 0.4s;
 }
 
+.button--square--cancel {
+  	border: 1px solid #ebebeb;
+	background-color: #ebebeb;
+	color: #1e1e1e;
+}
+
+.button--square--cancel:hover {
+	background-color: #1e1e1e;
+	color: #ebebeb;	
+}
 
 .button--full {
   width: 100% !important;

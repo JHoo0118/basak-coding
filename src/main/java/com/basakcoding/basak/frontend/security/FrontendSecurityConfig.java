@@ -47,7 +47,6 @@ public class FrontendSecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginProcessingUrl("/auth/signin")
 				.loginPage("/auth/signin")
 				.usernameParameter("email")
-				.defaultSuccessUrl("/personal/dashboard", true)
 				.permitAll()
 			.and()
 			.logout()

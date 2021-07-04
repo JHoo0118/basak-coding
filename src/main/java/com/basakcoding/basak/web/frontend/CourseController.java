@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.basakcoding.basak.service.CourseService;
+import com.basakcoding.basak.service.CurriculumDTO;
 import com.basakcoding.basak.service.FileDTO;
 import com.basakcoding.basak.service.VideoDTO;
 
@@ -41,13 +42,17 @@ public class CourseController {
 	@Autowired
     ResourceLoader resourceLoader;
 	@GetMapping("/class/{videoId}")
-	public String course(Model model, HttpServletRequest req) throws IOException {
+	public String course(@PathVariable String videoId, Model model, HttpServletRequest req) throws IOException {
 		
-		String videoId = ""+7;
+		if (videoId.charAt(0) >= 'A')
+			videoId = ""+7;
+		// String videoId = ""+7;
 		String courseId = courseService.getCourseId(videoId);
 		VideoDTO video = courseService.getVideo(videoId);
 		video.setCourseId(courseId);
 		
+		// 커리큘럼과 비디오 얻기
+		List<CurriculumDTO> curriculumList = courseService.getCurriculumList(courseId);
 		
 		// 비디오 파일들 가져오기
 		List<Map> fileList = courseService.getFileList(videoId);
@@ -85,26 +90,8 @@ public class CourseController {
 		}
 		
 		model.addAttribute("fileList", fileList);
-		model.addAttribute("video", video);
-		
-//		// 파일 내용 가져오기 테스트
-//		String dirName = "upload/course/2/file/test.html";
-//		Path dir = Paths.get(dirName);
-//		String path = dir.toFile().getAbsolutePath();
-//		File file = new File(path);
-//		StringBuilder sb = new StringBuilder();
-//		
-//		if (file.exists()) {
-//			String data;
-//			BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()));
-//			while ((data=br.readLine()) != null) {
-//				sb.append(data);
-//				sb.append("\r\n");
-//			}
-//			br.close();
-//		} else {
-//			System.out.println("파일 없음");
-//		}
+		model.addAttribute("currVideo", video);
+		model.addAttribute("curriculums", curriculumList);
 
 		return "frontend/course";
 	}

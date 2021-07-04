@@ -163,8 +163,9 @@
 			else return false;
 		};//////////비밀번호변경모달
 		//상세보기 정보
-		function detailsView() {
-			var payment_code = $('#viewDetails').text();
+		function detailsView(payment) {
+			var payment_code = payment.querySelectorAll("span")[1].innerText;
+			console.log(payment)
 			$.ajax({
 				url: '/personal/viewDetails.do',
 				data: {"payment_code": payment_code},
@@ -276,7 +277,7 @@
 					<!-- 나의 결제 시작 -->
 					<div class="tab-pane fade" id="pills-payment">
 						<th:block th:if="${myPayment}!=null">
-							<div class="payement__card row" th:each="myPayments :${myPayment}">
+							<div class="payement__card row" th:each="myPayments :${myPayment}" onclick="detailsView(this)">
 								<div class="payment__state col-sm-2">
 									<div class="state__upper">
 										<span>[[${myPayments.PAYMENT_STATE}]]</span></div>
@@ -312,8 +313,7 @@
 									</div>
 								</div>
 								<div class="payment__detail col-sm-2">
-									<a class="payment__modal" data-toggle="modal" data-target="#paymentModal"
-										onclick="detailsView()">
+									<a class="payment__modal" data-toggle="modal" data-target="#paymentModal">
 										상세보기
 									</a>
 								</div>

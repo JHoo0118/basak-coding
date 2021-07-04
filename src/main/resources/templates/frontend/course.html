@@ -22,7 +22,7 @@
   	<!-- <script defer th:src="@{/js/monaco.js}"></script> -->
 </head>
 
-<body style="background-color: #1e1e1e; overflow:hidden">
+<body style="background-color: #1e1e1e; overflow:hidden;">
 	<!-- navbar 시작 -->
 	<nav class="navbar-bg" style="border-bottom: 1px solid #5a5c65;">
 	    <div class="container-fluid container--main d-flex align-items-center" style="max-width: 100%;">
@@ -64,17 +64,17 @@
     	<div class="course__sideNav">
     		<ul class="sideNav__items">
     			<li class="sideNav__item active">
-	    			<button class="item__button active" id="tab-1">
+	    			<button class="item__button item__sToggle active" id="tab-1">
 	    				<i class="item__icon far fa-list-alt"></i>
     				</button>
     			</li>
     			<li class="sideNav__item">
-	    			<button class="item__button" data-toggle="pill" id="tab-2" >
+	    			<button class="item__button item__sToggle" data-toggle="pill" id="tab-2" >
 	    				<i class="item__icon far fa-question-circle"></i>
     				</button>
     			</li>
     			<li class="sideNav__item">
-	    			<button class="item__button" data-toggle="pill" id="tab-3">
+	    			<button class="item__button" data-toggle="modal" data-target="#inquiryModal">
 	    				<i class="item__icon far fa-address-card"></i>
     				</button>
     			</li>
@@ -86,43 +86,30 @@
    			<!-- 탭1 -->
    			<div class="" id="target-1">
 	   			<div class="content__list">
-	   				<div class="list__wrapper">
+	   			
+	   				<div class="list__wrapper" th:each="curriculum, i : ${curriculums}">
 		   				<div class="list__header">
-		   					<small class="header__chapter">Chapter 1</small>
-		   					<h3 class="header__title--course">바삭 코딩 정복 가이드</h3>
+		   					<small class="header__chapter">Chapter [[${i.index+1}]]</small>
+		   					<h3 class="header__title--course">[[${curriculum.name}]]</h3>
 		   				</div>
 		   				<hr class="list__horline" />
+		   				
+
 		   				<ul class="list__curr">
-		   					<li class="list__items active">
-		   						<a class="curr__link" th:href="@{/class/SANIOQWENIWN}">
-			   						<i class="list__icon fab fa-youtube"></i>
+		   					<li class="list__items" th:each="video : ${curriculum.videos}">
+		   						<a th:classappend="${video.videoId == currVideo.videoId} ? active" class="curr__link" th:href="@{/class/} + ${video.videoId}">
+			   						<i th:classappend="${video.seen} == 'Y' ? none" class="list__icon fab fa-youtube"></i>
+			   						<i th:classappend="${video.seen} == 'N' ? none" class="list__icon fas fa-check-circle" style="color:#0fd"></i>
 				   					<div class="curr__box">
-				   						<h3 class="curr__title">컴퓨터와 수다 떠는 법</h3>
-				   						<h3 class="curr__time">01:38</h3>
-				   					</div>
-	   							</a>
-		   					</li>
-			   				<li class="list__items">
-		   						<a class="curr__link" th:href="@{/class/SANIOQWENIWN}">
-			   						<i class="list__icon fab fa-youtube"></i>
-				   					<div class="curr__box">
-				   						<h3 class="curr__title">코라 정복하기-python편</h3>
-				   						<h3 class="curr__time">05:59</h3>
-				   					</div>
-	   							</a>
-		   					</li>
-		   					<li class="list__items">
-		   						<a class="curr__link" th:href="@{/class/SANIOQWENIWN}">
-			   						<i class="list__icon fab fa-youtube"></i>
-				   					<div class="curr__box">
-				   						<h3 class="curr__title">코라 정복하기-html/css편</h3>
-				   						<h3 class="curr__time">06:24</h3>
+				   						<h3 class="curr__title">[[${video.videoTitle}]]</h3>
+				   						<h3 class="curr__time">[[${video.videoLength}]]</h3>
 				   					</div>
 	   							</a>
 		   					</li>
 		   				</ul>
 	   				</div>
 	   				
+	   				<!-- 
 	   				<div class="list__wrapper">
 		   				<div class="list__header">
 		   					<small class="header__chapter">Chapter 2</small>
@@ -158,7 +145,7 @@
 	   							</a>
 		   					</li>
 		   				</ul>
-	  				</div>
+	  				</div> -->
 	   			</div>
    			</div>
 			<!-- 탭1 끝 -->
@@ -305,35 +292,39 @@
 			</div>
 	  		<!-- 탭2 끝 -->
 	  		<!-- 탭3 시작 -->
+	  		<!-- 
 	  		<div class="none" id="target-3">
 				<div>
 					<h1>으아으</h1>
 				</div>
 			</div>
+			-->
 	  		<!-- 탭3 끝 -->
 		</div>
     	<!-- 사이드 Navbar 끝-->
     		
     	<!-- 강의 메인 시작 -->
     	<div class="course__main">
-    		<div class="row">
-    			<div class="col-md-6 pr-0 ">
+    		<div class="row video__flex-box">
+    			<div class="col-md-6 pr-0" style="height: calc(100vh - 6rem);">
     				<!-- 비디오 -->
-					  <video id="my_video_1" class="video-js vjs-fluid vjs-sublime-skin vjs-big-play-centered" width="100%" height="100%"
-					      controls preload="auto" th:poster="@{/images/image4.jpg}"
-					      data-setup='{ "aspectRatio":"16:9", "playbackRates": [0.5, 1, 1.25, 1.5, 2]}'>
-					    
-					    <source th:src="@{${video.getVideoPath}}" type='video/mp4' />
-					    <source src="@{/images/video.mp4}" type='video/webm' />
-					    <!--
-					    <source th:src="@{/images/video.mp4}" type='video/mp4' />
-					    <source src="https://vjs.zencdn.net/v/oceans.webm" type='video/webm' />
-					    -->
-					  </video>
-					  <div class="video__wrapper"></div>
+					<video id="my_video_1" class="video-js vjs-fluid vjs-sublime-skin vjs-big-play-centered" width="100%" height="100%"
+					    controls preload="auto" th:poster="@{/images/image4.jpg}"
+					    data-setup='{ "aspectRatio":"16:9", "playbackRates": [0.5, 1, 1.25, 1.5, 2]}'>
+					  
+						<source th:src="@{${currVideo.getVideoPath}}" type='video/mp4' />
+						<source src="@{/images/video.mp4}" type='video/webm' />
+					 	<!--
+						<source th:src="@{/images/video.mp4}" type='video/mp4' />
+						<source src="https://vjs.zencdn.net/v/oceans.webm" type='video/webm' />
+					 	-->
+					</video>
 					<!-- 비디오 끝 -->
-					
-					<!-- 비디오 내용 -->
+					<!-- 비디오 내용 시작-->
+					<div class="video__wrapper">
+						<h3 th:utext="${currVideo.videoContent}"></h3>
+					</div>
+					<!-- 비디오 내용 끝 -->
 				</div>
 				<!-- 모나코 에디터 시작 -->
     			<div class="col-md-6 pl-0">
@@ -426,6 +417,78 @@
 		</div>
   </div>
 	<!-- 미니 브라우저 끝 -->
+	
+	<!-- 문의 작성 모달 시작 -->
+	<div class="modal fade" id="inquiryModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" style="border: none;">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body pModal__body">
+					<div class="pModal__header iModal__header">
+						Contact Us
+					</div>
+					<form>
+						<div class="form-group iForm__group p-0 position-relative">
+							<span class="iForm__label">보내는 사람</span>
+		                    <div class="p-0">
+		                        <input type="email" class="form-control iForm__input" placeholder="이메일을 입력해주세요." name="email" />
+		                    </div>
+		                    <!-- 에러 출력용 -->
+		                    <label class="error"></label>
+		                </div>
+		                <div class="form-group form__group p-0 position-relative">
+		                	<span class="iForm__label">문의 유형</span>
+	                        <div class="form-group form__group row m-0">
+	                            <div class="inquiry__type">
+	                                <div class="iForm__check">
+	                                    <input type="radio" id="type1" name="classification" checked />
+	                                    <label for="type1" class="iCheck__label">결제 및 환불 문의</label>
+	                                </div>
+	                                <div class="iForm__check">
+	                                    <input type="radio" id="type2" name="classification" />
+	                                    <label for="type2" class="iCheck__label">강의 문의</label>
+	                                </div>
+	                                <div class="iForm__check">
+	                                    <input type="radio" id="type3" name="classification" />
+	                                    <label for="type3" class="iCheck__label">기타 문의</label>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <div class="form-group iForm__group p-0 position-relative">
+							<span class="iForm__label">제목</span>
+		                    <div class="p-0">
+		                        <input type="text" class="form-control iForm__input" placeholder="제목을 입력해주세요." name="title"/>
+		                    </div>
+		                    <!-- 에러 출력용 -->
+		                    <label class="error"></label>
+		                </div>
+		                
+		                <div class="form-group iForm__group p-0 position-relative">
+							<span class="iForm__label">제목</span>
+		                    <div class="p-0">
+		                        <textarea class="form-control iForm__textarea" placeholder="내용 입력해주세요." name="content"></textarea>
+		                    </div>
+		                    <!-- 에러 출력용 -->
+		                    <label class="error"></label>
+		                </div>
+		                <div class="flex__end mb-2">
+							<button type="submit" class="button--square">후기 작성</button>
+							<button type="button" data-dismiss="modal" class="button--square button--square--cancel ml-3">취소</button>
+						</div>
+					</form>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 문의 작성 모달 끝 -->
+	
     <script>
     
 		var INITIAL_CODE = `[(${fileList.get(0).INITIAL_CODE})]`;
@@ -460,7 +523,7 @@
     	
   	    // 사이드바 처리
     	var sideContent = document.getElementById("sideContent");
-    	var menuBtns = document.querySelectorAll('.item__button');
+    	var menuBtns = document.querySelectorAll('.item__sToggle');
     	Array.prototype.slice.call(menuBtns).forEach(function(btn) {
     		btn.addEventListener("click", function() {
     			if (btn.classList.contains("active")) {
@@ -659,7 +722,7 @@
     				$.post({
     					url:"[[@{/class/autosave-code}]]",
     					data: {
-    						"videoId" : "[[${video.videoId}]]",
+    						"videoId" : "[[${currVideo.videoId}]]",
     						"currFilename": FILENAME,
     						"currFileContent": editor.getValue(),
     						"nextFilename": filename,
@@ -685,7 +748,7 @@
         			// 나중에 videoId로 고쳐야함
     				url:"[[@{/class/initial-code}]]",
     				data: {
-    					"videoId" : "[[${video.videoId}]]",
+    					"videoId" : "[[${currVideo.videoId}]]",
     					"filename": FILENAME
     				},
     				success: function() {

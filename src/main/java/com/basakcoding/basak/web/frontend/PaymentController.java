@@ -34,11 +34,11 @@ public class PaymentController {
 		
 		MemberDTO memberDto = paymentService.getMemberById(memberId);
 		map.put("EMAIL", memberDto.getEmail());
-		//강사 이미지 불러오기
-		if (map.containsKey("AVATAR")) {
-			map.put("PATH", "/upload/admin/" + map.get("ADMIN_ID") + "/" + map.get("AVATAR"));
+		//강의 이미지 불러오기
+		if (map.containsKey("THUMBNAIL")) {
+			map.put("THUMB_PATH", "/upload/course/" + map.get("COURSE_ID") + "/thumbnail/" + map.get("THUMBNAIL"));
 		} else {
-			map.put("AVATAR", null);
+			map.put("THUMBNAIL", null);
 		}
 		model.addAttribute("course", map);
 		
@@ -55,6 +55,12 @@ public class PaymentController {
 		map2.put("courseId", courseId);
 		map2.put("memberId", memberId);
 		Map map = paymentService.priceList(map2);
+		//강의 이미지 불러오기
+		if (map.containsKey("THUMBNAIL")) {
+			map.put("THUMB_PATH", "/upload/course/" + map.get("COURSE_ID") + "/thumbnail/" + map.get("THUMBNAIL"));
+		} else {
+			map.put("THUMBNAIL", null);
+		}
 		
 		MemberDTO memberDto = paymentService.getMemberById(memberId);
 		map.put("USERNAME", memberDto.getUsername());
@@ -72,7 +78,7 @@ public class PaymentController {
 	//
 	@PostMapping("/payments/complete")
 	@ResponseBody
-	public String pymentsComplete (@RequestParam Map map, Authentication auth) {
+	public String paymentsComplete (@RequestParam Map map, Authentication auth) {
 		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
 		map.put("memberId", memberId);
 
@@ -84,7 +90,7 @@ public class PaymentController {
 	
 	@PostMapping("/payments/check")
 	@ResponseBody
-	public String pymentsCheck (@RequestParam Map map, Authentication auth) {
+	public String paymentsCheck (@RequestParam Map map, Authentication auth) {
 		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
 		map.put("memberId", memberId);
 		int count = paymentService.alreadyPayment(map);
