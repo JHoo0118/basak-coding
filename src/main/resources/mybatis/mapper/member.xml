@@ -143,7 +143,6 @@
 	
 	<!-- 내 문의 상세보기 -->
 	<select id="inquDetails" parameterType="String" resultType="Map">
-		
 		select i.*,m.username,c.name,an.*,ad.avatar,ad.admin_id,an.answer_id,an.content ans_content,ad.name admin_name,an.created_at answer_created
 		from members m JOIN inquiry i ON m.member_id=i.member_id
 		JOIN classification c ON i.cl_id = c.cl_id
@@ -217,6 +216,21 @@
 	<select id="getLastVideo" parameterType="String" resultType="String">
 		select video_id FROM video WHERE curriculum_id = #{lastCurriculumId} and rownum=1
 		order by video_id desc
+	</select>
+	
+	<!-- 내 질문 상세보기 -->
+	<select id="questionDetails" parameterType="String" resultType="Map">
+		select m.username,a.name,a.avatar,a.admin_id,q.question_id,q.title,q.like_count,
+		q.comment_count,q.created_at,to_char(q.content)question_content,c.content,c.created_at comment_created,c.comment_id
+		from question q join members m on m.member_id=q.member_id
+		join comments c on c.question_id=q.question_id join admins a on a.admin_id=c.admin_id
+		where m.member_id=#{userId} and q.question_id=#{questionId}
+	</select>
+	
+	<!-- 내 질문 답변없을때 상세보기 -->
+	<select id="questionDetailNotExist" parameterType="String" resultType="Map">
+		select m.username,q.* from question q join members m on m.member_id=q.member_id
+		where m.member_id=#{userId} and q.question_id=#{questionId}
 	</select>
 	
 </mapper>
