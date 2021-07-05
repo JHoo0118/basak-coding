@@ -158,5 +158,13 @@ public class MemberService {
 	public String lastVideoId(String courseId) {
 		return memberMapper.lastVideoId(courseId);
 	}
+	//내 질문 상세보기
+	public Map questionDetails(String userId, String questionId) {
+		return memberMapper.questionDetails(userId,questionId);
+	}
+	//내 질문 답변없을때
+	public Map questionDetailNotExist(String userId, String questionId) {
+		return memberMapper.questionDetailNotExist(userId,questionId);
+	}
 
 }

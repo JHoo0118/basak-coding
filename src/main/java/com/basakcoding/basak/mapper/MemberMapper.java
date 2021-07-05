@@ -95,4 +95,10 @@ public interface MemberMapper {
 	//마지막 동영상 아이디
 	String lastVideoId(String courseId);
 
+	//내 질문 상세보기
+	Map questionDetails(String userId, String questionId);
+
+	//내 질문 답변없을때
+	Map questionDetailNotExist(String userId, String questionId);
+
 }

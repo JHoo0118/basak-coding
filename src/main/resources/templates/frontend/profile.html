@@ -299,7 +299,7 @@
 									<div class="body__lower">
 										<div class="state__set">
 											<h4>결제일자</h4>
-											<span>[[${myPayments.PAYMENT_CREATED}]]</span>
+											<span th:text="${#dates.format(myPayments.PAYMENT_CREATED, 'yyyy.MM.dd')}"></span>
 										</div>
 										<div class="state__set">
 											<h4>결제방법</h4>
@@ -390,7 +390,7 @@
 					<div class="pModal__receipt">
 						<h4 class="receipt__title">결제 정보</h4>
 						<div class="receipt__row row m-0">
-							<div class="row__left col-4">결제일</div>
+							<div class="row__left col-4" >결제일</div>
 							<div id="payCreated_at" class="row__right col-8"></div>
 						</div>
 						<div class="receipt__row row m-0">
