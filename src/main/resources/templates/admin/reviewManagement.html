@@ -61,7 +61,7 @@
 											<span class="checkbox__mark"></span>
 										</td>
 										<td>[[${review.courseId}]]</td>
-										<td>[[${review.title}]]</td>
+										<td><a th:href="@{/admin/review/management/view(no=${review.reviewId})}">[[${review.title}]]</a></td>
 										<td>[[${review.content}]]</td>
 										<td>[[${review.username}]]</td>
 										<td>[[${review.rating}]]</td>

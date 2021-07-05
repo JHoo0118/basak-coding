@@ -24,4 +24,7 @@ public class ReviewDTO {
 	private String username;
 	
 	
+	
+	
+	
 }

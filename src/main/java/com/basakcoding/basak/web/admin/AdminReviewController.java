@@ -23,9 +23,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.basakcoding.basak.service.AdminDTO;
 import com.basakcoding.basak.service.AdminRoleService;
 import com.basakcoding.basak.service.AdminService;
+import com.basakcoding.basak.service.InquiryDTO;
 import com.basakcoding.basak.service.MemberDTO;
 import com.basakcoding.basak.service.PriceRoleService;
 import com.basakcoding.basak.service.PriceService;
+import com.basakcoding.basak.service.ReviewDTO;
 import com.basakcoding.basak.service.ReviewService;
 import com.basakcoding.basak.service.RoleDTO;
 import com.basakcoding.basak.util.FileUploadUtil;
@@ -37,34 +39,27 @@ public class AdminReviewController {
 	@Autowired
 	private ReviewService reviewService;
 	
-	//@Autowired
-	//private PriceRoleService priceRoleService;
-	
 	@GetMapping("/management")
 	public String reviewList(Model model) {
-		List<Map> listReviews = reviewService.getReviewList();
+		List<Map> listReviews = reviewService.AllReviewList();
 		model.addAttribute("listReviews", listReviews);
 		model.addAttribute("title", "후기 관리");
 		System.out.println(listReviews);
 		return "admin/reviewManagement";
 	}
 	
-	/*
-	//후기 관리 폼 페이지
-	@GetMapping("/management/form")
-	public String reviewForm(@RequestParam Map<String, String> map, Model model) {
-		String adminId = map.get("adminId");
-		AdminDTO admin = new AdminDTO();
-		if (adminId != null) {
-			admin = priceService.getAdminById(adminId);
-		}
-		List<RoleDTO> reviewRoles = reviewRoleService.selectList();
-		model.addAttribute("reviewRoles", reviewRoles);
-		model.addAttribute("admin", admin);
+	
+	//후기 상세보기 페이지
+	@RequestMapping("/management/view")
+	public String reviewForm(@RequestParam Map map, Model model) {
+		ReviewDTO dto = reviewService.getReviewList(map);
+		model.addAttribute("review", dto);
 		model.addAttribute("title", "후기 관리");
-		return "admin/reviewForm";
+		System.out.println("상세페이지:"+map);
+		return "admin/reviewView";
 	}
-	*/
+	
+	
 	
 	
 

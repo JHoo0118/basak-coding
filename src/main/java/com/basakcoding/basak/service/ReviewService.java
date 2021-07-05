@@ -16,9 +16,15 @@ public class ReviewService {
 	@Autowired
 	private ReviewMapper reviewMapper;
     
-    public List<Map> getReviewList() {
-		return reviewMapper.getReviewList();
+    public List<Map> AllReviewList() {
+		return reviewMapper.AllReviewList();
 	}
+
+	public ReviewDTO getReviewList(Map map) {
+		return reviewMapper.getReviewList(map);
+	}
+
+	
 
 	
     

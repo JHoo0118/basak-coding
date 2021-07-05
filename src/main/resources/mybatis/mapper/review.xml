@@ -6,14 +6,21 @@
 <mapper namespace="com.basakcoding.basak.mapper.ReviewMapper">
 	
 	<!-- 전체 후기 얻기 -->
-	<select id="getReviewList" resultType="ReviewDTO" >
+	<select id="AllReviewList" resultType="ReviewDTO" >
 		SELECT review_id, c.course_id, content, rating, postdate, title, username
 		FROM review r
 		JOIN courses c ON r.course_id = c.course_id
 		JOIN members m ON m.member_id = r.member_id
 	</select>
 	
-
+	<!-- 후기 상세보기 -->
+	<select id="getReviewList"  parameterType="Map" resultType="ReviewDTO" >
+		SELECT review_id, username, title, r.postdate, r.content, username
+		FROM review r
+		JOIN members m ON m.member_id = r.member_id
+		JOIN courses c ON r.course_id = c.course_id
+		WHERE r.review_id=#{no}
+	</select>
 	
 	
 </mapper>
