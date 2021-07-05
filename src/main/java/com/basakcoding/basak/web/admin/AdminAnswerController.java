@@ -33,21 +33,24 @@ public class AdminAnswerController {
 		return "admin/answerManagement";
 	}//answerList
 	
-//	//강의 질문 전환
-//	@GetMapping("/management/change")
-//	public String likeChange(@RequestParam Map map,Model model) {
-//		if(map.get("action").equals("lec")) {
-//		List<LikeDTO> listLikes = likeService.courseSelect();
-//		model.addAttribute("listLikes", listLikes);
-//		model.addAttribute("title", "강의 좋아요");
-//		return "admin/questionManagement";
-//		}	
-//		else {
-//			List<LikeDTO> listLikes = likeService.questionSelect();
-//			model.addAttribute("listLikes", listLikes);
-//			model.addAttribute("title", "질문 좋아요");
-//			return "admin/questionManagement";
-//		}
-//	}//likeChange
+	@RequestMapping("/management/view")
+	public String answerView(@RequestParam Map map,Model model) {
+		AnswerDTO answer = answerService.selectOne(map);
+		model.addAttribute("answer", answer);
+		model.addAttribute("title", "문의 답변 관리");
+		return "admin/answerView";
+	}
+	
+	@RequestMapping("/management/deleteone")
+	public String deleteOne(@RequestParam Map map) {
+		int affected = answerService.deleteOne(map);
+		if(affected==1) {
+
+			return "forward:/admin/answer/management";
+		}
+		else {
+			return "forward:/admin";
+		} 
+	}
 
 }

@@ -56,9 +56,9 @@
 										</td>
 										<td>[[${i.index+1}]]</td>
 										<td>[[${answer.classification}]]</td>
-										<td>[[${answer.inquiryTitle}]]</td>
-										<td>[[${answer.answerTitle}]]</td>
-										<td>[[${answer.name}]]</td>
+										<td><a th:href="@{/admin/inquiry/management/view(no=${answer.inquiryId},page=ans)}">[[${answer.inquiryTitle}]]</td>
+										<td><a th:href="@{/admin/answer/management/view(no=${answer.answerId})}">[[${answer.answerTitle}]]</td>
+										<td>[[${answer.adminName}]]</td>
 										<td>[[${answer.createdAt}]]</td>
 									</tr>
 				                </tbody>

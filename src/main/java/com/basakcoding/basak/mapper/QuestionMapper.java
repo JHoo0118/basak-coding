@@ -12,8 +12,10 @@ import com.basakcoding.basak.service.QuestionDTO;
 @Mapper
 public interface QuestionMapper {
 
-	//질문 정보 가져오기
+	//질문 리스트 가져오기
 	public List<QuestionDTO> questionSelect();
 
+	//질문 가져오기
+	public QuestionDTO selectOne(Map map);
 
 }
