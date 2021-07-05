@@ -27,17 +27,7 @@
 						
 						<h3 class="text-muted text-center mb-3">결제 목록</h3>
 						<form name="actionForm" th:action="@{/admin/price/management/process}" method="post">
-							<div class="form__header d-flex justify-content-between">
-								<div>
-									<select name="action">
-										<option value="">액션을 선택하세요</option>
-										<option value="edit">수정(1개만)</option>
-										<option value="del">삭제</option>
-									</select>
-									<input class="button button--light button--sm d-inline" type="submit" value="확인" />
-									
-								</div>
-							</div>
+							
 							<div th:if="${message != null}" class="alert alert-success text-center">
 								[[${message}]]
 							</div>
@@ -45,7 +35,6 @@
 							<table class="table table-striped bg-light text-center">
 								<thead>
 				                  <tr class="text-muted">
-				                    <th>액션</th>
 				                    <th>결제번호</th>
 				                    <th>사용자명</th>
 				                    <th>강의명</th>
@@ -57,10 +46,7 @@
 				                </thead>
 				                <tbody>
 									<tr th:each="price, i : ${listPrices}">
-										<td>
-											<input type="checkbox" class="checkbox" name="target" th:value="${price.PAYMENT_ID}"/>
-											<span class="checkbox__mark"></span>
-										</td>
+										
 										<td>[[${price.PAYMENT_CODE}]]</td>
 										<td>[[${price.NAME}]]</td>
 										<td>[[${price.TITLE}]]</td>
