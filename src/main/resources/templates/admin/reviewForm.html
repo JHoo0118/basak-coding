@@ -4,7 +4,7 @@
 	<meta charset="UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>바삭 코딩 | 결제 관리</title>
+	<title>바삭 코딩 | 후기 관리</title>
 	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
 	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
 	<link rel="stylesheet" th:href="@{/css/admin/main.css}" />
@@ -16,7 +16,7 @@
 	<div th:replace="/admin/fragments/header.html :: fragment-header(${title})"></div>
 	<section class="col-xl-10 col-lg-9 col-md-8 mt-6 ml-auto">
 		<div class="container-fluid">
-			<form id="categoryForm" name="categoryForm" class="form" th:action="@{/admin/price/save}" method="post"
+			<form id="categoryForm" name="categoryForm" class="form" th:action="@{/admin/review/save}" method="post"
 				th:object="${category}">
 				<input type="hidden" name="categoryId" th:value="${param.categoryId}" />
 				<div class="form-group row pb-3 position-relative">
