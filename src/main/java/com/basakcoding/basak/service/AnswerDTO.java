@@ -11,9 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AnswerDTO {
 	private Integer answerId;
-	private String name;
+	private Integer inquiryId;
+	private String adminName;
 	private String inquiryTitle;
 	private String answerTitle;
 	private String classification;
+	private String content;
 	private Date createdAt;
 }

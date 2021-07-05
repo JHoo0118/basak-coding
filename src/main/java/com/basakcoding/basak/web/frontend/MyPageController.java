@@ -145,6 +145,7 @@ public class MyPageController {
 		List<Map> map =memberService.myQuestion(userId);
 		if (!map.isEmpty())
 			model.addAttribute("myQuestion",map);
+		System.out.println("질문맵"+map);
 		// 내 문의 제목,시간
 		List<Map> map1 = memberService.myInquiry(userId);
 		if (!map1.isEmpty())
@@ -228,13 +229,30 @@ public class MyPageController {
 		Map map = memberService.viewDetails(userId, pay_code);
 		return map;
 	}
+	//질문 상세보기 
+	@RequestMapping(value = "/questionDetails.do", method = RequestMethod.POST)
+	public @ResponseBody Map questionDetails(@RequestParam("questionId") String questionId, Model model, Authentication auth) {
+		String userId = ((UserDetails) auth.getPrincipal()).getUsername();
+		Map map = memberService.questionDetails(userId, questionId);
+		if (map == null) {
+			map = memberService.questionDetailNotExist(userId, questionId);
+		} 
+		else {
+			if (!map.containsKey("ADMIN_ID"))
+				map.put("ADMIN_ID", null);
+			else model.addAttribute("adminPath","/upload/admin/" + map.get("ADMIN_ID") + "/" + map.get("AVATAR"));
+			
+		}
+		System.out.println("질문상세맵"+map);
+		return map;
+	}
 
+	
 	// 문의 상세보기
 	@RequestMapping(value = "/inquDetails.do", method = RequestMethod.POST)
 	public @ResponseBody Map inquDetails(@RequestParam("inquiry_id") String inquiry_id, Model model, Authentication auth) {
 		String userId = ((UserDetails) auth.getPrincipal()).getUsername();
 		Map map = memberService.inquDetails(userId, inquiry_id);
-		
 		if (map == null) {
 			map = memberService.inquDetailNotExist(userId, inquiry_id);
 		} 

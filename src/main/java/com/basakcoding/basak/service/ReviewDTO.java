@@ -20,6 +20,11 @@ public class ReviewDTO {
 	private String content;
 	private Integer rating;
 	private Date postdate;
+	private String title;
+	private String username;
+	
+	
+	
 	
 	
 }

@@ -4,7 +4,7 @@
 	<meta charset="UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>바삭 코딩 | 결제 관리</title>
+	<title>바삭 코딩 | 후기 관리</title>
 	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
 	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
 	<link rel="stylesheet" th:href="@{/css/admin/main.css}" />
@@ -25,9 +25,18 @@
 					<div class="row md-5 mb-5">
 						<div class="col-xl-12 col-12 mb-4 mb-xl-0">
 						
-						<h3 class="text-muted text-center mb-3">결제 목록</h3>
-						<form name="actionForm" th:action="@{/admin/price/management/process}" method="post">
-							
+						<h3 class="text-muted text-center mb-3">후기 목록</h3>
+						<form name="actionForm" th:action="@{/admin/review/management/process}" method="post">
+							<div class="form__header d-flex justify-content-between">
+								<div>
+									<select name="action">
+										<option value="">액션을 선택하세요</option>
+										<option value="del">삭제</option>
+									</select>
+									<input class="button button--light button--sm d-inline" type="submit" value="확인" />
+									
+								</div>
+							</div>
 							<div th:if="${message != null}" class="alert alert-success text-center">
 								[[${message}]]
 							</div>
@@ -35,25 +44,28 @@
 							<table class="table table-striped bg-light text-center">
 								<thead>
 				                  <tr class="text-muted">
-				                    <th>결제번호</th>
-				                    <th>사용자명</th>
+				                    <th>액션</th>
+				                    <th>#</th>
 				                    <th>강의명</th>
-				                    <th>결제 금액</th>
-				                    <th>결제 상태</th>
-				                    <th>결제 방법</th>
-				                    <th>결제 날짜</th>
+				                    <th>내용</th>
+				                    <th>작성자</th>
+				                    <th>별점</th>
+				                    <th>작성일</th>
 				                  </tr>
 				                </thead>
 				                <tbody>
-									<tr th:each="price, i : ${listPrices}">
+									<tr th:each="review, i : ${listReviews}" >
+										<td>
+											<input type="checkbox" class="checkbox" name="target" th:value="${review.reviewId}"/>
+											<span class="checkbox__mark"></span>
+										</td>
+										<td>[[${review.courseId}]]</td>
+										<td><a th:href="@{/admin/review/management/view(no=${review.reviewId})}">[[${review.title}]]</a></td>
+										<td>[[${review.content}]]</td>
+										<td>[[${review.username}]]</td>
+										<td>[[${review.rating}]]</td>
+										<td>[[${review.postdate}]]</td>
 										
-										<td>[[${price.PAYMENT_CODE}]]</td>
-										<td>[[${price.NAME}]]</td>
-										<td>[[${price.TITLE}]]</td>
-										<td>[[${price.PRICE}]]</td>
-										<td>[[${price.PAYMENT_STATE}]]</td>
-										<td>[[${price.PAYMENT_METHOD}]]</td>
-										<td>[[${price.CREATED_AT}]]</td>
 									</tr>
 				                </tbody>
 							</table>

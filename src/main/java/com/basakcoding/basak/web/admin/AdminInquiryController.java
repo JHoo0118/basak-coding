@@ -36,15 +36,25 @@ public class AdminInquiryController {
 	
 	@RequestMapping("/management/view")
 	public String inquiryView(@RequestParam Map map,Model model) {
-		InquiryDTO dto = inquiryService.selectOne(map);
-		model.addAttribute("inquiry", dto);
+		InquiryDTO inquiry = inquiryService.selectOne(map);
+		model.addAttribute("inquiry", inquiry);
+		if(map.get("page") != null) {
+			model.addAttribute("title", "문의 답변 관리");
+			return "admin/inquiryView";
+		}
 		model.addAttribute("title", "문의 관리");
 		return "admin/inquiryView";
 	}//문의 상세보기
 
 	@RequestMapping("/management/deleteone")
 	public String deleteInquiryOne(@RequestParam Map map) {
-		int flag = inquiryService.deleteOne(map);
-		return "forward:/admin/inquiry/management";
+		int affected = inquiryService.deleteOne(map);
+		if(affected==1) {
+
+			return "forward:/admin/inquiry/management";
+		}
+		else {
+			return "forward:/admin";
+		}
 	}
 }//class

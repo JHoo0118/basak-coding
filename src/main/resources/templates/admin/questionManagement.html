@@ -60,7 +60,7 @@
 										</td>
 										<td>[[${i.index+1}]]</td>
 										<td>[[${question.courseTitle}]]</td>
-										<td>[[${question.questionTitle}]]</td>
+										<td><a th:href="@{/admin/question/management/view(no=${question.questionId})}">[[${question.questionTitle}]]</td>
 										<td>[[${question.userName}]]</td>
 										<td>[[${question.createdAt}]]</td>
 									</tr>
