@@ -153,7 +153,6 @@
 
 										}
 
-
 									})
 								})
 
@@ -164,14 +163,47 @@
 								var courseTime = Math.ceil(courseLength / 60);
 								console.log("courseTime:", courseTime);
 								$('#length').text(Math.floor(courseTime / 60) + "시간" + (courseTime % 60) + "분");
-
+								
+							 
+						
+							 
+							 var dd="[[${course.checkPayment}]]"
+							 	console.log("${course.checkPayment}:",dd);
+							 
 							</script>
 
 
 						</div>
-						<a th:href="@{/orders/payments/}+${course.COURSE_ID}" class="button button--cover button--full">
+						<span th:if="${course.checkPayment}=='0'">
+						<a  th:href="@{/orders/payments/}+${course.COURSE_ID}" class="button button--cover button--full">
 							등록하기
 						</a>
+						
+						</span>
+						<span th:if="${course.checkPayment}=='1'">
+						<a  th:href="@{/personal/dashboard}" class="button button--cover button--full">
+							강의 보러가기
+						</a>
+						</span>
+						
+						<span th:if="${course.checkPayment}=='2'">
+						<a  id="notLogin" class="button button--cover button--full">
+							등록하기
+						</a>
+						</span>
+						<script>
+							 $('#notLogin').click(function(){
+								if(confirm('로그인 후 이용 가능합니다')){
+									location.href = "/auth/signin";
+								}
+								return;
+							});
+						 </script>
+						
+					
+						
+						
+						
 					</div>
 					<div class="description">
 

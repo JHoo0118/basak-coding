@@ -63,6 +63,7 @@ public class CatalogController {
 		//로그인 안됐을때 likeCheck값 기본 0으로 초기화된 상태로 맵에저장
 		int likeCheck=0;
 		int reviewCheck=0;
+		int checkPayment=2;
 		
 		Map map = catalogService.selectOne(courseId);//강의 상세보기에 필요한 값 받아오기
 		
@@ -73,10 +74,14 @@ public class CatalogController {
 		String getClob = catalogService.getClobText(courseId);//강의설명(DESCRIPTION) 받아오기
 		
 		
+		
 		if(auth != null) {//로그인이 됐을때
 		
 			map.put("memberId",((UserDetails)auth.getPrincipal()).getUsername());
 			map.put("courseId",courseId);
+			
+			//결제 내역 판단 여부
+			checkPayment = catalogService.checkPayment(map);
 			//이전 좋아요 여부 확인
 			likeCheck = catalogService.likeCheck(map);
 			//이전 리뷰등록 여부 확인
@@ -88,9 +93,11 @@ public class CatalogController {
 		else map.put("PATH", "/upload/admin/" + map.get("ADMIN_ID") + "/" + map.get("AVATAR"));
 
 
-		//비로그인 시 likeCheck값/reviewCheck값 기본 0으로 초기화된 상태로 맵에저장
+		//비로그인 시 likeCheck값/reviewCheck/checkPayment
+		//위의 값들이 기본 0으로 초기화된 상태로 맵에저장
 		map.put("likeCheck", likeCheck);
 		map.put("reviewCheck", reviewCheck);
+		map.put("checkPayment",checkPayment);
 		
 		//CLOB형 자료 스트링화 하여 맵에 저장
 		map.put("DESCRIPTION", getClob);	
