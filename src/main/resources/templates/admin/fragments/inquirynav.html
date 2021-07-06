@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<div th:fragment="fragment-inquirynav">
+	<ul class="nav nav-tabs">
+		<li class="nav-item">
+			<a id="inqTab" class="nav-link" th:href="@{/admin/inquiry/management}">문의 </a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" th:href="@{/admin/answer/management}">문의 답변</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" th:href="@{/admin/question/management}">문의 질문</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" th:href="@{/admin/inquiry/management}">문의 분류</a>
+		</li>
+	</ul>
+</div>
+</html>

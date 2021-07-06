@@ -28,7 +28,7 @@ public class AdminQuestionController {
 	public String questionList(Model model) {
 		List<QuestionDTO> listQuestions = questionService.questionSelect();
 		model.addAttribute("listQuestions", listQuestions);
-		model.addAttribute("title", "질문 관리");
+		model.addAttribute("title", "문의 관리");
 		return "admin/questionManagement";
 	}//likeList
 	
@@ -36,7 +36,7 @@ public class AdminQuestionController {
 	public String questionView(@RequestParam Map map,Model model) {
 		QuestionDTO question = questionService.selectOne(map);
 		model.addAttribute("question",question);
-		model.addAttribute("title", "질문 관리");
+		model.addAttribute("title", "문의 관리");
 		return "admin/questionView";
 	}
 

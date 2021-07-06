@@ -31,6 +31,7 @@ public class AdminInquiryController {
 		List<InquiryDTO> listInquirys = inquiryService.inquirySelect();
 		model.addAttribute("listInquirys", listInquirys);
 		model.addAttribute("title", "문의 관리");
+		model.addAttribute("tab", "inq");
 		return "admin/inquiryManagement";
 	}//likeList
 	
@@ -39,7 +40,7 @@ public class AdminInquiryController {
 		InquiryDTO inquiry = inquiryService.selectOne(map);
 		model.addAttribute("inquiry", inquiry);
 		if(map.get("page") != null) {
-			model.addAttribute("title", "문의 답변 관리");
+			model.addAttribute("title", "문의 관리");
 			return "admin/inquiryView";
 		}
 		model.addAttribute("title", "문의 관리");

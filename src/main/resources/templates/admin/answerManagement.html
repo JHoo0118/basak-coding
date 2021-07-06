@@ -26,12 +26,21 @@
 						<div class="col-xl-12 col-12 mb-4 mb-xl-0">
 						
 						<h3 class="text-muted text-center mb-3">문의 답변 관리</h3>
+						<ul class="nav nav-tabs">
+									<li class="nav-item">
+										<a class="nav-link" th:href="@{/admin/inquiry/management}">문의 </a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link active" th:href="@{/admin/answer/management}">문의 답변</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" th:href="@{/admin/question/management}">문의 질문</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" th:href="@{/admin/inquiry/management}">문의 분류</a>
+									</li>
+								</ul>
 						<form name="actionForm" th:action="@{/admin/comment/management/change}">
-							<div class="form__header d-flex justify-content-between">
-								<div>
-									<a class="button button--reverse mb-2" th:href="@{/admin/category/management/form}">삭제</a>
-								</div>
-							</div>
 							<div th:if="${message != null}" class="alert alert-success text-center">
 								[[${message}]]
 							</div>

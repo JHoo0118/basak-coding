@@ -52,14 +52,8 @@
 							<li th:classappend="${title == '좋아요 관리'} ? current" class="nav-item mb-2">
 								<a th:href="@{/admin/like/management}" th:classappend="${title != '좋아요 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>좋아요 관리</a>
 							</li>
-							<li th:classappend="${title == '질문 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/question/management}" th:classappend="${title != '질문 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>질문 관리</a>
-							</li>
 							<li th:classappend="${title == '문의 관리'} ? current" class="nav-item mb-2">
 								<a th:href="@{/admin/inquiry/management}" th:classappend="${title != '문의 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>문의 관리</a>
-							</li>
-							<li th:classappend="${title == '문의 답변 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/answer/management}" th:classappend="${title != '문의 답변 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>문의 답변 관리</a>
 							</li>
 							<li th:classappend="${title == 'FAQ 관리'} ? current" class="nav-item mb-2">
 								<a th:href="@{/admin/faq/management}" th:classappend="${title != 'FAQ 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>FAQ 관리</a>

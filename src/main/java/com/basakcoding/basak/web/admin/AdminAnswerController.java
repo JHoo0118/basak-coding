@@ -29,7 +29,7 @@ public class AdminAnswerController {
 	public String answerList(Model model) {
 		List<AnswerDTO> listAnswers = answerService.answerSelect();
 		model.addAttribute("listAnswers", listAnswers);
-		model.addAttribute("title", "문의 답변 관리");
+		model.addAttribute("title", "문의 관리");
 		return "admin/answerManagement";
 	}//answerList
 	
@@ -37,7 +37,7 @@ public class AdminAnswerController {
 	public String answerView(@RequestParam Map map,Model model) {
 		AnswerDTO answer = answerService.selectOne(map);
 		model.addAttribute("answer", answer);
-		model.addAttribute("title", "문의 답변 관리");
+		model.addAttribute("title", "문의 관리");
 		return "admin/answerView";
 	}
 	

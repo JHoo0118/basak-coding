@@ -1,79 +1,90 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head>
 	<meta charset="UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>바삭 코딩 | 질문 관리</title>
 	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
-	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}" />
 	<link rel="stylesheet" th:href="@{/css/admin/main.css}" />
 	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
-  	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
-  	<script defer th:src="@{/js/actionValidate.js}"></script>
+	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+	<script defer th:src="@{/js/actionValidate.js}"></script>
 </head>
+
 <body>
-<body>
-	<!-- Header -->
-	<div th:replace="/admin/fragments/header.html :: fragment-header(${title})"></div>
-	
-	<!-- 메인 -->
-	<section class="col-xl-10 col-lg-9 col-md-8 mt-6 ml-auto">
-		<div class="container-md">
-			<div class="row">
-				<div class="col-12 ml-auto">
-					<div class="row md-5 mb-5">
-						<div class="col-xl-12 col-12 mb-4 mb-xl-0">
-						
-						<h3 class="text-muted text-center mb-3">질문 관리</h3>
-						<form name="actionForm" th:action="@{/admin/comment/management/change}">
-							<div class="form__header d-flex justify-content-between">
-								<div>
-									<select name="action">
-										<option value="manage">관리자</option>
-										<option value="stu">수강생</option>
-									</select>
-									<input class="button button--light button--sm d-inline" type="submit" value="확인" />
-									<a class="button button--reverse mb-2" th:href="@{/admin/category/management/form}">삭제</a>
-								</div>
+
+	<body>
+		<!-- Header -->
+		<div th:replace="/admin/fragments/header.html :: fragment-header(${title})"></div>
+
+		<!-- 메인 -->
+		<section class="col-xl-10 col-lg-9 col-md-8 mt-6 ml-auto">
+			<div class="container-md">
+				<div class="row">
+					<div class="col-12 ml-auto">
+						<div class="row md-5 mb-5">
+							<div class="col-xl-12 col-12 mb-4 mb-xl-0">
+
+								<h3 class="text-muted text-center mb-3">질문 관리</h3>
+								<ul class="nav nav-tabs">
+									<li class="nav-item">
+										<a class="nav-link" th:href="@{/admin/inquiry/management}">문의 </a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" th:href="@{/admin/answer/management}">문의 답변</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link active" th:href="@{/admin/question/management}">문의 질문</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" th:href="@{/admin/inquiry/management}">문의 분류</a>
+									</li>
+								</ul>
+								<form name="actionForm" th:action="@{/admin/comment/management/change}">
+									<div th:if="${message != null}" class="alert alert-success text-center">
+										[[${message}]]
+									</div>
+									<div class="table-responsive" style="min-width:1000px;">
+										<table class="table table-striped bg-light text-center">
+											<thead>
+												<tr class="text-muted">
+													<th>액션</th>
+													<th>#</th>
+													<th>강의명</th>
+													<th>제목</th>
+													<th>작성자</th>
+													<th>작성 날짜</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="question, i : ${listQuestions}">
+													<td>
+														<input type="checkbox" class="checkbox" name="target"
+															th:value="${question.questionId}" />
+														<span class="checkbox__mark"></span>
+													</td>
+													<td>[[${i.index+1}]]</td>
+													<td>[[${question.courseTitle}]]</td>
+													<td><a
+															th:href="@{/admin/question/management/view(no=${question.questionId})}">[[${question.questionTitle}]]
+													</td>
+													<td>[[${question.userName}]]</td>
+													<td>[[${question.createdAt}]]</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</form>
 							</div>
-							<div th:if="${message != null}" class="alert alert-success text-center">
-								[[${message}]]
-							</div>
-							<div class="table-responsive" style="min-width:1000px;">
-							<table class="table table-striped bg-light text-center">
-								<thead>
-				                  <tr class="text-muted">
-				                    <th>액션</th>
-				                    <th>#</th>
-				                    <th>강의명</th>
-				                    <th>제목</th>
-				                    <th>작성자</th>
-				                    <th>작성 날짜</th>
-				                  </tr>
-				                </thead>
-				                <tbody>
-									<tr th:each="question, i : ${listQuestions}">
-										<td>
-											<input type="checkbox" class="checkbox" name="target" th:value="${question.questionId}"/>
-											<span class="checkbox__mark"></span>
-										</td>
-										<td>[[${i.index+1}]]</td>
-										<td>[[${question.courseTitle}]]</td>
-										<td><a th:href="@{/admin/question/management/view(no=${question.questionId})}">[[${question.questionTitle}]]</td>
-										<td>[[${question.userName}]]</td>
-										<td>[[${question.createdAt}]]</td>
-									</tr>
-				                </tbody>
-							</table>
-							</div>
-						</form>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</section>
-	
-</body>
+		</section>
+
+	</body>
+
 </html>
