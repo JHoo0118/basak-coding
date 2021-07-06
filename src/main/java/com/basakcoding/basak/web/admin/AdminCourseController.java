@@ -61,13 +61,14 @@ public class AdminCourseController {
 		return "admin/courseForm";
 	}
 	
+	// 강의 등록
 	@PostMapping("/save")
 	public String createCourse(
 			@RequestParam Map<String, Object> map, 
 			@RequestParam Map<String, MultipartFile> multipartFiles,
 			RedirectAttributes redirectAttributes) throws IOException {
 		
-		// 강의 생성 로직
+		// 강의 등록 로직
 		if (!multipartFiles.get("thumbnail").isEmpty()) {
 			
 			MultipartFile thumbnailMulti = multipartFiles.get("thumbnail");
@@ -180,10 +181,11 @@ public class AdminCourseController {
 			// 파일 로컬 저장
 			for (String key : multipartFiles.keySet()) {
 				String[] temp;
-				if (key.startsWith("file")) {
+				if (key.startsWith("file-") && !key.startsWith("files")) {
 					temp = key.split("-");
 					MultipartFile fileMulti = multipartFiles.get(key);
 					String fileUri = StringUtils.cleanPath(fileMulti.getOriginalFilename());
+					System.out.println(key);
 					if (!file.containsKey(temp[2]))
 						file.put(temp[2], new HashMap());
 					file.get(temp[2]).put("fileName", fileUri);

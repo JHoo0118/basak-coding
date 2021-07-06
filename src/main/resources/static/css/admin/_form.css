@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+.none {
+	display: none;
+}
+
 .alert--custom {
 	position: absolute;
 	top: 20px;
@@ -103,7 +107,224 @@
 /* 새로 추가 */
 .form__section {
 	padding: 4rem 0;
-	width: 70%;
 	margin: 0 auto;
+}
+
+.form__tab { 
+	color:#eb2f64;
+}
+.form__tab:hover {
+	color:#ff1c64;
+}
+
+.form__tab.active {
+	border-color: #333 #333 #fff !important;
+}
+
+.post-form__title,
+.post-form__description {
+	font-size: 28px;
+	border: none;
+	border-radius: 0;
+	border-bottom: 2px solid #333;
+	background-color: transparent;
 	
+}
+
+.post-form__title:focus,
+.post-form__description:focus {
+	outline: none;
+	border: 0 !important;
+	border-bottom: 2px solid #333 !important;
+}
+
+.post-form__title::placeholder,
+.post-form__description::placeholder {
+	font-size: 28px;
+	font-weight: 700;
+	opacity: 0.5;
+}
+
+.button--square {
+  border-radius: 4px;
+  width: 120px;
+  color: #fff;
+  padding: .8rem;
+  background-color: #eb2f64;
+  border: 1px solid #eb2f64;
+  font-size: 14px !important;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  display: block;
+  transition: all 0.4s;
+}
+
+.button--square--purple {
+  	border: 1px solid #5643FA;
+	background-color: #5643FA;
+	color: #fff;
+}
+
+.button--square:hover {
+	transform: scale(1.05);
+	color: #fff;
+	text-decoration: none;
+}
+
+.button--square--cancel {
+  	border: 1px solid #ebebeb;
+	background-color: #ebebeb;
+	color: #1e1e1e;
+}
+
+.button--square--cancel:hover {
+	background-color: #1e1e1e;
+	color: #ebebeb;	
+}
+
+
+@media (max-width: 1200px) {
+  .button--square {
+    width: 100px;
+  	font-size: 12px;
+  	padding: .7rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .button--square {
+    width: 95px;
+  	font-size: 9px;
+  	padding: .6rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .button--square {
+    width: 85px;
+  	font-size: 8px;
+  	padding: .5rem;
+  }
+}
+
+
+/* 커리큘럼 등록 */
+
+.accordion--border {
+	border: 1px solid #333;
+	border-radius: 4px;
+}
+
+.curri__button {
+	background-color: transparent;
+	border: 0;
+	color: #eb2f64;
+	padding: 10px 0;
+}
+
+.curri__button .fa-calendar-plus{
+	margin-right:8px;
+}
+
+.curri__button .fa-comment-alt-plus {
+	margin-right:6px;
+}
+
+.curri__button .fa-calendar-plus,
+.curri__button .fa-calendar-minus {
+	font-size: 40px;
+}
+
+.curri__button .fa-comment-alt-plus,
+.curri__button .fa-comment-alt-minus {
+	font-size: 38px;
+}
+
+.aToggle__switch {
+	appearance: none;
+	height: 25px;
+	width: 50px;
+	background-color: #c2c2c2;
+	cursor: pointer;
+	border-radius: 1em;
+	position: relative;
+	transition: background-color 0.3s ease;
+  	margin-right: 14px;
+  	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.aToggle__switch::before {
+  content: "";
+  height: 100%;
+  width: 50%;
+  background-color: white;
+  position: absolute;
+  border-radius: 50%;
+  border: #999 solid 0.2em;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.aToggle__switch:checked {
+  background-color: #eb2f64;
+}
+
+.aToggle__switch:checked::before {
+  border-color: #eb2f64;
+  transform: translateX(100%);
+}
+
+@media screen and (max-width: 500px) {
+  .aToggle__switch {
+    outline: none;
+  }
+}
+
+.toggle__input {
+	width: 100%;
+	font-size: 28px;
+	border: 0;
+	border-radius: 0;
+	background-color: transparent;
+}
+
+toggle__textarea {
+	height: 100%;
+	font-size: 20px;
+	border-radius: 0;
+	background-color: transparent;
+}
+
+.toggle__input::placeholder {
+	font-size: 20px;
+	font-weight: 700;
+	opacity: 0.5;
+}
+
+.video__formBtn {
+	border: 0;
+	border-radius: 0;
+	background-color: transparent;
+	color: #eb2f64;
+	padding:0;
+} 
+.video__formBtn .fa-plus-square,
+.video__formBtn .fa-minus-square,
+.video__formBtn .fa-file-plus,
+.video__formBtn .fa-file-minus {
+	font-size: 32px;
+}
+
+
+
+.video__label {
+	cursor:pointer;
+	color: #333;
+	font-size: 14px;
+	padding: 8px 12px;
+	font-weight: 700;
+	background-color: #5643FA;
+	border-radius: 4px;
+	color: #fff;
+	margin-top: 10px;
 }

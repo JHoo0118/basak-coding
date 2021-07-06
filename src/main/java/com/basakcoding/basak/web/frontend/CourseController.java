@@ -98,7 +98,7 @@ public class CourseController {
 					System.out.println("파일 없음");
 				}
 				
-				if (fileExtension.equals("html"))
+//				if (fileExtension.equals("html"))
 					fileList.get(0).put("INITIAL_CODE", sb.toString());
 			}
 

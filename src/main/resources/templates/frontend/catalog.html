@@ -28,7 +28,8 @@
             <ul class="row p-0" style="list-style: none;">
                 <li th:each="course : ${courseList}" class="col-lg-4 col-md-6 col-sm-6 lecture__item">
                     <div style="position: relative;"  class="lecture-wrapper">
-                        <div class="lecture-profile" style="background-image: url(/images/image10.jpg);"></div>
+                        <div th:if="${course.AVATAR} == null" class="lecture-profile" style="background-image: url(/images/image10.jpg);"></div>
+                        <div th:if="${course.AVATAR} != null" class="lecture-profile" th:style="'background-image: url('+${course.ADMIN_PATH}+');'"></div>
                                                                                                               
                         <a th:href="@{/catalog/}+${course.COURSE_ID}">
 
