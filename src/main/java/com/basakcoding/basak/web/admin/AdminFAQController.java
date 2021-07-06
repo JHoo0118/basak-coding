@@ -29,7 +29,7 @@ public class AdminFAQController {
 	public String faqList(Model model) {
 		List<FAQDTO> listFAQs = faqService.faqSelect();
 		model.addAttribute("listFAQs", listFAQs);
-		model.addAttribute("title", "FAQ 관리");
+		model.addAttribute("title", "강의 관리");
 		return "admin/faqManagement";
 	}//faqList
 	

@@ -30,7 +30,7 @@ public class AdminCategoryController {
 	public String categoryList(Model model) {
 		List<CategoryDTO> listCategories = categoryService.selectList();
 		model.addAttribute("listCategories", listCategories);
-		model.addAttribute("title", "카테고리 관리");
+		model.addAttribute("title", "강의 관리");
 		return "admin/categoryManagement";
 	}
 	
@@ -43,7 +43,7 @@ public class AdminCategoryController {
 			category = categoryService.getCategoryById(categoryId);
 		}
 		model.addAttribute("category", category);
-		model.addAttribute("title", "카테고리 관리");
+		model.addAttribute("title", "강의 관리");
 		return "admin/categoryForm";
 	}
 	

@@ -29,7 +29,7 @@ public class AdminFileController {
 	public String fileList(Model model) {
 		List<FileDTO> listFiles = fileService.fileSelect();
 		model.addAttribute("listFiles", listFiles);
-		model.addAttribute("title", "파일 관리");
+		model.addAttribute("title", "강의 관리");
 		return "admin/fileManagement";
 	}//videoList
 	

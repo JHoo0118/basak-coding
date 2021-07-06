@@ -29,7 +29,7 @@ public class AdminVideoController {
 	public String videoList(Model model) {
 		List<VideoDTO> listVideos = videoService.videoSelect();
 		model.addAttribute("listVideos", listVideos);
-		model.addAttribute("title", "동영상 관리");
+		model.addAttribute("title", "강의 관리");
 		return "admin/videoManagement";
 	}//videoList
 	

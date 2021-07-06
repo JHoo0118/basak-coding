@@ -29,22 +29,11 @@
 							<li th:classappend="${title == '사용자 관리'} ? current" class="nav-item mb-2">
 								<a th:href="@{/admin/member/management}" th:classappend="${title != '사용자 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>사용자 관리</a>
 							</li>
-							<li th:classappend="${title == '카테고리 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/category/management}" th:classappend="${title != '카테고리 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>카테고리 관리</a>
-							</li>
 							<li th:classappend="${title == '강의 관리'} ? current" class="nav-item mb-2">
 								<a th:href="@{/admin/course/management}" th:classappend="${title != '강의 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>강의 관리</a>
 							</li>
-
-							<li th:classappend="${title == '동영상 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/video/management}" th:classappend="${title != '동영상 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>동영상 관리</a>
-							</li>
-							<li th:classappend="${title == '파일 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/file/management}" th:classappend="${title != '파일 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>파일 관리</a>
-
 							<li th:classappend="${title == '후기 관리'} ? current" class="nav-item mb-2">
 								<a th:href="@{/admin/review/management}" th:classappend="${title != '후기 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>후기 관리</a>
-
 							</li>
 							<li th:classappend="${title == '댓글 관리'} ? current" class="nav-item mb-2">
 								<a th:href="@{/admin/comment/management}" th:classappend="${title != '댓글 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>댓글 관리</a>
@@ -54,12 +43,6 @@
 							</li>
 							<li th:classappend="${title == '문의 관리'} ? current" class="nav-item mb-2">
 								<a th:href="@{/admin/inquiry/management}" th:classappend="${title != '문의 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>문의 관리</a>
-							</li>
-							<li th:classappend="${title == 'FAQ 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/faq/management}" th:classappend="${title != 'FAQ 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>FAQ 관리</a>
-							</li>
-							<li th:classappend="${title == '커리큘럼 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/curriculum/management}" th:classappend="${title != '커리큘럼 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>커리큘럼 관리</a>
 							</li>
 	                    </ul>
 	    			</div>

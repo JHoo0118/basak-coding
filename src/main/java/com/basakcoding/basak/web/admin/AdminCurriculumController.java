@@ -29,7 +29,7 @@ public class AdminCurriculumController {
 	public String curriculumList(Model model) {
 		List<CurriculumDTO> listCurriculums = curriculumService.curriculumSelect();
 		model.addAttribute("listCurriculums", listCurriculums);
-		model.addAttribute("title", "커리큘럼 관리");
+		model.addAttribute("title", "강의 관리");
 		return "admin/curriculumManagement";
 	}//curriculumList
 	
