@@ -351,12 +351,6 @@
 								    </a>
 					            </div>
 				            </li>
-						    
-						    <!--
-						    <li id="file-1" class="file__item"><a class="file__tab" href="javascript:void(0)">index.html</a></li>
-						    <li id="file-2" class="file__item"><a class="file__tab" href="javascript:void(0)">styles.css</a></li>
-						    <li id="file-3" class="file__item"><a class="file__tab" href="javascript:void(0)">script.js</a></li>
-						  	-->
 						  </ul>
 						</nav>
     				</div>
@@ -707,8 +701,8 @@
 			      verticalScrollbarSize: 18,
 			    },
 	  		});
-		  
-		  editorPreview.body.innerHTML = `[(${fileList.get(0).INITIAL_CODE})]`;
+		  if (FILE_EXTENSION == 'html')
+		 	 editorPreview.body.innerHTML = `[(${fileList.get(0).INITIAL_CODE})]`;
 		  editor.onDidChangeModelContent(() => {
 			  if (FILE_EXTENSION == 'html')
 				editorPreview.body.innerHTML = editor.getValue();

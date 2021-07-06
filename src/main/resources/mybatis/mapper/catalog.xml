@@ -7,7 +7,7 @@
 	<!-- 강의목록 -->
 	<select id="courseList" resultType="Map">
 	
-		SELECT co.*,ca.name CATEGORY_NAME,a.*,a.name ADMIN_NAME 
+		SELECT co.*,ca.name CATEGORY_NAME,a.*,a.name ADMIN_NAME
 		FROM COURSES co
 		JOIN CATEGORY ca 
 		ON co.category_id = ca.category_id
@@ -29,9 +29,7 @@
 	
 	<!-- 강의상세보기 강의설명 -->
 	<select id="getClobText" parameterType="String" resultType="String">
-	
-		SELECT to_char(DESCRIPTION) AS CONTENTS FROM COURSES WHERE COURSE_ID=#{courseId}
-		
+		SELECT DESCRIPTION AS CONTENTS FROM COURSES WHERE COURSE_ID=#{courseId}
 	</select>
 	
 	

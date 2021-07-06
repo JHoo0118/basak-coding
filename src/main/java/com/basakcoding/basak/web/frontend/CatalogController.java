@@ -45,11 +45,16 @@ public class CatalogController {
 		
 		
 		for (Map map : courseList) {
+			
 			map.put("PATH", "/upload/course/" + map.get("COURSE_ID") + "/thumbnail/" + map.get("THUMBNAIL"));
+			if (map.containsKey("AVATAR")) {
+				map.put("ADMIN_PATH", "/upload/admin/" + map.get("ADMIN_ID") + "/" + map.get("AVATAR"));
+			} else {
+				map.put("AVATAR", null);
+			}
 		}
 		
 		model.addAttribute("courseList", courseList);
-		System.out.println("courseList"+courseList);
 		return "frontend/catalog";
 	
 	
