@@ -3,35 +3,118 @@ var courseFormInputs = courseForm.querySelectorAll('.form-control');
 
 function setErrorFor(input, message) {
 	var parent = input.parentNode;
-	var errorText = parent.querySelector('span');
+	var errorText = parent.querySelector('small');
+	errorText.classList.add('error')
 	errorText.innerText = message;
 }
 
-function categoryValidate(value) {
+function categoryValidate(value, ele) {
 	if (value === "") {
-		setErrorFor(courseForm.categoryId, "필수 입력 항목입니다.");
+		setErrorFor(ele, "필수 입력 항목입니다.");
 		return false;
 	}
 	return true;
 }
 
+function priceValidate(value) {
+	if (value === "") {
+		setErrorFor(courseForm.price.parentNode, "필수 입력 항목입니다.");
+		return false;
+	}
+	return true;
+}
+
+function courseTitleValidate(value) {
+	if (value === "") {
+		setErrorFor(courseForm.courseTitle.parentNode, "필수 입력 항목입니다.");
+		return false;
+	}
+	return true;
+}
+
+function shortDescriptionValidate(value) {
+	if (value === "") {
+		setErrorFor(courseForm.shortDescription.parentNode, "필수 입력 항목입니다.");
+		return false;
+	}
+	return true;
+}
 
 Array.prototype.slice.call(courseForm).forEach(function(inputElement) {
 	inputElement.addEventListener("blur", function(e) {
-		if (e.target.name === 'categoryId') 
-			categoryValidate(courseForm.categoryId.options[courseForm.categoryId.selectedIndex].value);
+		if (e.target.name === 'categoryId')
+			categoryValidate(courseForm.categoryId.options[courseForm.categoryId.selectedIndex].value, courseForm.categoryId);
+
+		if (e.target.name === 'adminId')
+			categoryValidate(courseForm.adminId.options[courseForm.adminId.selectedIndex].value, courseForm.adminId);
 			
+		if (e.target.name === 'difficulty')
+			categoryValidate(courseForm.difficulty.options[courseForm.difficulty.selectedIndex].value, courseForm.difficulty);
+	
+		if(e.target.name === 'price') 
+			priceValidate(e.target.value.trim(), courseForm.price.parentNode);
+			
+		if(e.target.name === 'courseTitle') 
+			courseTitleValidate(e.target.value.trim(), courseForm.courseTitle.parentNode);
+		
+		if(e.target.name === 'shortDescription') 
+			shortDescriptionValidate(e.target.value.trim(), courseForm.shortDescription.parentNode);
 	});
 	
 	inputElement.addEventListener("input", function() {
-		var parentElement = inputElement.parentElement.parentElement;
-
-		parentElement.classList.remove('error');
-		parentElement.querySelector("small").innerText = "";
+	 	if (inputElement.name === 'thumbnail') return
+		var parentElement = inputElement.parentElement;
+		if (inputElement.name === 'price' || inputElement.name === 'courseTitle') parentElement = parentElement.parentElement
+		var errorText = parentElement.querySelector('small')
+		
+		errorText.innerText = "";
 	});
 });
 
 
+courseForm.addEventListener('submit', function(e) {
+
+	if (!courseFormValidate(e)) {
+		e.preventDefault();
+		toastr.error('강의 등록에 실패했습니다. 다시 한 번 확인해주세요!', '강의 등록 오류');
+	}
+	return false;
+});
+
+function courseFormValidate() {
+	var errorCheck = false;
+	
+	if (!categoryValidate(courseForm.adminId.options[courseForm.adminId.selectedIndex].value, courseForm.adminId)) {
+		errorCheck = true;
+	}
+	
+	if (!categoryValidate(courseForm.categoryId.options[courseForm.categoryId.selectedIndex].value, courseForm.categoryId)) {
+		errorCheck = true;
+	}
+	
+	if (!categoryValidate(courseForm.difficulty.options[courseForm.difficulty.selectedIndex].value, courseForm.difficulty)) {
+		errorCheck = true;
+	}
+	
+	if (!priceValidate(courseForm.price.value.trim())) {
+		errorCheck = true;
+	}
+	
+	if (!thumbnailValidate()) {
+		errorCheck = true;
+	}
+	
+	if(!courseTitleValidate(courseForm.courseTitle.value.trim())) {
+		errorCheck = true;
+	}
+	
+	if(!shortDescriptionValidate(courseForm.shortDescription.value.trim())) {
+		errorCheck = true;
+	}
+	
+	if (errorCheck) return false;
+	return true;
+}
 
 
 // 썸네일
