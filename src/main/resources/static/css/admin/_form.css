@@ -71,13 +71,11 @@
 .form-group small {
 	position: absolute;
 	left: 15px;
-	bottom: -10px;
-	visibility: hidden;
+	bottom: -25px;
 }
 
 .form-group.error small {
 	color: #e74c3c;
-	visibility: visible;
 }
 
 

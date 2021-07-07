@@ -60,10 +60,12 @@
 				                <ul class="navbar-nav">
 					                <li class="ml-md-auto d-flex align-items-center">
 					                	<!-- <span class="font-weight-bold" sec:authentication="principal.username"></span> -->
+					                	<a th:href="@{/admin/course/management/form}" class="nav-link" style="cursor:pointer;">
+					                		<i class="fas fa-pen" style="color:#eb2f64"></i>
+					                	</a>
 					                	<span class="nav-link" style="cursor:pointer;" data-toggle="modal" data-target="#modalLogout">
 					                		<i class="fas fa-sign-out-alt text-primary--1 fa-lg"></i>
 					                	</span>
-					                	
 				                	</li>
 				            	</ul>
 				            </div>
