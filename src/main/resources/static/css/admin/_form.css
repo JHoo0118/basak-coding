@@ -1,5 +1,21 @@
 @charset "UTF-8";
 
+.courseForm--section {
+	padding: 100px 80px 60px;
+}
+
+@media (max-width: 1200px) {
+    .courseForm--section {
+		padding: 90px 20px 60px;
+	}
+}
+
+@media (max-width: 768px) {
+    .courseForm--section {
+		padding: 2px 20px 60px;
+	}
+}
+
 .none {
 	display: none;
 }
@@ -63,6 +79,8 @@
 	color: #e74c3c;
 	visibility: visible;
 }
+
+
 
 @media (max-width: 576px) {
     .form-group .form__icon {

@@ -26,25 +26,13 @@
 						<div class="col-xl-12 col-12 mb-4 mb-xl-0">
 						
 						<h3 class="text-muted text-center mb-3">카테고리 목록</h3>
-						<ul class="nav nav-tabs">
-							<li class="nav-item">
-								<a class="nav-link active" th:href="@{/admin/category/management}">강의 카테고리</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" th:href="@{/admin/course/management}">강의 </a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" th:href="@{/admin/video/management}">동영상</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" th:href="@{/admin/file/management}">파일</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" th:href="@{/admin/curriculum/management}">커리큘럼</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" th:href="@{/admin/faq/management}">FAQ</a>
-							</li>
+						<ul class="nav nav-tabs mx-3" style="border-bottom-color: #333" id="nav-tab" role="tablist" >
+							<a class="nav-link form__tab active" th:href="@{/admin/category/management}">강의 카테고리</a>
+							<a class="nav-link form__tab" th:href="@{/admin/course/management}">강의 </a>
+							<a class="nav-link form__tab" th:href="@{/admin/curriculum/management}">커리큘럼</a>
+							<a class="nav-link form__tab" th:href="@{/admin/video/management}">동영상</a>
+							<a class="nav-link form__tab" th:href="@{/admin/file/management}">파일</a>
+							<a class="nav-link form__tab" th:href="@{/admin/faq/management}">FAQ</a>
 						</ul>
 						<form name="actionForm" th:action="@{/admin/category/management/process}" method="post">
 							<div class="form__header d-flex justify-content-between">
