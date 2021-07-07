@@ -3,6 +3,7 @@ package com.basakcoding.basak.web.frontend;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -69,10 +70,14 @@ public class CatalogController {
 		int likeCheck=0;
 		int reviewCheck=0;
 		int checkPayment=2;
-		
 		Map map = catalogService.selectOne(courseId);//강의 상세보기에 필요한 값 받아오기
 		
 		List<Map> map1 = catalogService.reviewList(courseId);//강의후기 리스트에 필요한 값 받아오기
+		
+		List<Map> map2  = catalogService.faqList(courseId);
+		
+		List<Map> map3 = catalogService.curriList(courseId);
+		
 		
 		int reviewCount = catalogService.reviewCount(courseId);//총 리뷰갯수 카운트
 		
@@ -112,12 +117,16 @@ public class CatalogController {
 		model.addAttribute("course",map);
 		System.out.println("course:"+map);
 		
-		
-		
 		model.addAttribute("reviewList",map1);
 		System.out.println("reviewList:"+map1);
+		
+		model.addAttribute("faqList",map2);
+		System.out.println("faq:"+map2);
+		
+		model.addAttribute("curriList",map3);
+		System.out.println("curriList:"+map3);
+		
 		model.addAttribute("reviewCount",reviewCount);
-		System.out.println("reviewCount:"+reviewCount);
 		
 		String notPost ="현재 등록된 글이 없습니다. 강의등록 후 후기를 남겨주세요!";
 		model.addAttribute("notPost", notPost);
@@ -174,7 +183,7 @@ public class CatalogController {
 		String courseId	= (String) map.get("courseId");
 		
 		if(auth == null){//로그인 돼있지 않을시
-			affected=2;
+			affected=3;
 			map.put("affected",affected);	
 			return map;
 		}
@@ -191,18 +200,29 @@ public class CatalogController {
 			return map;
 		}
  		
-		else {//결제한 이력이 있으면 1반환
-			String reviewContent = catalogService.reviewContent(map);
-			map.put("reviewContent",reviewContent);
-			String reviewRating = catalogService.reviewRating(map);
-			String a ="rating-input-";
-			String star = a.concat(reviewRating) ;
-			map.put("star",star);
-			System.out.println(star);
-			
-			affected=1;
-			map.put("affected", affected);
-			return map;
+		else {//결제한 이력도 있고 리뷰작성한 이력도 있으면 1반환
+			if(catalogService.reviewCheck(map)==1) {
+
+				String reviewContent = catalogService.reviewContent(map);
+				map.put("reviewContent",reviewContent);
+				String reviewRating = catalogService.reviewRating(map);
+				String a ="rating-input-";
+				String star = a.concat(reviewRating) ;
+				map.put("star",star);
+				System.out.println(star);
+				
+				affected=1;
+				map.put("affected", affected);
+				return map;
+			}
+			else {//결제는 했으나 리뷰를 작성 안한사람 2반환
+				
+				affected=2;
+				map.put("affected", affected);
+				return map;
+
+				
+			}
 			
 		}
 		

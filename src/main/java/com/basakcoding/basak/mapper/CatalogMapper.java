@@ -15,6 +15,8 @@ public interface CatalogMapper {
 	//강의 상세보기
 	 List<Map> courseList();
 	Map selectOne(String courseId);
+	List<Map> faqList(String courseId);
+	List<Map> curriList(String courseId);
 	String getClobText(String courseId);
 	
 	//강의 후기 기능

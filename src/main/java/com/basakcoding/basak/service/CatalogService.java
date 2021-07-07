@@ -23,6 +23,12 @@ public class CatalogService {
 	public Map selectOne(String courseId) {
 		return catalogMapper.selectOne(courseId);
 	}
+	public List<Map> faqList(String courseId){
+		return catalogMapper.faqList(courseId);
+	}
+	public List<Map> curriList(String courseId){
+		return catalogMapper.curriList(courseId);
+	}
 	
 	public String getClobText(String courseId) {
 		return catalogMapper.getClobText(courseId);
