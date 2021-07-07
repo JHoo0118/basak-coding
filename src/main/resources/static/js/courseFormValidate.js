@@ -1,3 +1,39 @@
+var courseFormGroups = courseForm.querySelectorAll('.form-group');
+var courseFormInputs = courseForm.querySelectorAll('.form-control');
+
+function setErrorFor(input, message) {
+	var parent = input.parentNode;
+	var errorText = parent.querySelector('span');
+	errorText.innerText = message;
+}
+
+function categoryValidate(value) {
+	if (value === "") {
+		setErrorFor(courseForm.categoryId, "필수 입력 항목입니다.");
+		return false;
+	}
+	return true;
+}
+
+
+Array.prototype.slice.call(courseForm).forEach(function(inputElement) {
+	inputElement.addEventListener("blur", function(e) {
+		if (e.target.name === 'categoryId') 
+			categoryValidate(courseForm.categoryId.options[courseForm.categoryId.selectedIndex].value);
+			
+	});
+	
+	inputElement.addEventListener("input", function() {
+		var parentElement = inputElement.parentElement.parentElement;
+
+		parentElement.classList.remove('error');
+		parentElement.querySelector("small").innerText = "";
+	});
+});
+
+
+
+
 // 썸네일
 $(document).ready(function() {
 	$("#thumbnail").change(function() {

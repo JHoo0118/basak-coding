@@ -50,7 +50,7 @@
 	<select id="getPriceList" resultType="Map">
 		SELECT pa.payment_id, pa.payment_code, pa.name, pa.price, pa.payment_state, pa.payment_method, pa.created_at, co.title
 		FROM payment pa
-		JOIN courses co ON pa.price = co.price
+		JOIN courses co ON pa.course_id = co.course_id
 	</select>
 	
 	<!-- 강의 아이디로 모든 비디오 아이디 가져오기 -->
