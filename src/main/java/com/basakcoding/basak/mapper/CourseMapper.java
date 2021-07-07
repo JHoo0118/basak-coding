@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.basakcoding.basak.service.CategoryDTO;
+import com.basakcoding.basak.service.CourseDTO;
 import com.basakcoding.basak.service.CurriculumDTO;
 import com.basakcoding.basak.service.FileDTO;
 import com.basakcoding.basak.service.VideoDTO;
@@ -52,4 +53,7 @@ public interface CourseMapper {
 
 	// 봤는지 여부 파악
 	int isSeen(Map params);
+	
+	// 강의 상세보기 - 강의정보
+	CourseDTO getCourseOne(Map map);
 }

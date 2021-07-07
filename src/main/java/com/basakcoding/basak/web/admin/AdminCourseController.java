@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.basakcoding.basak.service.AdminDTO;
 import com.basakcoding.basak.service.AdminService;
 import com.basakcoding.basak.service.CategoryDTO;
+import com.basakcoding.basak.service.CourseDTO;
 import com.basakcoding.basak.service.CourseService;
 import com.basakcoding.basak.util.FileUploadUtil;
 
@@ -214,4 +215,11 @@ public class AdminCourseController {
 		return "redirect:/admin/course/management";
 	}
 	
-}
+	//강의 상세보기
+	@RequestMapping("/management/view")
+	public String courseView(@RequestParam Map map,Model model) {
+		CourseDTO course = courseService.getCourseOne(map);
+		model.addAttribute("course", course);
+		return "admin/courseView";
+	}
+}//class

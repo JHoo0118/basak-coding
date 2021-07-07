@@ -75,4 +75,9 @@ public class CourseService {
 	public int isSeen(Map params) {
 		return courseMapper.isSeen(params);
 	}
+	
+	// 강의 상세보기 - 강의정보
+	public CourseDTO getCourseOne(Map map) {
+		return courseMapper.getCourseOne(map);
+	}
 }

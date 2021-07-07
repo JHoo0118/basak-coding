@@ -80,7 +80,7 @@
 										<td>[[${course.get('COURSE_ID')}]]</td>
 										<td>[[${course.get('CAT_NAME')}]]</td>
 										<td>[[${course.get('ADM_NAME')}]]</td>
-										<td>[[${course.get('TITLE')}]]</td>
+										<td><a th:href="@{/admin/course/management/view(no=${course.get('COURSE_ID')})}">[[${course.get('TITLE')}]]</a></td>
 										<td>[[${course.get('SHORT_DESCRIPTION')}]]</td>
 									</tr>
 				                </tbody>
