@@ -205,7 +205,8 @@ public class AdminCourseController {
 			}
 			
 		}
-		
+
+		redirectAttributes.addFlashAttribute("message", "강의가 등록되었습니다.");
 //		System.out.println(map);
 //		multipartFiles.values().stream().forEach(System.out::println);
 //		multipartFiles.keySet().stream().forEach(System.out::println);

@@ -177,7 +177,7 @@
 					$('#memEmail').text(data.EMAIL);
 					$('#payCreated_at').text(data.CREATED_AT);
 					$('#payMethod').text(data.PAYMENT_METHOD);
-					$('#payPrice').text(data.PRICE);
+					$('#payPrice').text('₩'+data.PRICE);
 				},
 				error: function () {
 					alert("오류가 발생했습니다.다시시도해주세요");

@@ -78,6 +78,10 @@
 	color: #e74c3c;
 }
 
+.form-group small.error {
+	color: #e74c3c;
+}
+
 
 
 @media (max-width: 576px) {
