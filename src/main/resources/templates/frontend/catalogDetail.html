@@ -430,7 +430,7 @@
 		<div class="modal-dialog fModal__dialog">
 			<div class="modal-content fModal__body">
 				<div style="margin-top: 10px;" class="modal-header fModal__header">
-					<h3 >후기 작성</h3>
+					<h3>후기 작성 <span style="color: red;">[200자 이내로 작성] </span></h3>
 					<button  type="button" class="close" data-dismiss="modal">
 						<span>&times;</span>
 					</button>
@@ -439,7 +439,7 @@
 					<div class="fModal__box">
 						<form >
 
-							<textarea id="content" class="form-control" placeholder="후기를 작성해주세요." ></textarea>
+							<textarea id="content" class="form-control" placeholder="후기를 작성해주세요."></textarea>
 							<span id="selectStar" class="rating mt-3">
 								<input type="radio" class="rating-input" id="rating-input-5" name="rating-input" />
 								<label for="rating-input-5" class="rating-star"></label>
@@ -462,7 +462,6 @@
 		</div>
 	</div>
 	<!-- 폼 모달 끝 -->
-
 
 	<!-- footer -->
 	<div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
@@ -493,12 +492,15 @@
 						url: "[[@{/catalog/reviewWrite}]]",
 						type: "POST",
 						data: JSON.stringify(data),//courseId=1
+						dataType:"json",
 						contentType: "application/json",
 						success: function (data) {				
+							console.log("data:",data);
+							
+							console.log("data.affected:",data.affected);
 						
-						console.log("data(courseId):", data)
-						
-							if (data == 0) {//로그인 후 미결제된 아이디
+							if (data.affected == 0) {//로그인 후 미결제된 아이디
+									console.log("여기여기");
 									console.log("로그인 후 강의결제 완료하지않은 아이디");
 									if(confirm("강의 등록 후 이용가능\r\r강의등록 페이지로 이동하시겠습니까?")){
 									location.href = "/orders/payments/"+courseId+"";//로그인창으로 페이지 이동
@@ -509,7 +511,7 @@
 									}
 								
 							}//바깥 if
-							else if (data == 1) {////로그인 후 결제완료된 아이디
+							else if (data.affected == 1) {////로그인 후 결제완료된 아이디
 							
 								console.log("로그인 후 결제 완료된 아이디");
 								
@@ -520,7 +522,13 @@
 								}
 								else{
 								console.log('이전 리뷰 등록자');
+								console.log("data.reviewContent:",data.reviewContent);
 								$('#reviewModal').modal('show');
+								$('#content').text(data.reviewContent);
+								$('#content').focus();
+								$('input[id="'+data.star+'"]').each(function() {
+    							$(this).prop('checked', true);
+								});
 								
 								}
 								
@@ -529,7 +537,7 @@
 								
 							}//else if 1
 							
-							else if (data == 2) {//로그인 안된 아이디
+							else if (data.affected == 2) {//로그인 안된 아이디
 								console.log("로그인 되지 않은 상황 ");
 								if(confirm("로그인 후 이용가능\r\r로그인 페이지로 이동하시겠습니까?")){//컨펌 확인 눌렀을때
 									location.href = "/auth/signin";//로그인창으로 페이지 이동
@@ -570,7 +578,7 @@
 				}
 				
 				//아래께 안됨
-				else if(!$("input:radio[name=rating-input]").is(':checked')){
+				else if($("input:radio[name=rating-input]").is(':checked')==false){
 					alert("별점을 선택해주세요");
 				}
 				

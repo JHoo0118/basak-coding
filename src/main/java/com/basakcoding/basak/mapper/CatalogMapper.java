@@ -20,6 +20,7 @@ public interface CatalogMapper {
 	//강의 후기 기능
 	List<Map> reviewList(String courseId);
 	String reviewContent(Map map);
+	String reviewRating(Map map);
 	
 	int reviewCount(String courseId);
 	int checkPayment(Map map);

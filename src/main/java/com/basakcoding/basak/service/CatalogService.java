@@ -36,6 +36,9 @@ public class CatalogService {
 	public String  reviewContent(Map map) {
 		return catalogMapper.reviewContent(map);
 	}
+	public String  reviewRating(Map map) {
+		return catalogMapper.reviewRating(map);
+	}
 	
 	
 	public int reviewCount(String courseId) {

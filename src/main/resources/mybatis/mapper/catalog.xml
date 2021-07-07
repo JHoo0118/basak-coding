@@ -84,9 +84,15 @@
 	
 	</select>
 	
-	<!-- 모달안 후기내용 가져오기 -->
+	<!-- 모달안 멤버별 후기내용 가져오기 -->
 	<select id="reviewContent" parameterType="Map" resultType="String">
 		SELECT content FROM review
+		WHERE member_id = #{memberId} and course_id= #{courseId}
+	
+	</select>
+	<!-- 모달안 멤버별 후기 별점 가져오기 -->
+	<select id="reviewRating" parameterType="Map" resultType="String">
+		SELECT rating FROM review
 		WHERE member_id = #{memberId} and course_id= #{courseId}
 	
 	</select>

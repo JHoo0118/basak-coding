@@ -167,15 +167,16 @@ public class CatalogController {
 	
 	
 	@PostMapping("/catalog/reviewWrite")//후기작성
-	public @ResponseBody int reviewWrite(Authentication auth  ,@RequestBody Map map, Model model) {
+	public @ResponseBody Map reviewWrite(Authentication auth  ,@RequestBody Map map, Model model) {
 		int affected;
 		int checkPayment;
 		String memberId;
 		String courseId	= (String) map.get("courseId");
 		
 		if(auth == null){//로그인 돼있지 않을시
-			
-			return affected=2;	
+			affected=2;
+			map.put("affected",affected);	
+			return map;
 		}
 		else {//로그인 돼있을시
 			memberId = ((UserDetails)auth.getPrincipal()).getUsername();
@@ -185,16 +186,24 @@ public class CatalogController {
 		}
 		
 		if(checkPayment==0) {//결제한 이력이 없으면 0반환
-			
-			return affected=0;
+			affected=0;
+			map.put("affected", affected);
+			return map;
 		}
  		
 		else {//결제한 이력이 있으면 1반환
+			String reviewContent = catalogService.reviewContent(map);
+			map.put("reviewContent",reviewContent);
+			String reviewRating = catalogService.reviewRating(map);
+			String a ="rating-input-";
+			String star = a.concat(reviewRating) ;
+			map.put("star",star);
+			System.out.println(star);
 			
-			//String reviewContent = catalogService.reviewContent(map);
-			//model.addAttribute("reviewContent",reviewContent);
-			//System.out.println("reviewContent:"+reviewContent);
-			return affected=1;
+			affected=1;
+			map.put("affected", affected);
+			return map;
+			
 		}
 		
 	}
