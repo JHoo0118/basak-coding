@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,9 +47,21 @@ public class CourseController {
     ResourceLoader resourceLoader;
 	@GetMapping("/class/{videoId}")
 	public String course(@PathVariable String videoId, Model model, HttpServletRequest req, Authentication auth) throws IOException {
-		
+//		for (int i = 0; i < videoId.length(); i++) {
+//			if ('0' <= videoId.charAt(i) && '9' >= videoId.charAt(i)) {
+//				continue;
+//			}
+//		}
 		String courseId = courseService.getCourseId(videoId);
 		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+
+		Map paymentCheck = new HashMap();
+		paymentCheck.put("courseId", courseId);
+		paymentCheck.put("memberId", memberId);
+		int count = courseService.alreadyPayment(paymentCheck);
+		if (count < 1) {
+			return "redirect:/personal/dashboard";
+		}
 		VideoDTO video = courseService.getVideo(videoId);
 		video.setCourseId(courseId);
 		
@@ -69,14 +82,17 @@ public class CourseController {
 				else v.setSeen('N');
 			}
 		}
-		
 		// 비디오 파일들 가져오기
+		List<String> cssFileList = new ArrayList<String>();
 		List<Map> fileList = courseService.getFileList(videoId);
 		for (int i=0; i<fileList.size(); i++) {
 			String filename = fileList.get(i).get("FILENAME").toString();
 			String fileExtension = filename.substring(filename.lastIndexOf(".")+1, filename.length());
 			fileList.get(i).put("FILE_EXTENSION", fileExtension);
-			
+
+			if (fileExtension.equals("css")) {
+				cssFileList.add("/upload/course/" + courseId + "/file/copy-" + memberId + "-" + filename);
+			}
 			// courseId 받아와야함 input hidden으로
 			
 			if (i == 0) {
@@ -107,10 +123,10 @@ public class CourseController {
 		if (!fileList.get(0).containsKey("INITIAL_CODE")) {
 			fileList.get(0).put("INITIAL_CODE", "abc");
 		}
+		model.addAttribute("cssFileList", cssFileList);
 		model.addAttribute("fileList", fileList);
 		model.addAttribute("currVideo", video);
 		model.addAttribute("curriculums", curriculumList);
-
 		return "frontend/course";
 	}
 	
@@ -122,7 +138,7 @@ public class CourseController {
 		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
 		String courseId = courseService.getCourseId(videoId);
 		
-		List<Map> fileList = courseService.getFileList(videoId);
+		// List<Map> fileList = courseService.getFileList(videoId);
 		
 		String copyFileDirName = "upload/course/" + courseId + "/file/copy-" + memberId + "-" + filename;
 		String originFileDirName =  "upload/course/" + courseId + "/file/" + filename;
@@ -153,7 +169,7 @@ public class CourseController {
 		}
 		bw.close();
 		br.close();
-		
+		System.out.println("여기");
 //		System.out.println(file);
 	}
 	

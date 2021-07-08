@@ -80,8 +80,14 @@ public class CourseService {
 	public CourseDTO getCourseOne(Map map) {
 		return courseMapper.getCourseOne(map);
 	}
+
 	// FAQ 목록 가져오기
 	public List<FAQDTO> getFAQList(String courseId) {
 		return courseMapper.getFAQList(courseId);
+	}
+
+	public int alreadyPayment(Map paymentCheck) {
+		return courseMapper.alreadyPayment(paymentCheck);
+
 	}
 }
