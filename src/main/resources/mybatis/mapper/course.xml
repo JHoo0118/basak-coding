@@ -60,34 +60,16 @@
 	
 	<!-- 파일 목록 가져오기 -->
 	<select id="getFileList" parameterType="String" resultType="Map">
-		SELECT * FROM files WHERE video_id = #{videoId} 
-	</select>
-	
-	<!-- resultMap용 파일 목록 가져오기 -->
-	<select id="resultMapFileList" resultType="FileDTO">
-		SELECT * FROM files WHERE video_id = #{videoMap} ORDER BY file_id
-	</select>
-	
-	<!-- FAQ 목록 가져오기 -->
-	<select id="getFAQList" parameterType="String" resultType="FAQDTO">
-		SELECT * FROM faq WHERE course_id = #{courseId}
+		SELECT * FROM files WHERE video_id = #{videoId}
 	</select>
 	
 	<!-- 비디오 아이디로 강의 아이디 가져오기 -->
 	<select id="getCourseId" parameterType="String" resultType="String">
 		SELECT cu.course_id FROM video v JOIN curriculum cu 
-		ON v.curriculum_id = cu.curriculum_id WHERE v.video_id = #{videoId}
+		ON v.curriculum_id = cu.curriculum_id WHERE video_id = #{videoId}
 	</select>
 	
 	<!-- 비디오 얻기 -->
-	<resultMap type="VideoDTO" id="videoMap">
-		<collection column="video_id"
-					property="files"
-					javaType="java.util.List"
-					ofType="FileDTO"
-					select="resultMapFileList">
-		</collection>
-	</resultMap>
 	<select id="getVideo" parameterType="String" resultType="VideoDTO">
 		SELECT * FROM video WHERE video_id = #{videoId}
 	</select>
@@ -115,7 +97,7 @@
 		SELECT * FROM curriculum WHERE course_id = #{courseId}
 	</select>
 	
-    <select id="getVideoList" resultMap="videoMap">
+    <select id="getVideoList" resultType="VideoDTO">
        	SELECT * FROM video WHERE curriculum_id = #{curriculums} ORDER BY video_id
     </select>
     
