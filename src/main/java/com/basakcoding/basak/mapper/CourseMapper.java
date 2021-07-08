@@ -60,4 +60,6 @@ public interface CourseMapper {
 	
 	//FAQ 목록 가져오기
 	List<FAQDTO> getFAQList(String courseId);
+
+	int alreadyPayment(Map paymentCheck);
 }

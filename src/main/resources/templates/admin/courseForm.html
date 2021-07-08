@@ -131,6 +131,7 @@
 						<button id="removeCurriculum" type="button" class="curri__button" data-toggle="tooltip" data-placement="bottom" title="커리큘럼 삭제">
 							<i class="fas fa-calendar-minus"></i>
 						</button>
+						<small class="error"></small>
 						<div class="accordion accordion--border" id="accordionCurriculum">
 						  <div class="card" id="curriculum-1">
 						    <div class="card-header d-flex align-items-center">
@@ -191,6 +192,7 @@
 						<button id="removeFaq" type="button" class="curri__button" data-toggle="tooltip" data-placement="bottom" title="FAQ 삭제">
 							<i class="fas fa-comment-alt-minus"></i>
 						</button>
+						<label class="error"></label>
 						<div class="accordion accordion--border" id="accordionFaq">    
 						  <div class="card" id="faqCard-1">
 					  		<div class="card-header d-flex align-items-center">
@@ -263,7 +265,7 @@
 		    tabsize: 2,
 		    height: 150,
 		    lang: 'ko-KR',
-	 	 });
+	 	});
 		
 		// 아코디언
 		/*
@@ -340,7 +342,14 @@
 		var vid = document.createElement('video');
 		$(document).on("change","input[name^=video-]",function(){ 
 			var name = this.getAttribute("name");
-			var fileURL = URL.createObjectURL(this.files[0]);
+			var nameSplit = name.split('-')
+			var file = this.files[0];
+			var spanEle = document.getElementById('videoFilename-'+ nameSplit[1] + '-' + nameSplit[2]);
+			if (!file) {
+				spanEle.innerText = '';
+				return;
+			}
+			var fileURL = URL.createObjectURL(file);
 			vid.src = fileURL;
 			vid.ondurationchange = function() {
 				// alert(this.duration);
