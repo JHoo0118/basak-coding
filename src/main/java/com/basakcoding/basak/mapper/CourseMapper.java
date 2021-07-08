@@ -56,4 +56,6 @@ public interface CourseMapper {
 	
 	// 강의 상세보기 - 강의정보
 	CourseDTO getCourseOne(Map map);
+
+	int alreadyPayment(Map paymentCheck);
 }

@@ -80,4 +80,8 @@ public class CourseService {
 	public CourseDTO getCourseOne(Map map) {
 		return courseMapper.getCourseOne(map);
 	}
+
+	public int alreadyPayment(Map paymentCheck) {
+		return courseMapper.alreadyPayment(paymentCheck);
+	}
 }

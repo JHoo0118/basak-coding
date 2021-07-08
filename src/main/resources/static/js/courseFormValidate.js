@@ -1,7 +1,5 @@
-var courseFormGroups = courseForm.querySelectorAll('.form-group');
-var courseFormInputs = courseForm.querySelectorAll('.form-control');
-
 function setErrorFor(input, message) {
+	
 	var parent = input.parentNode;
 	var errorText = parent.querySelector('small');
 	errorText.classList.add('error')
@@ -42,6 +40,7 @@ function shortDescriptionValidate(value) {
 
 Array.prototype.slice.call(courseForm).forEach(function(inputElement) {
 	inputElement.addEventListener("blur", function(e) {
+	
 		if (e.target.name === 'categoryId')
 			categoryValidate(courseForm.categoryId.options[courseForm.categoryId.selectedIndex].value, courseForm.categoryId);
 
@@ -62,18 +61,33 @@ Array.prototype.slice.call(courseForm).forEach(function(inputElement) {
 	});
 	
 	inputElement.addEventListener("input", function() {
-	 	if (inputElement.name === 'thumbnail') return
+		if (inputElement.type === 'checkbox') return;
+	 	if (inputElement.name === 'thumbnail') return;
+	 	if (inputElement.type === 'file') return;
+	 
+	 	if (inputElement.name.startsWith('videoTitle-') || inputElement.name.startsWith('curriculum-')) {
+	 		$(this).closest(".tab-pane").children('small.error').text("")
+	 		return;
+	 	}
+	 	
+	 	if (inputElement.name.startsWith('faqTitle-') || inputElement.name.startsWith('faqContent-')) {
+	 		$('#createCourseTwo').children('label.error').text("");
+	 		return;
+	 	}
+	 	
 		var parentElement = inputElement.parentElement;
-		if (inputElement.name === 'price' || inputElement.name === 'courseTitle') parentElement = parentElement.parentElement
-		var errorText = parentElement.querySelector('small')
 		
+		if (inputElement.name === 'price' || inputElement.name === 'courseTitle'
+		|| inputElement.name === 'shortDescription') parentElement = parentElement.parentElement
+		
+		var errorText = parentElement.querySelector('small')
+		console.log(parentElement)
 		errorText.innerText = "";
 	});
 });
 
 
 courseForm.addEventListener('submit', function(e) {
-
 	if (!courseFormValidate(e)) {
 		e.preventDefault();
 		toastr.error('강의 등록에 실패했습니다. 다시 한 번 확인해주세요!', '강의 등록 오류');
@@ -83,6 +97,10 @@ courseForm.addEventListener('submit', function(e) {
 
 function courseFormValidate() {
 	var errorCheck = false;
+	var currError = false;
+	var faqError = false;
+	
+	$('#createCourseTwo').children('small.error').text("")
 	
 	if (!categoryValidate(courseForm.adminId.options[courseForm.adminId.selectedIndex].value, courseForm.adminId)) {
 		errorCheck = true;
@@ -110,6 +128,79 @@ function courseFormValidate() {
 	
 	if(!shortDescriptionValidate(courseForm.shortDescription.value.trim())) {
 		errorCheck = true;
+	}
+	
+	if($('#summernote').summernote('isEmpty')) {
+		toastr.error('강의 설명을 입력해주세요.', '강의 설명 필수 입력');
+		errorCheck = true;
+	}
+
+	$('[id^=summernote-]').each(function() {
+		if ($(this).summernote('isEmpty')) {
+			toastr.error('비디오 설명을 입력해주세요.', '비디오 설명 필수 입력');
+			errorCheck = true;
+			currError = true;
+		}
+	})
+	
+	$('input[name^=curriculum-]').each(function() {
+		if ($(this).val() === "") {
+			errorCheck = true;
+			currError = true;
+		}
+	})
+	
+	$('input[name^=videoTitle-]').each(function() {
+		if ($(this).val() === "") {
+			errorCheck = true;
+			currError = true;
+		}
+	})
+	
+	
+	$('input[name^=faqTitle-]').each(function() {
+		if ($(this).val() === "") {
+			errorCheck = true;
+			currError = true;
+		}
+	})
+	
+	
+	$('input[name^=video-]').each(function() {
+		if($(this).get(0).files.length === 0) {
+			errorCheck = true;
+			currError = true;
+		}
+		
+	});
+	
+	$('input[name^=file-]').each(function() {
+		if($(this).get(0).files.length === 0) {
+			errorCheck = true;
+			currError = true;
+		}
+	});
+	
+	$('input[name^=faqTitle-]').each(function() {
+		if ($(this).val() === "") {
+			errorCheck = true;
+			faqError = true;
+		}
+	})
+	
+	$('textarea[name^=faqContent-]').each(function() {
+		if ($(this).val() === "") {
+			errorCheck = true;
+			faqError = true;
+		}
+	})
+	
+	if (currError) {
+		$('#createCourseTwo').children('small.error').text("커리큘럼 항목을 모두 채워주세요.");
+	}
+	
+	if (faqError) {
+		$('#createCourseTwo').children('label.error').text("FAQ 항목을 모두 채워주세요.");
 	}
 	
 	if (errorCheck) return false;

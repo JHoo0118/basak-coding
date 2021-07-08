@@ -66,7 +66,7 @@
 	<!-- 비디오 아이디로 강의 아이디 가져오기 -->
 	<select id="getCourseId" parameterType="String" resultType="String">
 		SELECT cu.course_id FROM video v JOIN curriculum cu 
-		ON v.curriculum_id = cu.curriculum_id WHERE video_id = #{videoId}
+		ON v.curriculum_id = cu.curriculum_id WHERE v.video_id = #{videoId}
 	</select>
 	
 	<!-- 비디오 얻기 -->
@@ -82,6 +82,14 @@
                     select="getVideoList">
         </collection>
 	</resultMap>
+	
+	<select id="alreadyPayment" parameterType="Map" resultType="int">
+		SELECT COUNT(*)
+		FROM courses co
+		JOIN payment pa ON pa.course_id = co.course_id
+		JOIN category ca ON ca.category_id = co.category_id
+		JOIN admins a ON co.admin_id = a.admin_id WHERE co.course_id = #{courseId} AND pa.member_id = #{memberId}
+	</select>
 	
 	
 	<!-- 커리큘럼 얻기 -->
