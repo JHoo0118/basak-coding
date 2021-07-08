@@ -228,24 +228,26 @@
 			<h1 class="detail__title">커리큘럼</h1>
 			<div class="accordion curriculum__accordion" id="accordionExample">
 			
-				<div th:each="curri : ${curriList}" class="card">
+				<div th:each="curriculum ,i : ${curriculums}" class="card">
 					<div class="card-header" id="headingOne">
 						<h2 class="mb-0">
+						
 							<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
-								data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-								<span class="curriculum__number">01</span>
-								<span class="curriculum__subTitle">[[${curri.NAME}]]</span>
+								th:attr="data-target='#collapse'+${i.index}+'curri'" aria-expanded="true" aria-controls="collapseOne">
+								<span th:if="${i.index+1}<10" th:text=" '0'+${i.index+1}" class="curriculum__number"></span>
+								<span th:if="${i.index+1}>=10" th:text=" ${i.index+1}" class="curriculum__number"></span>
+								<span class="curriculum__subTitle">[[${curriculum.name}]]</span>
 								<span><i class="fas fa-chevron-right"></i></span>
 							</button>
 						</h2>
 					</div>
 
-					<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-						<div class="card-body">
-							<div class="card__video">
+					<div  th:id="'collapse'+${i.index}+'curri'" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+						<div  class="card-body">
+							<div  th:each="video : ${curriculum.videos}" class="card__video">
 								<span class="video__icon"><i class="fab fa-youtube"></i></span>
-								<span class="video__text">[[${curri.VIDEO_TITLE}]]
-									<code>.show</code> class.
+								<span class="video__text">[[${video.videoTitle}]]
+									
 								</span>
 							</div>
 						</div>
@@ -304,19 +306,21 @@
 			<div   class="accordion curriculum__accordion" id="accordionFAQ">
 			
 			
-				<div  th:each='faq : ${faqList}' class="card">
+				<div  th:each='faq,i : ${faqList}' class="card">
 					<div class="card-header" id="headingOne">
 						<h2 class="mb-0">
 							<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
-								data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-								<span class="curriculum__number"> [[${faq.FAQ_ID}]]</span>
+								th:attr="data-target='#collapse'+${i.index}" aria-expanded="true" aria-controls="collapseOne">
+								<span th:if="${i.index+1}<10" th:text=" '0'+${i.index+1}" class="curriculum__number"> </span>
+								<span th:if="${i.index+1}>=10" th:text=" ${i.index+1}" class="curriculum__number"> </span>
+								
 								<span class="curriculum__subTitle"> [[${faq.TITLE}]]</span>
 								<span><i class="fas fa-chevron-right"></i></span>
 							</button>
 						</h2>
 					</div>
 
-					<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionFAQ">
+					<div th:id="'collapse'+${i.index}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionFAQ">
 						<div class="card-body faq__body">
 							<div class="faq__box">
 								<span th:if="${faq.CONTENT!=null}" th:text="${faq.CONTENT}" class="faq__text">
