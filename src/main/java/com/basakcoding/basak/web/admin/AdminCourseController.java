@@ -23,6 +23,9 @@ import com.basakcoding.basak.service.AdminService;
 import com.basakcoding.basak.service.CategoryDTO;
 import com.basakcoding.basak.service.CourseDTO;
 import com.basakcoding.basak.service.CourseService;
+import com.basakcoding.basak.service.CurriculumDTO;
+import com.basakcoding.basak.service.FAQDTO;
+import com.basakcoding.basak.service.VideoDTO;
 import com.basakcoding.basak.util.FileUploadUtil;
 
 @Controller
@@ -220,7 +223,31 @@ public class AdminCourseController {
 	@RequestMapping("/management/view")
 	public String courseView(@RequestParam Map map,Model model) {
 		CourseDTO course = courseService.getCourseOne(map);
+		List<CurriculumDTO> listCurriculum = courseService.getCurriculumList(map.get("no").toString());
+		List<FAQDTO> listFAQ = courseService.getFAQList(map.get("no").toString());
 		model.addAttribute("course", course);
+		model.addAttribute("listCurriculum",listCurriculum);
+		model.addAttribute("listFAQ", listFAQ);
+		model.addAttribute("title", "강의 관리");
 		return "admin/courseView";
 	}
+	
+	//강의 수정하기
+		@RequestMapping("/management/edit")
+		public String courseEdit(@RequestParam Map map,Model model) {
+			CourseDTO courseOne = courseService.getCourseOne(map);
+//			List<CurriculumDTO> listCurriculum = courseService.getCurriculumList(map.get("no").toString());
+//			List<FAQDTO> listFAQ = courseService.getFAQList(map.get("no").toString());
+			model.addAttribute("courseOne", courseOne);
+//			model.addAttribute("listCurriculum",listCurriculum);
+//			model.addAttribute("listFAQ", listFAQ);
+			List<CategoryDTO> listCategories = courseService.categoryList();
+			List<AdminDTO> listAdmin = AdminService.getAdminList();
+			Map course = new HashMap<>();
+			model.addAttribute("listAdmin", listAdmin);
+			model.addAttribute("listCategories", listCategories);
+			model.addAttribute("course", course);
+			model.addAttribute("title", "강의 관리");
+			return "admin/courseEdit";
+		}
 }//class

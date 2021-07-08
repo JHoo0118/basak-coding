@@ -12,4 +12,6 @@ public class FAQDTO {
 	private Integer courseId;
 	private String courseTitle;
 	private String faqTitle;
+	private String title;//resultMap용 faqTitle
+	private String content;
 }
