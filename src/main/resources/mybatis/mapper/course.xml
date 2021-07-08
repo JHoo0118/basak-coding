@@ -106,7 +106,7 @@
     	video_id = #{videoId} AND member_id = #{memberId} AND seen = 'Y'
     </select>
 	
-	<!-- 강의 상세보기 -->
+	<!--******************************** 강의 상세보기 ***************************************-->
 	<select id="getCourseOne" parameterType="Map" resultType="CourseDTO">
 		SELECT course_id,c.category_id, ca.name categoryname, ad.name adminname, difficulty,
 		price,thumbnail, title, short_description, description
@@ -115,4 +115,40 @@
 		JOIN admins ad ON ad.admin_id = c.admin_id
 		WHERE course_id = #{no}
 	</select>
+	<!-- 강의 상세보기용 커리큘럼 얻기 -->
+	<resultMap type="CurriculumDTO" id="coursecurriculums">
+		<collection column="curriculum_id" 
+                    property="videos" 
+                    javaType="java.util.List" 
+                    ofType="VideoDTO" 
+                    select="courseVideoList">
+        </collection>
+	</resultMap>
+	<!-- 강의 상세보기용 커리큘럼 리스트 -->
+	<select id="courseCurriculumList" parameterType="Map" resultMap="coursecurriculums">
+		SELECT * FROM curriculum WHERE course_id = #{no}
+	</select>
+    <resultMap type="VideoDTO" id="coursevideos">
+		<collection column="file_id" 
+                    property="files" 
+                    javaType="java.util.List" 
+                    ofType="FileDTO" 
+                    select="courseFileList">
+        </collection>
+	</resultMap>
+	<!-- 강의 상세보기용 비디오 리스트 -->
+    <select id="courseVideoList" resultMap="coursevideos">
+       	SELECT * FROM video WHERE curriculum_id = #{coursecurriculums} ORDER BY video_id
+    </select>
+    <!-- 강의 상세보기용 파일리스트 -->
+    <select id="courseFileList" resultType="FileDTO">
+		SELECT * FROM files WHERE video_id = #{coursevideos}
+	</select>
+	<!-- 강의 상세보기용 FAQ리스트 -->
+	<select id="getFAQList" parameterType="Map" resultType="FAQDTO">
+		SELECT * FROM faq WHERE course_id = #{no}
+	</select>
+	<!--******************************** 강의 상세보기 ***************************************-->
+	
+	
 </mapper>

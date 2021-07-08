@@ -220,17 +220,18 @@ public class AdminCourseController {
 	}
 	
 	//강의 상세보기
-//	@RequestMapping("/management/view")
-//	public String courseView(@RequestParam Map map,Model model) {
-//		CourseDTO course = courseService.getCourseOne(map);
-//		List<CurriculumDTO> listCurriculum = courseService.getCurriculumList(map.get("no").toString());
-//		List<FAQDTO> listFAQ = courseService.getFAQList(map.get("no").toString());
-//		model.addAttribute("course", course);
-//		model.addAttribute("listCurriculum",listCurriculum);
-//		model.addAttribute("listFAQ", listFAQ);
-//		model.addAttribute("title", "강의 관리");
-//		return "admin/courseView";
-//	}
+	@RequestMapping("/management/view")
+	public String courseView(@RequestParam Map map,Model model) {
+		CourseDTO course = courseService.getCourseOne(map);
+		List<CurriculumDTO> listCurriculum = courseService.courseCurriculumList(map);
+		List<FAQDTO> listFAQ = courseService.getFAQList(map);
+		System.out.println(listCurriculum.size());
+		model.addAttribute("course", course);
+		model.addAttribute("listCurriculum",listCurriculum);
+		model.addAttribute("listFAQ", listFAQ);
+		model.addAttribute("title", "강의 관리");
+		return "admin/courseView";
+	}
 //	
 //	//강의 수정하기
 //		@RequestMapping("/management/edit")

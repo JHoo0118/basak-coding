@@ -81,11 +81,15 @@ public class CourseService {
 		return courseMapper.getCourseOne(map);
 	}
 
-	// FAQ 목록 가져오기
-	public List<FAQDTO> getFAQList(String courseId) {
-		return courseMapper.getFAQList(courseId);
+	// 강의 상세보기 - FAQ 목록 가져오기
+	public List<FAQDTO> getFAQList(Map map) {
+		return courseMapper.getFAQList(map);
 	}
 
+	// 강의 상세보기 - 커리큘럼
+	public List<CurriculumDTO> courseCurriculumList(Map map) {
+		return courseMapper.courseCurriculumList(map);
+	}
 	public int alreadyPayment(Map paymentCheck) {
 		return courseMapper.alreadyPayment(paymentCheck);
 

@@ -58,8 +58,11 @@ public interface CourseMapper {
 	// 강의 상세보기 - 강의정보
 	CourseDTO getCourseOne(Map map);
 	
-	//FAQ 목록 가져오기
-	List<FAQDTO> getFAQList(String courseId);
+	// 강의 상세보기 - FAQ 목록 가져오기
+	List<FAQDTO> getFAQList(Map map);
 
+	//강의 살세보기 - 커리큘럼 
+	List<CurriculumDTO> courseCurriculumList(Map map);
+	
 	int alreadyPayment(Map paymentCheck);
 }
