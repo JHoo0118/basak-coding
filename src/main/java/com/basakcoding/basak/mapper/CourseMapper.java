@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.basakcoding.basak.service.CategoryDTO;
 import com.basakcoding.basak.service.CourseDTO;
 import com.basakcoding.basak.service.CurriculumDTO;
+import com.basakcoding.basak.service.FAQDTO;
 import com.basakcoding.basak.service.FileDTO;
 import com.basakcoding.basak.service.VideoDTO;
 
@@ -56,4 +57,7 @@ public interface CourseMapper {
 	
 	// 강의 상세보기 - 강의정보
 	CourseDTO getCourseOne(Map map);
+	
+	//FAQ 목록 가져오기
+	List<FAQDTO> getFAQList(String courseId);
 }
