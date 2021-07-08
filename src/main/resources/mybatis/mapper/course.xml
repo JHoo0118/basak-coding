@@ -118,7 +118,7 @@
 	
 	<!-- 강의 상세보기 -->
 	<select id="getCourseOne" parameterType="Map" resultType="CourseDTO">
-		SELECT course_id, ca.name categoryname, ad.name adminname, difficulty,
+		SELECT course_id,c.category_id, ca.name categoryname, ad.name adminname, difficulty,
 		price,thumbnail, title, short_description, description
 		FROM courses c
 		JOIN category ca ON ca.category_id = c.category_id
