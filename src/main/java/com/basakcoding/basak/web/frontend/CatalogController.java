@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.basakcoding.basak.service.CatalogService;
 import com.basakcoding.basak.service.CourseDTO;
+import com.basakcoding.basak.service.CurriculumDTO;
 
 
 @Controller
@@ -76,7 +77,7 @@ public class CatalogController {
 		
 		List<Map> map2  = catalogService.faqList(courseId);
 		
-		List<Map> map3 = catalogService.curriList(courseId);
+		List<CurriculumDTO> curriculumList = catalogService.getCurriculumList(courseId);
 		
 		
 		int reviewCount = catalogService.reviewCount(courseId);//총 리뷰갯수 카운트
@@ -128,8 +129,8 @@ public class CatalogController {
 		model.addAttribute("faqList",map2);
 		System.out.println("faq:"+map2);
 		
-		model.addAttribute("curriList",map3);
-		System.out.println("curriList:"+map3);
+		model.addAttribute("curriculums",curriculumList);
+		System.out.println("curriculums:"+curriculumList);
 		
 		model.addAttribute("reviewCount",reviewCount);
 		

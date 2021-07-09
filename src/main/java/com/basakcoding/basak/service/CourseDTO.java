@@ -28,5 +28,14 @@ public class CourseDTO {
 	private Date updateAT;
 	private Integer likeCount;
 	private String period;
+	//강의 상세보기
+	private String categoryName;
+	private String adminName;
+	private String videoTitle;
+	private String videoContent;
+	private Integer videoLength;
+	private String filename;
+	private String faqTitle;
+	private String faqContent;
 	
 }

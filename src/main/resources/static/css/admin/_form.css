@@ -78,6 +78,10 @@
 	color: #e74c3c;
 }
 
+.form-group small.error {
+	color: #e74c3c;
+}
+
 
 
 @media (max-width: 576px) {
@@ -331,8 +335,6 @@ toggle__textarea {
 	font-size: 32px;
 }
 
-
-
 .video__label {
 	cursor:pointer;
 	color: #333;
@@ -343,4 +345,13 @@ toggle__textarea {
 	border-radius: 4px;
 	color: #fff;
 	margin-top: 10px;
+}
+
+small.error {
+	color: #e74c3c;
+}
+
+label.error {
+	color: #e74c3c;
+	font-size: 12.8px;
 }

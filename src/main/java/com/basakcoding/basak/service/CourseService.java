@@ -75,4 +75,23 @@ public class CourseService {
 	public int isSeen(Map params) {
 		return courseMapper.isSeen(params);
 	}
+	
+	// 강의 상세보기 - 강의정보
+	public CourseDTO getCourseOne(Map map) {
+		return courseMapper.getCourseOne(map);
+	}
+
+	// 강의 상세보기 - FAQ 목록 가져오기
+	public List<FAQDTO> getFAQList(Map map) {
+		return courseMapper.getFAQList(map);
+	}
+
+	// 강의 상세보기 - 커리큘럼
+	public List<CurriculumDTO> courseCurriculumList(Map map) {
+		return courseMapper.courseCurriculumList(map);
+	}
+	public int alreadyPayment(Map paymentCheck) {
+		return courseMapper.alreadyPayment(paymentCheck);
+
+	}
 }

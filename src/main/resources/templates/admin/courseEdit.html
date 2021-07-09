@@ -22,8 +22,8 @@
   	
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+	<script th:src="@{/js/courseFormValidate.js}"></script>
 	<script defer th:src="@{/js/summernote-ko-KR.min.js}"></script>
-	<script defer th:src="@{/js/courseFormValidate.js}"></script>
 </head>
 <body>
 <div th:replace="/admin/fragments/header.html :: fragment-header(${title})"></div>
@@ -37,7 +37,7 @@
 		</nav>
 	
 		<div class="container-fluid">
-			<form id="courseForm" name="courseForm" class="form" th:action="@{/admin/course/save}" method="post"
+			<form id="courseForm" name="courseForm" class="form" th:action="@{/admin/course/editOk}" method="post"
 				enctype="multipart/form-data">
 				<input type="hidden" name="courseId" th:value="${param.courseId}" />
 				<!-- 전체 탭 시작 -->
@@ -52,7 +52,6 @@
 											th:value="${category.categoryId}"
 											th:text="${category.name}"></option>
 								</select>
-								<small class="error"></small>
 							</div>
 							
 							<div class="form-group col-md-4 pt-3 position-relative">
@@ -62,7 +61,6 @@
 											th:value="${admin.adminId}"
 											th:text="${admin.name}"></option>
 								</select>
-								<small class="error"></small>
 							</div>
 						
 							<div class="form-group col-md-4 pt-3 position-relative">
@@ -72,15 +70,13 @@
 									<option value="보통">보통</option>
 									<option value="어려움">어려움</option>
 								</select>
-								<small class="error" style="z-index:10;"></small>
 							</div>
 						</div>
 						
-						<div class="form-group row py-3 position-relative">
-							<div class="col-sm-4">
-								<input type="text" th:value="${price}" class="form-control post-form__title pt-3" placeholder="가격(원)" name="price">
+						<div class="form-group row pb-3 position-relative">
+							<div class="col-md-4">
+								<input type="text" th:value="${price}" class="form-control post-form__title py-3" placeholder="가격(원)" name="price">
 							</div>
-							<small class="error pb-3" style="z-index:10;"></small>
 						</div>
 						
 						<div class="form-group row pb-3 position-relative">
@@ -90,14 +86,13 @@
 								<div class="temp-box ml-3" style="text-align:center; line-height:200px; width:200px; height:200px; border: 2px solid #333; padding: 20px; border-radius: 4px;"><i class="fas fa-image" style="font-size:80px;"></i></div>
 								<img id="preview" class="img-fluid ml-3" alt="이미지" style="display:none; width:200px; height:200px;" />
 							</div>
-							<small class="error"></small>
 						</div>
 						
-						<div class="form-group row position-relative">
+						<div class="form-group row pb-3 position-relative">
 							<div class="col-12">
 								<input type="text" th:value="${course_title}" class="form-control py-3 post-form__title py-3" placeholder="강의 제목을 입력해주세요" name="courseTitle">
 							</div>
-							<small class="error" style="z-index:10;"></small>
+							<small>에러 메세지</small>
 						</div>
 						
 						
@@ -105,14 +100,14 @@
 							<div class="col-12">
 								<input th:value="${short_description}" class="form-control py-3 post-form__title" placeholder="강의 요약을 입력해주세요" name="shortDescription" />
 							</div>
-							<small class="error" style="bottom: -10px;"></small>
+							<small>에러 메세지</small>
 						</div>
 						
 						<div class="form-group row pb-2 position-relative">
 							<div class="col-sm-12">
 								<textarea id="summernote" th:value="${description}" class="form-control py-3" name="description"></textarea>
 							</div> 
-							<small></small>
+							<small>에러 메세지</small>
 						</div>
 						
 						
@@ -131,7 +126,6 @@
 						<button id="removeCurriculum" type="button" class="curri__button" data-toggle="tooltip" data-placement="bottom" title="커리큘럼 삭제">
 							<i class="fas fa-calendar-minus"></i>
 						</button>
-						<small class="error"></small>
 						<div class="accordion accordion--border" id="accordionCurriculum">
 						  <div class="card" id="curriculum-1">
 						    <div class="card-header d-flex align-items-center">
@@ -192,7 +186,6 @@
 						<button id="removeFaq" type="button" class="curri__button" data-toggle="tooltip" data-placement="bottom" title="FAQ 삭제">
 							<i class="fas fa-comment-alt-minus"></i>
 						</button>
-						<label class="error"></label>
 						<div class="accordion accordion--border" id="accordionFaq">    
 						  <div class="card" id="faqCard-1">
 					  		<div class="card-header d-flex align-items-center">
@@ -265,7 +258,7 @@
 		    tabsize: 2,
 		    height: 150,
 		    lang: 'ko-KR',
-	 	});
+	 	 });
 		
 		// 아코디언
 		/*
@@ -342,14 +335,7 @@
 		var vid = document.createElement('video');
 		$(document).on("change","input[name^=video-]",function(){ 
 			var name = this.getAttribute("name");
-			var nameSplit = name.split('-')
-			var file = this.files[0];
-			var spanEle = document.getElementById('videoFilename-'+ nameSplit[1] + '-' + nameSplit[2]);
-			if (!file) {
-				spanEle.innerText = '';
-				return;
-			}
-			var fileURL = URL.createObjectURL(file);
+			var fileURL = URL.createObjectURL(this.files[0]);
 			vid.src = fileURL;
 			vid.ondurationchange = function() {
 				// alert(this.duration);

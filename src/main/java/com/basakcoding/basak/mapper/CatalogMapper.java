@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.basakcoding.basak.service.CourseDTO;
+import com.basakcoding.basak.service.CurriculumDTO;
 
 @Repository
 @Mapper
@@ -16,7 +17,7 @@ public interface CatalogMapper {
 	 List<Map> courseList();
 	Map selectOne(String courseId);
 	List<Map> faqList(String courseId);
-	List<Map> curriList(String courseId);
+	List<CurriculumDTO> getCurriculumList(String courseId);
 	String getClobText(String courseId);
 	
 	//강의 후기 기능

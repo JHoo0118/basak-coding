@@ -26,8 +26,8 @@ public class CatalogService {
 	public List<Map> faqList(String courseId){
 		return catalogMapper.faqList(courseId);
 	}
-	public List<Map> curriList(String courseId){
-		return catalogMapper.curriList(courseId);
+	public List<CurriculumDTO> getCurriculumList(String courseId){
+		return catalogMapper.getCurriculumList(courseId);
 	}
 	
 	public String getClobText(String courseId) {
