@@ -96,7 +96,12 @@ public class CatalogController {
 			likeCheck = catalogService.likeCheck(map);
 			//이전 리뷰등록 여부 확인
 			reviewCheck = catalogService.reviewCheck(map);
-		
+			
+			String reviewRating = catalogService.reviewRating(map);
+			String a ="rating-input-";
+			String star = a.concat(reviewRating) ;
+			map.put("star",star);
+			
 		}
 		
 		if (!map.containsKey("AVATAR")) map.put("AVATAR", null);
@@ -232,7 +237,7 @@ public class CatalogController {
 	
 	//리뷰 작성 컨트롤러
 	@PostMapping("/catalog/reviewInsert")
-	public @ResponseBody int reviewInsert(Authentication auth  ,@RequestBody Map map) {
+	public @ResponseBody Map reviewInsert(Authentication auth  ,@RequestBody Map map) {
 		int affected;
 		String memberId;
 		memberId = ((UserDetails)auth.getPrincipal()).getUsername();
@@ -243,7 +248,8 @@ public class CatalogController {
 		String selectedStar= (String) map.get("selectedStar");
 		    String rating =selectedStar.split("-")[2];
 		    System.out.println("rating:"+rating);
-		
+		    
+		    
 		System.out.println("content:"+content);
 		System.out.println("courseId:"+courseId);
 		System.out.println("selectedStar:"+selectedStar);
@@ -260,15 +266,18 @@ public class CatalogController {
 			//리뷰테이블에 강의후기 등록
 			catalogService.reviewInsert(map);
 			//ajax : data값 0반환
-			return affected=0;
+			affected=4;
+			map.put("affected",affected);	
+			return map;
 			
 		}
 		else {//이전에 강의후기를 작성했을 경우
 			
 			// 업데이트  작성
 			catalogService.reviewUpdate(map);
-			
-		return affected =1;
+			affected =5;
+			map.put("affected",affected);	
+			return map;
 		}
 		
 		

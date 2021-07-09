@@ -388,12 +388,12 @@
 			<div class="modal-content fModal__body">
 				<div style="margin-top: 10px;" class="modal-header fModal__header">
 					<h3>후기 작성 <span style="color: red;">[200자 이내로 작성] </span></h3>
-					<button  type="button" class="close" data-dismiss="modal">
+					<button  type="button" class="modal_close" data-dismiss="modal">
 						<span>&times;</span>
 					</button>
 				</div>
-				<div  class="modal-body p-0">
-					<div class="fModal__box">
+				<div id="modal_box" class="modal-body p-0">
+					<div  class="fModal__box">
 						<form >
 
 							<textarea id="content" class="form-control" placeholder="후기를 작성해주세요."></textarea>
@@ -435,14 +435,24 @@
 							$('#reviewComplete').text("수정하기");	
 								
 						}
-							
-								
 				})
 				
-						
+				
 									
 				$('#reviewWrite').click(function(){
 					var data = {'courseId':courseId}
+					var selectedStar;
+					console.log("selectedStar찍기:",$("input[name=rating-input]:checked").val());
+
+					
+				// 모달 창 닫기 버튼 클릭 시 값 초기화
+   				$('#reviewModal').on('hidden.bs.modal', function (e) {
+  				  $(this).find('form')[0].reset();
+					});
+					
+					//모달창 esc버튼 혹은 바깥화면 클릭했을때 창 닫히는거 막음
+					$('#reviewModal').modal({backdrop: 'static', keyboard: false}) ;
+					
 					
 				$.ajax({
 					
@@ -452,9 +462,7 @@
 						dataType:"json",
 						contentType: "application/json",
 						success: function (data) {				
-							console.log("data:",data);
 							
-							console.log("data.affected:",data.affected);
 						
 							if (data.affected == 0) {//로그인 후 미결제된 아이디
 									console.log("여기여기");
@@ -476,6 +484,7 @@
 								$('#content').text(data.reviewContent);
 								$('input[id="'+data.star+'"]').each(function() {
     							$(this).prop('checked', true);
+    							
 								});
 								}
 								
@@ -500,10 +509,13 @@
 								
 							}//else if 
 
-				
 						}//success
-				})
+					})
 		
+				});//clickWrite
+				
+				
+				
 				//별점 눌렀을때
 				$("input.rating-input").click(function () {
 				name = $(this).attr('name');
@@ -511,25 +523,39 @@
 				$("input[name='" + name + "']:checked").val($(this).attr('id')); // add value to checked radio
 				// console 참고
 				//console.log($("input[name='" + name + "']:checked").val())
-				var selectedStar = $("input[name='" + name + "']:checked").val();
+				selectedStar = $("input[name='" + name + "']:checked").val();
+				console.log("selectedStar찍기:",$("input[name=rating-input]:checked").val());
 				console.log($('input:radio[name=rating-input]').is(':checked'));
-
+								
 				
+				});//clickStar
+					
+				
+				
+				
+			
 				//후기작성 완료버튼 눌렀을때
 				$("#reviewComplete").click(function(){
-				var content= $('#content').val();
-				var data = {'courseId':courseId,'content':content ,"selectedStar":selectedStar};
-				console.log("data:",JSON.stringify(data));			
-				
 				if(content==""){
 					alert("내용을 입력해주세요");
 					$('#content').focus();					
 				}
-				else if (! ($("input:radio[name=rating-input]").is(":checked")) ){
-					console.log("찍음")
-					
+				if (!($("input:radio[name=rating-input]").is(":checked"))){
+					alert("별점을 선택해주세요");
 				}
-
+				/*
+				if(selectedStar'on') 
+				 selectedStar="[[${course.star}]]";
+				눌렀으면
+				selectedStar = $("input[name='" + name + "']:checked").val();
+				console.log("selectedStar:",selectedStar);
+				*/
+				
+				var content= $('#content').val();
+				var data = {'courseId':courseId,'content':content ,"selectedStar":selectedStar};
+				console.log("data:",JSON.stringify(data));			
+				
+				
 				
 					$.ajax({
 
@@ -540,24 +566,22 @@
 						success: function (data) {
 							console.log("컨트롤로에서 넘어온 데이터값:",data)
 						
-						if(data==0){//이전에 등록된 글이 없을경우
-							console.log("강의후기 첫 등록");
+						if(data.affected==4){//이전에 등록된 글이 없을경우
 							$('#reviewModal').modal('hide');
 							alert("강의후기 등록완료");
 							location.href="/catalog/"+courseId+"";
 							
 									
 						}
-					    else if(data==1){//이전에 등록된 글이 있을경우
-							console.log("이전 강의후기 등록 있음");							
+					    else if(data.affected=5){//이전에 등록된 글이 있을경우
+													
 							$('#reviewModal').modal('hide');
 							alert("강의후기 수정완료");										
-							location.href="/catalog/"+courseId+"";	
+							location.href="/catalog/"+courseId+"";
+							
+								
 							}
 					
-							  
-						
-							
 							
 						}//success
 
@@ -565,11 +589,11 @@
 					
 							
 				});//clickComplete
-				
-				});//clickStar
-		
-				});//clickWrite
-		
+			
+			
+			
+			
+			
 		
 
 
