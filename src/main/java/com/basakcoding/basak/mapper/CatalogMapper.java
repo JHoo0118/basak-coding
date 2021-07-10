@@ -31,7 +31,7 @@ public interface CatalogMapper {
 	int reviewCheck(Map map);
 	int reviewInsert(Map map);
 	int reviewUpdate(Map map);
-	
+	int reviewDelete(Map map);
 	
 	//강의상세보기 좋아요 기능
 	int likeCheck(Map map);

@@ -171,5 +171,11 @@
 	
 	</update>	
 	
+	<delete id="reviewDelete" parameterType="Map">
+		DELETE FROM review
+		WHERE   COURSE_ID= #{courseId} and MEMBER_ID= #{memberId} 
+	
+	 </delete>
+	
 	
 </mapper>

@@ -414,7 +414,9 @@
 						</form>
 						<div class="flex__end">
 							<button id="reviewComplete" class="button--square mt-5">후기 작성</button>
+							<button th:if="${course.reviewCheck}==1" id="reviewDelete" class="button--square mt-5" style="background-color: red;">삭제 </button>
 						</div>
+						
 					</div>
 				</div>
 			</div>
@@ -427,23 +429,27 @@
 
 	<script>
 
-		//강의 후기 기능구현
+
+
+	
 			var reviewCheck = "[[${course.reviewCheck}]]";
 										
 				$(document).ready(function(){
 					if(reviewCheck==1){
 							$('#reviewWrite').text("후기 수정하기");	
 							$('#reviewComplete').text("수정하기");	
+							
 								
 						}
 				})
 				
 				
+			
+				
 									
 				$('#reviewWrite').click(function(){
 					var data = {'courseId':courseId}
 					var selectedStar;
-					console.log("selectedStar찍기:",$("input[name=rating-input]:checked").val());
 
 					
 				// 모달 창 닫기 버튼 클릭 시 값 초기화
@@ -451,10 +457,7 @@
   				  $(this).find('form')[0].reset();
 					});
 					
-					//모달창 esc버튼 혹은 바깥화면 클릭했을때 창 닫히는거 막음
-					$('#reviewModal').modal({backdrop: 'static', keyboard: false}) ;
-					
-					
+				
 				$.ajax({
 					
 						url: "[[@{/catalog/reviewWrite}]]",
@@ -466,55 +469,69 @@
 							
 						
 							if (data.affected == 0) {//로그인 후 미결제된 아이디
-									console.log("여기여기");
 									console.log("로그인 후 강의결제 완료하지않은 아이디");
 									if(confirm("강의 등록 후 이용가능\r\r강의등록 페이지로 이동하시겠습니까?")){
-									location.href = "/orders/payments/"+courseId+"";//로그인창으로 페이지 이동
+									location.href = "/orders/payments/"+courseId+"";//결제 페이지로 이동
+									
 									}//if
 									else{
 									console.log("결제 안된 아이디");
 									$('#reviewModal').modal('hide');
 									}
+							
 								
 							}//바깥 if
 							else if (data.affected == 1) {////로그인 후 결제완료된 아이디
 							
 								console.log("로그인 후 결제 완료하고 리뷰 작성한 아이디");
-								console.log("data.reviewContent:",data.reviewContent);
+								$('#reviewModal').modal({backdrop: 'static'}) ;
 								$('#reviewModal').modal('show');
 								$('#content').text(data.reviewContent);
 								$('input[id="'+data.star+'"]').each(function() {
     							$(this).prop('checked', true);
     							
 								});
+								
 								}
 								
 							else if(data.affected==2){//앞전 글이 등록 돼있지 않을때
 								console.log('신규 리뷰 등록자')
-								$('#reviewModal').modal('show');
 									
+								//모달창 esc버튼 혹은 바깥화면 클릭했을때 창 닫히는거 막음 (이거있음 modal.('hide'))
+								$('#reviewModal').modal({backdrop: 'static'}) ;
+								$('#reviewModal').modal('show');
+								
 								}
 							
 							
 							
 							else if (data.affected == 3) {//로그인 안된 아이디
-								console.log("로그인 되지 않은 상황 ");
 								if(confirm("로그인 후 이용가능\r\r로그인 페이지로 이동하시겠습니까?")){//컨펌 확인 눌렀을때
 									location.href = "/auth/signin";//로그인창으로 페이지 이동
-									//location.replace("/auth/signin"); //뒤로가기 불가능
 								}//if
 								else{//취소 버튼 눌렀을시
 									console.log("취소버튼누름");
 									$('#reviewModal').modal('hide');
+								
 								}
 								
 							}//else if 
-
+							
 						}//success
-					})
+						
+					})//ajax
 		
 				});//clickWrite
 				
+		
+				
+				
+		
+				if ( !($("input:radio[name=rating-input]").is(":checked")) ){
+					///이전 강의 후기 등록된 사람이 별표 안찍었을때 기존 찍혀있던 별표값 받아오기
+					selectedStar="[[${course.star}]]";
+					console.log("이전 강의후기 등록된사람 별표 안찍었을때 selectedStar:",selectedStar);
+				}
 				
 				
 				//별점 눌렀을때
@@ -525,33 +542,40 @@
 				// console 참고
 				//console.log($("input[name='" + name + "']:checked").val())
 				selectedStar = $("input[name='" + name + "']:checked").val();
-				console.log("selectedStar찍기:",$("input[name=rating-input]:checked").val());
+				console.log("selectedStar찍었을때:",$("input[name=rating-input]:checked").val());
 				console.log($('input:radio[name=rating-input]').is(':checked'));
-								
+				
 				
 				});//clickStar
 					
 				
+			
 				
-				
+								
 			
 				//후기작성 완료버튼 눌렀을때
 				$("#reviewComplete").click(function(){
-				if(content==""){
-					alert("내용을 입력해주세요");
-					$('#content').focus();					
-				}
-				if (!($("input:radio[name=rating-input]").is(":checked"))){
-					alert("별점을 선택해주세요");
-				}
-				
 			
-			
-				
-						
 				
 				var content= $('#content').val();
+					
+					if(content==""){
+					alert("내용을 입력해주세요");
+					$('#content').focus();	
+					
+					return;
+					}	
+					
+					if (!($("input:radio[name=rating-input]").is(":checked"))){
+					alert("별점을 선택해주세요");
+					}
+			
+				
+				
 				var data = {'courseId':courseId,'content':content ,"selectedStar":selectedStar};
+						
+				
+				
 				console.log("data:",JSON.stringify(data));			
 				
 				
@@ -566,20 +590,33 @@
 							console.log("컨트롤로에서 넘어온 데이터값:",data)
 						
 						if(data.affected==4){//이전에 등록된 글이 없을경우
-							$('#reviewModal').modal('hide');
-							alert("강의후기 등록완료");
-							location.href="/catalog/"+courseId+"";
 							
+							if(confirm("강의후기 등록하시겠습니까?")){
+								
+							location.reload();
+							}
+							else {
+								$('#reviewModal').modal('show');
+									
+							}
 									
 						}
-					    else if(data.affected=5){//이전에 등록된 글이 있을경우
+					   else if(data.affected=5){//이전에 등록된 글이 있을경우
 													
-							$('#reviewModal').modal('hide');
-							alert("강의후기 수정완료");										
-							location.href="/catalog/"+courseId+"";
-							
+							if(confirm("강의후기 수정하시겠습니까?")){
+						
+							location.reload();
 								
 							}
+							else{
+								$('#reviewModal').modal('show');	
+								
+								} 
+									
+							}
+							
+							
+							
 					
 							
 						}//success
@@ -587,11 +624,43 @@
 					})//ajax	
 					
 							
-				});//clickComplete
+				});//reviewComplete
 			
 			
-			
-			
+					//강의 후기 삭제 버튼 클릭시
+					$('#reviewDelete').click(function(){
+					var result=confirm("정말 삭제하시겠습니까?");
+					
+					if(!result){
+						return;
+					}	
+					else{
+						alert("해당 게시글이 삭제됐습니다.");
+					
+					}	
+						var data = {'courseId':courseId}
+						
+						
+						$.ajax({
+					
+						url: "[[@{/catalog/reviewDelete}]]",
+						type: "POST",
+						data: JSON.stringify(data),//courseId=1
+						dataType:"json",
+						contentType: "application/json",
+						success: function (data) {				
+							
+							if(data==1){
+								location.reload();
+							}
+							
+					
+						}//success
+						
+					})//ajax
+						
+					});//reviewDelete
+				
 			
 		
 

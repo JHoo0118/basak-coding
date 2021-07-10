@@ -66,6 +66,9 @@ public class CatalogService {
 	public int reviewUpdate(Map map) {
 		return catalogMapper.reviewUpdate(map);
 	}
+	public int reviewDelete(Map map) {
+		return catalogMapper.reviewDelete(map);
+	}
 	
 	
 	

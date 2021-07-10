@@ -71,6 +71,7 @@ public class CatalogController {
 		int likeCheck=0;
 		int reviewCheck=0;
 		int checkPayment=2;
+		String star = "0";
 		Map map = catalogService.selectOne(courseId);//강의 상세보기에 필요한 값 받아오기
 		
 		List<Map> map1 = catalogService.reviewList(courseId);//강의후기 리스트에 필요한 값 받아오기
@@ -98,21 +99,15 @@ public class CatalogController {
 			//이전 리뷰등록 여부 확인
 			reviewCheck = catalogService.reviewCheck(map);
 			
-			String star;
+		
 			if(reviewCheck==1) {
 			
 				String reviewRating = catalogService.reviewRating(map);
 				String a ="rating-input-";
 				star = a.concat(reviewRating) ;
-				map.put("star",star);
+				
 				
 			}
-			else {
-				star ="rating-input-0";
-				map.put("star",star);
-				
-			}
-			
 			
 		}
 		
@@ -128,7 +123,8 @@ public class CatalogController {
 		
 		//CLOB형 자료 스트링화 하여 맵에 저장
 		map.put("DESCRIPTION", getClob);	
-		//
+		
+		map.put("star",star);
 		
 
 		model.addAttribute("course",map);
@@ -138,10 +134,8 @@ public class CatalogController {
 		System.out.println("reviewList:"+map1);
 		
 		model.addAttribute("faqList",map2);
-		System.out.println("faq:"+map2);
 		
 		model.addAttribute("curriculums",curriculumList);
-		System.out.println("curriculums:"+curriculumList);
 		
 		model.addAttribute("reviewCount",reviewCount);
 		
@@ -211,6 +205,7 @@ public class CatalogController {
 			checkPayment = catalogService.checkPayment(map);
 		}
 		
+		
 		if(checkPayment==0) {//결제한 이력이 없으면 0반환
 			affected=0;
 			map.put("affected", affected);
@@ -245,7 +240,19 @@ public class CatalogController {
 		
 	}
 	
-	
+	@PostMapping("/catalog/reviewDelete")
+	public @ResponseBody int reviewDelete(Authentication auth,@RequestBody Map map,Model model) {
+		
+		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+		map.put("memberId", memberId);
+		
+		String courseId	= (String) map.get("courseId");
+		map.put("courseId", courseId);
+		
+		int reviewDelete = catalogService.reviewDelete(map);
+		
+		return reviewDelete;
+	}
 	
 	//리뷰 작성 컨트롤러
 	@PostMapping("/catalog/reviewInsert")
@@ -256,6 +263,8 @@ public class CatalogController {
 
 
 		String content = (String) map.get("content");
+	
+		
 		String courseId	= (String) map.get("courseId");
 		String selectedStar= (String) map.get("selectedStar");
 		    String rating =selectedStar.split("-")[2];
@@ -274,7 +283,7 @@ public class CatalogController {
 
 		
 		
-		if(	 catalogService.reviewCheck(map) == 0 ) {//이전에 강의후기를 작성하지 않았을 경우
+		if( catalogService.reviewCheck(map) == 0 ) {//이전에 강의후기를 작성하지 않았을 경우
 			//리뷰테이블에 강의후기 등록
 			catalogService.reviewInsert(map);
 			//ajax : data값 0반환
@@ -293,8 +302,6 @@ public class CatalogController {
 		}
 		
 		
-		
-			
 	}
 	
 
