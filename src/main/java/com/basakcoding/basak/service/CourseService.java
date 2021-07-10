@@ -94,4 +94,8 @@ public class CourseService {
 		return courseMapper.alreadyPayment(paymentCheck);
 
 	}
+
+	public int updateSeen(Map params) {
+		return courseMapper.updateSeen(params);
+	}
 }

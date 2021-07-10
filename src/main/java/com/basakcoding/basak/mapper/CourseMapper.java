@@ -65,4 +65,6 @@ public interface CourseMapper {
 	List<CurriculumDTO> courseCurriculumList(Map map);
 	
 	int alreadyPayment(Map paymentCheck);
+
+	int updateSeen(Map params);
 }

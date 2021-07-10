@@ -105,6 +105,10 @@
     	SELECT COUNT(*) FROM videoMember WHERE 
     	video_id = #{videoId} AND member_id = #{memberId} AND seen = 'Y'
     </select>
+    
+    <update id="updateSeen" parameterType="Map">
+    	UPDATE videoMember SET seen = 'Y' WHERE video_id = #{videoId} AND member_id = #{memberId}
+    </update>
 	
 	<!--******************************** 강의 상세보기 ***************************************-->
 	<select id="getCourseOne" parameterType="Map" resultType="CourseDTO">
