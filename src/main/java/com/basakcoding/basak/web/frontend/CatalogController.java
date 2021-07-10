@@ -98,10 +98,21 @@ public class CatalogController {
 			//이전 리뷰등록 여부 확인
 			reviewCheck = catalogService.reviewCheck(map);
 			
-			String reviewRating = catalogService.reviewRating(map);
-			String a ="rating-input-";
-			String star = a.concat(reviewRating) ;
-			map.put("star",star);
+			String star;
+			if(reviewCheck==1) {
+			
+				String reviewRating = catalogService.reviewRating(map);
+				String a ="rating-input-";
+				star = a.concat(reviewRating) ;
+				map.put("star",star);
+				
+			}
+			else {
+				star ="rating-input-0";
+				map.put("star",star);
+				
+			}
+			
 			
 		}
 		

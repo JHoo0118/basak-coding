@@ -167,8 +167,6 @@
 							 
 						
 							 
-							 var dd="[[${course.checkPayment}]]"
-							 	console.log("${course.checkPayment}:",dd);
 							 
 							</script>
 
@@ -431,7 +429,6 @@
 
 		//강의 후기 기능구현
 			var reviewCheck = "[[${course.reviewCheck}]]";
-						console.log('reviewCheck', reviewCheck);		
 										
 				$(document).ready(function(){
 					if(reviewCheck==1){
@@ -547,13 +544,11 @@
 				if (!($("input:radio[name=rating-input]").is(":checked"))){
 					alert("별점을 선택해주세요");
 				}
-				/*
-				if(selectedStar'on') 
-				 selectedStar="[[${course.star}]]";
-				눌렀으면
-				selectedStar = $("input[name='" + name + "']:checked").val();
-				console.log("selectedStar:",selectedStar);
-				*/
+				
+			
+			
+				
+						
 				
 				var content= $('#content').val();
 				var data = {'courseId':courseId,'content':content ,"selectedStar":selectedStar};
