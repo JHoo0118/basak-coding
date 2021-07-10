@@ -497,6 +497,38 @@
 	
     <script>
     
+    	// 비디오 본 것 처리
+    	var myPlayer = videojs("my_video_1");
+    	var seenCheck = false;
+    		
+		myPlayer.on('timeupdate', function () {
+			if (myPlayer.duration) {
+				if (myPlayer.duration() - myPlayer.currentTime() <= 5 && !seenCheck) {
+					$.post({
+	    				url:"[[@{/class/update-seen}]]",
+	    				data: {
+	    					"videoId" : "[[${currVideo.videoId}]]",
+	    				},
+	    				success: function(data) {
+	    					if (data === '1') {
+		    					seenCheck = true;
+		    					var parent = document.querySelector("a.curr__link.active");
+		    					var children = parent.querySelectorAll("i");
+		    					children[0].classList.add("none");
+		    					children[1].classList.remove("none");
+	    					}
+	    				},
+	    			});
+				}
+			
+			}
+		});
+    	
+    	myPlayer.on("ended", function() {
+ 			seenCheck = false;
+    	})
+    
+    
     	// 툴팁
     	$(function () {
 			$('[data-toggle="tooltip"]').tooltip()

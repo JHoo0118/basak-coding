@@ -227,4 +227,15 @@ public class CourseController {
 		bw.write(map.get("currFileContent"));
 		bw.close();
 	}
+	
+	@PostMapping("/class/update-seen")
+	@ResponseBody
+	public String saveCode(@RequestParam String videoId, Authentication auth) {
+		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+		Map params = new HashMap();
+		params.put("memberId", memberId);
+		params.put("videoId", videoId);
+		int result = courseService.updateSeen(params);
+		return Integer.toString(result);
+	}
 }
