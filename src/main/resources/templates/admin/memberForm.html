@@ -24,7 +24,6 @@
 					<div class="col-sm-9">
 						<input type="email" th:field="*{email}" class="form-control py-3" placeholder="이메일" name="email">
 					</div>
-					<small>에러 메세지</small>
 				</div>
 				
 				<div class="form-group row pb-3 position-relative">
@@ -32,9 +31,6 @@
 					<div class="col-sm-9">
 						<input type="text" th:field="*{username}" maxlength="12" class="form-control py-3" placeholder="사용자명" name="username">
 					</div>
-					<i class="far fa-check-circle fa-lg form__icon"></i> 
-					<i class="fas fa-exclamation-circle fa-lg form__icon"></i> 
-					<small>에러 메세지</small>
 				</div>
 				
 				<div class="form-group row pb-3 position-relative">
@@ -45,9 +41,6 @@
 							<img id="preview" class="img-fluid" alt="이미지 미리보기" style="width:100px; height:80px;" />
 						</div>
 					</div>
-					<i class="far fa-check-circle fa-lg form__icon"></i> 
-					<i class="fas fa-exclamation-circle fa-lg form__icon"></i> 
-					<small>에러 메세지</small>
 				</div>
 				
 				<div th:if="${param.memberId == null}" class="form-group row pb-3 position-relative">
@@ -55,9 +48,6 @@
 					<div class="col-sm-9">
 						<input type="password" th:field="*{password}" class="form-control py-3" placeholder="비밀번호" name="password" />
 					</div>
-					<i class="far fa-check-circle fa-lg form__icon"></i> 
-					<i class="fas fa-exclamation-circle fa-lg form__icon"></i> 
-					<small>에러 메세지</small>
 				</div>
 				
 				<div th:if="${param.memberId == null}" class="form-group row pb-3 position-relative">
@@ -65,9 +55,6 @@
 					<div class="col-sm-9">
 						<input type="password" class="form-control py-3" placeholder="비밀번호 확인" name="passwordConfirm">
 					</div>
-					<i class="far fa-check-circle fa-lg form__icon"></i> 
-					<i class="fas fa-exclamation-circle fa-lg form__icon"></i> 
-					<small>에러 메세지</small>
 				</div>
 			
 				<div class="form-group row">

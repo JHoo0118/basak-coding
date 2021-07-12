@@ -76,6 +76,14 @@ public class CatalogController {
 		
 		List<Map> map1 = catalogService.reviewList(courseId);//강의후기 리스트에 필요한 값 받아오기
 		
+		for (Map ma : map1) {
+			if (ma.containsKey("AVATAR")) {
+				ma.put("MEMBER_PATH", "/upload/member/" + ma.get("MEMBER_ID").toString() + "/" + ma.get("AVATAR"));
+			} else {
+				ma.put("AVATAR", null);
+			}
+		}
+		
 		List<Map> map2  = catalogService.faqList(courseId);
 		
 		List<CurriculumDTO> curriculumList = catalogService.getCurriculumList(courseId);

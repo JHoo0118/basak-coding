@@ -122,7 +122,7 @@
 	<!-- 강의후기 리스트 -->
 	<select id="reviewList" parameterType="String" resultType="Map">
 	
-	SELECT M.USERNAME NAME, R.* 
+	SELECT M.MEMBER_ID, M.USERNAME NAME, M.AVATAR, R.* 
 	FROM members M 
 	JOIN review R 
 	ON M.MEMBER_ID = R.MEMBER_ID

@@ -273,7 +273,8 @@
 				<li th:each="review : ${reviewList}" class="review__card col-md-6">
 					<div  class="review__header">
 						<div class="review__user">
-							<img th:src="@{/images/user.png}" alt="사용자 이미지" />
+							<img th:if="${review.AVATAR} != null" th:src="@{${review.MEMBER_PATH}}" alt="사용자 이미지" />
+							<img th:if="${review.AVATAR} == null" th:src="@{/images/image4.jpg}" alt="사용자 이미지" />
 							<div class="review__ubox">
 								<p>[[${review.NAME}]]</p>
 								<span id="postDate" class="review__date">[[${review.POSTDATE}]]</span>
