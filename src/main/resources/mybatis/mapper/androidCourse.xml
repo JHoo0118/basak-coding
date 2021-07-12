@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.basakcoding.basak.mapper.android.AndroidCourseMapper">
+
+	<!-- 결제한 모든 강의 얻기 -->
+	<select id="getMyCourseList" parameterType="String" resultType="Map">
+		SELECT co.course_id, co.thumbnail, co.title, co.video_count, a.name FROM courses co
+		JOIN admins a ON co.admin_id = a.admin_id JOIN payment p ON p.course_id = co.course_id
+		WHERE p.member_id = #{memberId}
+	</select>
+	
+	<!-- 강의에서 본 동영상 개수 가져오기 -->
+	<select id="getSeenCount" parameterType="Map" resultType="int">
+		SELECT count(vm.seen) FROM curriculum cu JOIN video v ON v.curriculum_id = cu.curriculum_id
+		JOIN videoMember vm ON v.video_id = vm.video_id WHERE cu.course_id = #{courseId} 
+		AND member_id = #{memberId} AND vm.seen = 'Y'
+	</select>
+	
+	
+</mapper>

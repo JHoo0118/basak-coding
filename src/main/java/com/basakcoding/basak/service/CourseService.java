@@ -90,11 +90,14 @@ public class CourseService {
 	public List<CurriculumDTO> courseCurriculumList(Map map) {
 		return courseMapper.courseCurriculumList(map);
 	}
+	
+	// 결제했는지 확인
 	public int alreadyPayment(Map paymentCheck) {
 		return courseMapper.alreadyPayment(paymentCheck);
 
 	}
 
+	// seen 업데이트
 	public int updateSeen(Map params) {
 		return courseMapper.updateSeen(params);
 	}

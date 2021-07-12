@@ -177,5 +177,4 @@ public class MemberService {
 	public Map questionDetailNotExist(String userId, String questionId) {
 		return memberMapper.questionDetailNotExist(userId,questionId);
 	}
-
 }

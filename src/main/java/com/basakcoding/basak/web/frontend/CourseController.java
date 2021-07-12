@@ -169,8 +169,6 @@ public class CourseController {
 		}
 		bw.close();
 		br.close();
-		System.out.println("여기");
-//		System.out.println(file);
 	}
 	
 	@PostMapping("/class/autosave-code")

@@ -128,10 +128,8 @@ public class CatalogController {
 		
 
 		model.addAttribute("course",map);
-		System.out.println("course:"+map);
 		
 		model.addAttribute("reviewList",map1);
-		System.out.println("reviewList:"+map1);
 		
 		model.addAttribute("faqList",map2);
 		
@@ -157,26 +155,22 @@ public class CatalogController {
 		String courseId	= (String) map.get("courseId");
 		
 		if(auth == null) {
-			System.out.println("로그인상태가 아님");
 			return affected=2;
 		
 		} else {
 			memberId = ((UserDetails)auth.getPrincipal()).getUsername();
 			map.put("memberId", memberId);
 			likeCheck = catalogService.likeCheck(map);
-			System.out.println("memberId:"+memberId+"\r\n"+"courseId:"+courseId);
 			
 		}
 			if(likeCheck == 0) {//좋아요 등록이 안돼있으면
 				catalogService.like(map);
-				System.out.println("likeCheck:" + likeCheck);
 				catalogService.likeCount(map);
 				return affected=0;
 			
 			}//작은 if
 			else {//likeCheck 결과 값이 1일떄 (이미 좋아요가 등록이 돼있을때)
 				catalogService.unLike(map);
-				System.out.println("likeCheck:" + likeCheck);
 				catalogService.likeCount(map);
 				return affected=1;
 			
@@ -221,7 +215,6 @@ public class CatalogController {
 				String a ="rating-input-";
 				String star = a.concat(reviewRating) ;
 				map.put("star",star);
-				System.out.println(star);
 				
 				affected=1;
 				map.put("affected", affected);
@@ -267,13 +260,9 @@ public class CatalogController {
 		
 		String courseId	= (String) map.get("courseId");
 		String selectedStar= (String) map.get("selectedStar");
-		    String rating =selectedStar.split("-")[2];
-		    System.out.println("rating:"+rating);
+	    String rating =selectedStar.split("-")[2];
 		    
 		    
-		System.out.println("content:"+content);
-		System.out.println("courseId:"+courseId);
-		System.out.println("selectedStar:"+selectedStar);
 		
 		map.put("memberId",memberId );
 		map.put("content", content);

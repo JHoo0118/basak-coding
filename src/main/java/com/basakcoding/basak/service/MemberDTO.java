@@ -1,5 +1,6 @@
 package com.basakcoding.basak.service;
 
+import java.beans.Transient;
 import java.sql.Date;
 
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ public class MemberDTO {
     private String avatar;
     private String emailSecret;
     
-    
+    @Transient
     public String getAvatarImagePath() {
     	if (avatar == null) return "/images/user.png";
     	return "/upload/member/" + this.memberId + "/" + this.avatar;

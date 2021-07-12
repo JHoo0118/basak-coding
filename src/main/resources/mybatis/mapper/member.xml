@@ -232,5 +232,4 @@
 		select m.username,q.* from question q join members m on m.member_id=q.member_id
 		where m.member_id=#{userId} and q.question_id=#{questionId}
 	</select>
-	
 </mapper>
