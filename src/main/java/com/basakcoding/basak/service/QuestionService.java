@@ -11,12 +11,25 @@ import com.basakcoding.basak.mapper.QuestionMapper;
 @Service
 public class QuestionService {
 	
-	//라이크맵퍼 주입
 	@Autowired
-	private QuestionMapper questionMapper;
+	QuestionMapper questionMapper;
 	
 	//질문 리스트 가져오기
-	public List<QuestionDTO> questionSelect(){
-		return questionMapper.questionSelect();
+	public List<QuestionDTO> lionList(){
+		return questionMapper.lionList();
+	}
+	
+	public QuestionDTO getQuestionById(String questionId) {
+		return questionMapper.getQuestionById(questionId);
+	}
+	
+	public int updateQuestion(Map map) {
+		return questionMapper.updateQuestion(map);
+	}
+	public int createQuestion(Map map) {
+		return questionMapper.createQuestion(map);
+	}
+	public int deleteMultpleQuestion(Map map) {
+		return questionMapper.deleteMultpleQuestion(map);
 	}
 }

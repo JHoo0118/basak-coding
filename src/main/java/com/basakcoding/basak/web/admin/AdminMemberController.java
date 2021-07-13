@@ -94,28 +94,6 @@ public class AdminMemberController {
 			redirectAttributes.addFlashAttribute("message", "사용자가 삭제되었습니다.");
 			return "redirect:/admin/member/management";
 			
-			// 사용자 관리 페이지
-			@GetMapping("/management")
-			public String memberList(Model model) {
-				List<MemberDTO> listMembers = memberService.selectList();
-				model.addAttribute("listMembers", listMembers);
-				model.addAttribute("title", "사용자 관리");
-				return "admin/memberManagement";
-			}
-			
-			// 문의 관리 - 분류 (조회, 삭제)
-			@GetMapping("/management/form")
-			public String memberForm(@RequestParam Map<String, String> map, Model model) {
-				String memberId = map.get("memberId");
-				MemberDTO member = new MemberDTO();
-				if (memberId != null) {
-					member = memberService.getMemberById(memberId);
-				}
-				model.addAttribute("member", member);
-				model.addAttribute("title", "사용자 관리");
-				return "admin/memberForm";
-			
-			
 			
 		}
 	}

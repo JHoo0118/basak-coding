@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class QuestionDTO {
 	private Integer questionId;
-	private String userName;
+	private String name;
 	private String courseTitle;
 	private String questionTitle;
 	private Date createdAt;

@@ -53,16 +53,12 @@
 							
 							
 							
-							<li th:classappend="${title == '조회, 삭제'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/classfiMangement}" th:classappend="${title != '조회, 삭제'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>조회, 삭제</a>
+							<li th:classappend="${title == '문의 카테고리 관리'} ? current" class="nav-item mb-2">
+								<a th:href="@{/admin/question/catagory}" th:classappend="${title != '문의 카테고리 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>문의 카테고리 관리</a>
 							</li>
-							<li th:classappend="${title == '등록, 수정'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/classfiForm}" th:classappend="${title != '등록, 수정'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>등록, 수정</a>
-							</li>
+
 	
-							
-							
-							
+														
 	                    </ul>
 	    			</div>
 	    			<!-- END (SIDEBAR) -->
