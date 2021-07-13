@@ -110,9 +110,9 @@
     	UPDATE videoMember SET seen = 'Y' WHERE video_id = #{videoId} AND member_id = #{memberId}
     </update>
 	
-	<!--******************************** 강의 상세보기 ***************************************-->
+	<!--―――――――――――――――――――――――――――― 강의 상세보기 ――――――――――――――――――――――――――――――-->
 	<select id="getCourseOne" parameterType="Map" resultType="CourseDTO">
-		SELECT course_id,c.category_id, ca.name categoryname, ad.name adminname, difficulty,
+		SELECT course_id,c.category_id, c.admin_id, ca.name categoryname, ad.name adminname, difficulty,
 		price,thumbnail, title, short_description, description
 		FROM courses c
 		JOIN category ca ON ca.category_id = c.category_id
@@ -152,7 +152,7 @@
 	<select id="getFAQList" parameterType="Map" resultType="FAQDTO">
 		SELECT * FROM faq WHERE course_id = #{no}
 	</select>
-	<!--******************************** 강의 상세보기 ***************************************-->
+	<!--―――――――――――――――――――――――――――― 강의 상세보기 ――――――――――――――――――――――――――――――-->
 	
 	
 </mapper>
