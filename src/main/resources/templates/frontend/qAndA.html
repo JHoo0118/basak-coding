@@ -2,447 +2,481 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>바삭 코딩 | 질문 & 댓글</title>
-	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
-	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}" />
-	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
-	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
-	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
-	<script>
-		//질문 상세보기
-		function questionDetails(question){
-			var questionId = question.querySelectorAll("span")[0].innerText;
-			console.log("잘들어오나"+questionId);
-			$.ajax({
-				url: '/personal/questionDetails.do',
-				data: {"questionId": questionId},
-				type: 'post',
-				dataType: "json",
-				success: function (data) {
-					console.log("성공");
-					$('#questionMem').text(data.USERNAME);
-					$('#questionTime').text(data.CREATED_AT);
-					$('#questionTitle').text(data.TITLE);
-					$('#questionContent').text(data.QUESTION_CONTENT);
-					//$('#questionLike').text(data.LIKE_COUNT);
-					//$('#questionComment').text(data.COMMENT_COUNT);
-					if(data.ADMIN_ID !=null && data.COMMENT_ID !=null){
-						document.querySelector(".question__list").style.display = "block";
-						document.querySelector(".question__noAnswer").style.display = "none";
-						$('#adminName').text(data.NAME);
-						$('#adminContent').text(data.CONTENT);
-					}
-				},
-				error: function () {
-					alert("오류가 발생했습니다.다시시도해주세요");
-				}
-			});
-		}
-		//문의 상세보기
-		function inquDetails(inquiry) {
+   <meta charset="UTF-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>바삭 코딩 | 질문 & 댓글</title>
+   <link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
+   <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}" />
+   <link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
+   <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+   <script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+   <script>
+      var questionId;
+      //좋아요 처리
+      $(document).ready(function () {
+         var likeCount = $('#likeCount').text();
+         if (likeCount == 1) {
+            $('#likeCount').html('<i class="fas fa-thumbs-up" ></i>' + likeCount);
+            $('#likeCount').prop("style", "color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");
+            $('#questionLike').html('<i class="far fa-thumbs-up"></i>' + likeCount);
+            $('#questionLike').prop("style", "color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");
+         }
+         else {
+            $('#likeCount').html('<i class="far fa-thumbs-up"></i>' + likeCount);
+            $('#likeCount').prop("style", "color: gray;");
+         }
 
-			var inquiry_id = inquiry.querySelectorAll("span")[1].innerText;
-			$.ajax({
-				url: '/personal/inquDetails.do',
-				data: {"inquiry_id": inquiry_id},
-				type: 'post',
-				dataType: "json",
-				success: function (data) {
-					$('#inqmem').text(data.USERNAME);
-					$('#inqtime').text(data.CREATED_AT);
-					$('#inqtitle').text(data.TITLE);
-					$('#inqcontent').text(data.CONTENT);
-					$('#clname').text(data.NAME);
-					if (data.ANSWER_ID != null) {
-						document.querySelector(".inquiry__list").style.display = "block";
-						document.querySelector(".inquiry__noAnswer").style.display = "none";
+      });
+      //모달 좋아요 기능
+      function like(like) {
+         var likeCount = like.querySelectorAll("span")[0].innerText
+         $.ajax({
+            url: '/personal/like.do',
+            data: {"questionId": questionId, "likeCount": likeCount},
+            type: 'post',
+            dataType: "json",
+            success: function (data) { 
+               if (data == 0) {//기존에 좋아요 누른적이 없을때
+                  likeCount++;
+                  $('#likeCount').html('<i class="fas fa-thumbs-up" ></i>' + likeCount);
+                  $('#likeCount').prop("style", "color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");
+                  $('#questionLike').html('<i class="fas fa-thumbs-up" ></i>' + likeCount);
+                  $('#questionLike').prop("style", "color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");
+               }
+               else if (data == 1) {////기존에 좋아요를 눌러놨을때
+                  likeCount--;
+                  $('#likeCount').html('<i class="far fa-thumbs-up"></i>' + likeCount);
+                  $('#likeCount').prop("style", "color: gray;");
+                  $('#questionLike').html('<i class="far fa-thumbs-up"></i>' + likeCount);
+                  $('#questionLike').prop("style", "color: gray;");
+               }
+            },
+            error: function () {
+               alert("오류가 발생했습니다.다시시도해주세요");
+            }
+         });
+      }
+      //질문 상세보기
+      function questionDetails(question) {
+         questionId = question.querySelectorAll("span")[0].innerText;
+         var commentList = document.getElementById("commentList");
+         $.ajax({
+            url: '/personal/questionDetails.do',
+            data: {"questionId": questionId},
+            type: 'post',
+            dataType: "json",
+            success: function (data) {
+               $('#questionMem').text(data.USERNAME);
+               $('#questionTime').text(data.CREATED_AT.split('T')[0]);
+               $('#questionTitle').text(data.TITLE);
+               $('#questionContent').text(data.QUESTION_CONTENT);
+               $('#questionLike').html('<i class="far fa-thumbs-up" ></i>' + data.LIKE_COUNT);
+               $('#questionComment').html('<i class="far fa-comment-dots" ></i>' + data.COMMENT_COUNT);
+               document.querySelector(".question__list").style.display = "none";
+               document.querySelector(".question__noAnswer").style.display = "block";
+               if (data.commentList != "") {
+                  document.querySelector(".question__list").style.display = "block";
+                  document.querySelector(".question__noAnswer").style.display = "none";
+                  commentList.innerHTML = '';
+                  $.each(data.commentList, function (index, value) {
+                     var commentHtml;
+                     if (data.commentList[index].adminId) {
+                        commentHtml = `
+                           <li class="comment__item" >
+                              <div class="comment__user">
+                                 <img src="${data.commentList[index].adminPath}" alt="admin avatar" />
+                                 <div class="user__info">
+                                    <h5 style="color: #0fd">${data.commentList[index].name}</h5>
+                                    <span>${data.commentList[index].createdAt}</span>
+                                 </div>
+                              </div>
+                              <p class="qModal__content">${data.commentList[index].content}</p>
+                           </li>
+                        `;
+                     } else if (data.commentList[index].memberId) {
+                        commentHtml = `
+                           <li class="comment__item" >
+                              <div class="comment__user">
+                                 <img src="${data.commentList[index].memberPath}" alt="admin avatar" />
+                                 <div class="user__info">
+                                    <h5>${data.commentList[index].username}</h5>
+                                    <span>${data.commentList[index].createdAt}</span>
+                                 </div>
+                              </div>
+                              <p class="qModal__content">${data.commentList[index].content}</p>
+                           </li>
+                        `;
+                     }
+                     commentList.insertAdjacentHTML("beforeend", commentHtml);
+                  });
+               }
+            },
+            error: function () {
+               alert("오류가 발생했습니다.다시시도해주세요");
+            }
+         });
+      }
+      //문의 상세보기
+      function inquDetails(inquiry) {
+         var inquiry_id = inquiry.querySelectorAll("span")[1].innerText;
+         $.ajax({
+            url: '/personal/inquDetails.do',
+            data: {"inquiry_id": inquiry_id},
+            type: 'post',
+            dataType: "json",
+            success: function (data) {
+               $('#inqmem').text(data.USERNAME);
+               $('#inqtime').text(data.CREATED_AT.split('T')[0]);
+               $('#inqtitle').text(data.TITLE);
+               $('#inqcontent').text(data.CONTENT);
+               $('#clname').text(data.NAME);
+               if (data.ANSWER_ID != null) {
+                  document.querySelector(".inquiry__list").style.display = "block";
+                  document.querySelector(".inquiry__noAnswer").style.display = "none";
 
-						$('#admin').text(data.ADMIN_NAME);
-						$('#admintime').text(data.ANSWER_CREATED);
-						$('#adminAnswer').text(data.ANS_CONTENT);
-					}
-					else {
-						document.querySelector(".inquiry__list").style.display = "none";
-						document.querySelector(".inquiry__noAnswer").style.display = "block";
-					}
+                  $('#admin').text(data.ADMIN_NAME);
+                  $('#admintime').text(data.ANSWER_CREATED.split('T')[0]);
+                  $('#adminAnswer').text(data.ANS_CONTENT);
+               }
+               else {
+                  document.querySelector(".inquiry__list").style.display = "none";
+                  document.querySelector(".inquiry__noAnswer").style.display = "block";
+               }
 
-				},
-				error: function () {
-					alert("오류가 발생했습니다.다시시도해주세요");
-				}
-			});
-		}
-		//댓글 상세보기
-		/*
-		function commentsDetails() {
-			var commenTitle = $('#commenTitle').text();
-			console.log("함수발생")
-			$.ajax({
-				url: '/personal/commentsDetails.do',
-				data: {"commenTitle": commenTitle},
-				type: 'post',
-				dataType: "json",
-				success: function (data) {
-					$('#inqmem').text(data.USERNAME);
-					$('#inqtime').text(data.CREATED_AT);
-					$('#inqtitle').text(data.TITLE);
-					$('#inqcontent').text(data.CONTENT);
-					$('#clname').text(data.NAME);
-				},
-				error: function () {
-					alert("오류가 발생했습니다.다시시도해주세요");
-				}
-			});
-		}*/
+            },
+            error: function () {
+               alert("오류가 발생했습니다.다시시도해주세요");
+            }
+         });
+      }
+      //댓글 상세보기
+      /*
+      function commentsDetails() {
+         var commenTitle = $('#commenTitle').text();
+         console.log("함수발생")
+         $.ajax({
+            url: '/personal/commentsDetails.do',
+            data: {"commenTitle": commenTitle},
+            type: 'post',
+            dataType: "json",
+            success: function (data) {
+               $('#inqmem').text(data.USERNAME);
+               $('#inqtime').text(data.CREATED_AT);
+               $('#inqtitle').text(data.TITLE);
+               $('#inqcontent').text(data.CONTENT);
+               $('#clname').text(data.NAME);
+            },
+            error: function () {
+               alert("오류가 발생했습니다.다시시도해주세요");
+            }
+         });
+      }*/
+      
 
-	</script>
+      
+
+   </script>
 </head>
 
 <body style="background-color: #1e1e1e;">
-	<!-- Navbar -->
-	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
-	<!-- 메인 섹션 시작 -->
-	<section class="dashboard">
-		<div class="container-fluid container--main">
-			<!-- mypage -->
-			<div th:insert="/frontend/fragments/mypage.html :: fragment-mypage"></div>
-			<nav class="dashboard__tab">
-				<div class="nav nav-tabs" id="nav-tab">
-					<a class="nav-link tab__link" th:href="@{/personal/dashboard}" href="/dashboard.html">나의
-						대시보드</a>
-					<a class="nav-link tab__link" th:href="@{/personal/profile}">나의
-						프로필</a>
-					<a class="nav-link tab__link active" th:href="@{/personal/qAndA/questions?page=1}">나의
-						질문답변</a>
-				</div>
-			</nav>
-		</div>
+   <!-- Navbar -->
+   <div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
+   <!-- 메인 섹션 시작 -->
+   <section class="dashboard">
+      <div class="container-fluid container--main">
+         <!-- mypage -->
+         <div th:insert="/frontend/fragments/mypage.html :: fragment-mypage"></div>
+         <nav class="dashboard__tab">
+            <div class="nav nav-tabs" id="nav-tab">
+               <a class="nav-link tab__link" th:href="@{/personal/dashboard}" href="/dashboard.html">나의
+                  대시보드</a>
+               <a class="nav-link tab__link" th:href="@{/personal/profile}">나의
+                  프로필</a>
+               <a class="nav-link tab__link active" th:href="@{/personal/qAndA/questions?page=1}">나의
+                  질문답변</a>
+            </div>
+         </nav>
+      </div>
 
-		<!-- 나의 질문 시작 -->
-		<div class="tab-pane tab__page fade show tab__content">
-			<div class="container-fluid container--main">
-				<ul class="nav nav-pills mb-3 row" id="pills-tab">
-					<li class="nav-item tab__menu col-4 p-0">
-						<a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-question">나의
-							질문</a>
-						<i class="fas fa-circle"></i>
-					</li>
-					<li class="nav-item tab__menu col-4 p-0">
-						<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-answer">나의 문의</a>
-						<i class="fas fa-circle"></i>
-					</li>
-					<li class="nav-item tab__menu col-4 p-0">
-						<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-comment">나의 댓글</a>
-						<i class="fas fa-circle"></i>
-					</li>
-				</ul>
-				<div class="tab-content" id="pills-tabContent">
-					<div class="tab-pane fade show active d-flex justify-content-center" id="pills-question">
-						<!-- <div class="notExist">
-	              <div class="notExist__inner">
-	                <div class="inner__full">
-	                  <p>궁금한 점이 생기면, 수강 화면 좌측 탭의<br />
-	                    Ask a Question 클릭하여 질문해주세요</p>
-	                </div>
-	              </div>
-	            </div> -->
-						<th:block th:if="${myQuestion}!=null">
-							<ul class="qAndA">
-								<li class="qAndA__box row m-0" data-toggle="modal" data-target="#questionModal"
-									th:each="myQuestions :${myQuestion}" onclick="questionDetails(this)">
-									<div class="qAndA__left col-2">
-										<span id="question_id" style="display:none">[[${myQuestions.QUESTION_ID}]]</span>
-										<span><i class="far fa-thumbs-up"></i>[[${myQuestions.LIKE_COUNT}]]</span>
-									</div>
-									<div class="qAndA__middle col-8">
-										<span th:text="${#dates.format(myQuestions.CREATED_AT, 'yyyy.MM.dd')}"></span>
-										<h4 class="iine-clamp">[[${myQuestions.TITLE}]]</h4>
-									</div>
-									<div class="qAndA__right col-2">
-										<span><i class="far fa-comment-dots"></i>[[${myQuestions.COMMENT_COUNT}]]</span>
-									</div>
-								</li>
-							</ul>
-						</th:block>
-						<div class="d-flex justify-content-center w-100" th:if="${myQuestion}==null">
-							<div class="notExist">
-								<div class="notExist__inner">
-									<div class="inner__upper">
-										<p>등록된 질문이 없습니다.<br />
-										</p>
-									</div>
-									<div class="inner__lower">
-										<a th:href="@{/catalog}">
-											<i class="fas fa-angle-double-right"></i>
-											<span>&nbsp;강의 보고 질문하기!&nbsp;</span>
-											<i class="fas fa-angle-double-right"></i>
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class=" tab-pane fade d-flex justify-content-center" id="pills-answer">
-						<!-- <div class="notExist">
-	              <div class="notExist__inner">
-	                <div class="inner__full">
-	                  <p>여러분이 알고 있는 지식을 다른 분들과 공유하고 싶다면,<br />
-	                    수강 화면 좌측 탭의 ? 클릭하여 답변해주세요</p>
-	                </div>
-	              </div>
-	            </div> -->
-						<th:block th:if="${myInquiry}!=null">
-							<ul class="qAndA">
-								<li class="qAndA__box row m-0" data-toggle="modal" data-target="#inquiryModal"
-									th:each="myInquirys :${myInquiry}" onclick="inquDetails(this)">
-									<div class="qAndA__left col-2">
-										<span>문의</span>
-										<span id="inquiry_id" style="display:none">[[${myInquirys.INQUIRY_ID}]]</span>
-									</div>
-									<div class="qAndA__middle col-8">
-										<span th:text="${#dates.format(myInquirys.CREATED_AT, 'yyyy.MM.dd')}"></span>
-										<h4 id="title" class="iine-clamp">[[${myInquirys.TITLE}]]</h4>
-									</div>
-									<div class="qAndA__right col-2">
-										<span>상세보기</span>
-									</div>
-								</li>
-							</ul>
-						</th:block>
-						<div class="d-flex justify-content-center w-100" th:if="${myInquiry}==null">
-							<div class="notExist">
-								<div class="notExist__inner">
-									<div class="inner__upper">
-										<p>등록된 문의가 없습니다.<br />
-										</p>
-									</div>
-									<div class="inner__lower">
-										<a th:href="@{/catalog}">
-											<i class="fas fa-angle-double-right"></i>
-											<span>&nbsp;문의 하기&nbsp;</span>
-											<i class="fas fa-angle-double-right"></i>
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="tab-pane fade d-flex justify-content-center" id="pills-comment">
-						<!-- <div class="notExist">
-	              <div class="notExist__inner">
-	                <div class="inner__full">
-	                  <p>여러분이 알고 있는 지식을 다른 분들과 공유하고 싶다면,<br />
-	                    수강 화면 좌측 탭의 ? 클릭하여 답변에 댓글을 달아주세요</p>
-	                </div>
-	              </div>
-	            </div> -->
-						<th:block th:if="${myComments}!=null">
-							<ul class="qAndA">
-								<li class="qAndA__box row m-0" data-toggle="modal" data-target="#questionModal"
-									th:each="myComment :${myComments}">
-									<div class="qAndA__left col-2">
-										<span>댓글</span>
-									</div>
-									<div class="qAndA__middle col-8">
-										<span id="commenTime" th:text="${#dates.format(myComment.CREATED_AT, 'yyyy.MM.dd')}">[[${myComment.CREATED_AT}]]</span>
-										<h4 class="iine-clamp">[[${myComment.CONTENT}]]</h4>
-									</div>
-									<div class="qAndA__right col-2">
-										<span><i class="far fa-comment-dots" onclick="commentsDetails()"></i></span>
-									</div>
-								</li>
-							</ul>
-						</th:block>
-						<div class="d-flex justify-content-center w-100" th:if="${myComments}==null">
-							<div class="notExist">
-								<div class="notExist__inner">
-									<div class="inner__upper">
-										<p>등록된 댓글이 없습니다.<br />
-										</p>
-									</div>
-									<div class="inner__lower">
-										<a th:href="@{/catalog}">
-											<i class="fas fa-angle-double-right"></i>
-											<span>&nbsp;댓글을 등록해보세요!&nbsp;</span>
-											<i class="fas fa-angle-double-right"></i>
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- 나의 질문 끝 -->
+      <!-- 나의 질문 시작 -->
+      <div class="tab-pane tab__page fade show tab__content">
+         <div class="container-fluid container--main">
+            <ul class="nav nav-pills mb-3 row" id="pills-tab">
+               <li class="nav-item tab__menu col-4 p-0">
+                  <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-question">나의
+                     질문</a>
+                  <i class="fas fa-circle"></i>
+               </li>
+               <li class="nav-item tab__menu col-4 p-0">
+                  <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-answer">나의 문의</a>
+                  <i class="fas fa-circle"></i>
+               </li>
+               <li class="nav-item tab__menu col-4 p-0">
+                  <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-comment">나의 댓글</a>
+                  <i class="fas fa-circle"></i>
+               </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+               <div class="tab-pane fade show active d-flex justify-content-center" id="pills-question">
+                  <th:block th:if="${myQuestion}!=null">
+                     <ul class="qAndA">
+                        <li class="qAndA__box row m-0" data-toggle="modal" data-target="#questionModal"
+                           th:each="myQuestions :${myQuestion}" onclick="questionDetails(this)">
+                           <div class="qAndA__left col-2">
+                              <span id="question_id"
+                                 style="display:none">[[${myQuestions.QUESTION_ID}]]</span>
+                              <span id="likeCount"><i
+                                    class="far fa-thumbs-up"></i>[[${myQuestions.LIKE_COUNT}]]</span>
+                           </div>
+                           <div class="qAndA__middle col-8">
+                              <span th:text="${#dates.format(myQuestions.CREATED_AT, 'yyyy.MM.dd')}"></span>
+                              <h4 class="iine-clamp">[[${myQuestions.TITLE}]]</h4>
+                           </div>
+                           <div class="qAndA__right col-2">
+                              <span><i class="far fa-comment-dots"></i>[[${myQuestions.COMMENT_COUNT}]]</span>
+                           </div>
+                        </li>
+                     </ul>
+                  </th:block>
+                  <div class="d-flex justify-content-center w-100" th:if="${myQuestion}==null">
+                     <div class="notExist">
+                        <div class="notExist__inner">
+                           <div class="inner__upper">
+                              <p>등록된 질문이 없습니다.<br />
+                              </p>
+                           </div>
+                           <div class="inner__lower">
+                              <a th:href="@{/catalog}">
+                                 <i class="fas fa-angle-double-right"></i>
+                                 <span>&nbsp;강의 보고 질문하기!&nbsp;</span>
+                                 <i class="fas fa-angle-double-right"></i>
+                              </a>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class=" tab-pane fade d-flex justify-content-center" id="pills-answer">
+                  <th:block th:if="${myInquiry}!=null">
+                     <ul class="qAndA">
+                        <li class="qAndA__box row m-0" data-toggle="modal" data-target="#inquiryModal"
+                           th:each="myInquirys :${myInquiry}" onclick="inquDetails(this)">
+                           <div class="qAndA__left col-2">
+                              <span>문의</span>
+                              <span id="inquiry_id" style="display:none">[[${myInquirys.INQUIRY_ID}]]</span>
+                           </div>
+                           <div class="qAndA__middle col-8">
+                              <span th:text="${#dates.format(myInquirys.CREATED_AT, 'yyyy.MM.dd')}"></span>
+                              <h4 id="title" class="iine-clamp">[[${myInquirys.TITLE}]]</h4>
+                           </div>
+                           <div class="qAndA__right col-2">
+                              <span>상세보기</span>
+                           </div>
+                        </li>
+                     </ul>
+                  </th:block>
+                  <div class="d-flex justify-content-center w-100" th:if="${myInquiry}==null">
+                     <div class="notExist">
+                        <div class="notExist__inner">
+                           <div class="inner__upper">
+                              <p>등록된 문의가 없습니다.<br />
+                              </p>
+                           </div>
+                           <div class="inner__lower">
+                              <a href="javascript:void(0)" style="cursor:default">
+                                 <i class="fas fa-angle-double-right"></i>
+                                 <span>&nbsp;하단의 문의하기를 통해 문의해주세요.&nbsp;</span>
+                                 <i class="fas fa-angle-double-right"></i>
+                              </a>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="tab-pane fade d-flex justify-content-center" id="pills-comment">
+                  <th:block th:if="${myComments}!=null">
+                     <ul class="qAndA">
+                        <li class="qAndA__box row m-0" data-toggle="modal" data-target="#questionModal"
+                           th:each="myComment :${myComments}">
+                           <div class="qAndA__left col-2">
+                              <span>댓글</span>
+                           </div>
+                           <div class="qAndA__middle col-8">
+                              <span id="commenTime" th:text="${#dates.format(myComment.CREATED_AT, 'yyyy.MM.dd')}">[[${myComment.CREATED_AT}]]</span>
+                              <h4 class="iine-clamp">[[${myComment.CONTENT}]]</h4>
+                           </div>
+                           <div class="qAndA__right col-2">
+                              <span><i class="far fa-comment-dots" onclick="commentsDetails()"></i></span>
+                           </div>
+                        </li>
+                     </ul>
+                  </th:block>
+                  <div class="d-flex justify-content-center w-100" th:if="${myComments}==null">
+                     <div class="notExist">
+                        <div class="notExist__inner">
+                           <div class="inner__upper">
+                              <p>등록된 댓글이 없습니다.<br />
+                              </p>
+                           </div>
+                           <div class="inner__lower">
+                              <a th:href="@{/catalog}">
+                                 <i class="fas fa-angle-double-right"></i>
+                                 <span>&nbsp;댓글을 등록해보세요!&nbsp;</span>
+                                 <i class="fas fa-angle-double-right"></i>
+                              </a>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- 나의 질문 끝 -->
 
-		<!-- 나의 질문 모달 시작 -->
-		<div class="modal fade" id="questionModal">
-			<div class="qmodal__dialog modal-dialog">
-				<div class="modal-content qModal__body">
-					<div class="modal-header qModal__header">
-						<button type="button" class="close" data-dismiss="modal">
-							<span style="color: #fff;">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body p-0">
-						<div class="qModal__box">
-							<div class="qModal__upper">
-								<div class="comment__user">
-									<img th:if="${member.AVATAR == null}" th:src="@{/images/image4.jpg}" />
-									<img th:if="${member.AVATAR != null}" th:src="@{${PATH}}" />
-									<div class="user__info">
-										<h5 id="questionMem"></h5>
-										<span id="questionTime"></span>
-									</div>
-								</div>
-								<h3 class="qModal__title" id="questionTitle"></h3>
-								<p class="qModal__content" id="questionContent"></p>
-								<span class="qModal__updated"></span>
-								<div class="qModal__state">
-									<div class="state__left">
-										<div class="state__like">
-											<a href="javascript:void(0)"><span>
-											<i class="far fa-thumbs-up" id="questionLike"></i></span></a>
-											<span><i class="far fa-comment-dots" id="questionComment"></i></span>
-										</div>
-										<div class="state__edit">
-											<span data-toggle="modal" data-target="#formModal">수정하기</span>
-										</div>
-									</div>
-									<div class="state__right">
-										<span data-toggle="modal" data-target="#formModal">답변 작성하기</span>
-									</div>
-								</div>
-							</div>
-							<div class="qModal__lower">
-								<ul class="comment__list question__list" >
-									<li class="comment__item">
-										<div class="comment__user">
-											<img th:if="${adminPath != null}" th:src="@{${adminPath}}" />
-											<img th:if="${adminPath == null}" th:src="@{/images/image4.jpg}" />
-											<div class="user__info">
-												<h5 style="color: #0fd" id="adminName"></h5>
-												<span>4시간 전</span>
-											</div>
-										</div>
-										<p class="qModal__content" id="adminContent"></p>
-									</li>
-									<li class="comment__item">
-										<div class="comment__user">
-											<img th:src="@{/images/user.png}" />
-											<div class="user__info">
-												<h5>질문자</h5>
-												<span>4시간 전</span>
-											</div>
-										</div>
-										<p class="qModal__content">안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
-											있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
-											있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은
-											어디
-											있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은
-											어디
-											있나요?ㅠㅠ
-										</p>
-									</li>
-								</ul>
-								<h2 class="qModal__updated question__noAnswer" style="display:none;">아직 등록된 댓글이 없습니다.</h2>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- 나의 질문 모달 끝 -->
+      <!-- 나의 질문 모달 시작 -->
+      <div class="modal fade" id="questionModal">
+         <div class="qmodal__dialog modal-dialog">
+            <div class="modal-content qModal__body">
+               <div class="modal-header qModal__header">
+                  <button type="button" class="close" data-dismiss="modal">
+                     <span style="color: #fff;">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body p-0">
+                  <div class="qModal__box">
+                     <div class="qModal__upper">
+                        <div class="comment__user">
+                           <img th:if="${member.AVATAR == null}" th:src="@{/images/image4.jpg}" />
+                           <img th:if="${member.AVATAR != null}" th:src="@{${PATH}}" />
+                           <div class="user__info">
+                              <h5 id="questionMem"></h5>
+                              <span id="questionTime"></span>
+                           </div>
+                        </div>
+                        <h3 class="qModal__title" id="questionTitle"></h3>
+                        <p class="qModal__content" id="questionContent"></p>
+                        <span class="qModal__updated"></span>
+                        <div class="qModal__state">
+                           <div class="state__left">
+                              <div class="state__like">
+                                 <a onclick="like(this)" href="javascript:void(0)">
+                                    <span id="questionLike">
+                                       <i class="far fa-thumbs-up" ></i>
+                                    </span>
+                                 </a>
+                                 <span id="questionComment">
+                                    <i class="far fa-comment-dots" ></i>
+                                 </span>
+                              </div>
+                              <div class="state__edit">
+                                 <span data-toggle="modal" data-target="#formModal">수정하기</span>
+                              </div>
+                           </div>
+                           <div class="state__right">
+                              <span data-toggle="modal" data-target="#formModal">답변 작성하기</span>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="qModal__lower">
+                        <ul id="commentList" class="comment__list question__list" >
+                           
+                        </ul>
+                        <h2 class="qModal__updated question__noAnswer" style="display:none;">아직 등록된 댓글이 없습니다.</h2>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- 나의 질문 모달 끝 -->
 
-		<!-- 나의 문의 모달 시작 -->
-		<div class="modal fade" id="inquiryModal">
-			<div class="qmodal__dialog modal-dialog">
-				<div class="modal-content qModal__body">
-					<div class="modal-header qModal__header">
-						<button type="button" class="close" data-dismiss="modal">
-							<span style="color: #fff;">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body p-0">
-						<div class="qModal__box">
-							<div class="qModal__upper">
-								<div class="comment__user">
-									<img th:if="${member.AVATAR == null}" th:src="@{/images/image4.jpg}" />
-									<img th:if="${member.AVATAR != null}" th:src="@{${PATH}}" />
-									<div class="user__info">
-										<h5 id="inqmem"></h5>
-										<span id="inqtime"></span>
-									</div>
-								</div>
-								<h3 class="qModal__title" id="inqtitle"></h3>
-								<p class="qModal__content" id="inqcontent"></p>
-								<!-- <span class="qModal__updated">수정시간</span> -->
-								<div class="qModal__state">
-									<div class="state__left">
-										<div class="state__like">
-											<span id="clname"></span>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="qModal__lower">
-								<ul class="comment__list inquiry__list">
-									<li class="comment__item">
-										<div class="comment__user">
-											<img th:if="${admin_path != null}" th:src="@{${admin_path}}" />
-											<img th:if="${admin_path == null}" th:src="@{/images/image4.jpg}" />
-											<div class="user__info">
-												<h5 id="admin"></h5>
-												<span id="admintime"></span>
-											</div>
-										</div>
-										<p id="adminAnswer" class="qModal__content"></p>
-									</li>
-								</ul>
-								<h2 class="qModal__updated inquiry__noAnswer" style="display:none;">아직 등록된 답변이 없습니다.
-								</h2>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- 나의 문의 모달 끝 -->
+      <!-- 나의 문의 모달 시작 -->
+      <div class="modal fade" id="inquiryModal">
+         <div class="qmodal__dialog modal-dialog">
+            <div class="modal-content qModal__body">
+               <div class="modal-header qModal__header">
+                  <button type="button" class="close" data-dismiss="modal">
+                     <span style="color: #fff;">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body p-0">
+                  <div class="qModal__box">
+                     <div class="qModal__upper">
+                        <div class="comment__user">
+                           <img th:if="${member.AVATAR == null}" th:src="@{/images/image4.jpg}" />
+                           <img th:if="${member.AVATAR != null}" th:src="@{${PATH}}" />
+                           <div class="user__info">
+                              <h5 id="inqmem"></h5>
+                              <span id="inqtime"></span>
+                           </div>
+                        </div>
+                        <h3 class="qModal__title" id="inqtitle"></h3>
+                        <p class="qModal__content" id="inqcontent"></p>
+                        <!-- <span class="qModal__updated">수정시간</span> -->
+                        <div class="qModal__state">
+                           <div class="state__left">
+                              <div class="state__like">
+                                 <span id="clname"></span>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="qModal__lower">
+                        <ul class="comment__list inquiry__list">
+                           <li class="comment__item">
+                              <div class="comment__user">
+                                 <img th:if="${admin_path != null}" th:src="@{${admin_path}}" />
+                                 <img th:if="${admin_path == null}" th:src="@{/images/image4.jpg}" />
+                                 <div class="user__info">
+                                    <h5 id="admin"></h5>
+                                    <span id="admintime"></span>
+                                 </div>
+                              </div>
+                              <p id="adminAnswer" class="qModal__content"></p>
+                           </li>
+                        </ul>
+                        <h2 class="qModal__updated inquiry__noAnswer" style="display:none;">아직 등록된 답변이 없습니다.
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- 나의 문의 모달 끝 -->
 
-		<!-- 폼 모달 -->
-		<div class="modal fade" id="formModal">
-			<div class="modal-dialog fModal__dialog">
-				<div class="modal-content fModal__body">
-					<div class="modal-header fModal__header">
-						<h3>강의 잘 듣고 있습니다</h3>
-						<button type="button" class="close" data-dismiss="modal">
-							<span>&times;</span>
-						</button>
-					</div>
-					<div class="modal-body p-0">
-						<div class="fModal__box">
-							<form>
-								<textarea class="form-control" placeholder="수업을 진행하면서 궁금한 코딩 관련 질문을 등록해 주세요.">안녕하세요. 질문
-									삭제
-									기능은 어디 있나요?ㅠㅠ</textarea>
-							</form>
-							<div class="flex__end">
-								<button class="button--square mt-5">수정하기</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- 폼 모달 끝 -->
+      <!-- 폼 모달 -->
+      <div class="modal fade" id="formModal">
+         <div class="modal-dialog fModal__dialog">
+            <div class="modal-content fModal__body">
+               <div class="modal-header fModal__header">
+                  <h3>강의 잘 듣고 있습니다</h3>
+                  <button type="button" class="close" data-dismiss="modal">
+                     <span>&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body p-0">
+                  <div class="fModal__box">
+                     <form>
+                        <textarea class="form-control" placeholder="수업을 진행하면서 궁금한 코딩 관련 질문을 등록해 주세요.">안녕하세요. 질문
+                           삭제
+                           기능은 어디 있나요?ㅠㅠ</textarea>
+                     </form>
+                     <div class="flex__end">
+                        <button class="button--square mt-5">수정하기</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- 폼 모달 끝 -->
 
-	</section>
-	<!-- 메인 섹션 끝 -->
-	<!-- footer -->
+   </section>
+   <!-- 메인 섹션 끝 -->
+   <!-- footer -->
     <div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
 </body>
 
