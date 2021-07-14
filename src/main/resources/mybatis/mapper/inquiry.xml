@@ -5,7 +5,7 @@
 
 <mapper namespace="com.basakcoding.basak.mapper.InquiryMapper">
 	
-	<!-- 리스트 -->
+	<!-- 리스트(관리자) -->
 	<select id="inquirySelect" resultType="InquiryDTO">
 		SELECT inquiry_id,username,name classification,title,i.created_at
 		FROM inquiry i
@@ -13,7 +13,7 @@
 		JOIN members m ON i.member_id=m.member_id
 	</select>
 	
-	<!-- 상세보기 -->
+	<!-- 상세보기(관리자) -->
 	<select id="selectOne" parameterType="Map" resultType="InquiryDTO">
 		SELECT inquiry_id,username,name classification,title,i.created_at,content
 		FROM inquiry i
@@ -22,9 +22,14 @@
 		WHERE inquiry_id=#{no}
 	</select>
 	
-	<!-- 상세보기 -->
+	<!-- 삭제하기(관리자) -->
 	<delete id="deleteOne" parameterType="Map">
 		DELETE inquiry WHERE inquiry_id=#{no}
 	</delete>
+	
+	<insert id="insertInquiry" parameterType="Map">
+		INSERT INTO inquiry VALUES(seq_inquiry.NEXTVAL,#{memberId},#{classification}
+		,#{title},#{content},DEFAULT)
+	</insert>
 	
 </mapper>

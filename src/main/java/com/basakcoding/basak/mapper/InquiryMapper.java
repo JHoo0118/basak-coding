@@ -18,6 +18,7 @@ public interface InquiryMapper {
 	public InquiryDTO selectOne(Map map);
 	//문의 삭제하기(1개)
 	public int deleteOne(Map map);
-
+	//문의보기 생성
+	int insertInquiry(Map map);
 
 }

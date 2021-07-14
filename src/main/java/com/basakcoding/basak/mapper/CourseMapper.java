@@ -67,4 +67,5 @@ public interface CourseMapper {
 	int alreadyPayment(Map paymentCheck);
 
 	int updateSeen(Map params);
+
 }

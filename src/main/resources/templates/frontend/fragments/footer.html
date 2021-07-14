@@ -1,87 +1,112 @@
 <!DOCTYPE html>
 <html lang="kr" xmlns:th="http://www.thymeleaf.org">
-	<div th:fragment="fragment-footer">
-		<!-- footer -->
-		<footer class="footer">
+<div th:fragment="fragment-footer">
+	<!-- footer -->
+	<footer class="footer">
 		<div class="d-flex justify-content-center align-items-center flex-column">
 			<p class="text-light py-4 m-0">
 				Copyright &copy;&nbsp;<span id="year"></span> by BASAK CODING
 			</p>
-			<a class="footer__item" href="javascript:void(0)" data-toggle="modal" data-target="#inquiryModalInFooter">문의하기</a>
+			<a class="footer__item" href="javascript:void(0)" data-toggle="modal"
+				data-target="#inquiryModalInFooter">문의하기</a>
 		</div>
-		
-		</footer>
-		
 		<!-- 문의 작성 모달 시작 -->
-	<div class="modal fade" id="inquiryModalInFooter">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header" style="border: none;">
-					<button type="button" class="close" data-dismiss="modal">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body pModal__body">
-					<div class="pModal__header iModal__header">
-						Contact Us
+		<div class="modal fade" id="inquiryModalInFooter">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header" style="border: none;">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span>
+						</button>
 					</div>
-					<form>
-						<div class="form-group iForm__group p-0 position-relative">
-							<span class="iForm__label">보내는 사람</span>
-		                    <div class="p-0">
-		                        <input type="email" class="form-control iForm__input" placeholder="이메일을 입력해주세요." name="email" />
-		                    </div>
-		                    <!-- 에러 출력용 -->
-		                    <label class="error"></label>
-		                </div>
-		                <div class="form-group form__group p-0 position-relative">
-		                	<span class="iForm__label">문의 유형</span>
-	                        <div class="form-group form__group row m-0">
-	                            <div class="inquiry__type">
-	                                <div class="iForm__check">
-	                                    <input type="radio" id="type1" name="classification" checked />
-	                                    <label for="type1" class="iCheck__label">결제 및 환불 문의</label>
-	                                </div>
-	                                <div class="iForm__check">
-	                                    <input type="radio" id="type2" name="classification" />
-	                                    <label for="type2" class="iCheck__label">강의 문의</label>
-	                                </div>
-	                                <div class="iForm__check">
-	                                    <input type="radio" id="type3" name="classification" />
-	                                    <label for="type3" class="iCheck__label">기타 문의</label>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    </div>
-	                    <div class="form-group iForm__group p-0 position-relative">
-							<span class="iForm__label">제목</span>
-		                    <div class="p-0">
-		                        <input type="text" class="form-control iForm__input" placeholder="제목을 입력해주세요." name="title"/>
-		                    </div>
-		                    <!-- 에러 출력용 -->
-		                    <label class="error"></label>
-		                </div>
-		                
-		                <div class="form-group iForm__group p-0 position-relative">
-							<span class="iForm__label">제목</span>
-		                    <div class="p-0">
-		                        <textarea class="form-control iForm__textarea" placeholder="내용 입력해주세요." name="content"></textarea>
-		                    </div>
-		                    <!-- 에러 출력용 -->
-		                    <label class="error"></label>
-		                </div>
-		                <div class="flex__end mb-2">
-							<button type="submit" class="button--square">후기 작성</button>
-							<button type="button" data-dismiss="modal" class="button--square button--square--cancel ml-3">취소</button>
+					<div class="modal-body pModal__body">
+						<div class="pModal__header iModal__header">
+							Contact Us
 						</div>
-					</form>
-					
+						<form id="inqForm">
+							<div class="form-group form__group p-0 position-relative">
+								<span class="iForm__label">문의 유형</span>
+								<div class="form-group form__group row m-0">
+									<div class="inquiry__type">
+										<div class="iForm__check">
+											<input type="radio" id="type1" name="classification" value="1" checked />
+											<label for="type1" class="iCheck__label">결제 및 환불 문의</label>
+										</div>
+										<div class="iForm__check">
+											<input type="radio" id="type2" name="classification" value="2" />
+											<label for="type2" class="iCheck__label">강의 문의</label>
+										</div>
+										<div class="iForm__check">
+											<input type="radio" id="type3" name="classification" value="3" />
+											<label for="type3" class="iCheck__label">기타 문의</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group iForm__group p-0 position-relative">
+								<span class="iForm__label">제목</span>
+								<div class="p-0">
+									<input type="text" class="form-control iForm__input" placeholder="제목을 입력해주세요."
+										name="title" id="title" />
+								</div>
+								<!-- 에러 출력용 -->
+								<label class="error"></label>
+							</div>
+
+							<div class="form-group iForm__group p-0 position-relative">
+								<span class="iForm__label">내용</span>
+								<div class="p-0">
+									<textarea class="form-control iForm__textarea" placeholder="내용 입력해주세요."
+										name="content" id="content"></textarea>
+								</div>
+								<!-- 에러 출력용 -->
+								<label class="error"></label>
+							</div>
+							<div class="flex__end mb-2">
+								<button type="button" id="btnInq" class="button--square">후기 작성</button>
+								<button type="button" id="btnInqCancle" data-dismiss="modal"
+									class="button--square button--square--cancel ml-3">취소</button>
+							</div>
+						</form>
+
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	
-	<!-- 문의 작성 모달 끝 -->
-		
-	</div>
+		<!-- 문의 작성 모달 끝 -->
+	</footer>
+	<script>
+		//문의하기
+		$('#btnInq').click(function () {
+			$.ajax({
+				url: "[[@{/class/inquiry}]]",
+				type: "post",
+				data: {'classification': $('input:checked').val(), 'title': $('#title').val(), 'content': $('#content').val()},
+				dataType: "json",
+				success: function (data) {
+					if (data == 1) {
+						$('#type1').prop('checked', true);
+						document.getElementById("title").value = '';
+						document.getElementById("content").value = '';
+						$('#inquiryModalInFooter').modal('hide')
+					}//if
+					else {
+						alert('문의하기 오류 발생')
+					}
+				}//success
+
+
+			})//ajax
+		})//btnInq
+		$('#inquiryModalInFooter').on('hide.bs.modal', function (e){
+			$('#type1').prop('checked', true);
+			document.getElementById("title").value = '';
+			document.getElementById("content").value = '';
+		});//hideModal
+	</script>
+
+</div>
+
+
+
 </html>

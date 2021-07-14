@@ -30,4 +30,9 @@ public class InquiryService {
 	public int deleteOne(Map map) {
 		return inquiryMapper.deleteOne(map);
 	}
+
+	//문의하기 생성
+	public int insertInquiry(Map map) {
+		return inquiryMapper.insertInquiry(map);
+	}
 }

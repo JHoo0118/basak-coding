@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.basakcoding.basak.service.CourseService;
 import com.basakcoding.basak.service.CurriculumDTO;
 import com.basakcoding.basak.service.FileDTO;
+import com.basakcoding.basak.service.InquiryService;
 import com.basakcoding.basak.service.VideoDTO;
 import com.basakcoding.basak.util.FileUploadUtil;
 
@@ -42,6 +43,9 @@ public class CourseController {
 	
 	@Autowired
 	CourseService courseService;
+	
+	@Autowired
+	InquiryService inquiryService;
 	
 	@Autowired
     ResourceLoader resourceLoader;
@@ -235,5 +239,15 @@ public class CourseController {
 		params.put("videoId", videoId);
 		int result = courseService.updateSeen(params);
 		return Integer.toString(result);
+	}
+	//문의하기
+	@PostMapping("/class/inquiry")
+	@ResponseBody
+	public String inquiryProcess(@RequestParam Map map, Authentication auth) {
+		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+		map.put("memberId", memberId);
+		int result = inquiryService.insertInquiry(map);
+		return Integer.toString(result);
+		
 	}
 }
