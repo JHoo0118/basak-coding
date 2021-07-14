@@ -11,11 +11,21 @@
 	</select>
 
 	<!-- 강의 리스트 가져오기 -->
-	<select id="selectList" resultType="Map">
-		SELECT ca.name CAT_NAME, co.course_id, co.title, co.short_description, a.name ADM_NAME 
-		FROM courses co
-		JOIN category ca ON ca.category_id = co.category_id
-		JOIN admins a ON co.admin_id = a.admin_id
+	<select id="selectList" resultType="CourseDTO">
+		SELECT * FROM (
+			SELECT ROWNUM R, T.* FROM (
+				SELECT ca.name categoryName, co.course_id, co.title, co.short_description, a.name adminName 
+				FROM courses co
+				JOIN category ca ON ca.category_id = co.category_id
+				JOIN admins a ON co.admin_id = a.admin_id
+		        ORDER BY co.course_id DESC
+		        )T)
+		        WHERE R BETWEEN #{start} AND #{end}
+	</select>
+	
+	<!-- 강의 총 갯수 -->
+	<select id="totalCount" resultType="int">
+		SELECT COUNT(*) FROM courses
 	</select>
 	
 	<!-- 강의 생성 후 강의 PK반환 -->

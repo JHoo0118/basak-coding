@@ -12,6 +12,7 @@ import com.basakcoding.basak.service.CurriculumDTO;
 import com.basakcoding.basak.service.FAQDTO;
 import com.basakcoding.basak.service.FileDTO;
 import com.basakcoding.basak.service.VideoDTO;
+import com.basakcoding.basak.util.ListPagingData;
 
 @Repository
 @Mapper
@@ -20,8 +21,10 @@ public interface CourseMapper {
 	List<CategoryDTO> categoryList();
 	
 	// 강의 전체 목록 받기
-	List<Map<String, String>> selectList();
+	List<CourseDTO> selectList(Map map);
 	
+	// 강의 총 갯수
+	int totalCount();
 	// 강의 만들기
 	int createCourse(Map map);
 

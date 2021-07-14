@@ -14,7 +14,7 @@ import com.basakcoding.basak.service.CurriculumDTO;
 public interface CatalogMapper {
 
 	//강의 상세보기
-	 List<Map> courseList();
+	List<Map> courseList();
 	Map selectOne(String courseId);
 	List<Map> faqList(String courseId);
 	List<CurriculumDTO> getCurriculumList(String courseId);
