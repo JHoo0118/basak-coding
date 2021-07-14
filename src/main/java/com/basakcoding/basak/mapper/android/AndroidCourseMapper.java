@@ -10,8 +10,10 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface AndroidCourseMapper {
 
+	List<Map> getCoursesList();
+		
 	List<Map> getMyCourseList(String memberId);
-
+	
 	int getSeenCount(Map params);
 
 }

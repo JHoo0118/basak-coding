@@ -14,6 +14,11 @@ public class AndroidCourseService {
 	@Autowired
 	AndroidCourseMapper androidCourseMapper;
 	
+	public List<Map> getCourseList() {
+		return androidCourseMapper.getCoursesList();
+	}
+	
+	
 	public List<Map> getMyCourseList(String memberId) {
 		return androidCourseMapper.getMyCourseList(memberId);
 	}

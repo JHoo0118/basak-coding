@@ -13,6 +13,8 @@
 	<select id="login" parameterType="String" resultType="MemberDTO">
 		SELECT member_id, email, username, avatar FROM members WHERE email = #{email}
 	</select>
+	
+	
 </mapper>
 	
 	
