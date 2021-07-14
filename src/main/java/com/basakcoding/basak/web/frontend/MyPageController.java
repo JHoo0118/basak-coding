@@ -32,245 +32,272 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.basakcoding.basak.service.MemberService;
+import com.basakcoding.basak.service.MyCommentDTO;
 import com.basakcoding.basak.util.FileUploadUtil;
 
 @Controller
 @RequestMapping("/personal")
 public class MyPageController {
-	@Autowired
-	private MemberService memberService;
+   @Autowired
+   private MemberService memberService;
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
+   @Autowired
+   PasswordEncoder passwordEncoder;
 
-	@RequestMapping("/password/edit.do")
-	public @ResponseBody boolean passwordEdit(@RequestBody Map map, Authentication auth) {
-		// System.out.println("넘어오는 비밀번호:"+map);
-		boolean booleanpass = passwordEncoder.matches((map.get("pass").toString()),
-				((UserDetails) auth.getPrincipal()).getPassword());
-		// System.out.println("비밀번호가 일치하는지!"+booleanpass);
-		return booleanpass;
-	}
+   @RequestMapping("/password/edit.do")
+   public @ResponseBody boolean passwordEdit(@RequestBody Map map, Authentication auth) {
+      // System.out.println("넘어오는 비밀번호:"+map);
+      boolean booleanpass = passwordEncoder.matches((map.get("pass").toString()),
+            ((UserDetails) auth.getPrincipal()).getPassword());
+      // System.out.println("비밀번호가 일치하는지!"+booleanpass);
+      return booleanpass;
+   }
 
-	public Model userInfo(Model model, Authentication auth) {
-		int userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
-		// 내결제정보
-		int paymentCount = memberService.paymentCount(userId);
-		model.addAttribute("paymentCount", paymentCount);
-		// 뿌려줄 내정보 가져오기
-		Map map = memberService.selectMyInfo(userId);
-		if (!map.containsKey("AVATAR"))
-			map.put("AVATAR", null);
-		else {
-			model.addAttribute("PATH", "/upload/member/" + userId + "/" + map.get("AVATAR"));
-		}
-		model.addAttribute("member", map);
-		model.addAttribute("userId", userId);
-		// 내댓글 개수
-		int commentsCount = memberService.commentsCount(userId);
-		model.addAttribute("commentsCount", commentsCount);
-		// 내 질문 개수
-		int questionCount = memberService.questionCount(userId);
-		model.addAttribute("questionCount", questionCount);
-		// 파일 이미지 경로
-		String uploadDir = "upload/member/" + userId;
-		model.addAttribute("uploadDir", uploadDir);
-		return model;
-	}
+   public Model userInfo(Model model, Authentication auth) {
+      int userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
+      // 내결제정보
+      int paymentCount = memberService.paymentCount(userId);
+      model.addAttribute("paymentCount", paymentCount);
+      // 뿌려줄 내정보 가져오기
+      Map map = memberService.selectMyInfo(userId);
+      if (!map.containsKey("AVATAR"))
+         map.put("AVATAR", null);
+      else {
+         model.addAttribute("PATH", "/upload/member/" + userId + "/" + map.get("AVATAR"));
+      }
+      model.addAttribute("member", map);
+      model.addAttribute("userId", userId);
+      // 내댓글 개수
+      int commentsCount = memberService.commentsCount(userId);
+      model.addAttribute("commentsCount", commentsCount);
+      // 내 질문 개수
+      int questionCount = memberService.questionCount(userId);
+      model.addAttribute("questionCount", questionCount);
+      // 파일 이미지 경로
+      String uploadDir = "upload/member/" + userId;
+      model.addAttribute("uploadDir", uploadDir);
+      return model;
+   }
 
-	@GetMapping("/dashboard")
-	public String dashboard(Model model, Authentication auth) {
-		userInfo(model, auth);
-		// 내강의
-		int userId = (int) model.getAttribute("userId");
-		List<Map> map = memberService.myCourses(userId);
-		Map params = new HashMap();
-		params.put("memberId", userId);
-		for(Map map1:map) {
-			String courseId= map1.get("COURSE_ID").toString();
-			params.put("courseId", courseId);
-			//다본 동영상 개수 가져오기
-			
-			int videoCount= memberService.videoCount(params);
-			String thumbnail=("/upload/course/" + courseId + "/thumbnail/" + map1.get("THUMBNAIL"));
+   @GetMapping("/dashboard")
+   public String dashboard(Model model, Authentication auth) {
+      userInfo(model, auth);
+      // 내강의
+      int userId = (int) model.getAttribute("userId");
+      List<Map> map = memberService.myCourses(userId);
+      Map params = new HashMap();
+      params.put("memberId", userId);
+      for (Map map1 : map) {
+         String courseId = map1.get("COURSE_ID").toString();
+         params.put("courseId", courseId);
+         // 다본 동영상 개수 가져오기
 
-			String courseVideoId = null;
-			List<String> curriculumIds = memberService.getCurriculum(courseId);
-			
-			// 마지막 커리큘럼의 아이디
-			String lastCurriculumId = curriculumIds.get(curriculumIds.size()-1);
-			
-			// 마지막 비디오 아이디
-			String lastVideoId = memberService.getLastVideo(lastCurriculumId);
+         int videoCount = memberService.videoCount(params);
+         String thumbnail = ("/upload/course/" + courseId + "/thumbnail/" + map1.get("THUMBNAIL"));
 
-			for (int i=0; i<curriculumIds.size(); i++) {
-				params.put("curriculumId", curriculumIds.get(i));
-				courseVideoId = memberService.getVideo(params);
-				if (courseVideoId != null) break;
-			}
-			
-			if(courseVideoId!=null) {
-				map1.put("courseVideoid",courseVideoId);
-			}
-			else {
-				//마지막 동영상 아이디
-				map1.put("courseVideoid", lastVideoId);
-			}
-			map1.put("progress",(int)(Math.ceil(videoCount*100/Double.parseDouble((map1.get("VIDEO_COUNT").toString())))));
-			
-			map1.put("thumbnail", thumbnail);
-		}
-		if (!map.isEmpty())
-			model.addAttribute("myCourses", map);
+         String courseVideoId = null;
+         List<String> curriculumIds = memberService.getCurriculum(courseId);
 
-		return "frontend/dashboard";
-	}
+         // 마지막 커리큘럼의 아이디
+         String lastCurriculumId = curriculumIds.get(curriculumIds.size() - 1);
 
-	@GetMapping("/profile")
-	public String profile(Model model, Authentication auth) {
-		userInfo(model, auth);
-		// 내결제
-		int userId = (int) model.getAttribute("userId");
-		List<Map> map = memberService.myPayment(userId);
-		if (!map.isEmpty())
-			model.addAttribute("myPayment", map);
-		return "frontend/profile";
-	}
+         // 마지막 비디오 아이디
+         String lastVideoId = memberService.getLastVideo(lastCurriculumId);
 
-	@GetMapping("/qAndA/questions")
-	public String qAndA(Model model, Authentication auth) {
-		userInfo(model, auth);
-		int userId = (int) model.getAttribute("userId");
-		//내 질문
-		List<Map> map =memberService.myQuestion(userId);
-		if (!map.isEmpty())
-			model.addAttribute("myQuestion",map);
-		System.out.println("질문맵"+map);
-		// 내 문의 제목,시간
-		List<Map> map1 = memberService.myInquiry(userId);
-		if (!map1.isEmpty())
-			model.addAttribute("myInquiry", map1);
-		// 내 댓글 제목,시간
-		List<Map> map2 = memberService.myComments(userId);
-		if (!map2.isEmpty())
-			model.addAttribute("myComments", map2);
-		
-		return "frontend/qAndA";
-	}
-	//내 프로필 이미지 
-	@RequestMapping("/dashBoard/profileImgUpdate")
-	public @ResponseBody int profileImgUpdate(@RequestParam String imgname, @RequestParam MultipartFile file,
-			Authentication auth) throws IllegalStateException, IOException {
-		String filename = StringUtils.cleanPath(file.getOriginalFilename());
-		int userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
-		String uploadDir = "upload/member/" + userId;
-		FileUploadUtil.cleanDir(uploadDir);
-		FileUploadUtil.saveFile(uploadDir, filename, file);
-		Map map = new HashMap();
-		int file_kind = filename.lastIndexOf(".");
-		String file_type = filename.substring(file_kind + 1, filename.length());
-		String[] check_file_type = { "jpg", "gif", "png", "jpeg", "bmp", "tif" };
-		map.put("userId", userId);
-		map.put("file_name", filename);
-		// DB에 업데이트
-		int success;
-		success = memberService.fileUpdate(map);
-		if (!Arrays.asList(check_file_type).contains(file_type)) { // 이미지파일이 아닌경우
-			success = -1;
-		} else if (file.getSize() > 1024 * 1024) { // 용량이 너무클경우
-			success = -2;
-		} else if (success == 0) {// DB오류
-		}
-		return success;
-	}
+         for (int i = 0; i < curriculumIds.size(); i++) {
+            params.put("curriculumId", curriculumIds.get(i));
+            courseVideoId = memberService.getVideo(params);
+            if (courseVideoId != null)
+               break;
+         }
 
-	@RequestMapping("/userprofile/edit.do")
-	public @ResponseBody int userNameEdit(@RequestBody Map map, Authentication auth) {
-		int userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
-		String username = (String) map.get("username");
-		if (username.length() >= 11) { // 11글자이상입력했을경우
-			return -1;
-		}
-		map.put("username", username);
-		map.put("userId", userId);
-		int success;
-		success = memberService.userNameEdit(map);
+         if (courseVideoId != null) {
+            map1.put("courseVideoid", courseVideoId);
+         } else {
+            // 마지막 동영상 아이디
+            map1.put("courseVideoid", lastVideoId);
+         }
+         map1.put("progress",
+               (int) (Math.ceil(videoCount * 100 / Double.parseDouble((map1.get("VIDEO_COUNT").toString())))));
 
-		return success;
-	}
-	//비밀번호 변경
-	@PostMapping("/newpass/edit.do")
-	public String newPass(@RequestParam Map map, Model model) {
-		map.put("password", map.get("newpass1"));
-		int newpass = memberService.passwordEdit(map);
-		model.addAttribute("passedit", newpass);
-		return "forward:/logout";
-	}
-	//로그아웃처리
-	@Controller
-	public class LogoutController {
+         map1.put("thumbnail", thumbnail);
+      }
+      if (!map.isEmpty())
+         model.addAttribute("myCourses", map);
 
-		@RequestMapping(value = "/logout")
-		public String logout(HttpServletRequest request, HttpServletResponse response) {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			if (auth != null && auth.isAuthenticated()) {
-				new SecurityContextLogoutHandler().logout(request, response, auth);
-			}
-			return "frontend/signin";
-		}
+      return "frontend/dashboard";
+   }
 
-	}//////////// LogoutController
-	//결제 상세보기 정보가져오기
-	@RequestMapping(value = "/viewDetails.do", method = RequestMethod.POST)
-	public @ResponseBody Map viewDetails(@RequestParam("payment_code") String payment_code, Model model,
-			Authentication auth) {
-		String userId = ((UserDetails) auth.getPrincipal()).getUsername();
-		String pay_code = payment_code;
-		Map map = memberService.viewDetails(userId, pay_code);
-		return map;
-	}
-	//질문 상세보기 
-	@RequestMapping(value = "/questionDetails.do", method = RequestMethod.POST)
-	public @ResponseBody Map questionDetails(@RequestParam("questionId") String questionId, Model model, Authentication auth) {
-		String userId = ((UserDetails) auth.getPrincipal()).getUsername();
-		Map map = memberService.questionDetails(userId, questionId);
-		if (map == null) {
-			map = memberService.questionDetailNotExist(userId, questionId);
-		} 
-		else {
-			if (!map.containsKey("ADMIN_ID"))
-				map.put("ADMIN_ID", null);
-			else model.addAttribute("adminPath","/upload/admin/" + map.get("ADMIN_ID") + "/" + map.get("AVATAR"));
-			
-		}
-		System.out.println("질문상세맵"+map);
-		return map;
-	}
+   @GetMapping("/profile")
+   public String profile(Model model, Authentication auth) {
+      userInfo(model, auth);
+      // 내결제
+      int userId = (int) model.getAttribute("userId");
+      List<Map> map = memberService.myPayment(userId);
+      if (!map.isEmpty())
+         model.addAttribute("myPayment", map);
+      return "frontend/profile";
+   }
 
-	
-	// 문의 상세보기
-	@RequestMapping(value = "/inquDetails.do", method = RequestMethod.POST)
-	public @ResponseBody Map inquDetails(@RequestParam("inquiry_id") String inquiry_id, Model model, Authentication auth) {
-		String userId = ((UserDetails) auth.getPrincipal()).getUsername();
-		Map map = memberService.inquDetails(userId, inquiry_id);
-		if (map == null) {
-			map = memberService.inquDetailNotExist(userId, inquiry_id);
-		} 
-		else {
-			if (!map.containsKey("ANSWER_ID"))
-				map.put("ANSWER_ID", null);
-			else model.addAttribute("admin_path","/upload/admin/" + map.get("ADMIN_ID") + "/" + map.get("AVATAR"));
-			
-		}
-		return map;
-	}
+   @GetMapping("/qAndA/questions")
+   public String qAndA(Model model, Authentication auth) {
+      userInfo(model, auth);
+      int userId = (int) model.getAttribute("userId");
+      // 내 질문
+      List<Map> map = memberService.myQuestion(userId);
+      System.out.println("내질문"+map);
+      if (!map.isEmpty())
+         model.addAttribute("myQuestion", map);
+      // 내 문의 제목,시간
+      List<Map> map1 = memberService.myInquiry(userId);
+      if (!map1.isEmpty())
+         model.addAttribute("myInquiry", map1);
+      // 내 댓글 제목,시간
+      List<Map> map2 = memberService.myComments(userId);
+      if (!map2.isEmpty())
+         model.addAttribute("myComments", map2);
 
-	//댓글 상세보기
-	@RequestMapping(value = "/commentsDetails.do", method = RequestMethod.POST)
-	public @ResponseBody Map commentDetails(@RequestParam("commenTitle") String commenTitle, Model model, Authentication auth) {
-		String userId = ((UserDetails) auth.getPrincipal()).getUsername();
-		Map map = memberService.commentsDetails(userId, commenTitle);
-		return map;
-	}
+      return "frontend/qAndA";
+   }
+
+   // 내 프로필 이미지
+   @RequestMapping("/dashBoard/profileImgUpdate")
+   public @ResponseBody int profileImgUpdate(@RequestParam String imgname, @RequestParam MultipartFile file,
+         Authentication auth) throws IllegalStateException, IOException {
+      String filename = StringUtils.cleanPath(file.getOriginalFilename());
+      int userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
+      String uploadDir = "upload/member/" + userId;
+      FileUploadUtil.cleanDir(uploadDir);
+      FileUploadUtil.saveFile(uploadDir, filename, file);
+      Map map = new HashMap();
+      int file_kind = filename.lastIndexOf(".");
+      String file_type = filename.substring(file_kind + 1, filename.length());
+      String[] check_file_type = { "jpg", "gif", "png", "jpeg", "bmp", "tif" };
+      map.put("userId", userId);
+      map.put("file_name", filename);
+      // DB에 업데이트
+      int success;
+      success = memberService.fileUpdate(map);
+      if (!Arrays.asList(check_file_type).contains(file_type)) { // 이미지파일이 아닌경우
+         success = -1;
+      } else if (file.getSize() > 1024 * 1024) { // 용량이 너무클경우
+         success = -2;
+      } else if (success == 0) {// DB오류
+      }
+      return success;
+   }
+
+   @RequestMapping("/userprofile/edit.do")
+   public @ResponseBody int userNameEdit(@RequestBody Map map, Authentication auth) {
+      int userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
+      String username = (String) map.get("username");
+      if (username.length() >= 11) { // 11글자이상입력했을경우
+         return -1;
+      }
+      map.put("username", username);
+      map.put("userId", userId);
+      int success;
+      success = memberService.userNameEdit(map);
+
+      return success;
+   }
+
+   // 비밀번호 변경
+   @PostMapping("/newpass/edit.do")
+   public String newPass(@RequestParam Map map, Model model) {
+      map.put("password", map.get("newpass1"));
+      int newpass = memberService.passwordEdit(map);
+      model.addAttribute("passedit", newpass);
+      return "forward:/logout";
+   }
+
+   // 로그아웃처리
+   @Controller
+   public class LogoutController {
+
+      @RequestMapping(value = "/logout")
+      public String logout(HttpServletRequest request, HttpServletResponse response) {
+         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+         if (auth != null && auth.isAuthenticated()) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+         }
+         return "frontend/signin";
+      }
+
+   }//////////// LogoutController
+      // 결제 상세보기 정보가져오기
+
+   @RequestMapping(value = "/viewDetails.do", method = RequestMethod.POST)
+   public @ResponseBody Map viewDetails(@RequestParam("payment_code") String payment_code, Model model,
+         Authentication auth) {
+      String userId = ((UserDetails) auth.getPrincipal()).getUsername();
+      String pay_code = payment_code;
+      Map map = memberService.viewDetails(userId, pay_code);
+      return map;
+   }
+
+   // 질문 상세보기
+   @RequestMapping(value = "/questionDetails.do", method = RequestMethod.POST)
+   public @ResponseBody Map questionDetails(@RequestParam("questionId") String questionId, Model model,
+         Authentication auth) {
+      String userId = ((UserDetails) auth.getPrincipal()).getUsername();
+      // 질문
+      Map map = memberService.questionDetails(userId, questionId);
+      // 댓글
+      List<MyCommentDTO> commentLists = memberService.commentList(questionId);
+      for (MyCommentDTO dto : commentLists) {
+         dto.setAdminPath(dto.getAdminAvatarImagePath());
+         dto.setMemberPath(dto.getMemberAvatarImagePath());
+      }
+      map.put("commentList", commentLists);
+      return map;
+   }
+   //질문 좋아요 
+   @RequestMapping(value="/like.do", method = RequestMethod.POST)
+   public @ResponseBody int like(@RequestParam("questionId")int questionId,@RequestParam("likeCount")int likeCount, Authentication auth) {
+      int userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
+      int affected;
+      likeCount = memberService.likeCheck(userId,questionId);
+      
+      if(likeCount == 0) {//좋아요 등록이 안돼있으면
+         memberService.like(userId,questionId);
+         memberService.likeCount(questionId);
+         return affected=0;
+         
+      }//작은 if
+      else {//likeCheck 결과 값이 1일떄 (이미 좋아요가 등록이 돼있을때)
+         memberService.unLike(userId,questionId);
+         memberService.likeCount(questionId);
+         return affected=1;         
+      }//작은 else
+   }
+
+   // 문의 상세보기
+   @RequestMapping(value = "/inquDetails.do", method = RequestMethod.POST)
+   public @ResponseBody Map inquDetails(@RequestParam("inquiry_id") String inquiry_id, Model model,
+         Authentication auth) {
+      String userId = ((UserDetails) auth.getPrincipal()).getUsername();
+      Map map = memberService.inquDetails(userId, inquiry_id);
+      if (map == null) {
+         map = memberService.inquDetailNotExist(userId, inquiry_id);
+      } else {
+         if (!map.containsKey("ANSWER_ID"))
+            map.put("ANSWER_ID", null);
+         else
+            model.addAttribute("admin_path", "/upload/admin/" + map.get("ADMIN_ID") + "/" + map.get("AVATAR"));
+
+      }
+      return map;
+   }
+
+   // 댓글 상세보기
+   @RequestMapping(value = "/commentsDetails.do", method = RequestMethod.POST)
+   public @ResponseBody Map commentDetails(@RequestParam("commenTitle") String commenTitle, Model model,
+         Authentication auth) {
+      String userId = ((UserDetails) auth.getPrincipal()).getUsername();
+      Map map = memberService.commentsDetails(userId, commenTitle);
+      return map;
+   }
+   
 
 }///////////// MyPageController

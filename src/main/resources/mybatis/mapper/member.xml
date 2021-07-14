@@ -7,229 +7,264 @@
 
 
 
-	<!-- 테스트 -->
-	<select id="selectListWithReview" resultType="map" >
-		SELECT m.*, r.content, r.rating FROM members m JOIN review r ON m.member_id = r.member_id
-	</select>
+   <!-- 테스트 -->
+   <select id="selectListWithReview" resultType="map" >
+      SELECT m.*, r.content, r.rating FROM members m JOIN review r ON m.member_id = r.member_id
+   </select>
 
-	<!-- 전체 사용자 얻기 -->
-	<select id="selectList" resultType="MemberDTO" >
-		SELECT * FROM members ORDER BY registered_at DESC
-	</select>
-	
-	
-	<!-- 아이디로 사용자 얻기 -->
-	<select id="getMemberById" parameterType="String" resultType="MemberDTO">
-		SELECT * FROM members WHERE member_id=#{memberId}
-	</select>
-	
-	<!-- 이메일로 사용자 얻기 -->
-	<select id="getMemberByEmail" parameterType="String" resultType="MemberDTO">
-		SELECT * FROM members WHERE email=#{email}
-	</select>
-	
-	<!-- 사용자 생성, selectKey로 memberId반환 -->
-	<insert id="createMember" parameterType="Map">
-		<selectKey keyProperty="memberId" resultType="int" order="BEFORE">
-			SELECT seq_members.NEXTVAL FROM dual
-		</selectKey>
-		INSERT INTO members VALUES(#{memberId}, #{email}, #{password}, #{username}, DEFAULT, DEFAULT, DEFAULT, 
-		<choose>
-			<when test="avatar != null">#{avatar},</when>
-			<otherwise>DEFAULT,</otherwise>
-		</choose>
-		null)
-	</insert>
-	
-	<!--  -->
-	
-	<insert id="registerMember" parameterType="Map">
-		<selectKey keyProperty="memberId" resultType="int" order="BEFORE">
-			SELECT seq_members.NEXTVAL FROM dual
-		</selectKey>
-		INSERT INTO members VALUES(#{memberId}, #{email}, #{password}, #{username}, DEFAULT, DEFAULT, DEFAULT, 
-		<choose>
-			<when test="avatar != null">#{avatar},</when>
-			<otherwise>DEFAULT,</otherwise>
-		</choose>
-		#{emailSecret})
-	</insert>
-	
-	<!-- 사용자 수정 -->
-	<update id="updateMember" parameterType="Map">
-		UPDATE members SET username=#{username}
-		<if test="avatar != null">, avatar=#{avatar}</if> 
-		WHERE member_id=#{memberId}
-	</update>
-	
-	<!-- 사용자 삭제 -->
-	<delete id="deleteMultpleMember" parameterType="Map">
-		DELETE members WHERE member_id in
-		<foreach collection="target" item="item" separator="," open="(" close=")">
-			#{item}
-		</foreach>
-	</delete>
-	
-	<!-- 파일 업로드 -->
-	<update id="fileUpdate" parameterType="Map">
-		UPDATE MEMBERS SET AVATAR=#{file_name} WHERE MEMBER_ID=#{userId}
-	</update>
-	
-	<!-- 프로필페이지 내정보 가져오기 -->
-	<select id="selectMyInfo" parameterType="int" resultType="map">
-		SELECT * FROM members WHERE member_id=#{userId}
-	</select>
-	
-	<!-- 결제한 강의 개수가져오기 -->
-	<select id="paymentCount" parameterType="int" resultType="int">
-		SELECT COUNT(*) FROM payment p JOIN members m ON (p.member_id =m.member_id) WHERE m.member_id=#{userId}
-		AND p.payment_state='결제 완료'
-	</select>
-	
-	<!-- 나의 댓글 개수-->
-	<select id="commentsCount" parameterType="int" resultType="int">
-		select count(*) from comments c JOIN members m ON (c.member_id = m.member_id) WHERE m.member_id=#{userId}
-	</select>
-	
-	<!-- 나의 질문 개수-->
-	<select id="questionCount" parameterType="int" resultType="int">
-		select count(*) from question q JOIN members m ON (q.member_id = m.member_id) WHERE m.member_id=#{userId}
-	</select>
-	
-	<!-- 나의 닉네임 변경 -->
-	<update id="userNameEdit" parameterType="Map">
-		UPDATE members SET username=#{username} WHERE member_id=#{userId}
-	</update>
-	
-	<!-- 비밀번호 변경 -->
-	<update id="passwordEdit" parameterType="Map">
-		UPDATE members SET password=#{password} WHERE member_id=#{userId}
-	</update>
-	
-	<!-- 내 강의 가져오기 -->
-	<select id="myCourses" parameterType="int" resultType="Map">
-		select co.title,co.course_id,co.short_description,co.period,co.thumbnail,co.video_count,ca.*,a.email,a.name admin_name
-      	from members m JOIN payment p ON m.member_id=p.member_id
-      	JOIN courses co ON p.course_id=co.course_id 
-      	JOIN category ca ON co.category_id=ca.category_id
-      	JOIN admins a ON co.admin_id=a.admin_id
-      	where p.payment_state='결제 완료' AND m.member_id=#{userId}
-	</select>
-	
-	<!-- 내 결제정보 가져오기 -->
-	<select id="myPayment" parameterType="int" resultType="Map">
-		select p.*,co.period,co.title,p.created_at payment_created
-		from members m 
-		JOIN payment p ON m.member_id=p.member_id
-		JOIN courses co ON p.course_id=co.course_id
-		where p.payment_state='결제 완료' and m.member_id=#{userId}
-	</select>
-	
-	<!-- 내 결제 상세보기 -->
-	<select id="viewDetails" parameterType="String" resultType="Map">
-		select p.payment_code,co.title,co.period,m.email,p.created_at,
-		p.payment_method,p.price
-		from members m JOIN payment p ON m.member_id=p.member_id
-		JOIN courses co ON p.course_id=co.course_id
-		WHERE m.member_id=#{userId} AND p.payment_code=#{pay_code}
-	</select>
-	
-	<!-- 내 문의 제목,시간 -->
-	<select id="myInquiry" parameterType="int" resultType="Map">
-		select i.*
-		from members m JOIN inquiry i ON m.member_id=i.member_id
-		WHERE m.member_id=#{userId}
-	</select>
-	
-	<!-- 내 문의 상세보기 -->
-	<select id="inquDetails" parameterType="String" resultType="Map">
-		select i.*,m.username,c.name,an.*,ad.avatar,ad.admin_id,an.answer_id,an.content ans_content,ad.name admin_name,an.created_at answer_created
-		from members m JOIN inquiry i ON m.member_id=i.member_id
-		JOIN classification c ON i.cl_id = c.cl_id
-		JOIN answer an ON an.inquiry_id=i.inquiry_id
-		JOIN admins ad ON ad.admin_id=an.admin_id
-		WHERE m.member_id=#{userId} AND i.inquiry_id=#{inquiry_id}
-	</select>
-	
-	<!-- 내 문의 답변 없을 때 상세보기 -->
-	<select id="inquDetailNotExist" parameterType="String" resultType="Map">
-		select i.*,m.username,c.name
-		from members m JOIN inquiry i ON m.member_id=i.member_id
-		JOIN classification c ON i.cl_id = c.cl_id
-		WHERE m.member_id = #{userId} AND i.inquiry_id = #{inquiry_id}
-	</select>
-	
-	<!-- 내 댓글 제목,시간 -->
-	<select id="myComments" parameterType="int" resultType="Map">
-		 select co.content,co.created_at
-		 from members m JOIN comments co ON m.member_id=co.member_id
-		 WHERE m.member_id=#{userId}
-	</select>
-	<!-- 
-	 댓글 상세보기
-	<select id="commentsDetails" parameterType="String" resultType="Map">
-		select m.username,co.title
-	</select>
-	 -->
-	
-	
-	<!-- 이메일로 emailvalidate값 얻기 -->
-	<update id="updateEmailValidate" parameterType="Map" >
-		UPDATE members SET email_validate='Y',email_Secret=null WHERE email_Secret=#{code}
-	</update>
-	
-	<!-- 내 질문 -->
-	<select id="myQuestion" parameterType="int" resultType="Map">
-		select q.* from question q JOIN members m ON m.member_id=q.member_id
-		where m.member_id=#{userId}
-	</select>
-	
-	<!-- 커리큘럼 얻기 -->
-	<select id="getCurriculum" parameterType="String" resultType="String">
-		select curriculum_id FROM curriculum WHERE course_id = #{courseId} ORDER BY curriculum_id
-	</select>
-	
-	
-	<!-- 안 본 비디오 얻기  -->
-	<select id="getVideo" parameterType="Map" resultType="String">
-		select vi.video_id FROM video vi JOIN videoMember vm ON vi.video_id = vm.video_id
-		WHERE curriculum_id = #{curriculumId} AND vm.member_id = #{memberId} AND vm.seen = 'N' AND ROWNUM = 1 ORDER BY vi.video_id
-	</select>
-	
-	<!-- 
-	 내 강의 안본비디오 
-	<select id="courseVideo" parameterType="String" resultType="String">
-		select v.video_id from curriculum cu join video v on v.curriculum_id=cu.curriculum_id
-		where course_id=#{course_id} and v.seen='N' and rownum=1
-		order by v.video_id desc
-	</select>
-	
-	 -->
-	<!-- 다본동영상개수  -->
-	<select id="videoCount" parameterType="Map" resultType="int">
-		SELECT COUNT(*) FROM curriculum cu JOIN video vi ON vi.curriculum_id = cu.curriculum_id
-		JOIN videoMember vm ON vi.video_id = vm.video_id WHERE vm.member_id = #{memberId} 
-		AND cu.course_id = #{courseId} AND vm.seen='Y'
-	</select>
-	
-	<!-- 마지막 동영상 아이디 -->
-	<select id="getLastVideo" parameterType="String" resultType="String">
-		select video_id FROM video WHERE curriculum_id = #{lastCurriculumId} and rownum=1
-		order by video_id desc
-	</select>
-	
-	<!-- 내 질문 상세보기 -->
-	<select id="questionDetails" parameterType="String" resultType="Map">
-		select m.username,a.name,a.avatar,a.admin_id,q.question_id,q.title,q.like_count,
-		q.comment_count,q.created_at,to_char(q.content)question_content,c.content,c.created_at comment_created,c.comment_id
-		from question q join members m on m.member_id=q.member_id
-		join comments c on c.question_id=q.question_id join admins a on a.admin_id=c.admin_id
-		where m.member_id=#{userId} and q.question_id=#{questionId}
-	</select>
-	
-	<!-- 내 질문 답변없을때 상세보기 -->
-	<select id="questionDetailNotExist" parameterType="String" resultType="Map">
-		select m.username,q.* from question q join members m on m.member_id=q.member_id
-		where m.member_id=#{userId} and q.question_id=#{questionId}
-	</select>
+   <!-- 전체 사용자 얻기 -->
+   <select id="selectList" resultType="MemberDTO" >
+      SELECT * FROM members ORDER BY registered_at DESC
+   </select>
+   
+   
+   <!-- 아이디로 사용자 얻기 -->
+   <select id="getMemberById" parameterType="String" resultType="MemberDTO">
+      SELECT * FROM members WHERE member_id=#{memberId}
+   </select>
+   
+   <!-- 이메일로 사용자 얻기 -->
+   <select id="getMemberByEmail" parameterType="String" resultType="MemberDTO">
+      SELECT * FROM members WHERE email=#{email}
+   </select>
+   
+   <!-- 사용자 생성, selectKey로 memberId반환 -->
+   <insert id="createMember" parameterType="Map">
+      <selectKey keyProperty="memberId" resultType="int" order="BEFORE">
+         SELECT seq_members.NEXTVAL FROM dual
+      </selectKey>
+      INSERT INTO members VALUES(#{memberId}, #{email}, #{password}, #{username}, DEFAULT, DEFAULT, DEFAULT, 
+      <choose>
+         <when test="avatar != null">#{avatar},</when>
+         <otherwise>DEFAULT,</otherwise>
+      </choose>
+      null)
+   </insert>
+   
+   <!--  -->
+   
+   <insert id="registerMember" parameterType="Map">
+      <selectKey keyProperty="memberId" resultType="int" order="BEFORE">
+         SELECT seq_members.NEXTVAL FROM dual
+      </selectKey>
+      INSERT INTO members VALUES(#{memberId}, #{email}, #{password}, #{username}, DEFAULT, DEFAULT, DEFAULT, 
+      <choose>
+         <when test="avatar != null">#{avatar},</when>
+         <otherwise>DEFAULT,</otherwise>
+      </choose>
+      #{emailSecret})
+   </insert>
+   
+   <!-- 사용자 수정 -->
+   <update id="updateMember" parameterType="Map">
+      UPDATE members SET username=#{username}
+      <if test="avatar != null">, avatar=#{avatar}</if> 
+      WHERE member_id=#{memberId}
+   </update>
+   
+   <!-- 사용자 삭제 -->
+   <delete id="deleteMultpleMember" parameterType="Map">
+      DELETE members WHERE member_id in
+      <foreach collection="target" item="item" separator="," open="(" close=")">
+         #{item}
+      </foreach>
+   </delete>
+   
+   <!-- 파일 업로드 -->
+   <update id="fileUpdate" parameterType="Map">
+      UPDATE MEMBERS SET AVATAR=#{file_name} WHERE MEMBER_ID=#{userId}
+   </update>
+   
+   <!-- 프로필페이지 내정보 가져오기 -->
+   <select id="selectMyInfo" parameterType="int" resultType="map">
+      SELECT * FROM members WHERE member_id=#{userId}
+   </select>
+   
+   <!-- 결제한 강의 개수가져오기 -->
+   <select id="paymentCount" parameterType="int" resultType="int">
+      SELECT COUNT(*) FROM payment p JOIN members m ON (p.member_id =m.member_id) WHERE m.member_id=#{userId}
+      AND p.payment_state='결제 완료'
+   </select>
+   
+   <!-- 나의 댓글 개수-->
+   <select id="commentsCount" parameterType="int" resultType="int">
+      select count(*) from comments c JOIN members m ON (c.member_id = m.member_id) WHERE m.member_id=#{userId}
+   </select>
+   
+   <!-- 나의 질문 개수-->
+   <select id="questionCount" parameterType="int" resultType="int">
+      select count(*) from question q JOIN members m ON (q.member_id = m.member_id) WHERE m.member_id=#{userId}
+   </select>
+   
+   <!-- 나의 닉네임 변경 -->
+   <update id="userNameEdit" parameterType="Map">
+      UPDATE members SET username=#{username} WHERE member_id=#{userId}
+   </update>
+   
+   <!-- 비밀번호 변경 -->
+   <update id="passwordEdit" parameterType="Map">
+      UPDATE members SET password=#{password} WHERE member_id=#{userId}
+   </update>
+   
+   <!-- 내 강의 가져오기 -->
+   <select id="myCourses" parameterType="int" resultType="Map">
+      select co.title,co.course_id,co.short_description,co.period,co.thumbnail,co.video_count,ca.*,a.email,a.name admin_name
+         from members m JOIN payment p ON m.member_id=p.member_id
+         JOIN courses co ON p.course_id=co.course_id 
+         JOIN category ca ON co.category_id=ca.category_id
+         JOIN admins a ON co.admin_id=a.admin_id
+         where p.payment_state='결제 완료' AND m.member_id=#{userId}
+   </select>
+   
+   <!-- 내 결제정보 가져오기 -->
+   <select id="myPayment" parameterType="int" resultType="Map">
+      select p.*,co.period,co.title,p.created_at payment_created
+      from members m 
+      JOIN payment p ON m.member_id=p.member_id
+      JOIN courses co ON p.course_id=co.course_id
+      where p.payment_state='결제 완료' and m.member_id=#{userId}
+   </select>
+   
+   <!-- 내 결제 상세보기 -->
+   <select id="viewDetails" parameterType="String" resultType="Map">
+      select p.payment_code,co.title,co.period,m.email,p.created_at,
+      p.payment_method,p.price
+      from members m JOIN payment p ON m.member_id=p.member_id
+      JOIN courses co ON p.course_id=co.course_id
+      WHERE m.member_id=#{userId} AND p.payment_code=#{pay_code}
+   </select>
+   
+   <!-- 내 문의 제목,시간 -->
+   <select id="myInquiry" parameterType="int" resultType="Map">
+      select i.*
+      from members m JOIN inquiry i ON m.member_id=i.member_id
+      WHERE m.member_id=#{userId}
+   </select>
+   
+   <!-- 내 문의 상세보기 -->
+   <select id="inquDetails" parameterType="String" resultType="Map">
+      select i.*,m.username,c.name,an.*,ad.avatar,ad.admin_id,an.answer_id,an.content ans_content,ad.name admin_name,an.created_at answer_created
+      from members m JOIN inquiry i ON m.member_id=i.member_id
+      JOIN classification c ON i.cl_id = c.cl_id
+      JOIN answer an ON an.inquiry_id=i.inquiry_id
+      JOIN admins ad ON ad.admin_id=an.admin_id
+      WHERE m.member_id=#{userId} AND i.inquiry_id=#{inquiry_id}
+   </select>
+   
+   <!-- 내 문의 답변 없을 때 상세보기 -->
+   <select id="inquDetailNotExist" parameterType="String" resultType="Map">
+      select i.*,m.username,c.name
+      from members m JOIN inquiry i ON m.member_id=i.member_id
+      JOIN classification c ON i.cl_id = c.cl_id
+      WHERE m.member_id = #{userId} AND i.inquiry_id = #{inquiry_id}
+   </select>
+   
+   <!-- 내 댓글 제목,시간 -->
+   <select id="myComments" parameterType="int" resultType="Map">
+       select co.content,co.created_at
+       from members m JOIN comments co ON m.member_id=co.member_id
+       WHERE m.member_id=#{userId}
+   </select>
+   <!-- 
+    댓글 상세보기
+   <select id="commentsDetails" parameterType="String" resultType="Map">
+      select m.username,co.title
+   </select>
+    -->
+   
+   
+   <!-- 이메일로 emailvalidate값 얻기 -->
+   <update id="updateEmailValidate" parameterType="Map" >
+      UPDATE members SET email_validate='Y',email_Secret=null WHERE email_Secret=#{code}
+   </update>
+   
+   <!-- 내 질문 -->
+   <select id="myQuestion" parameterType="int" resultType="Map">
+      select q.* from question q where q.member_id=#{userId}
+   </select>
+   
+   <!-- 커리큘럼 얻기 -->
+   <select id="getCurriculum" parameterType="String" resultType="String">
+      select curriculum_id FROM curriculum WHERE course_id = #{courseId} ORDER BY curriculum_id
+   </select>
+   
+   
+   <!-- 안 본 비디오 얻기  -->
+   <select id="getVideo" parameterType="Map" resultType="String">
+      select vi.video_id FROM video vi JOIN videoMember vm ON vi.video_id = vm.video_id
+      WHERE curriculum_id = #{curriculumId} AND vm.member_id = #{memberId} AND vm.seen = 'N' AND ROWNUM = 1 ORDER BY vi.video_id
+   </select>
+   
+   <!-- 
+    내 강의 안본비디오 
+   <select id="courseVideo" parameterType="String" resultType="String">
+      select v.video_id from curriculum cu join video v on v.curriculum_id=cu.curriculum_id
+      where course_id=#{course_id} and v.seen='N' and rownum=1
+      order by v.video_id desc
+   </select>
+   
+    -->
+   <!-- 다본동영상개수  -->
+   <select id="videoCount" parameterType="Map" resultType="int">
+      SELECT COUNT(*) FROM curriculum cu JOIN video vi ON vi.curriculum_id = cu.curriculum_id
+      JOIN videoMember vm ON vi.video_id = vm.video_id WHERE vm.member_id = #{memberId} 
+      AND cu.course_id = #{courseId} AND vm.seen='Y'
+   </select>
+   
+   <!-- 마지막 동영상 아이디 -->
+   <select id="getLastVideo" parameterType="String" resultType="String">
+      select video_id FROM video WHERE curriculum_id = #{lastCurriculumId} and rownum=1
+      order by video_id desc
+   </select>
+   
+   <!-- 내 질문 상세보기 -->
+   <select id="questionDetails" parameterType="String" resultType="Map">
+      select m.username,q.title,q.created_at,q.like_count,q.comment_count,to_char(q.content)question_content
+      from question q join members m on m.member_id=q.member_id
+      where m.member_id=#{userId} and q.question_id=#{questionId}
+   </select>
+   
+   <!-- 좋아요 관련 쿼리 시작 -->
+   <!-- 이전 좋아요 누른기록 체크용 -->
+   <select id="likeCheck" parameterType="Int" resultType="Int">
+   SELECT COUNT(*)
+   FROM LIKES
+   WHERE member_id=#{userId} AND question_id=#{questionId}
+   </select>
+   
+   <!-- 좋아요 등록 -->
+   <insert id="like" parameterType="Int">
+   INSERT INTO LIKES (LIKE_ID,MEMBER_ID,question_id)
+   VALUES (SEQ_LIKES.NEXTVAL,#{userId},#{questionId})
+   </insert>
+   
+   <!-- 좋아요 삭제 -->
+   <delete id="unLike" parameterType="Int">
+   DELETE FROM LIKES
+   WHERE MEMBER_ID=#{userId} AND question_id=#{questionId} 
+   </delete >
+   
+   <!--질문별 좋아요 개수 확인 -->
+   <update  id = "likeCount" parameterType="Map">
+   UPDATE question
+   SET LIKE_COUNT = (SELECT COUNT(*) FROM LIKES WHERE question_id=#{questionId} )
+   WHERE question_id=#{questionId} 
+
+   </update>
+   <!-- 좋아요 관련 쿼리 끝 -->
+   
+   <!-- 내 질문 댓글 -->
+   <select id="commentList" parameterType="String" resultType="MyCommentDTO">
+      select c.*,m.username,m.avatar memavatar,a.name,a.avatar
+         from comments c full join members m on c.member_id=m.member_id
+         full join admins a on c.admin_id=a.admin_id
+      where question_id=#{questionId}
+      order by c.created_at desc 
+   </select>
+   
+   <!-- 내 질문 답변없을때 상세보기 -->
+   <select id="questionDetailNotExist" parameterType="String" resultType="Map">
+      select m.username,q.* from question q join members m on m.member_id=q.member_id
+      where m.member_id=#{userId} and q.question_id=#{questionId}
+   </select>
 </mapper>
