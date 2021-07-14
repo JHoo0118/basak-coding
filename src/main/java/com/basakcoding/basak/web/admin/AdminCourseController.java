@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +29,7 @@ import com.basakcoding.basak.service.CurriculumDTO;
 import com.basakcoding.basak.service.FAQDTO;
 import com.basakcoding.basak.service.VideoDTO;
 import com.basakcoding.basak.util.FileUploadUtil;
+import com.basakcoding.basak.util.ListPagingData;
 
 @Controller
 @RequestMapping("/admin/course")
@@ -39,8 +42,8 @@ public class AdminCourseController {
 	private AdminService AdminService;
 	
 	@GetMapping("/management")
-	public String categoryList(Model model) {
-		List<Map<String, String>> listCourses = courseService.selectList();
+	public String categoryList(@RequestParam Map map, @RequestParam(required = false, defaultValue = "1") int nowPage, Model model) {
+		ListPagingData listCourses = courseService.selectList(map, nowPage);
 		model.addAttribute("listCourses", listCourses);
 		model.addAttribute("title", "강의 관리");
 		return "admin/courseManagement";
