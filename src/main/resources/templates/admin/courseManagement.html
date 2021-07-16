@@ -85,7 +85,7 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr th:each="course, ${listCourses.lists}">
+												<tr th:each="course : ${listCourses.lists}">
 													<td>
 														<input type="checkbox" class="checkbox" name="target"
 															th:value="${course.courseId}" />
