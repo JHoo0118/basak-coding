@@ -1,132 +1,125 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head>
 	<meta charset="UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>바삭 코딩 | 강의 관리</title>
 	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
-	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}" />
 	<link rel="stylesheet" th:href="@{/css/admin/main.css}" />
 	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
-  	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
 	<script defer th:src="@{/js/actionValidate.js}"></script>
 </head>
+
 <body>
-<body>
-	<!-- Header -->
-	<div th:replace="/admin/fragments/header.html :: fragment-header(${title})"></div>
-	
-	<!-- 메인 -->
-	<section class="col-xl-10 col-lg-9 col-md-8 mt-6 ml-auto">
-		<div class="container-md">
-			<div class="row">
-				<div class="col-12 ml-auto">
-					<div class="row md-5 mb-5">
-						<div class="col-xl-12 col-12 mb-4 mb-xl-0">
-						
-						<h3 class="text-muted text-center mb-3">강의 목록</h3>
-						<ul class="nav nav-tabs mx-3" style="border-bottom-color: #333" id="nav-tab" role="tablist" >
-							<a class="nav-link form__tab" th:href="@{/admin/category/management}">강의 카테고리</a>
-							<a class="nav-link form__tab active" th:href="@{/admin/course/management}">강의 </a>
-							<a class="nav-link form__tab" th:href="@{/admin/curriculum/management}">커리큘럼</a>
-							<a class="nav-link form__tab" th:href="@{/admin/video/management}">동영상</a>
-							<a class="nav-link form__tab" th:href="@{/admin/file/management}">파일</a>
-							<a class="nav-link form__tab" th:href="@{/admin/faq/management}">FAQ</a>
-						</ul>
-						<form name="actionForm" th:action="@{/admin/course/management/process}" method="post">
-							<div class="form__header d-flex justify-content-between">
-								<div>
-									<select name="action">
-										<option value="">액션을 선택하세요</option>
-										<option value="edit">수정(1개만)</option>
-										<option value="del">삭제</option>
-									</select>
-									<input class="button button--light button--sm d-inline" type="submit" value="확인" />
-									<a class="button button--reverse mb-2" th:href="@{/admin/course/management/form}">강의 추가</a>
+
+	<body>
+		<!-- Header -->
+		<div th:replace="/admin/fragments/header.html :: fragment-header(${title})"></div>
+
+		<!-- 메인 -->
+		<section class="col-xl-10 col-lg-9 col-md-8 mt-6 ml-auto">
+			<div class="container-md">
+				<div class="row">
+					<div class="col-12 ml-auto">
+						<div class="row md-5 mb-5">
+							<div class="col-xl-12 col-12 mb-4 mb-xl-0">
+
+								<h3 class="text-muted text-center mb-3">강의 목록</h3>
+								<ul class="nav nav-tabs mx-3" style="border-bottom-color: #333" id="nav-tab"
+									role="tablist">
+									<a class="nav-link form__tab" th:href="@{/admin/category/management}">강의 카테고리</a>
+									<a class="nav-link form__tab active" th:href="@{/admin/course/management}">강의 </a>
+									<a class="nav-link form__tab" th:href="@{/admin/curriculum/management}">커리큘럼</a>
+									<a class="nav-link form__tab" th:href="@{/admin/video/management}">동영상</a>
+									<a class="nav-link form__tab" th:href="@{/admin/file/management}">파일</a>
+									<a class="nav-link form__tab" th:href="@{/admin/faq/management}">FAQ</a>
+								</ul>
+								<form name="actionForm" th:action="@{/admin/course/management}" method="post">
+									<div class="form__header d-flex justify-content-between">
+										<div>
+										<span id="category">
+											<select id="categoryColumn" name='categoryColumn' style="width: 100px;">
+												<option value='all'>전체</option>
+												<option th:each="category :${categoryList}" th:value="${category.categoryId}">[[${category.name}]]</option>
+											</select>
+										</span>
+											<select id="searchColumn" name="searchColumn">
+												<option value="all">전체</option>
+												<option value="a.name">강사명</option>
+												<option value="co.title">강의명</option>
+												<option value="co.short_description">요약</option>
+											</select>
+											<input type="text" name="searchText" id="searchText" th:value="${searchText}">
+											<input class="button button--light button--sm d-inline" type="submit"
+											value="확인" />
+											<a class="button button--reverse mb-2"
+												th:href="@{/admin/course/management/form}">강의 추가</a>
+
+										</div>
+									</div>
+									<div th:if="${message != null}" class="alert alert-success text-center">
+										[[${message}]]
+									</div>
+									<div class="table-responsive" style="min-width:1000px;">
+										<table class="table table-striped bg-light text-center">
+											<thead>
+												<tr class="text-muted">
+													<th>액션</th>
+													<th>#</th>
+													<th>아이디</th>
+													<th>카테고리</th>
+													<th>강사</th>
+													<th>제목</th>
+													<th>요약</th>
+												<!-- 
+								                    <th>가격</th>
+								                    <th>난의도</th>
+								                    <th>좋아요 수</th>
+								                    <th>강의 길이</th>
+								                    <th>동영상 수</th>
+							                    -->
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="course, ${listCourses.lists}">
+													<td>
+														<input type="checkbox" class="checkbox" name="target"
+															th:value="${course.courseId}" />
+														<span class="checkbox__mark"></span>
+													</td>
+													<td>[[${listCourses.TotalCourseCount}-${course.R}+1]]</td>
+													<td>[[${course.courseId}]]</td>
+													<td>[[${course.categoryName}]]</td>
+													<td>[[${course.adminName}]]</td>
+													<td><a
+															th:href="@{/admin/course/management/view(no=${course.courseId})}">[[${course.title}]]</a>
+													</td>
+													<td>[[${course.shortDescription}]]</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
 									
-								</div>
+								</form>
 							</div>
-							<div th:if="${message != null}" class="alert alert-success text-center">
-								[[${message}]]
-							</div>
-							<div class="table-responsive" style="min-width:1000px;">
-							<table class="table table-striped bg-light text-center">
-								<thead>
-				                  <tr class="text-muted">
-				                    <th>액션</th>
-				                    <th>#</th>
-				                    <th>아이디</th>
-				                    <th>카테고리</th>
-				                    <th>강사</th>
-				                    <th>제목</th>
-				                    <th>요약</th>
-				                    <!-- 
-				                    <th>가격</th>
-				                    <th>난의도</th>
-				                    <th>좋아요 수</th>
-				                    <th>강의 길이</th>
-				                    <th>동영상 수</th>
-				                    -->
-				                  </tr>
-				                </thead>
-				                <tbody>
-									<tr th:each="course, i : ${listCourses.lists}">
-										<td>
-											<input type="checkbox" class="checkbox" name="target" th:value="${course.courseId}"/>
-											<span class="checkbox__mark"></span>
-										</td>
-										<td>[[${listCourses.TotalCourseCount}-${course.R}+1]]</td>
-										<td>[[${course.courseId}]]</td>
-										<td>[[${course.categoryName}]]</td>
-										<td>[[${course.adminName}]]</td>
-										<td><a th:href="@{/admin/course/management/view(no=${course.courseId})}">[[${course.title}]]</a></td>
-										<td>[[${course.shortDescription}]]</td>
-									</tr>
-				                </tbody>
-							</table>
-							</div>
-						</form>
-						<div class="row">
-							<div id="paging" class="col-off-md-12 text-center" th:utext="${listCourses.pagingString}"></div>
-						</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</section>
-	<script>
-	
-	/*
-	var data = {
-		token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjIyMzkxOTc2fQ.EtPDjQIgd9SjcOITK94ouOhDhjon_JJBx2oe6qsh2EU",
-		email: $('input[name=email]').val(),
-		name: $('input[name=name]').val(),
-		username: $('input[name=username]').val(),
-		password: $('input[name=password]').val()
-	}*/
-	/*
-	var query = "query { seeFeed { caption } }";
-	var mutation = "query"
-		$("#submit").on('click', function() {
-			$.ajax({
-				type: 'POST',
-				url: "http://localhost:4000/graphql",
-				contentType: 'application/json',
-				beforeSend: function(xhr) {
-					xhr.setRequestHeader("token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJob28iLCJpYXQiOjE2MjM0NzUyNzF9.6-1fKqJdPHnWY5tLffnbTCpdKK9q_Vzndntw5W05laE");
-				},
-				data: JSON.stringify({
-					"query":query,
-				}),
-				success: function(result) {
-					console.log(result)
-				}
-			})
-			
-		})
-		*/
-	</script>
-</body>
+			<div class="row" style="width: 5%; margin: 0 auto;">
+										<div id="paging" class="col-off-md-12 text-center"
+											th:utext="${listCourses.pagingString}"></div>
+									</div>
+		</section>
+		
+		<script>
+				
+		</script>
+		
+	</body>
+
 </html>

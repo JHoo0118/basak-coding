@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -30,6 +31,8 @@ import com.basakcoding.basak.service.FAQDTO;
 import com.basakcoding.basak.service.VideoDTO;
 import com.basakcoding.basak.util.FileUploadUtil;
 import com.basakcoding.basak.util.ListPagingData;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 @RequestMapping("/admin/course")
@@ -41,12 +44,28 @@ public class AdminCourseController {
 	@Autowired
 	private AdminService AdminService;
 	
-	@GetMapping("/management")
-	public String categoryList(@RequestParam Map map, @RequestParam(required = false, defaultValue = "1") int nowPage, Model model) {
+	@Autowired
+	ObjectMapper objectMapper;
+	
+	//강의 관리 목록 페이지
+	@RequestMapping("/management")
+	public String courseList(@RequestParam Map map, @RequestParam(required = false, defaultValue = "1") int nowPage, Model model) {
 		ListPagingData listCourses = courseService.selectList(map, nowPage);
+		List<CategoryDTO> categoryList = courseService.categoryList();
 		model.addAttribute("listCourses", listCourses);
+		model.addAttribute("categoryList",categoryList);
 		model.addAttribute("title", "강의 관리");
 		return "admin/courseManagement";
+	}
+	
+	
+	//강의 카테고리 셀렉
+	@RequestMapping("/management/category")
+	public @ResponseBody String categoryList() throws JsonProcessingException {
+		List<CategoryDTO> categoryList = courseService.categoryList();
+		String category = objectMapper.writeValueAsString(categoryList);
+		System.out.println(category);
+		return category;
 	}
 	
 	// 강의 관리 폼 페이지

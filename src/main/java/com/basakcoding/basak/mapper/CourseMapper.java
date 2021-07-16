@@ -24,7 +24,7 @@ public interface CourseMapper {
 	List<CourseDTO> selectList(Map map);
 	
 	// 강의 총 갯수
-	int totalCount();
+	int totalCount(Map map);
 	// 강의 만들기
 	int createCourse(Map map);
 
