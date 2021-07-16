@@ -259,11 +259,11 @@ public class AdminCourseController {
 		@RequestMapping("/management/edit")
 		public String courseEdit(@RequestParam Map map,Model model) {
 			CourseDTO courseOne = courseService.getCourseOne(map);
-//			List<CurriculumDTO> listCurriculum = courseService.courseCurriculumList(map.get("no").toString());
-//			List<FAQDTO> listFAQ = courseService.getFAQList(map.get("no").toString());
+			List<CurriculumDTO> listCurriculum = courseService.courseCurriculumList(map);
+			List<FAQDTO> listFAQ = courseService.getFAQList(map);
 			model.addAttribute("courseOne", courseOne);
-//			model.addAttribute("listCurriculum",listCurriculum);
-//			model.addAttribute("listFAQ", listFAQ);
+			model.addAttribute("listCurriculum",listCurriculum);
+			model.addAttribute("listFAQ", listFAQ);
 			List<CategoryDTO> listCategories = courseService.categoryList();
 			List<AdminDTO> listAdmin = AdminService.getAdminList();
 			Map course = new HashMap<>();
