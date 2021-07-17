@@ -13,172 +13,210 @@
 	<!-- 강의 리스트 가져오기 -->
 	<select id="selectList" resultType="CourseDTO">
 		SELECT * FROM (
-			SELECT ROWNUM R, T.* FROM (
-				SELECT ca.name categoryName, co.course_id, co.title, co.short_description, a.name adminName 
-				FROM courses co
-				JOIN category ca ON ca.category_id = co.category_id
-				JOIN admins a ON co.admin_id = a.admin_id
-		        ORDER BY co.course_id DESC
-		        )T)
-		        WHERE R BETWEEN #{start} AND #{end}
+		SELECT ROWNUM R, T.* FROM (
+		SELECT ca.name categoryName, co.course_id, co.title, co.short_description,
+		a.name adminName
+		FROM courses co
+		JOIN category ca ON ca.category_id = co.category_id
+		JOIN admins a ON co.admin_id = a.admin_id
+		ORDER BY co.course_id DESC
+		)T)
+		WHERE R BETWEEN #{start} AND #{end}
 	</select>
-	
+
 	<!-- 강의 총 갯수 -->
 	<select id="totalCount" resultType="int">
 		SELECT COUNT(*) FROM courses
 	</select>
-	
+
 	<!-- 강의 생성 후 강의 PK반환 -->
 	<insert id="createCourse" parameterType="Map">
-		<selectKey keyProperty="courseId" resultType="int" order="BEFORE">
+		<selectKey keyProperty="courseId" resultType="int"
+			order="BEFORE">
 			SELECT seq_courses.NEXTVAL FROM dual
 		</selectKey>
-		INSERT INTO courses VALUES(#{courseId}, #{adminId}, #{categoryId}, #{courseTitle}, #{shortDescription}, 
-		#{description}, #{price}, #{difficulty}, DEFAULT, #{thumbnail}, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT)
+		INSERT INTO courses VALUES(#{courseId}, #{adminId}, #{categoryId},
+		#{courseTitle}, #{shortDescription},
+		#{description}, #{price}, #{difficulty}, DEFAULT, #{thumbnail}, DEFAULT, DEFAULT,
+		DEFAULT, DEFAULT, DEFAULT)
 	</insert>
-	
+
 	<!-- FAQ 생성 -->
 	<insert id="createFaq" parameterType="Map">
-		INSERT INTO faq VALUES(seq_faq.NEXTVAL, #{courseId}, #{title}, #{content})
+		INSERT INTO faq
+		VALUES(seq_faq.NEXTVAL, #{courseId}, #{title}, #{content})
 	</insert>
-	
+
 	<!-- 커리큘럼 생성 -->
 	<insert id="createCurri" parameterType="Map">
-		<selectKey keyProperty="curriculumId" resultType="int" order="BEFORE">
+		<selectKey keyProperty="curriculumId" resultType="int"
+			order="BEFORE">
 			SELECT seq_curriculum.NEXTVAL FROM dual
 		</selectKey>
 		INSERT INTO curriculum VALUES(#{curriculumId}, #{courseId}, #{name})
 	</insert>
-	
+
 	<!-- 비디오 생성 -->
 	<insert id="createVideo" parameterType="Map">
-		<selectKey keyProperty="videoId" resultType="int" order="BEFORE">
+		<selectKey keyProperty="videoId" resultType="int"
+			order="BEFORE">
 			SELECT seq_video.NEXTVAL FROM dual
 		</selectKey>
-		INSERT INTO video VALUES(#{videoId}, #{curriculumId}, #{videoUri}, #{videoLength}, null, #{videoTitle}, #{videoContent})
+		INSERT INTO video VALUES(#{videoId}, #{curriculumId}, #{videoUri},
+		#{videoLength}, null, #{videoTitle}, #{videoContent})
 	</insert>
-	
+
 	<!-- 파일 생성 -->
 	<insert id="createFile" parameterType="Map">
-		INSERT INTO files VALUES(seq_files.NEXTVAL, #{videoId}, #{fileName}, #{fileUri})
+		INSERT INTO files
+		VALUES(seq_files.NEXTVAL, #{videoId}, #{fileName}, #{fileUri})
 	</insert>
-	
+
 	<!-- 강의 비디오 총 개수 및 총 길이 업데이트 -->
 	<update id="updateVideoCntAndLength" parameterType="map">
-		UPDATE courses SET video_count = #{videoCnt}, course_length = #{totalVideoLength}  WHERE course_id = #{courseId}
+		UPDATE
+		courses SET video_count = #{videoCnt}, course_length =
+		#{totalVideoLength} WHERE course_id = #{courseId}
 	</update>
-	
+
 	<!-- 파일 목록 가져오기 -->
 	<select id="getFileList" parameterType="String" resultType="Map">
 		SELECT * FROM files WHERE video_id = #{videoId}
 	</select>
-	
+
 	<!-- 비디오 아이디로 강의 아이디 가져오기 -->
-	<select id="getCourseId" parameterType="String" resultType="String">
-		SELECT cu.course_id FROM video v JOIN curriculum cu 
+	<select id="getCourseId" parameterType="String"
+		resultType="String">
+		SELECT cu.course_id FROM video v JOIN curriculum cu
 		ON v.curriculum_id = cu.curriculum_id WHERE video_id = #{videoId}
 	</select>
-	
+
 	<!-- 비디오 얻기 -->
-	<select id="getVideo" parameterType="String" resultType="VideoDTO">
+	<select id="getVideo" parameterType="String"
+		resultType="VideoDTO">
 		SELECT * FROM video WHERE video_id = #{videoId}
 	</select>
-	
+
 	<resultMap type="CurriculumDTO" id="curriculums">
-		<collection column="curriculum_id" 
-                    property="videos" 
-                    javaType="java.util.List" 
-                    ofType="VideoDTO" 
-                    select="getVideoList">
-        </collection>
+		<collection column="curriculum_id" property="videos"
+			javaType="java.util.List" ofType="VideoDTO" select="getVideoList">
+		</collection>
 	</resultMap>
-	
+
 	<select id="alreadyPayment" parameterType="Map" resultType="int">
 		SELECT COUNT(*)
 		FROM courses co
-		JOIN payment pa ON pa.course_id = co.course_id
+		JOIN payment pa ON pa.course_id =
+		co.course_id
 		JOIN category ca ON ca.category_id = co.category_id
-		JOIN admins a ON co.admin_id = a.admin_id WHERE co.course_id = #{courseId} AND pa.member_id = #{memberId}
+		JOIN
+		admins a ON co.admin_id = a.admin_id WHERE co.course_id = #{courseId}
+		AND pa.member_id = #{memberId}
 	</select>
-	
-	
+
+
 	<!-- 커리큘럼 얻기 -->
-	<select id="getCurriculumList" parameterType="String" resultMap="curriculums">
+	<select id="getCurriculumList" parameterType="String"
+		resultMap="curriculums">
 		SELECT * FROM curriculum WHERE course_id = #{courseId}
 	</select>
-	
-    <select id="getVideoList" resultType="VideoDTO">
-       	SELECT * FROM video WHERE curriculum_id = #{curriculums} ORDER BY video_id
-    </select>
-    
-    <select id="isSeen" parameterType="map" resultType="int">
-    	SELECT COUNT(*) FROM videoMember WHERE 
-    	video_id = #{videoId} AND member_id = #{memberId} AND seen = 'Y'
-    </select>
-    
-    <update id="updateSeen" parameterType="Map">
-    	UPDATE videoMember SET seen = 'Y' WHERE video_id = #{videoId} AND member_id = #{memberId}
-    </update>
-	
-	<!--―――――――――――――――――――――――――――― 강의 상세보기 ――――――――――――――――――――――――――――――-->
-	<select id="getCourseOne" parameterType="Map" resultType="CourseDTO">
-		SELECT course_id,c.category_id, c.admin_id, ca.name categoryname, ad.name adminname, difficulty,
-		price,thumbnail, title, short_description, description
+
+	<select id="getVideoList" resultType="VideoDTO">
+		SELECT * FROM video WHERE curriculum_id = #{curriculums} ORDER BY video_id
+	</select>
+
+	<select id="isSeen" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM videoMember WHERE
+		video_id = #{videoId} AND member_id = #{memberId} AND seen = 'Y'
+	</select>
+
+	<update id="updateSeen" parameterType="Map">
+		UPDATE videoMember SET seen = 'Y' WHERE video_id = #{videoId} AND member_id
+		= #{memberId}
+	</update>
+
+	<!--―――――――――――――――――――――――――――― 강의 상세보기 ―――――――――――――――――――――――――――――― -->
+	<select id="getCourseOne" parameterType="Map"
+		resultType="CourseDTO">
+		SELECT course_id,c.category_id, c.admin_id, ca.name
+		categoryname, ad.name adminname, difficulty,
+		price,thumbnail, title,
+		short_description, description
 		FROM courses c
-		JOIN category ca ON ca.category_id = c.category_id
-		JOIN admins ad ON ad.admin_id = c.admin_id
+		JOIN category ca ON
+		ca.category_id = c.category_id
+		JOIN admins ad ON ad.admin_id =
+		c.admin_id
 		WHERE course_id = #{no}
 	</select>
+	
 	<!-- 강의 상세보기용 커리큘럼 얻기 -->
 	<resultMap type="CurriculumDTO" id="coursecurriculums">
-		<collection column="curriculum_id" 
-                    property="videos" 
-                    javaType="java.util.List" 
-                    ofType="VideoDTO" 
-                    select="courseVideoList">
-        </collection>
+		<collection column="curriculum_id" property="videos"
+			javaType="java.util.List" ofType="VideoDTO" select="courseVideoList">
+		</collection>
 	</resultMap>
 	<!-- 강의 상세보기용 커리큘럼 리스트 -->
-	<select id="courseCurriculumList" parameterType="Map" resultMap="coursecurriculums">
+	<select id="courseCurriculumList" parameterType="Map"
+		resultMap="coursecurriculums">
 		SELECT * FROM curriculum WHERE course_id = #{no}
 	</select>
-    <resultMap type="VideoDTO" id="coursevideos">
-		<collection column="file_id" 
-                    property="files" 
-                    javaType="java.util.List" 
-                    ofType="FileDTO" 
-                    select="courseFileList">
-        </collection>
+	<resultMap type="VideoDTO" id="coursevideos">
+		<collection column="file_id" property="files"
+			javaType="java.util.List" ofType="FileDTO" select="courseFileList">
+		</collection>
 	</resultMap>
 	<!-- 강의 상세보기용 비디오 리스트 -->
-    <select id="courseVideoList" resultMap="coursevideos">
-       	SELECT * FROM video WHERE curriculum_id = #{coursecurriculums} ORDER BY video_id
-    </select>
-    <!-- 강의 상세보기용 파일리스트 -->
-    <select id="courseFileList" resultType="FileDTO">
-		SELECT * FROM files WHERE video_id = #{coursevideos}
+	<select id="courseVideoList" resultMap="coursevideos">
+		SELECT * FROM video WHERE curriculum_id = #{coursecurriculums} ORDER BY
+		video_id
+	</select>
+	<!-- 강의 상세보기용 파일리스트 -->
+	<select id="courseFileList" resultType="FileDTO">
+		SELECT * FROM files WHERE
+		video_id = #{coursevideos}
 	</select>
 	<!-- 강의 상세보기용 FAQ리스트 -->
 	<select id="getFAQList" parameterType="Map" resultType="FAQDTO">
-		SELECT * FROM faq WHERE course_id = #{no}
+		SELECT *
+		FROM faq WHERE course_id = #{no}
 	</select>
-	<!--―――――――――――――――――――――――――――― 강의 상세보기 ――――――――――――――――――――――――――――――-->
-	
-	<!-- 질문 뿌려주기 -->
-	<select id='questionList' resultType="Map">
-	
-	SELECT * 
-	FROM MEMBERS m JOIN QUESTION q
-	ON q.member_id = m.member_id
-	
-	
+	<!--―――――――――――――――――――――――――――― 강의 상세보기 ―――――――――――――――――――――――――――――― -->
+
+	<!-- 강의별(course) 질문 뿌려주기 -->
+	<select id='questionList' parameterType="String"
+		resultType="Map">
+
+		SELECT *
+		FROM MEMBERS m JOIN QUESTION q
+		ON q.member_id = m.member_id
+		WHERE COURSE_ID = #{courseId}
+		ORDER BY QUESTION_ID DESC
+	</select>
+
+	<!-- 질문내용(클롭) 가져오기 -->
+	<select id="getClobQuestionText" parameterType="String"
+		resultType="String">
+		SELECT CONTENT 
+		AS CONTENTS 
+		FROM QUESTION 
+		WHERE course_id=#{courseId}
+		ORDER BY QUESTION_ID DESC
 	</select>
 	
-	<!-- 질문내용(클롭) 가져오기-->
-	<select id="getClobQuestionText" parameterType="String" resultType="String">
-		SELECT CONTENT AS CONTENTS FROM QUESTION WHERE QUESTION_ID=#{questionId} 
+	<!-- 질문별 댓글(COMMENTS 뿌려주기 -->
+	<select id='commentsList' parameterType="String"
+		resultType="Map">
+
+		SELECT c.*,name,username
+		FROM COMMENTS c
+		FULL JOIN MEMBERS m
+		ON m.MEMBER_ID=c.MEMBER_ID
+		FULL JOIN ADMINS a
+		ON a.ADMIN_ID=c.ADMIN_ID
+		WHERE QUESTION_ID = #{questionId}
+		ORDER BY COMMENT_ID
 	</select>
-	
-	
-	
+
+
 </mapper>

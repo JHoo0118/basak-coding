@@ -75,7 +75,9 @@
 	
 	<!-- 강의상세보기 강의설명 -->
 	<select id="getClobText" parameterType="String" resultType="String">
-		SELECT DESCRIPTION AS CONTENTS FROM COURSES WHERE COURSE_ID=#{courseId}
+		SELECT DESCRIPTION
+		AS CONTENTS FROM COURSES 
+		WHERE COURSE_ID=#{courseId}
 	</select>
 	
 	

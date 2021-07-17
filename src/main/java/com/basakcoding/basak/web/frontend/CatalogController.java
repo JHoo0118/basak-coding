@@ -142,7 +142,7 @@ public class CatalogController {
 		model.addAttribute("faqList",map2);
 		
 		model.addAttribute("curriculums",curriculumList);
-		
+		System.out.println("curriculumList:"+curriculumList);
 		model.addAttribute("reviewCount",reviewCount);
 		
 		String notPost ="현재 등록된 글이 없습니다. 강의등록 후 후기를 남겨주세요!";
