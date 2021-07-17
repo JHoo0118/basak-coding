@@ -31,7 +31,7 @@ public class MyCommentDTO {
 	
 	@Transient
     public String getMemberAvatarImagePath() {
-    	if (avatar == null) return "/images/user.png";
+    	if (avatar == null) return "/images/image4.jpg";
     	return "/upload/member/" + this.memberId + "/" + this.avatar;
     }
 }

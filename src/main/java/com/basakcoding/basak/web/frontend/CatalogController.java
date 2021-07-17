@@ -41,7 +41,7 @@ public class CatalogController {
 	
 	// 강의목록 페이지
 	@GetMapping("/catalog")
-	public String catalog(Model model ) {
+	public String catalog(Model model) {
 		
 		List<Map> courseList = catalogService.courseList();
 		

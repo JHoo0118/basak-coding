@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.basakcoding.basak.mapper.InquiryMapper;
+import com.basakcoding.basak.service.ClassificationDTO;
 import com.basakcoding.basak.service.InquiryDTO;
 import com.basakcoding.basak.service.InquiryService;
+import com.basakcoding.basak.service.QuestionDTO;
 
 
 @Controller
@@ -35,6 +37,7 @@ public class AdminInquiryController {
 		return "admin/inquiryManagement";
 	}//likeList
 	
+	
 	@RequestMapping("/management/view")
 	public String inquiryView(@RequestParam Map map,Model model) {
 		InquiryDTO inquiry = inquiryService.selectOne(map);
@@ -46,7 +49,7 @@ public class AdminInquiryController {
 		model.addAttribute("title", "문의 관리");
 		return "admin/inquiryView";
 	}//문의 상세보기
-
+	
 	@RequestMapping("/management/deleteone")
 	public String deleteInquiryOne(@RequestParam Map map) {
 		int affected = inquiryService.deleteOne(map);
@@ -58,4 +61,74 @@ public class AdminInquiryController {
 			return "forward:/admin";
 		}
 	}
+	
+
+	
+	
+	// 질문 카테고리 관리 화면으로 이동
+	@GetMapping("/category/management") 
+	public String questioncategory(Model model) {
+			List<ClassificationDTO> listInquirys = inquiryService.selectList();
+			model.addAttribute("listInquirys", listInquirys);
+			model.addAttribute("title", "문의 카테고리 관리");		
+		return "admin/inquirycategory";
+	}
+
+
+		
+		// 문의 카테고리 생성 및 수정 폼으로 이동
+		@GetMapping("/category/form")
+		public String questionForm(@RequestParam Map<String, String> map, Model model) {
+			String clId = map.get("clId");
+			ClassificationDTO inquiry = new ClassificationDTO();
+			if (clId != null) {
+				inquiry = inquiryService.getInquiryById(clId);
+			}
+			
+			model.addAttribute("inquiry", inquiry);
+			model.addAttribute("title", "문의 카테고리 관리");
+			return "admin/inquiryForm";
+		}
+		
+		// 문의 카테고리 생성 및 수정
+		@PostMapping("/save")
+		public String createSave(
+				@RequestParam Map map,
+				RedirectAttributes redirectAttributes) {
+			if (map.get("clId").equals("")) {
+				inquiryService.createInquiry(map);
+				redirectAttributes.addFlashAttribute("message", "문의내용이 등록되었습니다.");
+			}
+			else {
+				inquiryService.updateInquiry(map);
+				redirectAttributes.addFlashAttribute("message", "문의내용이 수정되었습니다.");
+			}
+			return "redirect:/admin/inquiry/category/management";
+		}
+
+		
+		// 문의 카테고리 수정 폼 이동 or 삭제
+		@PostMapping("/category/process")
+		public String Process(
+				@RequestParam Map map, 
+				@RequestParam List<String> target, 
+				RedirectAttributes redirectAttributes) throws IOException {
+			String action = map.get("action").toString();
+			if ("edit".equals(action)) {
+				redirectAttributes.addAttribute("clId", map.get("target").toString());
+				return "redirect:/admin/inquiry/category/form";
+			} else {
+				map.put("target", target);
+				inquiryService.deleteMultpleInquiry(map);
+				redirectAttributes.addFlashAttribute("message", "카테고리가 삭제되었습니다.");
+				return "redirect:/admin/inquiry/category/management";
+			}
+		}	
+	
+
+
+
+	
+	
+	
 }//class

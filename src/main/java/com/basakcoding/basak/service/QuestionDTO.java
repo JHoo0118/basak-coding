@@ -10,10 +10,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuestionDTO {
+	
+
+
 	private Integer questionId;
+	private Integer memberId;
+	private Integer courseId;
+	private String name;
+	private String title;
+	private String content;
+	private Date createdAt;
+	private int likeCount;
+	private int commentCount;
+	
 	private String userName;
 	private String courseTitle;
 	private String questionTitle;
-	private String content;
-	private Date createdAt;
 }

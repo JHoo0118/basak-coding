@@ -91,26 +91,20 @@ public class MyPageController {
          String courseId = map1.get("COURSE_ID").toString();
          params.put("courseId", courseId);
          // 다본 동영상 개수 가져오기
-
          int videoCount = memberService.videoCount(params);
          String thumbnail = ("/upload/course/" + courseId + "/thumbnail/" + map1.get("THUMBNAIL"));
-
          String courseVideoId = null;
          List<String> curriculumIds = memberService.getCurriculum(courseId);
-
          // 마지막 커리큘럼의 아이디
          String lastCurriculumId = curriculumIds.get(curriculumIds.size() - 1);
-
          // 마지막 비디오 아이디
          String lastVideoId = memberService.getLastVideo(lastCurriculumId);
-
          for (int i = 0; i < curriculumIds.size(); i++) {
             params.put("curriculumId", curriculumIds.get(i));
             courseVideoId = memberService.getVideo(params);
             if (courseVideoId != null)
                break;
          }
-
          if (courseVideoId != null) {
             map1.put("courseVideoid", courseVideoId);
          } else {
@@ -145,7 +139,6 @@ public class MyPageController {
       int userId = (int) model.getAttribute("userId");
       // 내 질문
       List<Map> map = memberService.myQuestion(userId);
-      System.out.println("내질문"+map);
       if (!map.isEmpty())
          model.addAttribute("myQuestion", map);
       // 내 문의 제목,시간
@@ -289,7 +282,38 @@ public class MyPageController {
       }
       return map;
    }
-
+   //내 질문 수정
+   @RequestMapping("/questionEdit.do")
+   public @ResponseBody int questionEdit(@RequestParam("title")String title,@RequestParam("content")String content,@RequestParam("questionId")String questionId){
+	   questionId.toString();
+	   int succese=memberService.questionUpdate(title,content,questionId);
+	   return succese;
+   }
+   //질문에 답변 추가
+   @RequestMapping("/newComment.do")
+   public @ResponseBody Map newComment(@RequestParam("newContent")String content,@RequestParam("questionId")String questionId,Authentication auth,Map map) {
+	   String userId = ((UserDetails) auth.getPrincipal()).getUsername();
+	   map.put("userId", userId);
+	   map.put("content", content);
+	   map.put("questionId", questionId);
+	   int result=memberService.newComment(map);
+	   Map commentmap=new HashMap();
+	   if(result==1) {
+		// 댓글
+		List<MyCommentDTO> commentLists = memberService.commentList(questionId);
+		   for (MyCommentDTO dto : commentLists) {
+		      dto.setAdminPath(dto.getAdminAvatarImagePath());
+		      dto.setMemberPath(dto.getMemberAvatarImagePath());
+		 }
+		  commentmap.put("commentList", commentLists);
+		  memberService.commentCountUpdate(map);
+		  String commentCount=map.get("commentCount").toString();
+		  int mycomment=memberService.commentsCount(Integer.parseInt(userId));
+		  commentmap.put("commentCount", commentCount);
+		  commentmap.put("mycomment",mycomment);
+	   }
+	   return commentmap;
+   }
    // 댓글 상세보기
    @RequestMapping(value = "/commentsDetails.do", method = RequestMethod.POST)
    public @ResponseBody Map commentDetails(@RequestParam("commenTitle") String commenTitle, Model model,
