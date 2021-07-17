@@ -12,7 +12,7 @@
 	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
 	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
 	<script>
-		
+
 		//좋아요 처리
 		$(document).ready(function () {
 			var questionId;
@@ -125,18 +125,18 @@
 		}
 		//내 질문 수정하기
 		function questionEdit() {
-			if(title.type=Object && content.type!=Object){
-				title=$('#questionformTitle').val();
+			if (title.type = Object && content.type != Object) {
+				title = $('#questionformTitle').val();
 			}
-			if(content.type=Object && title.type!=Object){
-				content=$('#questionformContent').val();
+			if (content.type = Object && title.type != Object) {
+				content = $('#questionformContent').val();
 			}
-			else if((title.type=Object) && (content.type=Object)){
+			else if ((title.type = Object) && (content.type = Object)) {
 				return false;
 			}
 			$.ajax({
 				url: '/personal/questionEdit.do',
-				data: {"questionId":questionId,"title": title,"content":content},
+				data: {"questionId": questionId, "title": title, "content": content},
 				type: 'post',
 				dataType: "json",
 				success: function (data) {
@@ -149,27 +149,27 @@
 					alert("오류가 발생했습니다.다시시도해주세요");
 				}
 			});
-			
+
 		}///////////내질문수정 
 		//질문제목 변경한값
-		function inputTage(){
-			title=$("#questionformTitle").val();
+		function inputTage() {
+			title = $("#questionformTitle").val();
 		}
 		//질문내용 변경한값
-		function textTage(){
-			content=$('#questionformContent').val();
+		function textTage() {
+			content = $('#questionformContent').val();
 		}
 		//답변 작성하기
-		function newComment(){
-			newContent=$('#newCommentContent').val();
-			console.log("새로작성한값"+newContent);
-			if(newContent==""){
+		function newComment() {
+			newContent = $('#newCommentContent').val();
+			console.log("새로작성한값" + newContent);
+			if (newContent == "") {
 				alert("내용을 작성해주세요");
 				return false;
 			}
 			$.ajax({
 				url: '/personal/newComment.do',
-				data: {"questionId":questionId,"newContent":newContent},
+				data: {"questionId": questionId, "newContent": newContent},
 				type: 'post',
 				dataType: "json",
 				success: function (data) {
@@ -209,19 +209,19 @@
 							}
 							commentList.insertAdjacentHTML("beforeend", commentHtmls);
 							$('#formModalComment').modal("hide");
-							console.log('와이!!!!?!?'+data.commentCount,data);
-							$('#questionComment').html('<i class="far fa-comment-dots" ></i>'+data.commentCount);
-							$('#myquestionCommentCount').html('<i class="far fa-comment-dots" ></i>'+data.commentCount);
+							console.log('와이!!!!?!?' + data.commentCount, data);
+							$('#questionComment').html('<i class="far fa-comment-dots" ></i>' + data.commentCount);
+							$('#myquestionCommentCount').html('<i class="far fa-comment-dots" ></i>' + data.commentCount);
 							$('#mycomment').text(data.mycomment);
 						});
 					}
-					
+
 				},
 				error: function () {
 					alert("오류가 발생했습니다.다시시도해주세요");
 				}
 			});
-			
+
 		}////////답변작성하기
 		//문의 상세보기
 		function inquDetails(inquiry) {
@@ -404,7 +404,7 @@
                   <th:block th:if="${myComments}!=null">
                      <ul class="qAndA">
                         <li class="qAndA__box row m-0" data-toggle="modal" data-target="#questionModal"
-                           th:each="myComment :${myComments}">
+                           th:each="myComment :${myComments.lists}">
                            <div class="qAndA__left col-2">
                               <span>댓글</span>
                            </div>
@@ -417,7 +417,9 @@
                            </div>
                         </li>
                      </ul>
+                     
                   </th:block>
+                  
                   <div class="d-flex justify-content-center w-100" th:if="${myComments}==null">
                      <div class="notExist">
                         <div class="notExist__inner">
@@ -435,9 +437,15 @@
                         </div>
                      </div>
                   </div>
+                  <div class="row">
+							<div id="paging" class="col-off-md-12 text-center" style="font-color:red;" th:utext="${myComments.pagingString}"></div>
+				</div>
                </div>
+               
             </div>
+            
          </div>
+         
       </div>
       <!-- 나의 질문 끝 -->
 

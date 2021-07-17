@@ -34,6 +34,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.basakcoding.basak.service.MemberService;
 import com.basakcoding.basak.service.MyCommentDTO;
 import com.basakcoding.basak.util.FileUploadUtil;
+import com.basakcoding.basak.util.ListPagingData;
+import com.basakcoding.basak.util.myListPagingData;
 
 @Controller
 @RequestMapping("/personal")
@@ -134,7 +136,7 @@ public class MyPageController {
    }
 
    @GetMapping("/qAndA/questions")
-   public String qAndA(Model model, Authentication auth) {
+   public String qAndA(@RequestParam(required = false, defaultValue = "1") int nowPage,Model model, Authentication auth) {
       userInfo(model, auth);
       int userId = (int) model.getAttribute("userId");
       // 내 질문
@@ -146,9 +148,10 @@ public class MyPageController {
       if (!map1.isEmpty())
          model.addAttribute("myInquiry", map1);
       // 내 댓글 제목,시간
-      List<Map> map2 = memberService.myComments(userId);
-      if (!map2.isEmpty())
-         model.addAttribute("myComments", map2);
+      myListPagingData listComment = memberService.myComments(userId,nowPage);
+      //List<Map> map2 = memberService.myComments(userId);
+      if (listComment!=null)
+         model.addAttribute("myComments", listComment);
 
       return "frontend/qAndA";
    }
@@ -218,8 +221,7 @@ public class MyPageController {
       }
 
    }//////////// LogoutController
-      // 결제 상세보기 정보가져오기
-
+   // 결제 상세보기 정보가져오기
    @RequestMapping(value = "/viewDetails.do", method = RequestMethod.POST)
    public @ResponseBody Map viewDetails(@RequestParam("payment_code") String payment_code, Model model,
          Authentication auth) {

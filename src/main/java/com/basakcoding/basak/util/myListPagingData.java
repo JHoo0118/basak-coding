@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ListPagingData<T> {
+public class myListPagingData<T> {
 	private List<T> lists;
 	private int TotalCourseCount;
 	private int pageSize;

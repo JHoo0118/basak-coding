@@ -176,11 +176,17 @@
 	</select>
 
 	<!-- 내 댓글 제목,시간 -->
-	<select id="myComments" parameterType="int" resultType="Map">
+	<select id="myComments" parameterType="Map" resultType="Map">
+	<!-- 
 		select co.content,co.created_at
 		from members m JOIN comments co ON m.member_id=co.member_id
-		WHERE m.member_id=#{userId}
+		WHERE m.member_id=#{userId} and
 		order by created_at desc
+	 -->
+		select * from(select co.content,co.created_at,rownum r 
+		from members m JOIN comments co ON m.member_id=co.member_id
+		WHERE m.member_id=#{userId}
+		order by created_at desc) t where r between #{start} and #{end}
 	</select>
 	<!-- 댓글 상세보기 <select id="commentsDetails" parameterType="String" resultType="Map"> 
 		select m.username,co.title </select> -->
