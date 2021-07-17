@@ -133,6 +133,8 @@ public interface MemberMapper {
    //질문별 댓글수 증가
    int commentCountUpdate(Map map);
 
+   int commentCountUpdateAtQuestion(Map map);
+
 
    
 }

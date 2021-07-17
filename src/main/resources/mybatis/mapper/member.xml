@@ -321,6 +321,11 @@
 			SELECT COUNT(*) FROM comments WHERE question_id=#{questionId}
 		</selectKey>
 	</update>
+	
+	<!-- 질문 테이블 답변수 증가 -->
+	<update id="commentCountUpdateAtQuestion" parameterType="Map">
+		UPDATE question SET comment_count = comment_count+1 WHERE question_id = #{questionId}
+	</update>
 
 	
 

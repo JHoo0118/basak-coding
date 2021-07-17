@@ -234,7 +234,11 @@ public class MemberService {
    //질문별 댓글수 증가
    public int commentCountUpdate(Map map) {
 	   return memberMapper.commentCountUpdate(map);
-}
+   }
+
+   public int commentCountUpdateAtQuestion(Map map) {
+	   return memberMapper.commentCountUpdateAtQuestion(map);
+   }
 
    
 
