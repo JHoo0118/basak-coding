@@ -186,7 +186,7 @@ body {
 
 
 .pagination {
-	border: 1px solid #5643FA;
+	border: 1px solid #eb2f64;
 }
 
 .pagination .page-item {
@@ -194,12 +194,12 @@ body {
 }
 
 .pagination .page-item:not(:last-child) {
-	border-right: 1px solid #5643FA;
+	border-right: 1px solid #eb2f64;
 }
 
 .pagination .page-item .page-link {
 	border-radius: 0;
-	color: #5643FA;
+	color: #eb2f64;
 	display: block;
 }
 .pagination .page-item .page-link:focus{
@@ -208,8 +208,8 @@ body {
 
 .pagination .page-item.active .page-link {
 	color: #fff !important;
-	background-color: #5643FA !important;
-	border-color: #5643FA;
+	background-color: #eb2f64 !important;
+	border-color: #eb2f64;
 }
 
 .container--error {
@@ -217,4 +217,21 @@ body {
 	top:50%;
 	left:50%;
 	transform: translate(-50%,-50%);
+}
+
+td a:link {
+  color : black;
+  text-decoration: none;
+}
+td a:visited {
+  color : black;
+  text-decoration: none;
+}
+td a:hover {
+  color : #eb2f64;
+  text-decoration: underline;
+}
+td a:active {
+  color : #eb2f64;
+  text-decoration: underline;
 }

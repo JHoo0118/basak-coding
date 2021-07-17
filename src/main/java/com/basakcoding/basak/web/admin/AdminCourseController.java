@@ -250,12 +250,13 @@ public class AdminCourseController {
 		System.out.println(listCurriculum.size());
 		model.addAttribute("course", course);
 		model.addAttribute("listCurriculum",listCurriculum);
+		System.out.println(listCurriculum);
 		model.addAttribute("listFAQ", listFAQ);
 		model.addAttribute("title", "강의 관리");
 		return "admin/courseView";
 	}
 //	
-	//강의 수정하기
+	//강의 수정 페이지
 		@RequestMapping("/management/edit")
 		public String courseEdit(@RequestParam Map map,Model model) {
 			CourseDTO courseOne = courseService.getCourseOne(map);
@@ -272,5 +273,10 @@ public class AdminCourseController {
 			model.addAttribute("course", course);
 			model.addAttribute("title", "강의 관리");
 			return "admin/courseEdit";
+		}
+	//강의 수정하기
+		@RequestMapping("/management/editOk")
+		public String courseEditProcess() {
+			return "redirect:/admin/course/management/view";
 		}
 }//class

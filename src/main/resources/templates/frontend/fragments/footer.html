@@ -7,7 +7,8 @@
 			<p class="text-light py-4 m-0">
 				Copyright &copy;&nbsp;<span id="year"></span> by BASAK CODING
 			</p>
-			<a class="footer__item" href="javascript:void(0)" data-toggle="modal"
+			
+			<a sec:authorize="isAuthenticated()" class="footer__item" href="javascript:void(0)" data-toggle="modal"
 				data-target="#inquiryModalInFooter">문의하기</a>
 		</div>
 		<!-- 문의 작성 모달 시작 -->
@@ -88,7 +89,9 @@
 						$('#type1').prop('checked', true);
 						document.getElementById("title").value = '';
 						document.getElementById("content").value = '';
-						$('#inquiryModalInFooter').modal('hide')
+						alert('문의가 접수되었습니다.');
+						$('#inquiryModalInFooter').modal('hide');
+						
 					}//if
 					else {
 						alert('문의하기 오류 발생')

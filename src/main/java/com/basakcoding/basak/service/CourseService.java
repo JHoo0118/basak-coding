@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.basakcoding.basak.mapper.CourseMapper;
 import com.basakcoding.basak.util.ListPagingData;
-import com.basakcoding.basak.util.PagingUtil;
+import com.basakcoding.basak.util.CoursePagingUtil;
 
 @Service
 public class CourseService {
@@ -41,7 +41,7 @@ public class CourseService {
 		map.put("end", end);
 		List lists = courseMapper.selectList(map);
 		String page = "/admin/course/management";
-		String pagingString=PagingUtil.pagingBootStrapStyle(totalCourseCount,pageSize, blockPage, nowPage, page, map);		
+		String pagingString=CoursePagingUtil.pagingBootStrapStyle(totalCourseCount,pageSize, blockPage, nowPage, page, map);		
 		ListPagingData<CourseDTO> listPagingData = 
 				ListPagingData.builder()
 				.lists(lists)

@@ -11,14 +11,18 @@
 	</select>
 
 	<!-- 강의 리스트 가져오기 -->
-	<select id="selectList" parameterType="Map" resultType="CourseDTO">
+	<select id="selectList" parameterType="Map"
+		resultType="CourseDTO">
 		SELECT * FROM (
 		SELECT ROWNUM R, T.* FROM (
-		SELECT ca.name categoryName, co.course_id, co.title, co.short_description,
+		SELECT ca.name categoryName,
+		co.course_id, co.title, co.short_description,
 		a.name adminName
-		FROM courses co
+		FROM
+		courses co
 		JOIN category ca ON ca.category_id = co.category_id
-		JOIN admins a ON co.admin_id = a.admin_id
+		JOIN
+		admins a ON co.admin_id = a.admin_id
 		WHERE 1=1
 
 		<if test="categoryColumn != null and !categoryColumn.equals('all')">
@@ -29,8 +33,10 @@
 			<choose>
 				<when test="searchColumn.equals('all')">
 					AND a.name LIKE '%' || #{searchText} || '%'
-					OR co.title LIKE '%' || #{searchText} || '%'
-					OR co.short_description LIKE '%' || #{searchText} || '%'
+					OR
+					co.title LIKE '%' || #{searchText} || '%'
+					OR co.short_description
+					LIKE '%' || #{searchText} || '%'
 				</when>
 				<when test="!searchColumn.equals('all')">
 					AND ${searchColumn} LIKE '%' || #{searchText} || '%'
@@ -46,7 +52,8 @@
 	<!-- 강의 총 갯수 -->
 	<select id="totalCount" parameterType="Map" resultType="int">
 		SELECT COUNT(*) FROM courses co
-		JOIN admins a ON co.admin_id = a.admin_id
+		JOIN admins a ON co.admin_id =
+		a.admin_id
 		JOIN category ca ON ca.category_id = co.category_id
 		WHERE 1=1
 		<if test="categoryColumn != null and !categoryColumn.equals('all')">
@@ -56,8 +63,10 @@
 			<choose>
 				<when test="searchColumn.equals('all')">
 					AND a.name LIKE '%' || #{searchText} || '%'
-					OR co.title LIKE '%' || #{searchText} || '%'
-					OR co.short_description LIKE '%' || #{searchText} || '%'
+					OR
+					co.title LIKE '%' || #{searchText} || '%'
+					OR co.short_description
+					LIKE '%' || #{searchText} || '%'
 				</when>
 				<when test="!searchColumn.equals('all')">
 					AND ${searchColumn} LIKE '%' || #{searchText} || '%'
@@ -74,8 +83,10 @@
 		</selectKey>
 		INSERT INTO courses VALUES(#{courseId}, #{adminId}, #{categoryId},
 		#{courseTitle}, #{shortDescription},
-		#{description}, #{price}, #{difficulty}, DEFAULT, #{thumbnail}, DEFAULT, DEFAULT,
-		DEFAULT, DEFAULT, DEFAULT)
+		#{description}, #{price},
+		#{difficulty}, DEFAULT, #{thumbnail}, DEFAULT, DEFAULT,
+		DEFAULT,
+		DEFAULT, DEFAULT)
 	</insert>
 
 	<!-- FAQ 생성 -->
@@ -125,7 +136,8 @@
 	<select id="getCourseId" parameterType="String"
 		resultType="String">
 		SELECT cu.course_id FROM video v JOIN curriculum cu
-		ON v.curriculum_id = cu.curriculum_id WHERE video_id = #{videoId}
+		ON
+		v.curriculum_id = cu.curriculum_id WHERE video_id = #{videoId}
 	</select>
 
 	<!-- 비디오 얻기 -->
@@ -159,16 +171,20 @@
 	</select>
 
 	<select id="getVideoList" resultType="VideoDTO">
-		SELECT * FROM video WHERE curriculum_id = #{curriculums} ORDER BY video_id
+		SELECT * FROM video WHERE
+		curriculum_id = #{curriculums} ORDER BY video_id
 	</select>
 
 	<select id="isSeen" parameterType="map" resultType="int">
-		SELECT COUNT(*) FROM videoMember WHERE
-		video_id = #{videoId} AND member_id = #{memberId} AND seen = 'Y'
+		SELECT
+		COUNT(*) FROM videoMember WHERE
+		video_id = #{videoId} AND member_id =
+		#{memberId} AND seen = 'Y'
 	</select>
 
 	<update id="updateSeen" parameterType="Map">
-		UPDATE videoMember SET seen = 'Y' WHERE video_id = #{videoId} AND member_id
+		UPDATE videoMember SET
+		seen = 'Y' WHERE video_id = #{videoId} AND member_id
 		= #{memberId}
 	</update>
 
@@ -198,13 +214,14 @@
 		SELECT * FROM curriculum WHERE course_id = #{no}
 	</select>
 	<resultMap type="VideoDTO" id="coursevideos">
-		<collection column="file_id" property="files"
+		<collection column="video_id" property="files"
 			javaType="java.util.List" ofType="FileDTO" select="courseFileList">
 		</collection>
 	</resultMap>
 	<!-- 강의 상세보기용 비디오 리스트 -->
 	<select id="courseVideoList" resultMap="coursevideos">
-		SELECT * FROM video WHERE curriculum_id = #{coursecurriculums} ORDER BY
+		SELECT * FROM video WHERE
+		curriculum_id = #{coursecurriculums} ORDER BY
 		video_id
 	</select>
 	<!-- 강의 상세보기용 파일리스트 -->
@@ -218,6 +235,28 @@
 		FROM faq WHERE course_id = #{no}
 	</select>
 	<!--―――――――――――――――――――――――――――― 강의 상세보기 ―――――――――――――――――――――――――――――― -->
+	<!--―――――――――――――――――――――――――――― 강의 수정하기 ―――――――――――――――――――――――――――――― -->
+	<update id="updateCourse" parameterType="Map">
+		UPDATE courses SET
+		category_id=#{categoryId}, deficulty=#{difficulty},
+		title=#{courseTitle},
+		short_description=#{shortDescription},
+		description=#{description}, price=#{price}, thumbnail=#{thumbnail},
+		updated_at=DEFAULT
+		WHERE course_id=#{no}
+	</update>
+	<update id="updateCurriculum" parameterType="Map">
+		UPDATE curriculum
+		SET
+		name=#{name}
+		WHERE curriculum_id=#{curriculumId}
+	</update>
+	<update id="updateVideo" parameterType="Map">
+		UPDATE video SET
+		video_url=#{videoUri}, video_title=#{videoTitle},video_content=#{videoContent}
+		WHERE video_id=#{videoId}
+	</update>
+	<!--―――――――――――――――――――――――――――― 강의 수정하기 ―――――――――――――――――――――――――――――― -->
 
 
 </mapper>

@@ -168,7 +168,7 @@
 										
 										<div class="d-flex flex-column">
 										<div th:each="file,i : ${video.files}">
-											<div class="file__box--sm" id="fileForm-1-1">
+											<div class="file__box--sm" th:id="fileForm-1-${i.index}">
 												<input class="none" id="file-1-1" name="file-1-1" type="file">
 												<div>
 													<label for="file-1-1" class="video__label my-1">파일 선택</label>
@@ -342,7 +342,7 @@
 	
 		var curId = 1;
 		var videoId = 1;
-		var fileId = 1;
+		var fileId = document.querySelectorAll(".file__box--sm:last-child");
 		var collapseId = 1;
 		var faqId = 1;
 		
