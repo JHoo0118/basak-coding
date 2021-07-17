@@ -71,22 +71,25 @@
 				                  </tr>
 				                </thead>
 				                <tbody>
-									<tr th:each="course, i : ${listCourses}">
+									<tr th:each="course, i : ${listCourses.lists}">
 										<td>
-											<input type="checkbox" class="checkbox" name="target" th:value="${course.get('COURSE_ID')}"/>
+											<input type="checkbox" class="checkbox" name="target" th:value="${course.courseId}"/>
 											<span class="checkbox__mark"></span>
 										</td>
-										<td>[[${i.index+1}]]</td>
-										<td>[[${course.get('COURSE_ID')}]]</td>
-										<td>[[${course.get('CAT_NAME')}]]</td>
-										<td>[[${course.get('ADM_NAME')}]]</td>
-										<td><a th:href="@{/admin/course/management/view(no=${course.get('COURSE_ID')})}">[[${course.get('TITLE')}]]</a></td>
-										<td>[[${course.get('SHORT_DESCRIPTION')}]]</td>
+										<td>[[${listCourses.TotalCourseCount}-${course.R}+1]]</td>
+										<td>[[${course.courseId}]]</td>
+										<td>[[${course.categoryName}]]</td>
+										<td>[[${course.adminName}]]</td>
+										<td><a th:href="@{/admin/course/management/view(no=${course.courseId})}">[[${course.title}]]</a></td>
+										<td>[[${course.shortDescription}]]</td>
 									</tr>
 				                </tbody>
 							</table>
 							</div>
 						</form>
+						<div class="row">
+							<div id="paging" class="col-off-md-12 text-center" th:utext="${listCourses.pagingString}"></div>
+						</div>
 						</div>
 					</div>
 				</div>
@@ -94,6 +97,7 @@
 		</div>
 	</section>
 	<script>
+	
 	/*
 	var data = {
 		token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjIyMzkxOTc2fQ.EtPDjQIgd9SjcOITK94ouOhDhjon_JJBx2oe6qsh2EU",

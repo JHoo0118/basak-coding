@@ -7,6 +7,48 @@
 	<select id="courseSelect" resultType="LikeDTO">
 		SELECT title,like_count FROM courses
 	</select>
+	
+	
+	<!-- 좋아요 관련 쿼리 시작 -->
+	
+	<!-- 이전 좋아요 누른기록 체크용 -->
+	<select id="likeCheck" parameterType="Map" resultType="Int">
+	
+	SELECT COUNT(*)
+	FROM LIKES
+	WHERE member_id=#{memberId} AND course_id=#{courseId}
+	
+	</select>
+	
+	<!-- 좋아요 등록 -->
+	<insert id="like" parameterType="Map">
+	
+	INSERT INTO LIKES (LIKE_ID,MEMBER_ID,COURSE_ID)
+	VALUES (SEQ_LIKES.NEXTVAL,#{memberId},#{courseId})
+	
+	</insert>
+	
+	<!-- 좋아요 삭제 -->
+	<delete id="unLike" parameterType="Map">
+	
+	DELETE FROM LIKES
+	WHERE MEMBER_ID=#{memberId} AND COURSE_ID=#{courseId} 
+	
+	</delete >
+	
+	<!--강의별 좋아요 개수 확인 -->
+	<update  id = "likeCount" parameterType="Map">
+	
+	UPDATE COURSES
+	SET LIKE_COUNT = (SELECT COUNT(*) FROM LIKES WHERE COURSE_ID=#{courseId} )
+
+	WHERE COURSE_ID=#{courseId} 
+	
+	</update>
+	<!-- 좋아요 관련 쿼리 끝 -->
+	
+	
+	
 	<select id="questionSelect" resultType="LikeDTO">
 		SELECT title,like_count FROM question
 	</select>

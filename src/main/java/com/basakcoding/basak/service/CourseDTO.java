@@ -28,6 +28,7 @@ public class CourseDTO {
 	private Date updateAT;
 	private Integer likeCount;
 	private String period;
+	private Integer R;
 	//강의 상세보기
 	private String categoryName;
 	private String adminName;
