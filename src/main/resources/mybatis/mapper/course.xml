@@ -154,5 +154,21 @@
 	</select>
 	<!--―――――――――――――――――――――――――――― 강의 상세보기 ――――――――――――――――――――――――――――――-->
 	
+	<!-- 질문 뿌려주기 -->
+	<select id='questionList' resultType="Map">
+	
+	SELECT * 
+	FROM MEMBERS m JOIN QUESTION q
+	ON q.member_id = m.member_id
+	
+	
+	</select>
+	
+	<!-- 질문내용(클롭) 가져오기-->
+	<select id="getClobQuestionText" parameterType="String" resultType="String">
+		SELECT CONTENT AS CONTENTS FROM QUESTION WHERE QUESTION_ID=#{questionId} 
+	</select>
+	
+	
 	
 </mapper>

@@ -101,4 +101,9 @@ public class CourseService {
 	public int updateSeen(Map params) {
 		return courseMapper.updateSeen(params);
 	}
+	
+	public List<Map> questionList(){
+		return courseMapper.questionList();
+	}
+	
 }

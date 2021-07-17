@@ -149,6 +149,8 @@
 	   			</div>
    			</div>
 			<!-- 탭1 끝 -->
+			
+			
 	  		<!-- 탭2 시작 -->
 			<div class="none" id="target-2">
 				<div class="question__header">
@@ -165,15 +167,15 @@
 				<!-- 질문 목록 -->
 				<div class="qModal__box" id="questionList">
 					<!-- 목록 1 -->
-					<div class="qModal__upper">
+					<div th:each=" question : ${questionList}" class="qModal__upper">
 						<div class="comment__user">
 							<img th:src="@{/images/user.png}" />
 							<div class="user__info">
-								<h5>질문자</h5>
-								<span>4시간 전</span>
+								<h5>[[${question.USERNAME}]]</h5>
+								<span>4시간 전(로직미완성)</span>
 							</div>
 						</div>
-						<h3 class="qModal__title qModal__title-course" onclick="seeQuestionDetail(this)">강의 잘 듣고 있습니다.</h3>
+						<h3 class="qModal__title qModal__title-course" onclick="seeQuestionDetail(this)" >[[${question.TITLE}]] </h3>
 						
 						<div class="qModal__state">
 							<div class="state__left">
@@ -190,7 +192,9 @@
 						</div>
 					</div>
 					
+					
 					<!-- 목록 2 -->
+					<!--
 					<div class="qModal__upper">
 						<div class="comment__user">
 							<img th:src="@{/images/user.png}" />
@@ -215,19 +219,22 @@
 							</div>
 						</div>
 					</div>
+				-->
+				
 				</div>
+				
 				
 				<!-- 질문 상세보기 -->
 				<div class="qModal__box none" id="questionDetail">
-					<div class="qModal__upper">
+					<div th:each=" question : ${questionList}" class="qModal__upper">
 						<div class="comment__user">
 							<img th:src="@{/images/user.png}" />
 							<div class="user__info">
-								<h5>질문자</h5>
-								<span>4시간 전</span>
+								<h5>[[${question.USERNAME}]]</h5>
+								<span>4시간 전(수정필요)</span>
 							</div>
 						</div>
-						<h3 class="qModal__title">강의 잘 듣고 있습니다.</h3>
+						<h3 class="qModal__title">[[${question.TITLE}]]</h3>
 						<p class="qModal__content">안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문
 							삭제 기능은 어디
 							있나요?ㅠㅠ</p>
@@ -607,11 +614,11 @@
 					<div class="comment__user">
 						<img src="/images/user.png" />
 						<div class="user__info">
-							<h5>질문자</h5>
+							<h5>ddd</h5>
 							<span>12시간 전</span>
 						</div>
 					</div>
-					<h3 class="qModal__title qModal__title-course" onclick="seeQuestionDetail(this)">테스트 제목.</h3>
+					<h3 class="qModal__title qModal__title-course" onclick="seeQuestionDetail(this)">제목</h3>
 					
 					<div class="qModal__state">
 						<div class="state__left">
