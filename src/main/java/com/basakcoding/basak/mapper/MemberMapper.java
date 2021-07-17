@@ -124,4 +124,14 @@ public interface MemberMapper {
    //내 질문 답변없을때
    Map questionDetailNotExist(String userId, String questionId);
 
+   //질문 수정
+   int questionUpdate(String title, String content,String questionId);
+
+   //답변 추가
+   int newComment(Map map);
+
+   //질문별 댓글수 증가
+   int commentCountUpdate(Map map);
+
+   
 }

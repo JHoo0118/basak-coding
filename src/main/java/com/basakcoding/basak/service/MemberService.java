@@ -193,6 +193,18 @@ public class MemberService {
    public int likeCount(int questionId) {
       return memberMapper.likeCount(questionId);
    }
+   //질문수정
+   public int questionUpdate(String title, String content,String questionId) {
+	   return memberMapper.questionUpdate(title,content,questionId);
+   }
+   //댓글 작성
+   public int newComment(Map map) {
+	   return memberMapper.newComment(map);
+   }
+   //질문별 댓글수 증가
+   public int commentCountUpdate(Map map) {
+	   return memberMapper.commentCountUpdate(map);
+}
 
    
 
