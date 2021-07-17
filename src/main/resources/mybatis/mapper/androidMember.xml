@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.basakcoding.basak.mapper.android.AndroidMemberMapper">
+<!-- ************************************************************* -->
+	<!-- 안드로이드 REST API -->
+	<select id="getPassword" parameterType="String" resultType="String">
+		SELECT password FROM members WHERE email = #{email}
+	</select>
+	
+	<select id="login" parameterType="String" resultType="MemberDTO">
+		SELECT member_id, email, username, avatar FROM members WHERE email = #{email}
+	</select>
+</mapper>
+	
+	

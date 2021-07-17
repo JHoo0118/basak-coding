@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>바삭 코딩 | 후기 관리</title>
+	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" th:href="@{/css/admin/main.css}" />
+	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+  	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+	<script defer th:src="@{/js/actionValidate.js}"></script>
+</head>
+<body>
+<body>
+	<!-- Header -->
+	<div th:replace="/admin/fragments/header.html :: fragment-header(${title})"></div>
+	
+	<!-- 메인 -->
+	<section class="col-xl-10 col-lg-9 col-md-8 mt-6 ml-auto">
+		<div class="container-md">
+			<div class="row">
+				<div class="col-12 ml-auto">
+					<div class="row md-5 mb-5">
+						<div class="col-xl-12 col-12 mb-4 mb-xl-0">
+						
+						<h3 class="text-muted text-center mb-3">후기 목록</h3>
+						<form name="actionForm" th:action="@{/admin/review/management/process}" method="post">
+							<div class="form__header d-flex justify-content-between">
+								<div>
+									<select name="action">
+										<option value="">액션을 선택하세요</option>
+										<option value="del">삭제</option>
+									</select>
+									<input class="button button--light button--sm d-inline" type="submit" value="확인" />
+									
+								</div>
+							</div>
+							<div th:if="${message != null}" class="alert alert-success text-center">
+								[[${message}]]
+							</div>
+							<div class="table-responsive" style="min-width:1000px;">
+							<table class="table table-striped bg-light text-center">
+								<thead>
+				                  <tr class="text-muted">
+				                    <th>액션</th>
+				                    <th>#</th>
+				                    <th>강의명</th>
+				                    <th>내용</th>
+				                    <th>작성자</th>
+				                    <th>별점</th>
+				                    <th>작성일</th>
+				                  </tr>
+				                </thead>
+				                <tbody>
+									<tr th:each="review, i : ${listReviews}" >
+										<td>
+											<input type="checkbox" class="checkbox" name="target" th:value="${review.reviewId}"/>
+											<span class="checkbox__mark"></span>
+										</td>
+										<td>[[${review.courseId}]]</td>
+										<td><a th:href="@{/admin/review/management/view(no=${review.reviewId})}">[[${review.title}]]</a></td>
+										<td>[[${review.content}]]</td>
+										<td>[[${review.username}]]</td>
+										<td>[[${review.rating}]]</td>
+										<td>[[${review.postdate}]]</td>
+										
+									</tr>
+				                </tbody>
+							</table>
+							</div>
+						</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<script>
+	/*
+	var data = {
+		token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjIyMzkxOTc2fQ.EtPDjQIgd9SjcOITK94ouOhDhjon_JJBx2oe6qsh2EU",
+		email: $('input[name=email]').val(),
+		name: $('input[name=name]').val(),
+		username: $('input[name=username]').val(),
+		password: $('input[name=password]').val()
+	}*/
+	/*
+	var query = "query { seeFeed { caption } }";
+	var mutation = "query"
+		$("#submit").on('click', function() {
+			$.ajax({
+				type: 'POST',
+				url: "http://localhost:4000/graphql",
+				contentType: 'application/json',
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJob28iLCJpYXQiOjE2MjM0NzUyNzF9.6-1fKqJdPHnWY5tLffnbTCpdKK9q_Vzndntw5W05laE");
+				},
+				data: JSON.stringify({
+					"query":query,
+				}),
+				success: function(result) {
+					console.log(result)
+				}
+			})
+			
+		})
+		*/
+	</script>
+</body>
+</html>

@@ -49,7 +49,7 @@ public class AdminHomeController {
 		
 		if(adminService.loginAdmin(map)==1){ 
 			session.setAttribute("loginEmail",map.get("email"));
-            return "admin/home";
+            return "redirect:/admin";
         }
 		else{
             return "admin/login";

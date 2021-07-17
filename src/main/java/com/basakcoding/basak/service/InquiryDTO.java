@@ -12,7 +12,9 @@ import lombok.NoArgsConstructor;
 public class InquiryDTO {
 	private Integer inquiryId;
 	private String userName;
+	private String content;
 	private String Title;
 	private String classification;
 	private Date createdAt;
 }
+	

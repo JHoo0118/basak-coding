@@ -20,7 +20,7 @@
 <div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
 
 
-<section class="signin" style="background-color: black;">
+<section class="signin">
    <div class="container-fluid signin__container">
       <h2 class="signin__title">회원가입</h2>
       <form class="row" id="frm"  th:action="@{/auth/signup}" method="POST" onSubmit="return checkemail(this)"  >

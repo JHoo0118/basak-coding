@@ -12,6 +12,35 @@
 	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
 	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
 	<script>
+		//질문 상세보기
+		function questionDetails(question){
+			var questionId = question.querySelectorAll("span")[0].innerText;
+			console.log("잘들어오나"+questionId);
+			$.ajax({
+				url: '/personal/questionDetails.do',
+				data: {"questionId": questionId},
+				type: 'post',
+				dataType: "json",
+				success: function (data) {
+					console.log("성공");
+					$('#questionMem').text(data.USERNAME);
+					$('#questionTime').text(data.CREATED_AT);
+					$('#questionTitle').text(data.TITLE);
+					$('#questionContent').text(data.QUESTION_CONTENT);
+					//$('#questionLike').text(data.LIKE_COUNT);
+					//$('#questionComment').text(data.COMMENT_COUNT);
+					if(data.ADMIN_ID !=null && data.COMMENT_ID !=null){
+						document.querySelector(".question__list").style.display = "block";
+						document.querySelector(".question__noAnswer").style.display = "none";
+						$('#adminName').text(data.NAME);
+						$('#adminContent').text(data.CONTENT);
+					}
+				},
+				error: function () {
+					alert("오류가 발생했습니다.다시시도해주세요");
+				}
+			});
+		}
 		//문의 상세보기
 		function inquDetails(inquiry) {
 
@@ -125,10 +154,11 @@
 								<li class="qAndA__box row m-0" data-toggle="modal" data-target="#questionModal"
 									th:each="myQuestions :${myQuestion}" onclick="questionDetails(this)">
 									<div class="qAndA__left col-2">
+										<span id="question_id" style="display:none">[[${myQuestions.QUESTION_ID}]]</span>
 										<span><i class="far fa-thumbs-up"></i>[[${myQuestions.LIKE_COUNT}]]</span>
 									</div>
 									<div class="qAndA__middle col-8">
-										<span>[[${myQuestions.CREATED_AT}]]</span>
+										<span th:text="${#dates.format(myQuestions.CREATED_AT, 'yyyy.MM.dd')}"></span>
 										<h4 class="iine-clamp">[[${myQuestions.TITLE}]]</h4>
 									</div>
 									<div class="qAndA__right col-2">
@@ -173,7 +203,7 @@
 										<span id="inquiry_id" style="display:none">[[${myInquirys.INQUIRY_ID}]]</span>
 									</div>
 									<div class="qAndA__middle col-8">
-										<span>[[${myInquirys.CREATED_AT}]]</span>
+										<span th:text="${#dates.format(myInquirys.CREATED_AT, 'yyyy.MM.dd')}"></span>
 										<h4 id="title" class="iine-clamp">[[${myInquirys.TITLE}]]</h4>
 									</div>
 									<div class="qAndA__right col-2">
@@ -217,7 +247,7 @@
 										<span>댓글</span>
 									</div>
 									<div class="qAndA__middle col-8">
-										<span id="commenTitle">[[${myComment.CREATED_AT}]]</span>
+										<span id="commenTime" th:text="${#dates.format(myComment.CREATED_AT, 'yyyy.MM.dd')}">[[${myComment.CREATED_AT}]]</span>
 										<h4 class="iine-clamp">[[${myComment.CONTENT}]]</h4>
 									</div>
 									<div class="qAndA__right col-2">
@@ -262,23 +292,22 @@
 						<div class="qModal__box">
 							<div class="qModal__upper">
 								<div class="comment__user">
-									<img th:src="@{/images/user.png}" />
+									<img th:if="${member.AVATAR == null}" th:src="@{/images/image4.jpg}" />
+									<img th:if="${member.AVATAR != null}" th:src="@{${PATH}}" />
 									<div class="user__info">
-										<h5>질문자</h5>
-										<span>4시간 전</span>
+										<h5 id="questionMem"></h5>
+										<span id="questionTime"></span>
 									</div>
 								</div>
-								<h3 class="qModal__title">강의 잘 듣고 있습니다.</h3>
-								<p class="qModal__content">안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문
-									삭제 기능은 어디
-									있나요?ㅠㅠ</p>
-								<span class="qModal__updated">4시간 전에 수정됨</span>
+								<h3 class="qModal__title" id="questionTitle"></h3>
+								<p class="qModal__content" id="questionContent"></p>
+								<span class="qModal__updated"></span>
 								<div class="qModal__state">
 									<div class="state__left">
 										<div class="state__like">
-											<a href="javascript:void(0)"><span><i
-														class="far fa-thumbs-up"></i>6</span></a>
-											<span><i class="far fa-comment-dots"></i>6</span>
+											<a href="javascript:void(0)"><span>
+											<i class="far fa-thumbs-up" id="questionLike"></i></span></a>
+											<span><i class="far fa-comment-dots" id="questionComment"></i></span>
 										</div>
 										<div class="state__edit">
 											<span data-toggle="modal" data-target="#formModal">수정하기</span>
@@ -290,18 +319,17 @@
 								</div>
 							</div>
 							<div class="qModal__lower">
-								<ul class="comment__list">
+								<ul class="comment__list question__list" >
 									<li class="comment__item">
 										<div class="comment__user">
-											<img th:src="@{/images/user.png}" />
+											<img th:if="${adminPath != null}" th:src="@{${adminPath}}" />
+											<img th:if="${adminPath == null}" th:src="@{/images/image4.jpg}" />
 											<div class="user__info">
-												<h5 style="color: #0fd">강사</h5>
+												<h5 style="color: #0fd" id="adminName"></h5>
 												<span>4시간 전</span>
 											</div>
 										</div>
-										<p class="qModal__content">안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
-											있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
-											있나요?ㅠㅠ</p>
+										<p class="qModal__content" id="adminContent"></p>
 									</li>
 									<li class="comment__item">
 										<div class="comment__user">
@@ -321,6 +349,7 @@
 										</p>
 									</li>
 								</ul>
+								<h2 class="qModal__updated question__noAnswer" style="display:none;">아직 등록된 댓글이 없습니다.</h2>
 							</div>
 						</div>
 					</div>
@@ -413,6 +442,8 @@
 
 	</section>
 	<!-- 메인 섹션 끝 -->
+	<!-- footer -->
+    <div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
 </body>
 
 </html>

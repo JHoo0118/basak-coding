@@ -146,5 +146,35 @@ public class MemberService {
 	public List<Map> myQuestion(int userId) {
 		return memberMapper.myQuestion(userId);
 	}
+	//내 강의 안본 비디오가져오기
+//	public String courseVideo(String courseId) {
+//		return memberMapper.courseVideo(courseId);
+//	}
+	//비디오 개수
+	public int videoCount(Map params) {
+		return memberMapper.videoCount(params);
+	}
 
+	//커리큘럼 아이디 얻기
+	public List<String> getCurriculum(String courseId) {
+		return memberMapper.getCurriculum(courseId);
+	}
+
+	//비디오 얻기
+	public String getVideo(Map map) {
+		return memberMapper.getVideo(map);
+	}
+
+	//마지막 동영상 아이디
+	public String getLastVideo(String lastCurriculumId) {
+		return memberMapper.getLastVideo(lastCurriculumId);
+	}
+	//내 질문 상세보기
+	public Map questionDetails(String userId, String questionId) {
+		return memberMapper.questionDetails(userId,questionId);
+	}
+	//내 질문 답변없을때
+	public Map questionDetailNotExist(String userId, String questionId) {
+		return memberMapper.questionDetailNotExist(userId,questionId);
+	}
 }

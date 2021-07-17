@@ -1,5 +1,8 @@
 package com.basakcoding.basak.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +19,9 @@ public class VideoDTO {
 	private String videoTitle;
 	private char seen;
 	private String videoContent;
+	private String curriculumName;
 	
+	List<FileDTO> files = new ArrayList<FileDTO>();
 	// path용
 	private String courseId;
 	

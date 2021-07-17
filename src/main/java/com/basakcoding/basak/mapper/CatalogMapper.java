@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.basakcoding.basak.service.CourseDTO;
+import com.basakcoding.basak.service.CurriculumDTO;
 
 @Repository
 @Mapper
@@ -15,17 +16,22 @@ public interface CatalogMapper {
 	//강의 상세보기
 	 List<Map> courseList();
 	Map selectOne(String courseId);
+	List<Map> faqList(String courseId);
+	List<CurriculumDTO> getCurriculumList(String courseId);
 	String getClobText(String courseId);
 	
 	//강의 후기 기능
 	List<Map> reviewList(String courseId);
+	String reviewContent(Map map);
+	String reviewRating(Map map);
+	
 	int reviewCount(String courseId);
 	int checkPayment(Map map);
 	
 	int reviewCheck(Map map);
 	int reviewInsert(Map map);
-	
-	
+	int reviewUpdate(Map map);
+	int reviewDelete(Map map);
 	
 	//강의상세보기 좋아요 기능
 	int likeCheck(Map map);

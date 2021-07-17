@@ -14,5 +14,6 @@ public class QuestionDTO {
 	private String userName;
 	private String courseTitle;
 	private String questionTitle;
+	private String content;
 	private Date createdAt;
 }

@@ -6,10 +6,21 @@
 <mapper namespace="com.basakcoding.basak.mapper.AnswerMapper">
 	
 	<select id="answerSelect" resultType="AnswerDTO">
-		SELECT answer_id,i.name classification,i.title inquirytitle,a.title answertitle,ad.name,a.created_at
+		SELECT answer_id,a.inquiry_id,i.name classification,i.title inquirytitle,a.title answertitle,ad.name adminName,a.created_at
 		FROM answer a
 		JOIN admins ad ON ad.admin_id = a.admin_id
 		JOIN (SELECT * FROM inquiry i JOIN classification c ON c.cl_id=i.cl_id ) i ON i.inquiry_id = a.inquiry_id
 	</select>
+	
+	<select id="selectOne" parameterType="Map" resultType="AnswerDTO">
+		SELECT answer_id,i.title inquirytitle,ad.name adminName,a.title answertitle,i.name classification,a.content,a.created_at
+		FROM answer a
+		JOIN (SELECT * FROM inquiry i JOIN classification c ON c.cl_id=i.cl_id ) i ON i.inquiry_id=a.inquiry_id
+		JOIN admins ad ON ad.admin_id=a.admin_id
+		WHERE answer_id = #{no}
+	</select>
+	<delete id="deleteOne" parameterType="Map">
+		DELETE answer WHERE answer_id = #{no}
+	</delete>
 	
 </mapper>

@@ -12,8 +12,13 @@ import com.basakcoding.basak.service.AnswerDTO;
 @Mapper
 public interface AnswerMapper {
 
-	//문의 답변 정보 가져오기
+	//문의 답변 리스트 가져오기
 	public List<AnswerDTO> answerSelect();
+	
+	//문의 답변 가져오기
+	public AnswerDTO selectOne(Map map);
+	
+	//문의 답변 삭제하기
+	public int deleteOne(Map map);
 
-
-}
+}//interface

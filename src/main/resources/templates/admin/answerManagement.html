@@ -26,17 +26,13 @@
 						<div class="col-xl-12 col-12 mb-4 mb-xl-0">
 						
 						<h3 class="text-muted text-center mb-3">문의 답변 관리</h3>
+						<ul class="nav nav-tabs mx-3" style="border-bottom-color: #333" id="nav-tab" role="tablist" >
+							<a class="nav-link form__tab" th:href="@{/admin/inquiry/management}">문의 </a>
+							<a class="nav-link active form__tab" th:href="@{/admin/answer/management}">문의 답변</a>
+							<a class="nav-link form__tab" th:href="@{/admin/question/management}">문의 질문</a>
+							<a class="nav-link form__tab" th:href="@{/admin/inquiry/management}">문의 분류</a>
+						</ul>
 						<form name="actionForm" th:action="@{/admin/comment/management/change}">
-							<div class="form__header d-flex justify-content-between">
-								<div>
-									<select name="action">
-										<option value="manage">관리자</option>
-										<option value="stu">수강생</option>
-									</select>
-									<input class="button button--light button--sm d-inline" type="submit" value="확인" />
-									<a class="button button--reverse mb-2" th:href="@{/admin/category/management/form}">삭제</a>
-								</div>
-							</div>
 							<div th:if="${message != null}" class="alert alert-success text-center">
 								[[${message}]]
 							</div>
@@ -61,9 +57,9 @@
 										</td>
 										<td>[[${i.index+1}]]</td>
 										<td>[[${answer.classification}]]</td>
-										<td>[[${answer.inquiryTitle}]]</td>
-										<td>[[${answer.answerTitle}]]</td>
-										<td>[[${answer.name}]]</td>
+										<td><a th:href="@{/admin/inquiry/management/view(no=${answer.inquiryId},page=ans)}">[[${answer.inquiryTitle}]]</td>
+										<td><a th:href="@{/admin/answer/management/view(no=${answer.answerId})}">[[${answer.answerTitle}]]</td>
+										<td>[[${answer.adminName}]]</td>
 										<td>[[${answer.createdAt}]]</td>
 									</tr>
 				                </tbody>

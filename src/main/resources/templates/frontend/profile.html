@@ -177,7 +177,7 @@
 					$('#memEmail').text(data.EMAIL);
 					$('#payCreated_at').text(data.CREATED_AT);
 					$('#payMethod').text(data.PAYMENT_METHOD);
-					$('#payPrice').text(data.PRICE);
+					$('#payPrice').text('₩'+data.PRICE);
 				},
 				error: function () {
 					alert("오류가 발생했습니다.다시시도해주세요");
@@ -299,7 +299,7 @@
 									<div class="body__lower">
 										<div class="state__set">
 											<h4>결제일자</h4>
-											<span>[[${myPayments.PAYMENT_CREATED}]]</span>
+											<span th:text="${#dates.format(myPayments.PAYMENT_CREATED, 'yyyy.MM.dd')}"></span>
 										</div>
 										<div class="state__set">
 											<h4>결제방법</h4>
@@ -343,15 +343,6 @@
 	</section>
 	<!-- 메인 섹션 끝 -->
 
-	<!-- footer -->
-	<footer class="footer">
-		<div class="d-flex justify-content-center align-items-center">
-			<p class="text-light py-4 m-0">
-				Copyright &copy;&nbsp;<span id="year"></span> by LIKE LION
-			</p>
-		</div>
-	</footer>
-
 	<!-- 결제 정보 모달 시작 -->
 	<div class="modal fade" id="paymentModal">
 		<div class="modal-dialog pModal__dialog">
@@ -390,7 +381,7 @@
 					<div class="pModal__receipt">
 						<h4 class="receipt__title">결제 정보</h4>
 						<div class="receipt__row row m-0">
-							<div class="row__left col-4">결제일</div>
+							<div class="row__left col-4" >결제일</div>
 							<div id="payCreated_at" class="row__right col-8"></div>
 						</div>
 						<div class="receipt__row row m-0">
@@ -448,6 +439,8 @@
 		</div>
 	</div>
 	<!-- 변경할 비밀번호 모달끝 -->
+	<!-- footer -->
+    <div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
 </body>
 
 </html>

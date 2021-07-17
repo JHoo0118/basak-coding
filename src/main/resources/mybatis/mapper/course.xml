@@ -45,7 +45,7 @@
 		<selectKey keyProperty="videoId" resultType="int" order="BEFORE">
 			SELECT seq_video.NEXTVAL FROM dual
 		</selectKey>
-		INSERT INTO video VALUES(#{videoId}, #{curriculumId}, #{videoUri}, DEFAULT, null, #{videoTitle}, DEFAULT, #{videoContent})
+		INSERT INTO video VALUES(#{videoId}, #{curriculumId}, #{videoUri}, #{videoLength}, null, #{videoTitle}, #{videoContent})
 	</insert>
 	
 	<!-- 파일 생성 -->
@@ -53,9 +53,9 @@
 		INSERT INTO files VALUES(seq_files.NEXTVAL, #{videoId}, #{fileName}, #{fileUri})
 	</insert>
 	
-	<!-- 강의 비디오 총 개수 업데이트 -->
-	<update id="updateVideoCnt" parameterType="map">
-		UPDATE courses SET video_cnt = #{videoCnt} WHERE course_id = #{courseId}
+	<!-- 강의 비디오 총 개수 및 총 길이 업데이트 -->
+	<update id="updateVideoCntAndLength" parameterType="map">
+		UPDATE courses SET video_count = #{videoCnt}, course_length = #{totalVideoLength}  WHERE course_id = #{courseId}
 	</update>
 	
 	<!-- 파일 목록 가져오기 -->
@@ -65,7 +65,7 @@
 	
 	<!-- 비디오 아이디로 강의 아이디 가져오기 -->
 	<select id="getCourseId" parameterType="String" resultType="String">
-		SELECT cu.course_id FROM video v RIGHT JOIN curriculum cu 
+		SELECT cu.course_id FROM video v JOIN curriculum cu 
 		ON v.curriculum_id = cu.curriculum_id WHERE video_id = #{videoId}
 	</select>
 	
@@ -83,6 +83,14 @@
         </collection>
 	</resultMap>
 	
+	<select id="alreadyPayment" parameterType="Map" resultType="int">
+		SELECT COUNT(*)
+		FROM courses co
+		JOIN payment pa ON pa.course_id = co.course_id
+		JOIN category ca ON ca.category_id = co.category_id
+		JOIN admins a ON co.admin_id = a.admin_id WHERE co.course_id = #{courseId} AND pa.member_id = #{memberId}
+	</select>
+	
 	
 	<!-- 커리큘럼 얻기 -->
 	<select id="getCurriculumList" parameterType="String" resultMap="curriculums">
@@ -90,8 +98,61 @@
 	</select>
 	
     <select id="getVideoList" resultType="VideoDTO">
-       	SELECT * FROM video WHERE curriculum_id = #{curriculums}
+       	SELECT * FROM video WHERE curriculum_id = #{curriculums} ORDER BY video_id
     </select>
     
+    <select id="isSeen" parameterType="map" resultType="int">
+    	SELECT COUNT(*) FROM videoMember WHERE 
+    	video_id = #{videoId} AND member_id = #{memberId} AND seen = 'Y'
+    </select>
+    
+    <update id="updateSeen" parameterType="Map">
+    	UPDATE videoMember SET seen = 'Y' WHERE video_id = #{videoId} AND member_id = #{memberId}
+    </update>
+	
+	<!--―――――――――――――――――――――――――――― 강의 상세보기 ――――――――――――――――――――――――――――――-->
+	<select id="getCourseOne" parameterType="Map" resultType="CourseDTO">
+		SELECT course_id,c.category_id, c.admin_id, ca.name categoryname, ad.name adminname, difficulty,
+		price,thumbnail, title, short_description, description
+		FROM courses c
+		JOIN category ca ON ca.category_id = c.category_id
+		JOIN admins ad ON ad.admin_id = c.admin_id
+		WHERE course_id = #{no}
+	</select>
+	<!-- 강의 상세보기용 커리큘럼 얻기 -->
+	<resultMap type="CurriculumDTO" id="coursecurriculums">
+		<collection column="curriculum_id" 
+                    property="videos" 
+                    javaType="java.util.List" 
+                    ofType="VideoDTO" 
+                    select="courseVideoList">
+        </collection>
+	</resultMap>
+	<!-- 강의 상세보기용 커리큘럼 리스트 -->
+	<select id="courseCurriculumList" parameterType="Map" resultMap="coursecurriculums">
+		SELECT * FROM curriculum WHERE course_id = #{no}
+	</select>
+    <resultMap type="VideoDTO" id="coursevideos">
+		<collection column="file_id" 
+                    property="files" 
+                    javaType="java.util.List" 
+                    ofType="FileDTO" 
+                    select="courseFileList">
+        </collection>
+	</resultMap>
+	<!-- 강의 상세보기용 비디오 리스트 -->
+    <select id="courseVideoList" resultMap="coursevideos">
+       	SELECT * FROM video WHERE curriculum_id = #{coursecurriculums} ORDER BY video_id
+    </select>
+    <!-- 강의 상세보기용 파일리스트 -->
+    <select id="courseFileList" resultType="FileDTO">
+		SELECT * FROM files WHERE video_id = #{coursevideos}
+	</select>
+	<!-- 강의 상세보기용 FAQ리스트 -->
+	<select id="getFAQList" parameterType="Map" resultType="FAQDTO">
+		SELECT * FROM faq WHERE course_id = #{no}
+	</select>
+	<!--―――――――――――――――――――――――――――― 강의 상세보기 ――――――――――――――――――――――――――――――-->
+	
 	
 </mapper>

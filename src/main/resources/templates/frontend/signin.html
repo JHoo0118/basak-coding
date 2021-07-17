@@ -67,7 +67,7 @@
                             name="password" />
                     </div>
                     <!-- 에러 출력용 -->
-                    <label class="error"><span th:if="${param.email}!=null">아이디와 비밀번호가 일치하지않습니다</span></label>
+                    <label class="error"><span th:if="${param.error}!=null">아이디와 비밀번호가 일치하지않습니다</span></label>
                 </div>
                 <h5 class="signin__link">
                     <span class="d-block">비밀번호를 잊으셨나요?</span><a th:href="@{/auth/reset-pass}">비밀번호 찾기</a>

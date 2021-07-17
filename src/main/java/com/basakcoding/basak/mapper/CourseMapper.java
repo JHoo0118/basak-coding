@@ -7,7 +7,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.basakcoding.basak.service.CategoryDTO;
+import com.basakcoding.basak.service.CourseDTO;
 import com.basakcoding.basak.service.CurriculumDTO;
+import com.basakcoding.basak.service.FAQDTO;
 import com.basakcoding.basak.service.FileDTO;
 import com.basakcoding.basak.service.VideoDTO;
 
@@ -35,8 +37,8 @@ public interface CourseMapper {
 	// 파일 만들기
 	int createFile(Map map);
 	
-	// 비디오 개수 업데이트
-	int updateVideoCnt(Map map);
+	// 비디오 개수 및 비디오 총 길이 업데이트
+	int updateVideoCntAndLength(Map map);
 
 	// 파일 목록 얻기
 	List<Map> getFileList(String videoId);
@@ -49,4 +51,20 @@ public interface CourseMapper {
 
 	// 커리큘럼 및 비디오 목록 얻기
 	List<CurriculumDTO> getCurriculumList(String courseId);
+
+	// 봤는지 여부 파악
+	int isSeen(Map params);
+	
+	// 강의 상세보기 - 강의정보
+	CourseDTO getCourseOne(Map map);
+	
+	// 강의 상세보기 - FAQ 목록 가져오기
+	List<FAQDTO> getFAQList(Map map);
+
+	//강의 살세보기 - 커리큘럼 
+	List<CurriculumDTO> courseCurriculumList(Map map);
+	
+	int alreadyPayment(Map paymentCheck);
+
+	int updateSeen(Map params);
 }

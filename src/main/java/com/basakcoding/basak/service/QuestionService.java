@@ -18,5 +18,10 @@ public class QuestionService {
 	//질문 리스트 가져오기
 	public List<QuestionDTO> questionSelect(){
 		return questionMapper.questionSelect();
-	}
-}
+	}//questionSelect
+	
+	//질문 가져오기
+	public QuestionDTO selectOne(Map map) {
+		return questionMapper.selectOne(map);
+	}//selectOne
+}//class

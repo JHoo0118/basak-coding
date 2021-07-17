@@ -92,7 +92,8 @@
 
 								var likeCheck = "[[${course.likeCheck}]]";
 								console.log('likeCheck', likeCheck);
-
+								
+								
 								$(document).ready(function () {
 									if (likeCheck == 1) {
 										console.log('기존에 좋아요 눌렀을때');
@@ -152,12 +153,8 @@
 
 										}
 
-
-
 									})
 								})
-
-
 
 
 								//강의시간(초)를 시간/분으로 변경
@@ -166,18 +163,49 @@
 								var courseTime = Math.ceil(courseLength / 60);
 								console.log("courseTime:", courseTime);
 								$('#length').text(Math.floor(courseTime / 60) + "시간" + (courseTime % 60) + "분");
-
+								
+							 
+						
+							 
+							 
 							</script>
 
 
 						</div>
-						<a th:href="@{/orders/payments/}+${course.COURSE_ID}" class="button button--cover button--full">
+						<span th:if="${course.checkPayment}=='0'">
+						<a  th:href="@{/orders/payments/}+${course.COURSE_ID}" class="button button--cover button--full">
 							등록하기
 						</a>
+						
+						</span>
+						<span th:if="${course.checkPayment}=='1'">
+						<a  th:href="@{/personal/dashboard}" class="button button--cover button--full">
+							강의 보러가기
+						</a>
+						</span>
+						
+						<span th:if="${course.checkPayment}=='2'">
+						<a  id="notLogin" class="button button--cover button--full">
+							등록하기
+						</a>
+						</span>
+						<script>
+							 $('#notLogin').click(function(){
+								if(confirm('로그인 후 이용 가능합니다')){
+									location.href = "/auth/signin";
+								}
+								return;
+							});
+						 </script>
+						
+					
+						
+						
+						
 					</div>
 					<div class="description">
 
-						<h1 class="description__title">[[${course.DESCRIPTION}]]</h1>
+						<p th:utext="${course.DESCRIPTION}"></p>
 
 				     </div>
                 </div>
@@ -196,101 +224,57 @@
 	<section class="curriculum">
 		<div class="container-fluid container--main">
 			<h1 class="detail__title">커리큘럼</h1>
-
 			<div class="accordion curriculum__accordion" id="accordionExample">
-				<div class="card">
+			
+				<div th:each="curriculum ,i : ${curriculums}" class="card">
 					<div class="card-header" id="headingOne">
 						<h2 class="mb-0">
+						
 							<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
-								data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-								<span class="curriculum__number">01</span>
-								<span class="curriculum__subTitle">코드라이언 정복 가이드</span>
+								th:attr="data-target='#collapse'+${i.index}+'curri'" aria-expanded="true" aria-controls="collapseOne">
+								<span th:if="${i.index+1}<10" th:text=" '0'+${i.index+1}" class="curriculum__number"></span>
+								<span th:if="${i.index+1}>=10" th:text=" ${i.index+1}" class="curriculum__number"></span>
+								<span class="curriculum__subTitle">[[${curriculum.name}]]</span>
 								<span><i class="fas fa-chevron-right"></i></span>
 							</button>
 						</h2>
 					</div>
 
-					<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-						<div class="card-body">
-							<div class="card__video">
+					<div  th:id="'collapse'+${i.index}+'curri'" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+						<div  class="card-body">
+							<div  th:each="video : ${curriculum.videos}" class="card__video">
 								<span class="video__icon"><i class="fab fa-youtube"></i></span>
-								<span class="video__text">Some placeholder content for the first
-									accordion panel.
-									<code>.show</code> class.
+								<span class="video__text">[[${video.videoTitle}]]
+									
 								</span>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="card">
-					<div class="card-header" id="headingTwo">
-						<h2 class="mb-0">
-							<button class="btn btn-link btn-block text-left collapsed" type="button"
-								data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
-								aria-controls="collapseTwo">
-								<span class="curriculum__number">02</span>
-								<span class="curriculum__subTitle">Collapsible Group Item #2</span>
-								<span><i class="fas fa-chevron-right"></i></span>
-							</button>
-						</h2>
-					</div>
-					<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-						<div class="card-body">
-							<div class="card__video">
-								<span class="video__icon"><i class="fab fa-youtube"></i></span>
-								<span class="video__text">Some placeholder content for the first
-									accordion panel.
-									<code>.show</code> class.
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="card">
-					<div class="card-header" id="headingThree">
-						<h2 class="mb-0">
-							<button class="btn btn-link btn-block text-left collapsed" type="button"
-								data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
-								aria-controls="collapseThree">
-								<span class="curriculum__number">03</span>
-								<span class="curriculum__subTitle">Collapsible Group Item #3</span>
-								<span><i class="fas fa-chevron-right"></i></span>
-							</button>
-						</h2>
-					</div>
-					<div id="collapseThree" class="collapse" aria-labelledby="headingThree"
-						data-parent="#accordionExample">
-						<div class="card-body">
-							<div class="card__video">
-								<span class="video__icon"><i class="fab fa-youtube"></i></span>
-								<span class="video__text">Some placeholder content for the first
-									accordion panel.
-									<code>.show</code> class.
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
+				
+				
 			</div>
 		</div>
 	</section>
 	<!-- 강의 상세보기 끝 -->
-
 	<!-- 강의 후기작성 버튼-->
 	<section class="review">
 		<div class="container-fluid container--main">
-			<h1 class="detail__title d-flex justify-content-between align-items-center">강의후기
+			<h1 class="detail__title d-flex justify-content-between align-items-center">강의후기 
+			총 [[${reviewCount}]]건
 				<button id="reviewWrite" class="button--square review__button" data-target="#reviewModal">
 				후기	작성하기</button>
 			</h1>
+				<p th:if="${reviewCount==0}" th:text="${notPost}" style="color: white; font-size: 20px"> </p>
 	
 	<!--강의후기 내용들 뿌려주기-->
 
 			<ul class="review__list row m-0 justify-content-between">
 				<li th:each="review : ${reviewList}" class="review__card col-md-6">
-					<div class="review__header">
+					<div  class="review__header">
 						<div class="review__user">
-							<img th:src="@{/images/user.png}" alt="사용자 이미지" />
+							<img th:if="${review.AVATAR} != null" th:src="@{${review.MEMBER_PATH}}" alt="사용자 이미지" />
+							<img th:if="${review.AVATAR} == null" th:src="@{/images/image4.jpg}" alt="사용자 이미지" />
 							<div class="review__ubox">
 								<p>[[${review.NAME}]]</p>
 								<span id="postDate" class="review__date">[[${review.POSTDATE}]]</span>
@@ -313,103 +297,40 @@
 		</div>
 	</section>
 
-	<script>
-		//후기
-		/*	
-		
-		
-		var starCount ="[[${reviewList[0].RATING}]]";		 
-		 console.log("starCount",starCount);
-		 */
-		 
-		 /*
-		var star = $("#star").html();
-		console.log("star", star);
-
-		var starCount = $('#star').text();
-		console.log("starCount", starCount);
-		*/
-
-		/*		
-				$(document).ready(function(){
-			
-					$("#star i:lt("+star+")").attr('class','fas fa-star');		
-				
-			});
-			
-		
- var listSize = Number.parseInt("[[${reviewList.size}]]");
-		 console.log("listSize",listSize);
-
-	*/
-	
-	
-		
-	/*
-	$(document).ready(function(){
-		
-		for(var i=0;i<listSize;i++){
-		
-		var innerHtml = "";
-
-		for (var i = 0; i < 5; i++) {
-
-			if (i < starCount) {
-
-				innerHtml += '<i class="fas fa-star"></i>';
-
-			} else {
-
-				innerHtml += '<i class="far fa-star"></i>';
-
-		}	
-			
-		$('#star').html(innerHtml);
-
-		}
-	}
-		
-	});
-		
-		
-		*/		
-	
-	
-
-        //forEach에 items=reviewList 집어넣어서 .키값으로 가져옴 
-
-	</script>
-
-
 
 	<!-- FAQ -->
 	<section class="faq">
-		<div class="container-fluid container--main">
+		<div  class="container-fluid container--main">
 			<h1 class="detail__title">FAQ</h1>
-			<div class="accordion curriculum__accordion" id="accordionFAQ">
-				<div class="card">
+			<div   class="accordion curriculum__accordion" id="accordionFAQ">
+			
+			
+				<div  th:each='faq,i : ${faqList}' class="card">
 					<div class="card-header" id="headingOne">
 						<h2 class="mb-0">
 							<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
-								data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-								<span class="curriculum__number">01</span>
-								<span class="curriculum__subTitle">코스를 듣기 전 미리 알아야 할 내용이 있나요?</span>
+								th:attr="data-target='#collapse'+${i.index}" aria-expanded="true" aria-controls="collapseOne">
+								<span th:if="${i.index+1}<10" th:text=" '0'+${i.index+1}" class="curriculum__number"> </span>
+								<span th:if="${i.index+1}>=10" th:text=" ${i.index+1}" class="curriculum__number"> </span>
+								
+								<span class="curriculum__subTitle"> [[${faq.TITLE}]]</span>
 								<span><i class="fas fa-chevron-right"></i></span>
 							</button>
 						</h2>
 					</div>
 
-					<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionFAQ">
+					<div th:id="'collapse'+${i.index}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionFAQ">
 						<div class="card-body faq__body">
 							<div class="faq__box">
-								<span class="faq__text">기본적인 파이썬 지식을 알고 있어야 수강할 수 있어요. 바삭 코딩의
-									<code>일단 만드는 Python, [기초] 같이 푸는 Python, [심화] 같이 푸는 Python</code>을 수강하신 후 수강하시는 것을
-									추천드려요.
+								<span th:if="${faq.CONTENT!=null}" th:text="${faq.CONTENT}" class="faq__text">
+									
 								</span>
 							</div>
 						</div>
 					</div>
 				</div>
+				
+				<!-- 
 				<div class="card">
 					<div class="card-header" id="headingTwo">
 						<h2 class="mb-0">
@@ -433,6 +354,7 @@
 						</div>
 					</div>
 				</div>
+				
 				<div class="card">
 					<div class="card-header" id="headingThree">
 						<h2 class="mb-0">
@@ -456,6 +378,8 @@
 						</div>
 					</div>
 				</div>
+				-->
+				
 			</div>
 		</div>
 	</section>
@@ -466,17 +390,17 @@
 		<div class="modal-dialog fModal__dialog">
 			<div class="modal-content fModal__body">
 				<div style="margin-top: 10px;" class="modal-header fModal__header">
-					<h3 >후기 작성</h3>
-					<button  type="button" class="close" data-dismiss="modal">
+					<h3>후기 작성 <span style="color: red;">[200자 이내로 작성] </span></h3>
+					<button  type="button" class="modal_close" data-dismiss="modal">
 						<span>&times;</span>
 					</button>
 				</div>
-				<div class="modal-body p-0">
-					<div class="fModal__box">
-						<form>
+				<div id="modal_box" class="modal-body p-0">
+					<div  class="fModal__box">
+						<form >
 
 							<textarea id="content" class="form-control" placeholder="후기를 작성해주세요."></textarea>
-							<span class="rating mt-3">
+							<span id="selectStar" class="rating mt-3">
 								<input type="radio" class="rating-input" id="rating-input-5" name="rating-input" />
 								<label for="rating-input-5" class="rating-star"></label>
 								<input type="radio" class="rating-input" id="rating-input-4" name="rating-input" />
@@ -491,7 +415,9 @@
 						</form>
 						<div class="flex__end">
 							<button id="reviewComplete" class="button--square mt-5">후기 작성</button>
+							<button th:if="${course.reviewCheck}==1" id="reviewDelete" class="button--square mt-5" style="background-color: red;">삭제 </button>
 						</div>
+						
 					</div>
 				</div>
 			</div>
@@ -499,83 +425,161 @@
 	</div>
 	<!-- 폼 모달 끝 -->
 
-
 	<!-- footer -->
 	<div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
 
 	<script>
 
-		//리뷰	
+
+
+	
+			var reviewCheck = "[[${course.reviewCheck}]]";
+										
+				$(document).ready(function(){
+					if(reviewCheck==1){
+							$('#reviewWrite').text("후기 수정하기");	
+							$('#reviewComplete').text("수정하기");	
+							
+								
+						}
+				})
+				
+				
+			
+				
+									
 				$('#reviewWrite').click(function(){
 					var data = {'courseId':courseId}
+					var selectedStar;
+
+					
+				// 모달 창 닫기 버튼 클릭 시 값 초기화
+   				$('#reviewModal').on('hidden.bs.modal', function (e) {
+  				  $(this).find('form')[0].reset();
+					});
+					
 				
 				$.ajax({
 					
 						url: "[[@{/catalog/reviewWrite}]]",
 						type: "POST",
 						data: JSON.stringify(data),//courseId=1
+						dataType:"json",
 						contentType: "application/json",
 						success: function (data) {				
+							
 						
-						console.log("data:", data)
-							if (data == 0) {//로그인 후 미결제된 아이디
+							if (data.affected == 0) {//로그인 후 미결제된 아이디
 									console.log("로그인 후 강의결제 완료하지않은 아이디");
 									if(confirm("강의 등록 후 이용가능\r\r강의등록 페이지로 이동하시겠습니까?")){
-									location.href = "/orders/payments/"+courseId+"";//로그인창으로 페이지 이동
+									location.href = "/orders/payments/"+courseId+"";//결제 페이지로 이동
+									
 									}//if
 									else{
 									console.log("결제 안된 아이디");
 									$('#reviewModal').modal('hide');
 									}
+							
 								
 							}//바깥 if
-							else if (data == 1) {////로그인 후 결제완료된 아이디
+							else if (data.affected == 1) {////로그인 후 결제완료된 아이디
 							
-								console.log("로그인 후 결제 완료된 아이디");
-								$('#reviewModal').modal('show');	
-							}//else if 1
+								console.log("로그인 후 결제 완료하고 리뷰 작성한 아이디");
+								$('#reviewModal').modal({backdrop: 'static'}) ;
+								$('#reviewModal').modal('show');
+								$('#content').text(data.reviewContent);
+								$('input[id="'+data.star+'"]').each(function() {
+    							$(this).prop('checked', true);
+    							
+								});
+								
+								}
+								
+							else if(data.affected==2){//앞전 글이 등록 돼있지 않을때
+								console.log('신규 리뷰 등록자')
+									
+								//모달창 esc버튼 혹은 바깥화면 클릭했을때 창 닫히는거 막음 (이거있음 modal.('hide'))
+								$('#reviewModal').modal({backdrop: 'static'}) ;
+								$('#reviewModal').modal('show');
+								
+								}
 							
-							else if (data == 2) {//로그인 안된 아이디
-								console.log("로그인 되지 않은 상황 ");
+							
+							
+							else if (data.affected == 3) {//로그인 안된 아이디
 								if(confirm("로그인 후 이용가능\r\r로그인 페이지로 이동하시겠습니까?")){//컨펌 확인 눌렀을때
 									location.href = "/auth/signin";//로그인창으로 페이지 이동
-									//location.replace("/auth/signin"); //뒤로가기 불가능
 								}//if
 								else{//취소 버튼 눌렀을시
 									console.log("취소버튼누름");
 									$('#reviewModal').modal('hide');
+								
 								}
 								
-							}//else if 2
-
-				
+							}//else if 
+							
 						}//success
-				})
+						
+					})//ajax
+		
+				});//clickWrite
+				
 		
 				
+				
+		
+				if ( !($("input:radio[name=rating-input]").is(":checked")) ){
+					///이전 강의 후기 등록된 사람이 별표 안찍었을때 기존 찍혀있던 별표값 받아오기
+					selectedStar="[[${course.star}]]";
+					console.log("이전 강의후기 등록된사람 별표 안찍었을때 selectedStar:",selectedStar);
+				}
+				
+				
+				//별점 눌렀을때
 				$("input.rating-input").click(function () {
 				name = $(this).attr('name');
 				$("input[name='" + name + "']").val(""); // remove value from all radio's (with this name)
 				$("input[name='" + name + "']:checked").val($(this).attr('id')); // add value to checked radio
 				// console 참고
 				//console.log($("input[name='" + name + "']:checked").val())
-				var selectedStar = $("input[name='" + name + "']:checked").val();
+				selectedStar = $("input[name='" + name + "']:checked").val();
+				console.log("selectedStar찍었을때:",$("input[name=rating-input]:checked").val());
+				console.log($('input:radio[name=rating-input]').is(':checked'));
+				
+				
+				});//clickStar
+					
 				
 			
+				
+								
+			
+				//후기작성 완료버튼 눌렀을때
 				$("#reviewComplete").click(function(){
+			
+				
 				var content= $('#content').val();
-				var data = {'courseId':courseId,'content':content ,"selectedStar":selectedStar};
-				console.log("data:",JSON.stringify(data));			
-				/*
-				if(content==""){
+					
+					if(content==""){
 					alert("내용을 입력해주세요");
-					$('#content').focus();					
-				}
-				else if(selectedStar == ""){
+					$('#content').focus();	
+					
+					return;
+					}	
+					
+					if (!($("input:radio[name=rating-input]").is(":checked"))){
 					alert("별점을 선택해주세요");
-					$('#rating-input-1').focus();		
-				}
-				*/
+					}
+			
+				
+				
+				var data = {'courseId':courseId,'content':content ,"selectedStar":selectedStar};
+						
+				
+				
+				console.log("data:",JSON.stringify(data));			
+				
+				
 				
 					$.ajax({
 
@@ -586,24 +590,79 @@
 						success: function (data) {
 							console.log("컨트롤로에서 넘어온 데이터값:",data)
 						
-							if(data==0){
-								alert("강의후기 등록완료");
+						if(data.affected==4){//이전에 등록된 글이 없을경우
+							
+							if(confirm("강의후기 등록하시겠습니까?")){
+								
+							location.reload();
+							}
+							else {
+								$('#reviewModal').modal('show');
+									
+							}
+									
+						}
+					   else if(data.affected=5){//이전에 등록된 글이 있을경우
+													
+							if(confirm("강의후기 수정하시겠습니까?")){
+						
+							location.reload();
+								
+							}
+							else{
+								$('#reviewModal').modal('show');	
+								
+								} 
+									
 							}
 							
 							
 							
+					
 							
 						}//success
 
 					})//ajax	
 					
 							
-				});//clickComplete
+				});//reviewComplete
+			
+			
+					//강의 후기 삭제 버튼 클릭시
+					$('#reviewDelete').click(function(){
+					var result=confirm("정말 삭제하시겠습니까?");
+					
+					if(!result){
+						return;
+					}	
+					else{
+						alert("해당 게시글이 삭제됐습니다.");
+					
+					}	
+						var data = {'courseId':courseId}
+						
+						
+						$.ajax({
+					
+						url: "[[@{/catalog/reviewDelete}]]",
+						type: "POST",
+						data: JSON.stringify(data),//courseId=1
+						dataType:"json",
+						contentType: "application/json",
+						success: function (data) {				
+							
+							if(data==1){
+								location.reload();
+							}
+							
+					
+						}//success
+						
+					})//ajax
+						
+					});//reviewDelete
 				
-				});//clickStar
-		
-				});//clickWrite
-		
+			
 		
 
 

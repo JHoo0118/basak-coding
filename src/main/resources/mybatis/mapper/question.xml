@@ -5,11 +5,22 @@
 
 <mapper namespace="com.basakcoding.basak.mapper.QuestionMapper">
 	
+	<!-- 질문 관리 리스트 가져오기 -->
 	<select id="questionSelect" resultType="QuestionDTO">
 		SELECT question_id,username,c.title coursetitle,q.title questiontitle,q.created_at
 		FROM question q
 		JOIN courses c ON c.course_id=q.course_id
 		JOIN members m ON q.member_id=m.member_id
 	</select>
+	
+	<!-- 질문 관리 상세보기 -->
+	<select id="selectOne" parameterType="Map" resultType="QuestionDTO">
+		SELECT question_id,username,c.title coursetitle,q.title questiontitle,content,q.created_at
+		FROM question q
+		JOIN courses c ON c.course_id=q.course_id
+		JOIN members m ON m.member_id=q.member_id
+		WHERE question_id = #{no}
+	</select>
+	
 	
 </mapper>

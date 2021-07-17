@@ -12,4 +12,6 @@ public class FileDTO {
 	private Integer videoId;
 	private String filename;
 	private String fileUri;
+	private String videoTitle;
+	private String curriculumName;
 }

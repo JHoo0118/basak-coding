@@ -26,6 +26,14 @@
 						<div class="col-xl-12 col-12 mb-4 mb-xl-0">
 						
 						<h3 class="text-muted text-center mb-3">강의 목록</h3>
+						<ul class="nav nav-tabs mx-3" style="border-bottom-color: #333" id="nav-tab" role="tablist" >
+							<a class="nav-link form__tab" th:href="@{/admin/category/management}">강의 카테고리</a>
+							<a class="nav-link form__tab active" th:href="@{/admin/course/management}">강의 </a>
+							<a class="nav-link form__tab" th:href="@{/admin/curriculum/management}">커리큘럼</a>
+							<a class="nav-link form__tab" th:href="@{/admin/video/management}">동영상</a>
+							<a class="nav-link form__tab" th:href="@{/admin/file/management}">파일</a>
+							<a class="nav-link form__tab" th:href="@{/admin/faq/management}">FAQ</a>
+						</ul>
 						<form name="actionForm" th:action="@{/admin/course/management/process}" method="post">
 							<div class="form__header d-flex justify-content-between">
 								<div>
@@ -36,6 +44,7 @@
 									</select>
 									<input class="button button--light button--sm d-inline" type="submit" value="확인" />
 									<a class="button button--reverse mb-2" th:href="@{/admin/course/management/form}">강의 추가</a>
+									
 								</div>
 							</div>
 							<div th:if="${message != null}" class="alert alert-success text-center">
@@ -71,7 +80,7 @@
 										<td>[[${course.get('COURSE_ID')}]]</td>
 										<td>[[${course.get('CAT_NAME')}]]</td>
 										<td>[[${course.get('ADM_NAME')}]]</td>
-										<td>[[${course.get('TITLE')}]]</td>
+										<td><a th:href="@{/admin/course/management/view(no=${course.get('COURSE_ID')})}">[[${course.get('TITLE')}]]</a></td>
 										<td>[[${course.get('SHORT_DESCRIPTION')}]]</td>
 									</tr>
 				                </tbody>

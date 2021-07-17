@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>바삭 코딩 | 파일 관리</title>
+	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" th:href="@{/css/admin/main.css}" />
+	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+  	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+  	<script defer th:src="@{/js/actionValidate.js}"></script>
+</head>
+<body>
+<body>
+	<!-- Header -->
+	<div th:replace="/admin/fragments/header.html :: fragment-header(${title})"></div>
+	
+	<!-- 메인 -->
+	<section class="col-xl-10 col-lg-9 col-md-8 mt-6 ml-auto">
+		<div class="container-md">
+			<div class="row">
+				<div class="col-12 ml-auto">
+					<div class="row md-5 mb-5">
+						<div class="col-xl-12 col-12 mb-4 mb-xl-0">
+						
+						<h3 class="text-muted text-center mb-3">파일 관리</h3>
+						<ul class="nav nav-tabs mx-3" style="border-bottom-color: #333" id="nav-tab" role="tablist" >
+							<a class="nav-link form__tab" th:href="@{/admin/category/management}">강의 카테고리</a>
+							<a class="nav-link form__tab" th:href="@{/admin/course/management}">강의 </a>
+							<a class="nav-link form__tab" th:href="@{/admin/curriculum/management}">커리큘럼</a>
+							<a class="nav-link form__tab" th:href="@{/admin/video/management}">동영상</a>
+							<a class="nav-link form__tab active" th:href="@{/admin/file/management}">파일</a>
+							<a class="nav-link form__tab" th:href="@{/admin/faq/management}">FAQ</a>
+						</ul>
+						<form name="actionForm">
+							<div th:if="${message != null}" class="alert alert-success text-center">
+								[[${message}]]
+							</div>
+							<div class="table-responsive" style="min-width:1000px;">
+							<table class="table table-striped bg-light text-center">
+								<thead>
+				                  <tr class="text-muted">
+				                    <th>#</th>
+				                    <th>커리큘럼</th>
+				                    <th>비디오</th>
+				                    <th>파일명</th>	
+				                  </tr>
+				                </thead>
+				                <tbody>
+									<tr th:each="file, i : ${listFiles}">
+										<td>[[${i.index+1}]]</td>
+										<td>[[${file.curriculumName}]]</td>
+										<td>[[${file.videoTitle}]]</a></td>
+										<td>[[${file.filename}]]</a></td>
+									</tr>
+				                </tbody>
+							</table>
+							</div>
+						</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+</body>
+</html>

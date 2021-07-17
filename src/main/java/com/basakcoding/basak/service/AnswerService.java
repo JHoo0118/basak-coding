@@ -18,5 +18,15 @@ public class AnswerService {
 	//문의 답변 리스트 가져오기
 	public List<AnswerDTO> answerSelect(){
 		return answerMapper.answerSelect();
-	}
-}
+	}//answerSelect
+	
+	//문의 답변 가져오기
+	public AnswerDTO selectOne(Map map) {
+		return answerMapper.selectOne(map);
+	}//selectOne
+	
+	//문의 답변 삭제하기
+	public int deleteOne(Map map) {
+		return answerMapper.deleteOne(map);
+	}//deleteOne
+}//class

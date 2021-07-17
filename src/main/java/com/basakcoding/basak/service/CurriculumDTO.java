@@ -13,7 +13,9 @@ import lombok.NoArgsConstructor;
 public class CurriculumDTO {
 	private Integer curriculumId;
 	private Integer courseId;
+	private String courseTitle;
 	private String name;
 	
 	List<VideoDTO> videos = new ArrayList<VideoDTO>();
+
 }

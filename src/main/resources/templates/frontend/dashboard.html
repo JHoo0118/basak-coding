@@ -65,15 +65,15 @@
 	                                        </div>
 	                                    </div>
 	                                    <div class="header__right">
-	                                        <a th:href="@{/class/SANIOQWENIWN}"><i class="fa fa-play-circle"></i></a>
+	                                        <a th:href="@{/class/}+${myCourse.courseVideoid}"><i class="fa fa-play-circle"></i></a>
 	                                    </div>
 	                                </div>
 	                                <p>[[${myCourse.SHORT_DESCRIPTION}]]</p>
 	                                <div class="dashboard__progress">
-	                                    <span>0%</span>
+	                                    <span>[[${myCourse.progress}]]%</span>
 	                                    <div class="progress lecture__progress">
 	                                        <div class="progress-bar progress__bar bg-success" role="progressbar"
-	                                            style="width: 100%"></div>
+	                                            th:style="|width:${myCourse.progress}%|"></div>
 	                                    </div>
 	                                </div>
 	                                <div class="dashboard__footer">

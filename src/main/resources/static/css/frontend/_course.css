@@ -254,10 +254,15 @@
 	cursor: pointer;
 }
 
-.nav__file .file__folder .fa-chrome,
-.nav__file .file__folder .fa-circle-notch {
+.nav__file .file__folder .fas,
+.nav__file .file__folder .fab {
 	color: #919191;
 	font-size: 20px;
+}
+
+.nav__file .file__dropmenu {
+	display: inline-block;
+	padding:10px 20px;
 }
 
 .nav__file .file__item {

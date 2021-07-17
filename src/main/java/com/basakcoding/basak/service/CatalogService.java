@@ -23,6 +23,12 @@ public class CatalogService {
 	public Map selectOne(String courseId) {
 		return catalogMapper.selectOne(courseId);
 	}
+	public List<Map> faqList(String courseId){
+		return catalogMapper.faqList(courseId);
+	}
+	public List<CurriculumDTO> getCurriculumList(String courseId){
+		return catalogMapper.getCurriculumList(courseId);
+	}
 	
 	public String getClobText(String courseId) {
 		return catalogMapper.getClobText(courseId);
@@ -32,6 +38,15 @@ public class CatalogService {
 	public List<Map> reviewList(String courseId) {
 		return catalogMapper.reviewList(courseId);
 	}
+	
+	public String  reviewContent(Map map) {
+		return catalogMapper.reviewContent(map);
+	}
+	public String  reviewRating(Map map) {
+		return catalogMapper.reviewRating(map);
+	}
+	
+	
 	public int reviewCount(String courseId) {
 		return catalogMapper.reviewCount(courseId);
 	}
@@ -47,6 +62,12 @@ public class CatalogService {
 	public int reviewInsert(Map map) {
 		return catalogMapper.reviewInsert(map);
 		
+	}
+	public int reviewUpdate(Map map) {
+		return catalogMapper.reviewUpdate(map);
+	}
+	public int reviewDelete(Map map) {
+		return catalogMapper.reviewDelete(map);
 	}
 	
 	

@@ -84,11 +84,42 @@ public class MyPageController {
 		// 내강의
 		int userId = (int) model.getAttribute("userId");
 		List<Map> map = memberService.myCourses(userId);
+		Map params = new HashMap();
+		params.put("memberId", userId);
 		for(Map map1:map) {
-			String thumbnail=("/upload/course/" + map1.get("COURSE_ID") + "/thumbnail/" + map1.get("THUMBNAIL"));
+			String courseId= map1.get("COURSE_ID").toString();
+			params.put("courseId", courseId);
+			//다본 동영상 개수 가져오기
+			
+			int videoCount= memberService.videoCount(params);
+			String thumbnail=("/upload/course/" + courseId + "/thumbnail/" + map1.get("THUMBNAIL"));
+
+			String courseVideoId = null;
+			List<String> curriculumIds = memberService.getCurriculum(courseId);
+			
+			// 마지막 커리큘럼의 아이디
+			String lastCurriculumId = curriculumIds.get(curriculumIds.size()-1);
+			
+			// 마지막 비디오 아이디
+			String lastVideoId = memberService.getLastVideo(lastCurriculumId);
+
+			for (int i=0; i<curriculumIds.size(); i++) {
+				params.put("curriculumId", curriculumIds.get(i));
+				courseVideoId = memberService.getVideo(params);
+				if (courseVideoId != null) break;
+			}
+			
+			if(courseVideoId!=null) {
+				map1.put("courseVideoid",courseVideoId);
+			}
+			else {
+				//마지막 동영상 아이디
+				map1.put("courseVideoid", lastVideoId);
+			}
+			map1.put("progress",(int)(Math.ceil(videoCount*100/Double.parseDouble((map1.get("VIDEO_COUNT").toString())))));
+			
 			map1.put("thumbnail", thumbnail);
 		}
-		System.out.println("맵"+map);
 		if (!map.isEmpty())
 			model.addAttribute("myCourses", map);
 
@@ -110,10 +141,11 @@ public class MyPageController {
 	public String qAndA(Model model, Authentication auth) {
 		userInfo(model, auth);
 		int userId = (int) model.getAttribute("userId");
-		//내 강의
+		//내 질문
 		List<Map> map =memberService.myQuestion(userId);
 		if (!map.isEmpty())
 			model.addAttribute("myQuestion",map);
+		System.out.println("질문맵"+map);
 		// 내 문의 제목,시간
 		List<Map> map1 = memberService.myInquiry(userId);
 		if (!map1.isEmpty())
@@ -197,13 +229,30 @@ public class MyPageController {
 		Map map = memberService.viewDetails(userId, pay_code);
 		return map;
 	}
+	//질문 상세보기 
+	@RequestMapping(value = "/questionDetails.do", method = RequestMethod.POST)
+	public @ResponseBody Map questionDetails(@RequestParam("questionId") String questionId, Model model, Authentication auth) {
+		String userId = ((UserDetails) auth.getPrincipal()).getUsername();
+		Map map = memberService.questionDetails(userId, questionId);
+		if (map == null) {
+			map = memberService.questionDetailNotExist(userId, questionId);
+		} 
+		else {
+			if (!map.containsKey("ADMIN_ID"))
+				map.put("ADMIN_ID", null);
+			else model.addAttribute("adminPath","/upload/admin/" + map.get("ADMIN_ID") + "/" + map.get("AVATAR"));
+			
+		}
+		System.out.println("질문상세맵"+map);
+		return map;
+	}
 
+	
 	// 문의 상세보기
 	@RequestMapping(value = "/inquDetails.do", method = RequestMethod.POST)
 	public @ResponseBody Map inquDetails(@RequestParam("inquiry_id") String inquiry_id, Model model, Authentication auth) {
 		String userId = ((UserDetails) auth.getPrincipal()).getUsername();
 		Map map = memberService.inquDetails(userId, inquiry_id);
-		
 		if (map == null) {
 			map = memberService.inquDetailNotExist(userId, inquiry_id);
 		} 

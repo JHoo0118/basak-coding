@@ -5,11 +5,26 @@
 
 <mapper namespace="com.basakcoding.basak.mapper.InquiryMapper">
 	
+	<!-- 리스트 -->
 	<select id="inquirySelect" resultType="InquiryDTO">
 		SELECT inquiry_id,username,name classification,title,i.created_at
 		FROM inquiry i
 		JOIN classification c ON c.cl_id=i.cl_id
 		JOIN members m ON i.member_id=m.member_id
 	</select>
+	
+	<!-- 상세보기 -->
+	<select id="selectOne" parameterType="Map" resultType="InquiryDTO">
+		SELECT inquiry_id,username,name classification,title,i.created_at,content
+		FROM inquiry i
+		JOIN classification c ON c.cl_id=i.cl_id
+		JOIN members m ON i.member_id=m.member_id
+		WHERE inquiry_id=#{no}
+	</select>
+	
+	<!-- 상세보기 -->
+	<delete id="deleteOne" parameterType="Map">
+		DELETE inquiry WHERE inquiry_id=#{no}
+	</delete>
 	
 </mapper>

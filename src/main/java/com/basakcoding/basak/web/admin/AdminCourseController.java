@@ -21,7 +21,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.basakcoding.basak.service.AdminDTO;
 import com.basakcoding.basak.service.AdminService;
 import com.basakcoding.basak.service.CategoryDTO;
+import com.basakcoding.basak.service.CourseDTO;
 import com.basakcoding.basak.service.CourseService;
+import com.basakcoding.basak.service.CurriculumDTO;
+import com.basakcoding.basak.service.FAQDTO;
+import com.basakcoding.basak.service.VideoDTO;
 import com.basakcoding.basak.util.FileUploadUtil;
 
 @Controller
@@ -61,13 +65,14 @@ public class AdminCourseController {
 		return "admin/courseForm";
 	}
 	
+	// 강의 등록
 	@PostMapping("/save")
 	public String createCourse(
 			@RequestParam Map<String, Object> map, 
 			@RequestParam Map<String, MultipartFile> multipartFiles,
 			RedirectAttributes redirectAttributes) throws IOException {
 		
-		// 강의 생성 로직
+		// 강의 등록 로직
 		if (!multipartFiles.get("thumbnail").isEmpty()) {
 			
 			MultipartFile thumbnailMulti = multipartFiles.get("thumbnail");
@@ -124,6 +129,7 @@ public class AdminCourseController {
 				curriId.put(key, curri.get(key).get("curriculumId"));
 			}
 			
+			int totalVideoLength = 0;
 			for (String key : map.keySet()) {
 				String[] temp;
 				if (key.startsWith("video")) {
@@ -136,13 +142,16 @@ public class AdminCourseController {
 						video.get(temp[2]).put("curriculumId", curriId.get(temp[1]));
 					} else if (temp[0].equals("videoContent")) {
 						video.get(temp[2]).put("videoContent", map.get(key));
+					} else if (temp[0].equals("videoLength")) {
+						int videoLength = Integer.parseInt(map.get(key).toString());
+						totalVideoLength += videoLength;
+						video.get(temp[2]).put("videoLength", videoLength);
 					}
 				}
 			}
 			
 			// 비디오 로컬 저장
 			int videoCnt = 0;
-			long videoDuration = 0;
 			
 			for (String key : multipartFiles.keySet()) {
 				String[] temp;
@@ -165,20 +174,22 @@ public class AdminCourseController {
 				videoId.put(key, video.get(key).get("videoId"));
 			}
 			
-			// 강의 비디오 총 개수 업데이트
-//			Map updateForVideoCnt = new HashMap();
-//			map.put("videoCnt", videoCnt);
-//			map.put("courseId", courseId);
-//			courseService.updateVideoCnt(map);
+			// 강의 비디오 총 개수 및 비디오 총 길이 업데이트
+			Map updateForVideoCntAndLength = new HashMap();
+			updateForVideoCntAndLength.put("totalVideoLength", totalVideoLength);
+			updateForVideoCntAndLength.put("videoCnt", videoCnt);
+			updateForVideoCntAndLength.put("courseId", courseId);
+			courseService.updateVideoCntAndLength(updateForVideoCntAndLength);
 			
 
 			// 파일 로컬 저장
 			for (String key : multipartFiles.keySet()) {
 				String[] temp;
-				if (key.startsWith("file")) {
+				if (key.startsWith("file-") && !key.startsWith("files")) {
 					temp = key.split("-");
 					MultipartFile fileMulti = multipartFiles.get(key);
 					String fileUri = StringUtils.cleanPath(fileMulti.getOriginalFilename());
+					System.out.println(key);
 					if (!file.containsKey(temp[2]))
 						file.put(temp[2], new HashMap());
 					file.get(temp[2]).put("fileName", fileUri);
@@ -187,7 +198,7 @@ public class AdminCourseController {
 					
 					String uploadFileDir = "upload/course/" + courseId +"/file";
 					FileUploadUtil.saveFile(uploadFileDir, fileUri, fileMulti);
-					FileUploadUtil.saveFile(uploadFileDir, "copy-"+fileUri, fileMulti);
+//					FileUploadUtil.saveFile(uploadFileDir, "copy-"+fileUri, fileMulti);
 				}
 			}
 			
@@ -197,7 +208,8 @@ public class AdminCourseController {
 			}
 			
 		}
-		
+
+		redirectAttributes.addFlashAttribute("message", "강의가 등록되었습니다.");
 //		System.out.println(map);
 //		multipartFiles.values().stream().forEach(System.out::println);
 //		multipartFiles.keySet().stream().forEach(System.out::println);
@@ -207,4 +219,36 @@ public class AdminCourseController {
 		return "redirect:/admin/course/management";
 	}
 	
-}
+	//강의 상세보기
+	@RequestMapping("/management/view")
+	public String courseView(@RequestParam Map map,Model model) {
+		CourseDTO course = courseService.getCourseOne(map);
+		List<CurriculumDTO> listCurriculum = courseService.courseCurriculumList(map);
+		List<FAQDTO> listFAQ = courseService.getFAQList(map);
+		System.out.println(listCurriculum.size());
+		model.addAttribute("course", course);
+		model.addAttribute("listCurriculum",listCurriculum);
+		model.addAttribute("listFAQ", listFAQ);
+		model.addAttribute("title", "강의 관리");
+		return "admin/courseView";
+	}
+//	
+	//강의 수정하기
+		@RequestMapping("/management/edit")
+		public String courseEdit(@RequestParam Map map,Model model) {
+			CourseDTO courseOne = courseService.getCourseOne(map);
+//			List<CurriculumDTO> listCurriculum = courseService.courseCurriculumList(map.get("no").toString());
+//			List<FAQDTO> listFAQ = courseService.getFAQList(map.get("no").toString());
+			model.addAttribute("courseOne", courseOne);
+//			model.addAttribute("listCurriculum",listCurriculum);
+//			model.addAttribute("listFAQ", listFAQ);
+			List<CategoryDTO> listCategories = courseService.categoryList();
+			List<AdminDTO> listAdmin = AdminService.getAdminList();
+			Map course = new HashMap<>();
+			model.addAttribute("listAdmin", listAdmin);
+			model.addAttribute("listCategories", listCategories);
+			model.addAttribute("course", course);
+			model.addAttribute("title", "강의 관리");
+			return "admin/courseEdit";
+		}
+}//class

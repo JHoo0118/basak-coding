@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.basakcoding.basak.mapper.FileMapper">
+	<select id="fileSelect" resultType="FileDTO">
+		SELECT file_id,v.name curriculumname,filename,video_title
+		FROM files f
+		JOIN (SELECT * FROM video v JOIN curriculum c ON v.curriculum_id=c.curriculum_id) v ON v.video_id=f.video_id
+	</select>
+	
+</mapper>

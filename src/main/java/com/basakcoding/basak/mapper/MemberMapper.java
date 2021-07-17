@@ -86,4 +86,25 @@ public interface MemberMapper {
 	//내 질문
 	List<Map> myQuestion(int userId);
 
+	//내 강의 안본 비디오
+	// String courseVideo(String courseId);
+	
+	//본 동영상 개수
+	int videoCount(Map params);
+
+	//커리큘럼 아이디 얻기
+	List<String> getCurriculum(String courseId);
+
+	//비디오 얻기
+	String getVideo(Map map);
+
+	//마지막 동영상 아이디
+	String getLastVideo(String lastCurriculumId);
+
+	//내 질문 상세보기
+	Map questionDetails(String userId, String questionId);
+
+	//내 질문 답변없을때
+	Map questionDetailNotExist(String userId, String questionId);
+
 }

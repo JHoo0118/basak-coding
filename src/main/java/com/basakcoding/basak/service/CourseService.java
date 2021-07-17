@@ -50,9 +50,9 @@ public class CourseService {
 		return courseMapper.createFile(map);
 	}
 	
-	// 강의 비디오 총 개수 업데이트
-	public int updateVideoCnt(Map map) {
-		return courseMapper.updateVideoCnt(map);
+	// 강의 비디오 총 개수 및 총 길이 업데이트
+	public int updateVideoCntAndLength(Map map) {
+		return courseMapper.updateVideoCntAndLength(map);
 	}
 
 	// 파일 목록 가져오기
@@ -70,5 +70,35 @@ public class CourseService {
 
 	public List<CurriculumDTO> getCurriculumList(String courseId) {
 		return courseMapper.getCurriculumList(courseId);
+	}
+
+	public int isSeen(Map params) {
+		return courseMapper.isSeen(params);
+	}
+	
+	// 강의 상세보기 - 강의정보
+	public CourseDTO getCourseOne(Map map) {
+		return courseMapper.getCourseOne(map);
+	}
+
+	// 강의 상세보기 - FAQ 목록 가져오기
+	public List<FAQDTO> getFAQList(Map map) {
+		return courseMapper.getFAQList(map);
+	}
+
+	// 강의 상세보기 - 커리큘럼
+	public List<CurriculumDTO> courseCurriculumList(Map map) {
+		return courseMapper.courseCurriculumList(map);
+	}
+	
+	// 결제했는지 확인
+	public int alreadyPayment(Map paymentCheck) {
+		return courseMapper.alreadyPayment(paymentCheck);
+
+	}
+
+	// seen 업데이트
+	public int updateSeen(Map params) {
+		return courseMapper.updateSeen(params);
 	}
 }
