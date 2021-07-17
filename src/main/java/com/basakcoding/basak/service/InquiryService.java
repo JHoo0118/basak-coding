@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.basakcoding.basak.mapper.InquiryMapper;
 
-
 @Service
 public class InquiryService {
 	
@@ -35,4 +34,34 @@ public class InquiryService {
 	public int insertInquiry(Map map) {
 		return inquiryMapper.insertInquiry(map);
 	}
+	
+	
+	
+	
+	//문의 카테고리
+	public ClassificationDTO getInquiryById(String clId) {
+		return inquiryMapper.getInquiryById(clId);
+	
+	}
+
+	
+	public int createInquiry(Map map) {
+		return inquiryMapper.createInquiry(map);
+	}
+
+	public int updateInquiry(Map map) {
+		return inquiryMapper.updateInquiry(map);
+	}
+
+	public int deleteMultpleInquiry(Map map) {
+		return inquiryMapper.deleteMultpleInquiry(map);
+	}
+
+
+	public List<ClassificationDTO> selectList() {
+		return inquiryMapper.selectList();
+	}
+
+
+	
 }

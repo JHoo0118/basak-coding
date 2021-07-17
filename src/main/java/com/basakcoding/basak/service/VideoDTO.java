@@ -1,5 +1,6 @@
 package com.basakcoding.basak.service;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,11 @@ public class VideoDTO {
 	List<FileDTO> files = new ArrayList<FileDTO>();
 	// path용
 	private String courseId;
+	
+	@Transient
+	public char getSeen() {
+		return seen;
+	}
 	
 	public String getVideoPath() {
     	if (videoUri == null) return "/images/video.mp4";

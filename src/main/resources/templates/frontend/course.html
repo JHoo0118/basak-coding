@@ -154,13 +154,10 @@
 				</div>
 			</div>
 			<!-- 탭1 끝 -->
-<<<<<<< HEAD
-			<!-- 탭2 시작 -->
-=======
+
 			
 			
 	  		<!-- 탭2 시작 -->
->>>>>>> refs/heads/ksg
 			<div class="none" id="target-2">
 				<div class="question__header">
 					<div class="question__box">
@@ -186,14 +183,10 @@
 								<span>4시간 전(로직미완성)</span>
 							</div>
 						</div>
-<<<<<<< HEAD
-						<h3 class="qModal__title qModal__title-course" onclick="seeQuestionDetail(this)">강의 잘 듣고 있습니다.
-						</h3>
 
-=======
 						<h3 class="qModal__title qModal__title-course" onclick="seeQuestionDetail(this)" >[[${question.TITLE}]] </h3>
 						
->>>>>>> refs/heads/ksg
+
 						<div class="qModal__state">
 							<div class="state__left">
 								<div class="state__like">
@@ -208,12 +201,7 @@
 							</div>
 						</div>
 					</div>
-<<<<<<< HEAD
 
-=======
-					
-					
->>>>>>> refs/heads/ksg
 					<!-- 목록 2 -->
 					<!--
 					<div class="qModal__upper">
@@ -244,12 +232,7 @@
 				-->
 				
 				</div>
-<<<<<<< HEAD
 
-=======
-				
-				
->>>>>>> refs/heads/ksg
 				<!-- 질문 상세보기 -->
 				<div class="qModal__box none" id="questionDetail">
 					<div th:each=" question : ${questionList}" class="qModal__upper">
@@ -261,9 +244,7 @@
 							</div>
 						</div>
 						<h3 class="qModal__title">[[${question.TITLE}]]</h3>
-						<p class="qModal__content">안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문
-							삭제 기능은 어디
-							있나요?ㅠㅠ</p>
+						<p class="qModal__content">[[${question.CONTENT}]]</p>
 						<span class="qModal__updated">4시간 전에 수정됨</span>
 						<div class="qModal__state">
 							<div class="state__left">
@@ -280,6 +261,8 @@
 							</div>
 						</div>
 					</div>
+					
+					
 					<div class="qModal__lower">
 						<ul class="comment__list">
 							<li class="comment__item">
@@ -290,11 +273,11 @@
 										<span>4시간 전</span>
 									</div>
 								</div>
-								<p class="qModal__content">안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
-									있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
-									있나요?ㅠㅠ</p>
+								<p class="qModal__content">dd </p>
 							</li>
-							<li class="comment__item">
+							
+							
+							<!--li class="comment__item">
 								<div class="comment__user">
 									<img th:src="@{/images/user.png}" />
 									<div class="user__info">
@@ -310,7 +293,9 @@
 									어디
 									있나요?ㅠㅠ
 								</p>
-							</li>
+							</li -->
+							
+							
 						</ul>
 					</div>
 				</div>
@@ -526,7 +511,7 @@
 							<label class="error"></label>
 						</div>
 						<div class="flex__end mb-2">
-							<button type="button" id="btnInq" class="button--square">후기 작성</button>
+							<button type="button" id="btnInq" class="button--square">문의 작성</button>
 							<button type="button" id="btnInqCancle" data-dismiss="modal"
 								class="button--square button--square--cancel ml-3">취소</button>
 						</div>

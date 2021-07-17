@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <!DOCTYPE html>
 <html lang="kr" xmlns:th="http://www.thymeleaf.org"
             xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
@@ -79,7 +79,7 @@
    
    <div th:replace="/admin/fragments/logoutModal.html :: fragment-logout"></div>
    </div>
-=======
+
 <!DOCTYPE html>
 <html lang="kr" xmlns:th="http://www.thymeleaf.org"
 				xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
@@ -136,7 +136,7 @@
 							
 							
 							<li th:classappend="${title == '문의 카테고리 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/question/catagory}" th:classappend="${title != '문의 카테고리 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>문의 카테고리 관리</a>
+								<a th:href="@{/admin/inquiry/category/management}" th:classappend="${title != '문의 카테고리 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>문의 카테고리 관리</a>
 							</li>
 
 	
@@ -173,5 +173,5 @@
 	
 	<div th:replace="/admin/fragments/logoutModal.html :: fragment-logout"></div>
 	</div>
->>>>>>> refs/heads/dhy
+
 </html>

@@ -128,11 +128,27 @@ public class CourseController {
 			fileList.get(0).put("INITIAL_CODE", "abc");
 		}
 		
-		//비디오 관련 질문리스트
-		List<Map> questionList = courseService.questionList();
+		//강의별 질문리스트
+		List<Map> questionList = courseService.questionList(courseId);
 		
-		//String questionClobText = courseService.questionClobText();
+		//질문 별 질문내용
+		List<String> questionClobText = courseService.getClobQuestionText(courseId);
+			for(int i=0;i<questionClobText.size();i++) {
+				String content = questionClobText.get(i);
+				questionList.get(i).put("CONTENT",content);
+			}
+		    String questionId = "-1";
+		for (Map question : questionList) {
+			questionId = question.get("QUESTION_ID").toString();
+		}
+		List<Map> commentsList = courseService.commentsList(questionId);
+		model.addAttribute("commentsList",commentsList);
+		System.out.println("commentsList"+commentsList);
+			
 		System.out.println("questionList:"+questionList);
+		
+		
+		
 		
 		
 		model.addAttribute("questionList", questionList);

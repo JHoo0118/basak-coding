@@ -17,16 +17,20 @@ public interface QuestionMapper {
 	public List<QuestionDTO> questionSelect();
 	
 	//질문 정보 가져오기
-	public List<QuestionDTO> lionList();
+	public List<QuestionDTO> questionList();
+	
+
+	//질문 가져오기
+	public QuestionDTO selectOne(Map map);
+	
+
+	
 	
 	public QuestionDTO getQuestionById(String questionId);
 	
 	public int updateQuestion(Map map);
 	
 	public int createQuestion(Map map);
-
-	//질문 가져오기
-	public QuestionDTO selectOne(Map map);
 	
 	public int deleteMultpleQuestion(Map map);
 
