@@ -327,6 +327,10 @@
 		UPDATE question SET comment_count = comment_count+1 WHERE question_id = #{questionId}
 	</update>
 
+	<!-- 임시 비밀번호(비밀번호 수정) -->
+    <update id="updatepassword" parameterType="Map">
+      UPDATE members SET password=#{password} WHERE email=#{email}
+    </update>
 	
 
 </mapper>

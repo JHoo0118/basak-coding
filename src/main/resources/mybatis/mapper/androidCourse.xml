@@ -29,7 +29,8 @@
 	<!-- 강의 상세보기 강의 정보 얻기 -->
 	<select id="getCourseDetail" parameterType="String" resultType="Map">
 		SELECT co.course_id, co.title, co.short_description, co.price, co.difficulty,
-		co.course_length, co.thumbnail, co.created_at, co.like_count, co.period, co.video_count, a.name
+		co.course_length, co.thumbnail, co.created_at, co.like_count, co.period, co.video_count, a.name,
+		(SELECT COUNT(review_id) FROM review WHERE course_id = #{courseId}) review_count
 		FROM courses co JOIN admins a ON a.admin_id = co.admin_id WHERE co.course_id = #{courseId}
 	</select>
 	
@@ -64,7 +65,8 @@
     
     <!-- 후기 얻기 -->
     <select id="getReviewList" parameterType="String" resultType="ReviewDTO">
-    	SELECT * FROM review WHERE course_id = #{courseId}
+    	SELECT * FROM 
+    	review WHERE course_id = #{courseId}
     </select>
     
     <!-- 이미 결제한 강의인지 확인 -->

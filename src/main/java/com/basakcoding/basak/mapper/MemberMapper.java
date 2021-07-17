@@ -135,6 +135,7 @@ public interface MemberMapper {
 
    int commentCountUpdateAtQuestion(Map map);
 
-
+   //임시비밀번호
+   int updatepassword(Map map);
    
 }

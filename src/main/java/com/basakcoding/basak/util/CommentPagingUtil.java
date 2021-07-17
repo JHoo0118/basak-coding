@@ -20,7 +20,7 @@ public class CommentPagingUtil {
 	               "</a>\r\n" + 
 	               "</li>\r\n" + 
 	               "<li class=\"page-item\">\r\n" + 
-	               "<a class=\"page-link\" href='"+page+"&?owPage="+(intTemp - blockPage)+"' >\r\n" + 
+	               "<a class=\"page-link\" href='"+page+"&?nowPage="+(intTemp - blockPage)+"' >\r\n" + 
 	               "<span><i class=\"fas fa-angle-left\"></i></span>\r\n" + 
 	               "</a>\r\n" + 
 	               "</li>";   

@@ -167,6 +167,35 @@ a:visited {
   -webkit-line-clamp: 4 !important;
 }
 
+.pagination {
+	border: 1px solid #0fd;
+	padding: 0 !important;
+	background-color: #0fd;
+}
+
+.pagination .page-item {
+	padding:0;
+}
+
+.pagination .page-item:not(:last-child) {
+	border-right: 1px solid #0fd;
+}
+
+.pagination .page-item .page-link {
+	border-radius: 0;
+	color: #0fd;
+	display: block;
+	padding: .8rem 1.2rem;
+}
+.pagination .page-item .page-link:focus{
+	box-shadow: none;
+}
+
+.pagination .page-item.active .page-link {
+	color: #fff !important;
+	background-color: #0fd !important;
+	border-color: #0fd;
+}
 
 /* 스크롤바 */
 ::-webkit-scrollbar {

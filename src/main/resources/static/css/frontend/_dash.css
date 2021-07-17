@@ -139,6 +139,7 @@
 
 .tab-pane {
   min-height: 50rem;
+  padding-bottom: 1rem;
 }
 
 .dashboard__card {

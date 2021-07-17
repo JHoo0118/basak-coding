@@ -239,6 +239,12 @@ public class MemberService {
    public int commentCountUpdateAtQuestion(Map map) {
 	   return memberMapper.commentCountUpdateAtQuestion(map);
    }
+   
+   //임시 비밀번호로 비밀번호 변경
+   public int updatepassword(Map map) {
+      encodePassword(map);
+      return memberMapper.updatepassword(map);
+   }
 
    
 
