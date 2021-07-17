@@ -2,87 +2,93 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-   <meta charset="UTF-8" />
-   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <title>바삭 코딩 | 질문 & 댓글</title>
-   <link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
-   <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}" />
-   <link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
-   <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
-   <script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
-   <script>
-      var questionId;
-      //좋아요 처리
-      $(document).ready(function () {
-         var likeCount = $('#likeCount').text();
-         if (likeCount == 1) {
-            $('#likeCount').html('<i class="fas fa-thumbs-up" ></i>' + likeCount);
-            $('#likeCount').prop("style", "color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");
-            $('#questionLike').html('<i class="far fa-thumbs-up"></i>' + likeCount);
-            $('#questionLike').prop("style", "color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");
-         }
-         else {
-            $('#likeCount').html('<i class="far fa-thumbs-up"></i>' + likeCount);
-            $('#likeCount').prop("style", "color: gray;");
-         }
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>바삭 코딩 | 질문 & 댓글</title>
+	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
+	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+	<script>
+		
+		//좋아요 처리
+		$(document).ready(function () {
+			var questionId;
+			var title;
+			var content;
+			var likeCount = $('#likeCount').text();
+			if (likeCount == 1) {
+				$('#likeCount').html('<i class="fas fa-thumbs-up" ></i>' + likeCount);
+				$('#likeCount').prop("style", "color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");
+				$('#questionLike').html('<i class="far fa-thumbs-up"></i>' + likeCount);
+				$('#questionLike').prop("style", "color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");
+			}
+			else {
+				$('#likeCount').html('<i class="far fa-thumbs-up"></i>' + likeCount);
+				$('#likeCount').prop("style", "color: gray;");
+			}
 
-      });
-      //모달 좋아요 기능
-      function like(like) {
-         var likeCount = like.querySelectorAll("span")[0].innerText
-         $.ajax({
-            url: '/personal/like.do',
-            data: {"questionId": questionId, "likeCount": likeCount},
-            type: 'post',
-            dataType: "json",
-            success: function (data) { 
-               if (data == 0) {//기존에 좋아요 누른적이 없을때
-                  likeCount++;
-                  $('#likeCount').html('<i class="fas fa-thumbs-up" ></i>' + likeCount);
-                  $('#likeCount').prop("style", "color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");
-                  $('#questionLike').html('<i class="fas fa-thumbs-up" ></i>' + likeCount);
-                  $('#questionLike').prop("style", "color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");
-               }
-               else if (data == 1) {////기존에 좋아요를 눌러놨을때
-                  likeCount--;
-                  $('#likeCount').html('<i class="far fa-thumbs-up"></i>' + likeCount);
-                  $('#likeCount').prop("style", "color: gray;");
-                  $('#questionLike').html('<i class="far fa-thumbs-up"></i>' + likeCount);
-                  $('#questionLike').prop("style", "color: gray;");
-               }
-            },
-            error: function () {
-               alert("오류가 발생했습니다.다시시도해주세요");
-            }
-         });
-      }
-      //질문 상세보기
-      function questionDetails(question) {
-         questionId = question.querySelectorAll("span")[0].innerText;
-         var commentList = document.getElementById("commentList");
-         $.ajax({
-            url: '/personal/questionDetails.do',
-            data: {"questionId": questionId},
-            type: 'post',
-            dataType: "json",
-            success: function (data) {
-               $('#questionMem').text(data.USERNAME);
-               $('#questionTime').text(data.CREATED_AT.split('T')[0]);
-               $('#questionTitle').text(data.TITLE);
-               $('#questionContent').text(data.QUESTION_CONTENT);
-               $('#questionLike').html('<i class="far fa-thumbs-up" ></i>' + data.LIKE_COUNT);
-               $('#questionComment').html('<i class="far fa-comment-dots" ></i>' + data.COMMENT_COUNT);
-               document.querySelector(".question__list").style.display = "none";
-               document.querySelector(".question__noAnswer").style.display = "block";
-               if (data.commentList != "") {
-                  document.querySelector(".question__list").style.display = "block";
-                  document.querySelector(".question__noAnswer").style.display = "none";
-                  commentList.innerHTML = '';
-                  $.each(data.commentList, function (index, value) {
-                     var commentHtml;
-                     if (data.commentList[index].adminId) {
-                        commentHtml = `
+		});
+		//모달 좋아요 기능
+		function like(like) {
+			var likeCount = like.querySelectorAll("span")[0].innerText
+			$.ajax({
+				url: '/personal/like.do',
+				data: {"questionId": questionId, "likeCount": likeCount},
+				type: 'post',
+				dataType: "json",
+				success: function (data) {
+					if (data == 0) {//기존에 좋아요 누른적이 없을때
+						likeCount++;
+						$('#likeCount').html('<i class="fas fa-thumbs-up" ></i>' + likeCount);
+						$('#likeCount').prop("style", "color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");
+						$('#questionLike').html('<i class="fas fa-thumbs-up" ></i>' + likeCount);
+						$('#questionLike').prop("style", "color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");
+					}
+					else if (data == 1) {////기존에 좋아요를 눌러놨을때
+						likeCount--;
+						$('#likeCount').html('<i class="far fa-thumbs-up"></i>' + likeCount);
+						$('#likeCount').prop("style", "color: gray;");
+						$('#questionLike').html('<i class="far fa-thumbs-up"></i>' + likeCount);
+						$('#questionLike').prop("style", "color: gray;");
+					}
+				},
+				error: function () {
+					alert("오류가 발생했습니다.다시시도해주세요");
+				}
+			});
+		}
+		//질문 상세보기
+		function questionDetails(question) {
+			questionId = question.querySelectorAll("span")[0].innerText;
+			var commentList = document.getElementById("commentList");
+			$.ajax({
+				url: '/personal/questionDetails.do',
+				data: {"questionId": questionId},
+				type: 'post',
+				dataType: "json",
+				success: function (data) {
+					//폼 모달에 내질문
+					$('#questionformTitle').val(data.TITLE);
+					$('#questionformContent').text(data.QUESTION_CONTENT);
+					$('#questionMem').text(data.USERNAME);
+					$('#questionTime').text(data.CREATED_AT.split('T')[0]);
+					$('#questionTitle').text(data.TITLE);
+					$('#questionContent').text(data.QUESTION_CONTENT);
+					$('#questionLike').html('<i class="far fa-thumbs-up" ></i>' + data.LIKE_COUNT);
+					$('#questionComment').html('<i class="far fa-comment-dots" ></i>' + data.COMMENT_COUNT);
+					document.querySelector(".question__list").style.display = "none";
+					document.querySelector(".question__noAnswer").style.display = "block";
+					if (data.commentList != "") {
+						document.querySelector(".question__list").style.display = "block";
+						document.querySelector(".question__noAnswer").style.display = "none";
+						commentList.innerHTML = '';
+						$.each(data.commentList, function (index, value) {
+							var commentHtml;
+							if (data.commentList[index].adminId) {
+								commentHtml = `
                            <li class="comment__item" >
                               <div class="comment__user">
                                  <img src="${data.commentList[index].adminPath}" alt="admin avatar" />
@@ -94,8 +100,8 @@
                               <p class="qModal__content">${data.commentList[index].content}</p>
                            </li>
                         `;
-                     } else if (data.commentList[index].memberId) {
-                        commentHtml = `
+							} else if (data.commentList[index].memberId) {
+								commentHtml = `
                            <li class="comment__item" >
                               <div class="comment__user">
                                  <img src="${data.commentList[index].memberPath}" alt="admin avatar" />
@@ -107,134 +113,234 @@
                               <p class="qModal__content">${data.commentList[index].content}</p>
                            </li>
                         `;
-                     }
-                     commentList.insertAdjacentHTML("beforeend", commentHtml);
-                  });
-               }
-            },
-            error: function () {
-               alert("오류가 발생했습니다.다시시도해주세요");
-            }
-         });
-      }
-      //문의 상세보기
-      function inquDetails(inquiry) {
-         var inquiry_id = inquiry.querySelectorAll("span")[1].innerText;
-         $.ajax({
-            url: '/personal/inquDetails.do',
-            data: {"inquiry_id": inquiry_id},
-            type: 'post',
-            dataType: "json",
-            success: function (data) {
-               $('#inqmem').text(data.USERNAME);
-               $('#inqtime').text(data.CREATED_AT.split('T')[0]);
-               $('#inqtitle').text(data.TITLE);
-               $('#inqcontent').text(data.CONTENT);
-               $('#clname').text(data.NAME);
-               if (data.ANSWER_ID != null) {
-                  document.querySelector(".inquiry__list").style.display = "block";
-                  document.querySelector(".inquiry__noAnswer").style.display = "none";
+							}
+							commentList.insertAdjacentHTML("beforeend", commentHtml);
+						});
+					}
+				},
+				error: function () {
+					alert("오류가 발생했습니다.다시시도해주세요");
+				}
+			});
+		}
+		//내 질문 수정하기
+		function questionEdit() {
+			if(title.type=Object && content.type!=Object){
+				title=$('#questionformTitle').val();
+			}
+			if(content.type=Object && title.type!=Object){
+				content=$('#questionformContent').val();
+			}
+			else if((title.type=Object) && (content.type=Object)){
+				return false;
+			}
+			$.ajax({
+				url: '/personal/questionEdit.do',
+				data: {"questionId":questionId,"title": title,"content":content},
+				type: 'post',
+				dataType: "json",
+				success: function (data) {
+					alert("수정 완료되었습니다.");
+					$('#realTitle').text(title);
+					$('#questionTitle').text(title);
+					$('#questionContent').text(content);
+				},
+				error: function () {
+					alert("오류가 발생했습니다.다시시도해주세요");
+				}
+			});
+			
+		}///////////내질문수정 
+		//질문제목 변경한값
+		function inputTage(){
+			title=$("#questionformTitle").val();
+		}
+		//질문내용 변경한값
+		function textTage(){
+			content=$('#questionformContent').val();
+		}
+		//답변 작성하기
+		function newComment(){
+			newContent=$('#newCommentContent').val();
+			console.log("새로작성한값"+newContent);
+			if(newContent==""){
+				alert("내용을 작성해주세요");
+				return false;
+			}
+			$.ajax({
+				url: '/personal/newComment.do',
+				data: {"questionId":questionId,"newContent":newContent},
+				type: 'post',
+				dataType: "json",
+				success: function (data) {
+					alert("등록 완료되었습니다.");
+					if (data.commentList != "") {
+						document.querySelector(".question__list").style.display = "block";
+						document.querySelector(".question__noAnswer").style.display = "none";
+						commentList.innerHTML = '';
+						$.each(data.commentList, function (index, value) {
+							var commentHtmls;
+							if (data.commentList[index].adminId) {
+								commentHtmls = `
+                           <li class="comment__item" >
+                              <div class="comment__user">
+                                 <img src="${data.commentList[index].adminPath}" alt="admin avatar" />
+                                 <div class="user__info">
+                                    <h5 style="color: #0fd">${data.commentList[index].name}</h5>
+                                    <span>${data.commentList[index].createdAt}</span>
+                                 </div>
+                              </div>
+                              <p class="qModal__content">${data.commentList[index].content}</p>
+                           </li>
+                        `;
+							} else if (data.commentList[index].memberId) {
+								commentHtmls = `
+                           <li class="comment__item" >
+                              <div class="comment__user">
+                                 <img src="${data.commentList[index].memberPath}" alt="admin avatar" />
+                                 <div class="user__info">
+                                    <h5>${data.commentList[index].username}</h5>
+                                    <span>${data.commentList[index].createdAt}</span>
+                                 </div>
+                              </div>
+                              <p class="qModal__content">${data.commentList[index].content}</p>
+                           </li>
+                        `;
+							}
+							commentList.insertAdjacentHTML("beforeend", commentHtmls);
+							$('#formModalComment').modal("hide");
+							console.log('와이!!!!?!?'+data.commentCount,data);
+							$('#questionComment').html('<i class="far fa-comment-dots" ></i>'+data.commentCount);
+							$('#myquestionCommentCount').html('<i class="far fa-comment-dots" ></i>'+data.commentCount);
+							$('#mycomment').text(data.mycomment);
+						});
+					}
+					
+				},
+				error: function () {
+					alert("오류가 발생했습니다.다시시도해주세요");
+				}
+			});
+			
+		}////////답변작성하기
+		//문의 상세보기
+		function inquDetails(inquiry) {
+			var inquiry_id = inquiry.querySelectorAll("span")[1].innerText;
+			$.ajax({
+				url: '/personal/inquDetails.do',
+				data: {"inquiry_id": inquiry_id},
+				type: 'post',
+				dataType: "json",
+				success: function (data) {
+					$('#inqmem').text(data.USERNAME);
+					$('#inqtime').text(data.CREATED_AT.split('T')[0]);
+					$('#inqtitle').text(data.TITLE);
+					$('#inqcontent').text(data.CONTENT);
+					$('#clname').text(data.NAME);
+					if (data.ANSWER_ID != null) {
+						document.querySelector(".inquiry__list").style.display = "block";
+						document.querySelector(".inquiry__noAnswer").style.display = "none";
 
-                  $('#admin').text(data.ADMIN_NAME);
-                  $('#admintime').text(data.ANSWER_CREATED.split('T')[0]);
-                  $('#adminAnswer').text(data.ANS_CONTENT);
-               }
-               else {
-                  document.querySelector(".inquiry__list").style.display = "none";
-                  document.querySelector(".inquiry__noAnswer").style.display = "block";
-               }
+						$('#admin').text(data.ADMIN_NAME);
+						$('#admintime').text(data.ANSWER_CREATED.split('T')[0]);
+						$('#adminAnswer').text(data.ANS_CONTENT);
+					}
+					else {
+						document.querySelector(".inquiry__list").style.display = "none";
+						document.querySelector(".inquiry__noAnswer").style.display = "block";
+					}
 
-            },
-            error: function () {
-               alert("오류가 발생했습니다.다시시도해주세요");
-            }
-         });
-      }
+				},
+				error: function () {
+					alert("오류가 발생했습니다.다시시도해주세요");
+				}
+			});
+		}
       //댓글 상세보기
-      /*
-      function commentsDetails() {
-         var commenTitle = $('#commenTitle').text();
-         console.log("함수발생")
-         $.ajax({
-            url: '/personal/commentsDetails.do',
-            data: {"commenTitle": commenTitle},
-            type: 'post',
-            dataType: "json",
-            success: function (data) {
-               $('#inqmem').text(data.USERNAME);
-               $('#inqtime').text(data.CREATED_AT);
-               $('#inqtitle').text(data.TITLE);
-               $('#inqcontent').text(data.CONTENT);
-               $('#clname').text(data.NAME);
-            },
-            error: function () {
-               alert("오류가 발생했습니다.다시시도해주세요");
-            }
-         });
-      }*/
-      
+		/*
+		function commentsDetails() {
+		   var commenTitle = $('#commenTitle').text();
+		   console.log("함수발생")
+		   $.ajax({
+			  url: '/personal/commentsDetails.do',
+			  data: {"commenTitle": commenTitle},
+			  type: 'post',
+			  dataType: "json",
+			  success: function (data) {
+				 $('#inqmem').text(data.USERNAME);
+				 $('#inqtime').text(data.CREATED_AT);
+				 $('#inqtitle').text(data.TITLE);
+				 $('#inqcontent').text(data.CONTENT);
+				 $('#clname').text(data.NAME);
+			  },
+			  error: function () {
+				 alert("오류가 발생했습니다.다시시도해주세요");
+			  }
+		   });
+		}*/
 
-      
 
-   </script>
+
+
+	</script>
 </head>
 
 <body style="background-color: #1e1e1e;">
-   <!-- Navbar -->
-   <div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
-   <!-- 메인 섹션 시작 -->
-   <section class="dashboard">
-      <div class="container-fluid container--main">
-         <!-- mypage -->
-         <div th:insert="/frontend/fragments/mypage.html :: fragment-mypage"></div>
-         <nav class="dashboard__tab">
-            <div class="nav nav-tabs" id="nav-tab">
-               <a class="nav-link tab__link" th:href="@{/personal/dashboard}" href="/dashboard.html">나의
-                  대시보드</a>
-               <a class="nav-link tab__link" th:href="@{/personal/profile}">나의
-                  프로필</a>
-               <a class="nav-link tab__link active" th:href="@{/personal/qAndA/questions?page=1}">나의
-                  질문답변</a>
-            </div>
-         </nav>
-      </div>
+	<!-- Navbar -->
+	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
+	<!-- 메인 섹션 시작 -->
+	<section class="dashboard">
+		<div class="container-fluid container--main">
+			<!-- mypage -->
+			<div th:insert="/frontend/fragments/mypage.html :: fragment-mypage"></div>
+			<nav class="dashboard__tab">
+				<div class="nav nav-tabs" id="nav-tab">
+					<a class="nav-link tab__link" th:href="@{/personal/dashboard}" href="/dashboard.html">나의
+						대시보드</a>
+					<a class="nav-link tab__link" th:href="@{/personal/profile}">나의
+						프로필</a>
+					<a class="nav-link tab__link active" th:href="@{/personal/qAndA/questions?page=1}">나의
+						질문답변</a>
+				</div>
+			</nav>
+		</div>
 
-      <!-- 나의 질문 시작 -->
-      <div class="tab-pane tab__page fade show tab__content">
-         <div class="container-fluid container--main">
-            <ul class="nav nav-pills mb-3 row" id="pills-tab">
-               <li class="nav-item tab__menu col-4 p-0">
-                  <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-question">나의
-                     질문</a>
-                  <i class="fas fa-circle"></i>
-               </li>
-               <li class="nav-item tab__menu col-4 p-0">
-                  <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-answer">나의 문의</a>
-                  <i class="fas fa-circle"></i>
-               </li>
-               <li class="nav-item tab__menu col-4 p-0">
-                  <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-comment">나의 댓글</a>
-                  <i class="fas fa-circle"></i>
-               </li>
-            </ul>
-            <div class="tab-content" id="pills-tabContent">
-               <div class="tab-pane fade show active d-flex justify-content-center" id="pills-question">
-                  <th:block th:if="${myQuestion}!=null">
-                     <ul class="qAndA">
-                        <li class="qAndA__box row m-0" data-toggle="modal" data-target="#questionModal"
-                           th:each="myQuestions :${myQuestion}" onclick="questionDetails(this)">
-                           <div class="qAndA__left col-2">
-                              <span id="question_id"
-                                 style="display:none">[[${myQuestions.QUESTION_ID}]]</span>
-                              <span id="likeCount"><i
-                                    class="far fa-thumbs-up"></i>[[${myQuestions.LIKE_COUNT}]]</span>
-                           </div>
-                           <div class="qAndA__middle col-8">
-                              <span th:text="${#dates.format(myQuestions.CREATED_AT, 'yyyy.MM.dd')}"></span>
-                              <h4 class="iine-clamp">[[${myQuestions.TITLE}]]</h4>
+		<!-- 나의 질문 시작 -->
+		<div class="tab-pane tab__page fade show tab__content">
+			<div class="container-fluid container--main">
+				<ul class="nav nav-pills mb-3 row" id="pills-tab">
+					<li class="nav-item tab__menu col-4 p-0">
+						<a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-question">나의
+							질문</a>
+						<i class="fas fa-circle"></i>
+					</li>
+					<li class="nav-item tab__menu col-4 p-0">
+						<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-answer">나의 문의</a>
+						<i class="fas fa-circle"></i>
+					</li>
+					<li class="nav-item tab__menu col-4 p-0">
+						<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-comment">나의 댓글</a>
+						<i class="fas fa-circle"></i>
+					</li>
+				</ul>
+				<div class="tab-content" id="pills-tabContent">
+					<div class="tab-pane fade show active d-flex justify-content-center" id="pills-question">
+						<th:block th:if="${myQuestion}!=null">
+							<ul class="qAndA">
+								<li class="qAndA__box row m-0" data-toggle="modal" data-target="#questionModal"
+									th:each="myQuestions :${myQuestion}" onclick="questionDetails(this)">
+									<div class="qAndA__left col-2">
+										<span id="question_id"
+											style="display:none">[[${myQuestions.QUESTION_ID}]]</span>
+										<span id="likeCount"><i
+												class="far fa-thumbs-up"></i>[[${myQuestions.LIKE_COUNT}]]</span>
+									</div>
+									<div class="qAndA__middle col-8">
+										<span th:text="${#dates.format(myQuestions.CREATED_AT, 'yyyy.MM.dd')}"></span>
+                              <h4 id="realTitle"class="iine-clamp">[[${myQuestions.TITLE}]]</h4>
                            </div>
                            <div class="qAndA__right col-2">
-                              <span><i class="far fa-comment-dots"></i>[[${myQuestions.COMMENT_COUNT}]]</span>
+                              <span id="myquestionCommentCount"><i class="far fa-comment-dots"></i>[[${myQuestions.COMMENT_COUNT}]]</span>
                            </div>
                         </li>
                      </ul>
@@ -375,7 +481,7 @@
                               </div>
                            </div>
                            <div class="state__right">
-                              <span data-toggle="modal" data-target="#formModal">답변 작성하기</span>
+                              <span data-toggle="modal" data-target="#formModalComment">답변 작성하기</span>
                            </div>
                         </div>
                      </div>
@@ -414,7 +520,6 @@
                         </div>
                         <h3 class="qModal__title" id="inqtitle"></h3>
                         <p class="qModal__content" id="inqcontent"></p>
-                        <!-- <span class="qModal__updated">수정시간</span> -->
                         <div class="qModal__state">
                            <div class="state__left">
                               <div class="state__like">
@@ -447,32 +552,54 @@
       </div>
       <!-- 나의 문의 모달 끝 -->
 
-      <!-- 폼 모달 -->
+      <!-- 수정하기 폼 모달 -->
       <div class="modal fade" id="formModal">
          <div class="modal-dialog fModal__dialog">
             <div class="modal-content fModal__body">
                <div class="modal-header fModal__header">
-                  <h3>강의 잘 듣고 있습니다</h3>
+                  <h3 style="margin-left: 15px;">질문 수정</h3>
                   <button type="button" class="close" data-dismiss="modal">
                      <span>&times;</span>
                   </button>
                </div>
                <div class="modal-body p-0">
-                  <div class="fModal__box">
-                     <form>
-                        <textarea class="form-control" placeholder="수업을 진행하면서 궁금한 코딩 관련 질문을 등록해 주세요.">안녕하세요. 질문
-                           삭제
-                           기능은 어디 있나요?ㅠㅠ</textarea>
-                     </form>
+                  <form class="fModal__box">
+                     <input onchange="inputTage()" id="questionformTitle" style="border: none;width:400px;height:50px;font-size:20px;"></input>
+                        <textarea onchange="textTage()" id="questionformContent" class="form-control" placeholder="수업을 진행하면서 궁금한 코딩 관련 질문을 등록해 주세요."
+                        	style="height:200px;font-size: 16px;background-color: #25262b; color:#fff;border-radius:6px;padding: 10px;"></textarea>
                      <div class="flex__end">
-                        <button class="button--square mt-5">수정하기</button>
+                        <button type="button" class="button--square mt-5" onclick="questionEdit()">수정하기</button>
                      </div>
-                  </div>
+                  </form>
                </div>
             </div>
          </div>
       </div>
-      <!-- 폼 모달 끝 -->
+      <!-- 수정하기 폼 모달 끝 -->
+      <!-- 답변 작성하기 폼 모달 -->
+      <div class="modal fade" id="formModalComment">
+         <div class="modal-dialog fModal__dialog">
+            <div class="modal-content fModal__body">
+               <div class="modal-header fModal__header">
+                  <h3 style="margin-left: 15px;"></h3>
+                  <button type="button" class="close" data-dismiss="modal">
+                     <span>&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body p-0">
+                  <form class="fModal__box">
+                     <input style="border: none;width:400px;height:50px;font-size:20px;" value="아래 댓글 내용을 작성해주세요" disabled></input>
+                        <textarea id="newCommentContent" class="form-control" placeholder="댓글을 작성해주세요"
+                        	style="height:200px;font-size: 16px;background-color: #25262b; color:#fff;border-radius:6px;padding: 10px;"></textarea>
+                     <div class="flex__end">
+                        <button type="button" class="button--square mt-5" onclick="newComment()">등록하기</button>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- 답변작성하기 폼 모달 끝 -->
 
    </section>
    <!-- 메인 섹션 끝 -->
