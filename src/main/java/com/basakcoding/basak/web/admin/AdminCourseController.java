@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -30,6 +31,8 @@ import com.basakcoding.basak.service.FAQDTO;
 import com.basakcoding.basak.service.VideoDTO;
 import com.basakcoding.basak.util.FileUploadUtil;
 import com.basakcoding.basak.util.ListPagingData;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 @RequestMapping("/admin/course")
@@ -41,12 +44,28 @@ public class AdminCourseController {
 	@Autowired
 	private AdminService AdminService;
 	
-	@GetMapping("/management")
-	public String categoryList(@RequestParam Map map, @RequestParam(required = false, defaultValue = "1") int nowPage, Model model) {
+	@Autowired
+	ObjectMapper objectMapper;
+	
+	//강의 관리 목록 페이지
+	@RequestMapping("/management")
+	public String courseList(@RequestParam Map map, @RequestParam(required = false, defaultValue = "1") int nowPage, Model model) {
 		ListPagingData listCourses = courseService.selectList(map, nowPage);
+		List<CategoryDTO> categoryList = courseService.categoryList();
 		model.addAttribute("listCourses", listCourses);
+		model.addAttribute("categoryList",categoryList);
 		model.addAttribute("title", "강의 관리");
 		return "admin/courseManagement";
+	}
+	
+	
+	//강의 카테고리 셀렉
+	@RequestMapping("/management/category")
+	public @ResponseBody String categoryList() throws JsonProcessingException {
+		List<CategoryDTO> categoryList = courseService.categoryList();
+		String category = objectMapper.writeValueAsString(categoryList);
+		System.out.println(category);
+		return category;
 	}
 	
 	// 강의 관리 폼 페이지
@@ -231,20 +250,21 @@ public class AdminCourseController {
 		System.out.println(listCurriculum.size());
 		model.addAttribute("course", course);
 		model.addAttribute("listCurriculum",listCurriculum);
+		System.out.println(listCurriculum);
 		model.addAttribute("listFAQ", listFAQ);
 		model.addAttribute("title", "강의 관리");
 		return "admin/courseView";
 	}
 //	
-	//강의 수정하기
+	//강의 수정 페이지
 		@RequestMapping("/management/edit")
 		public String courseEdit(@RequestParam Map map,Model model) {
 			CourseDTO courseOne = courseService.getCourseOne(map);
-//			List<CurriculumDTO> listCurriculum = courseService.courseCurriculumList(map.get("no").toString());
-//			List<FAQDTO> listFAQ = courseService.getFAQList(map.get("no").toString());
+			List<CurriculumDTO> listCurriculum = courseService.courseCurriculumList(map);
+			List<FAQDTO> listFAQ = courseService.getFAQList(map);
 			model.addAttribute("courseOne", courseOne);
-//			model.addAttribute("listCurriculum",listCurriculum);
-//			model.addAttribute("listFAQ", listFAQ);
+			model.addAttribute("listCurriculum",listCurriculum);
+			model.addAttribute("listFAQ", listFAQ);
 			List<CategoryDTO> listCategories = courseService.categoryList();
 			List<AdminDTO> listAdmin = AdminService.getAdminList();
 			Map course = new HashMap<>();
@@ -253,5 +273,10 @@ public class AdminCourseController {
 			model.addAttribute("course", course);
 			model.addAttribute("title", "강의 관리");
 			return "admin/courseEdit";
+		}
+	//강의 수정하기
+		@RequestMapping("/management/editOk")
+		public String courseEditProcess() {
+			return "redirect:/admin/course/management/view";
 		}
 }//class

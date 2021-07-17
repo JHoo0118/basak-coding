@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.basakcoding.basak.mapper.MemberMapper;
 import com.basakcoding.basak.util.ListPagingData;
-import com.basakcoding.basak.util.PagingUtil;
+import com.basakcoding.basak.util.CommentPagingUtil;
 import com.basakcoding.basak.util.SHA256;
 import com.basakcoding.basak.util.myListPagingData;
 
@@ -147,7 +147,7 @@ public class MemberService {
 		map.put("userId",userId);
 		List lists = memberMapper.myComments(map);
 		String page = "/personal/qAndA/questions";
-		String pagingString=PagingUtil.pagingBootStrapStyle(totalCourseCount,pageSize, blockPage, nowPage, page);		
+		String pagingString=CommentPagingUtil.pagingBootStrapStyle(totalCourseCount,pageSize, blockPage, nowPage, page);		
 		myListPagingData<Map> listPagingData = 
 				myListPagingData.builder()
 				.lists(lists)
