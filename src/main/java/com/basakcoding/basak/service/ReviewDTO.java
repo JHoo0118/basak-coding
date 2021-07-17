@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class ReviewDTO {
 	
 	//강의 후기 (리뷰관련)
-	private Integer reviewId ;
+	private Integer reviewId;
 	private Integer courseId;
 	private Integer memberId;
 	private String content;
@@ -22,9 +22,4 @@ public class ReviewDTO {
 	private Date postdate;
 	private String title;
 	private String username;
-	
-	
-	
-	
-	
 }
