@@ -24,8 +24,8 @@ public class QuestionService {
 		return questionMapper.selectOne(map);
 	}//selectOne
 
-	public List<QuestionDTO> lionList(){
-		return questionMapper.lionList();
+	public List<QuestionDTO> questionList(){
+		return questionMapper.questionList();
 	}
 	
 	public QuestionDTO getQuestionById(String questionId) {

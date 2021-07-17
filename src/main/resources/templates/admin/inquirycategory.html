@@ -25,16 +25,16 @@
 						<div class="col-xl-12 col-12 mb-4 mb-xl-0">
 						
 						<h3 class="text-muted text-center mb-3">문의 카테고리 목록</h3>
-						<form name="actionForm" th:action="@{/admin/question/catagory/process}" method="post">
+						<form name="actionForm" th:action="@{/admin/inquiry/category/process}" method="post">
 							<div class="form__header d-flex justify-content-between">
 								<div>
 									<select name="action">
 										<option value="">삭제, 수정</option>
-										<option value="edit">삭제</option>
-										<option value="del">수정</option>
+										<option value="edit">수정</option>
+										<option value="del">삭제</option>
 									</select>
 									<input class="button button--light button--sm d-inline" type="submit" value="확인" />
-									<a class="button button--reverse mb-2" th:href="@{/admin/question/catagory/form}">문의 등록</a>
+									<a class="button button--reverse mb-2" th:href="@{/admin/inquiry/category/form}">문의 등록</a>
 								</div>
 							</div>
 							<div th:if="${message != null}" class="alert alert-success text-center">
@@ -51,14 +51,14 @@
 				                  </tr>
 				                </thead>
 				                <tbody>
-									<tr th:each="question, i : ${listquestions}">
+									<tr th:each="inquiry, i : ${listInquirys}">
 										<td>
-											<input type="checkbox" class="checkbox" name="target" th:value="${question.questionId}"/>
+											<input type="checkbox" class="checkbox" name="target" th:value="${inquiry.clId}"/>
 											<span class="checkbox__mark"></span>
 										</td>
 										<td>[[${i.index+1}]]</td>
-										<td>[[${question.questionId}]]</td>
-										<td>[[${question.name}]]</td>
+										<td>[[${inquiry.clId}]]</td>
+										<td>[[${inquiry.name}]]</td>
 									</tr>
 				                </tbody>
 							</table>
