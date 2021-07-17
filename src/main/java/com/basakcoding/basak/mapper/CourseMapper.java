@@ -71,4 +71,9 @@ public interface CourseMapper {
 
 	int updateSeen(Map params);
 
+	
+	//비디오별 질문 가져오기
+	List<Map> questionList();
+	
+
 }

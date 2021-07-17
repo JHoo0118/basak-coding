@@ -130,4 +130,10 @@ public class CourseService {
 		return courseMapper.updateSeen(params);
 	}
 
+	
+	public List<Map> questionList(){
+		return courseMapper.questionList();
+	}
+	
+
 }

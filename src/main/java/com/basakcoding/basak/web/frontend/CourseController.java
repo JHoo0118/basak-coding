@@ -127,6 +127,15 @@ public class CourseController {
 		if (!fileList.get(0).containsKey("INITIAL_CODE")) {
 			fileList.get(0).put("INITIAL_CODE", "abc");
 		}
+		
+		//비디오 관련 질문리스트
+		List<Map> questionList = courseService.questionList();
+		
+		//String questionClobText = courseService.questionClobText();
+		System.out.println("questionList:"+questionList);
+		
+		
+		model.addAttribute("questionList", questionList);
 		model.addAttribute("cssFileList", cssFileList);
 		model.addAttribute("fileList", fileList);
 		model.addAttribute("currVideo", video);
@@ -240,6 +249,7 @@ public class CourseController {
 		int result = courseService.updateSeen(params);
 		return Integer.toString(result);
 	}
+
 	//문의하기
 	@PostMapping("/class/inquiry")
 	@ResponseBody
@@ -250,4 +260,13 @@ public class CourseController {
 		return Integer.toString(result);
 		
 	}
+
+	
+	
+
+	
+	
+	
+	
+
 }
