@@ -14,7 +14,12 @@
 		SELECT member_id, email, username, avatar FROM members WHERE email = #{email}
 	</select>
 	
-	
+	<select id="getMyPage" parameterType="String" resultType="Map">
+		SELECT member_id, email, password, username, avatar 
+		FROM members 
+		WHERE member_id = #{memberId}
+	</select>
+
 </mapper>
 	
 	
