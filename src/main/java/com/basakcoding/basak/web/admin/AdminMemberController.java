@@ -77,6 +77,9 @@ public class AdminMemberController {
       return "redirect:/admin/member/management";
    }
    
+  
+   
+   
    // 사용자 수정 폼 이동 or 삭제
    @PostMapping("/management/process")
    public String process(@RequestParam Map map, @RequestParam List<String> target, RedirectAttributes redirectAttributes) throws IOException {
@@ -96,3 +99,5 @@ public class AdminMemberController {
       }
    }
 }
+
+
