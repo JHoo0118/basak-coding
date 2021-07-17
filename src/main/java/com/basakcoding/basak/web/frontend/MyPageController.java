@@ -308,6 +308,7 @@ public class MyPageController {
 		      dto.setMemberPath(dto.getMemberAvatarImagePath());
 		 }
 		  commentmap.put("commentList", commentLists);
+		  memberService.commentCountUpdateAtQuestion(map);
 		  memberService.commentCountUpdate(map);
 		  String commentCount=map.get("commentCount").toString();
 		  int mycomment=memberService.commentsCount(Integer.parseInt(userId));
