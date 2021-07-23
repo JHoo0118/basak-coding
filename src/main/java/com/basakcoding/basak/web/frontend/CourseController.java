@@ -35,6 +35,7 @@ import com.basakcoding.basak.service.CourseService;
 import com.basakcoding.basak.service.CurriculumDTO;
 import com.basakcoding.basak.service.FileDTO;
 import com.basakcoding.basak.service.InquiryService;
+import com.basakcoding.basak.service.QuestionDTO;
 import com.basakcoding.basak.service.VideoDTO;
 import com.basakcoding.basak.util.FileUploadUtil;
 
@@ -129,21 +130,8 @@ public class CourseController {
 		}
 		
 		//강의별 질문리스트
-		List<Map> questionList = courseService.questionList(courseId);
+		List<QuestionDTO> questionList = courseService.questionList(courseId);
 		
-		//질문 별 질문내용
-		List<String> questionClobText = courseService.getClobQuestionText(courseId);
-			for(int i=0;i<questionClobText.size();i++) {
-				String content = questionClobText.get(i);
-				questionList.get(i).put("CONTENT",content);
-			}
-		    String questionId = "-1";
-		for (Map question : questionList) {
-			questionId = question.get("QUESTION_ID").toString();
-		}
-		List<Map> commentsList = courseService.commentsList(questionId);
-		model.addAttribute("commentsList",commentsList);
-		System.out.println("commentsList"+commentsList);
 			
 		System.out.println("questionList:"+questionList);
 		
@@ -276,10 +264,6 @@ public class CourseController {
 		return Integer.toString(result);
 		
 	}
-
-	
-	
-
 	
 	
 	
