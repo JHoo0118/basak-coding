@@ -223,10 +223,21 @@
 	<select id="getFAQList" parameterType="Map" resultType="FAQDTO">
 		SELECT * FROM faq WHERE course_id = #{no}
 	</select>
-	<!--―――――――――――――――――――――――――――― 강의 상세보기 ―――――――――――――――――――――――――――――― -->
+	<!--―――――――――――――――――――――――――――― 질문 상세보기 ―――――――――――――――――――――――――――――― -->
+	
+	<resultMap type="QuestionDTO" id="question">
+		<collection column="questionId"
+			 property="comments"
+			 javaType="java.util.List" 
+			 ofType="CommentDTO"
+			 select="commentsList">
+		</collection>
+	</resultMap>
+	
+	
 	<!-- 강의별(course) 질문 뿌려주기 -->
 	<select id='questionList' parameterType="String"
-		resultType="Map">
+		resultType="QuestionDTO">
 		SELECT * FROM MEMBERS m
 		JOIN QUESTION q ON q.member_id = m.member_id
 		WHERE COURSE_ID = #{courseId}
@@ -244,7 +255,7 @@
 	
 	<!-- 질문별 댓글(COMMENTS 뿌려주기 -->
 	<select id='commentsList' parameterType="String"
-		resultType="Map">
+		resultType="CommentDTO">
 
 		SELECT c.*,name,username
 		FROM COMMENTS c

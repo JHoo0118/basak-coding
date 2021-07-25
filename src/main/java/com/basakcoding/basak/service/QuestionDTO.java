@@ -1,6 +1,8 @@
 package com.basakcoding.basak.service;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,4 +28,8 @@ public class QuestionDTO {
 	private String userName;
 	private String courseTitle;
 	private String questionTitle;
+	
+	
+	List<CommentDTO> comments = new ArrayList<CommentDTO>();
+	
 }
