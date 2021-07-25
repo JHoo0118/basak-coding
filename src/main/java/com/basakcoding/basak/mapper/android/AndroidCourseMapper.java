@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.basakcoding.basak.service.CurriculumDTO;
 import com.basakcoding.basak.service.FAQDTO;
 import com.basakcoding.basak.service.ReviewDTO;
+import com.basakcoding.basak.service.VideoDTO;
 
 @Repository
 @Mapper
@@ -29,5 +30,19 @@ public interface AndroidCourseMapper {
 	List<ReviewDTO> getReviewList(String courseId);
 
 	String getCourseDescription(String courseId);
+
+	// 비디오 아이디 링크 얻기 시작
+	List<String> getCurriculum(String courseId);
+
+	String getLastVideo(String lastCurriculumId);
+
+	String getVideo(Map params);
+
+	// 비디오 아이디 링크 얻기 끝
+	
+	// 현재 재생할 비디오 얻기
+	VideoDTO getCurrVideo(String videoId);
+
+	int isSeen(Map params);
 
 }

@@ -2,6 +2,7 @@
 server:
   port: 9090
   tomcat:    max-swallow-size: -1
+          
 
 # hikari - 커넥션 풀 설정
 # username과 password는 오라클 계정 정보 입력
@@ -20,7 +21,8 @@ spring:
     
   servlet:    multipart:      max-file-size: -1
       max-request-size: -1
-  main:    allow-bean-definition-overriding: true        
+  main:    allow-bean-definition-overriding: true
+            
 
 # MyBatis
 # 패키지 경로에 따라 다르게 설정

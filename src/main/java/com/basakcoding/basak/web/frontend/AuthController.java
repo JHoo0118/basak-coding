@@ -172,7 +172,7 @@ public class AuthController {
     public    String signup(@RequestParam Map map , Model model) throws IOException{
        int affected = memberService.registerMember(map);
        
-         String host ="http://localhost:9090/auth";
+        String host ="http://localhost:9090/auth";
         String from = "basakcoding@gmail.com";
         String to = memberService.getMemberById(map.get("memberId").toString()).getEmail();
         String subject = "사이트 이용을 위한 이메일 인증 메일 입니다.";
@@ -183,66 +183,41 @@ public class AuthController {
 
         
       if(affected==1) {
-
-          // SMTP에 접속하기 위한 정보를 기입합니다.
-
+          // SMTP
           Properties p = new Properties();
-
           p.put("mail.smtp.user", from);
-
           p.put("mail.smtp.host", "smtp.googlemail.com");
-
           p.put("mail.smtp.port", "465");
-
           p.put("mail.smtp.starttls.enable", "true");
-
           p.put("mail.smtp.auth", "true");
-
           p.put("mail.smtp.debug", "true");
-
           p.put("mail.smtp.socketFactory.port", "465");
-
           p.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-
           p.put("mail.smtp.socketFactory.fallback", "false");
-
           try{
-
               Authenticator auth = new Gmail();
-
               Session ses = Session.getInstance(p, auth);
-
               ses.setDebug(true);
-
               MimeMessage msg = new MimeMessage(ses); 
-
               msg.setSubject(subject);
-
               Address fromAddr = new InternetAddress(from);
-
               msg.setFrom(fromAddr);
-
               Address toAddr = new InternetAddress(to);
-
               msg.addRecipient(Message.RecipientType.TO, toAddr);
-
               msg.setContent(content, "text/html;charset=UTF-8");    
               Transport.send(msg);
-   
           } catch(Exception e){
-
               e.printStackTrace();             
                  System.out.println("오류입니다.");         
           }
-        
-        return "frontend/signupConfirm";
-  
+          return "frontend/signupConfirm";
       }///if
          
-      else {model.addAttribute("signupfail", "회원가입에 실패하였습니다.");
-            return "frontend/signup";
-         }//else
-    }/////signup
+      else {
+    	  model.addAttribute("signupfail", "회원가입에 실패하였습니다.");
+          return "frontend/signup";
+      }//else
+   }/////signup
    
        
 
@@ -287,50 +262,28 @@ public class AuthController {
         
         //구글 smtp 설정
         Properties p = new Properties();
-        
         p.put("mail.smtp.user", from);
-
         p.put("mail.smtp.host", "smtp.googlemail.com");
-
         p.put("mail.smtp.port", "465");
-
         p.put("mail.smtp.starttls.enable", "true");
-
         p.put("mail.smtp.auth", "true");
-
         p.put("mail.smtp.debug", "true");
-
         p.put("mail.smtp.socketFactory.port", "465");
-
         p.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-
         p.put("mail.smtp.socketFactory.fallback", "false");
-
         try{
-
             Authenticator auth = new Gmail();
-
             Session ses = Session.getInstance(p, auth);
-
             ses.setDebug(true);
-
             MimeMessage msg = new MimeMessage(ses); 
-
             msg.setSubject(subject);
-
             Address fromAddr = new InternetAddress(from);
-
             msg.setFrom(fromAddr);
-
             Address toAddr = new InternetAddress(to);
-
             msg.addRecipient(Message.RecipientType.TO, toAddr);
-
             msg.setContent(content, "text/html;charset=UTF-8");    
             Transport.send(msg);
- 
         } catch(Exception e){
-
             e.printStackTrace();             
                System.out.println("오류입니다.");        
         }
