@@ -4,8 +4,8 @@ import java.util.Map;
 
 public class CommentPagingUtil {
 
-	public static String pagingBootStrapStyle(int totalCourseCount,int pageSize,int blockPage,int nowPage,String page){
-	      
+	public static String pagingBootStrapStyle(int totalCourseCount,int pageSize,int blockPage,int nowPage,String page,int where){
+	      where = 3;
 	      String pagingStr="<ul class=\"pagination\" >";
 	      
 	      //1.전체 페이지 구하기
@@ -15,12 +15,12 @@ public class CommentPagingUtil {
 	      //처음 및 이전을 위한 로직
 	      if(intTemp != 1){
 	         pagingStr+="<li class=\"page-item\">\r\n" + 
-	               "<a class=\"page-link\" href='"+page+"?nowPage=1'>\r\n" + 
+	               "<a class=\"page-link\" href='"+page+"?nowPage=1&where="+where+"'>\r\n" + 
 	               "<span><i class=\"fas fa-angle-double-left\"></i></span>\r\n" + 
 	               "</a>\r\n" + 
 	               "</li>\r\n" + 
 	               "<li class=\"page-item\">\r\n" + 
-	               "<a class=\"page-link\" href='"+page+"&?nowPage="+(intTemp - blockPage)+"' >\r\n" + 
+	               "<a class=\"page-link\" href='"+page+"?nowPage="+(intTemp - blockPage)+"&where="+where+"'>\r\n" + 
 	               "<span><i class=\"fas fa-angle-left\"></i></span>\r\n" + 
 	               "</a>\r\n" + 
 	               "</li>";   
@@ -38,7 +38,7 @@ public class CommentPagingUtil {
 	            pagingStr+="<li class=\"page-item active\"><a class=\"page-link\" href='javascript:void(0)'><span>"+intTemp+"</span></a></li>";
 	         }
 	           else
-	              pagingStr+="<li class=\"page-item\"><a class=\"page-link\" href='"+page+"?nowPage="+intTemp+"'>"+intTemp+"</a></li>";
+	              pagingStr+="<li class=\"page-item\"><a class=\"page-link\" href='"+page+"?nowPage="+intTemp+"&where="+where+"'>"+intTemp+"</a></li>";
 	             
 	         intTemp = intTemp + 1;
 	         blockCount = blockCount + 1;
@@ -49,12 +49,12 @@ public class CommentPagingUtil {
 	         
 	      if(intTemp <= totalPage){
 	         pagingStr+="<li class=\"page-item\">\r\n" + 
-	               "<a class=\"page-link\" href='"+page+"?nowPage="+intTemp+"'>\r\n" + 
+	               "<a class=\"page-link\" href='"+page+"?nowPage="+intTemp+"&where="+where+"'>\r\n" + 
 	               "<span><i class=\"fas fa-angle-right\"></i></span>\r\n" + 
 	               "</a>\r\n" + 
 	               "</li>\r\n" + 
 	               "<li class=\"page-item\">\r\n" + 
-	               "<a class=\"page-link\" href='"+page+"?nowPage="+totalPage+"' >\r\n" + 
+	               "<a class=\"page-link\" href='"+page+"?nowPage="+totalPage+"&where="+where+"'>\r\n" + 
 	               "<span><i class=\"fas fa-angle-double-right\"></i></span>\r\n" + 
 	               "</a>\r\n" + 
 	               "</li>";

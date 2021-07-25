@@ -100,7 +100,13 @@
 		select count(*) from comments c JOIN members m ON (c.member_id =
 		m.member_id) WHERE m.member_id=#{userId}
 	</select>
-
+	
+	<!-- 내 문의 개수 -->
+	<select id="inquiryCount" parameterType="int" resultType="int">
+		select count(*) from inquiry i
+		where i.member_id=#{userId}
+	</select>
+	
 	<!-- 나의 질문 개수 -->
 	<select id="questionCount" parameterType="int" resultType="int">
 		select count(*) from question q JOIN members m ON (q.member_id =
@@ -130,12 +136,13 @@
 	</select>
 
 	<!-- 내 결제정보 가져오기 -->
-	<select id="myPayment" parameterType="int" resultType="Map">
-		select p.*,co.period,co.title,p.created_at payment_created
+	<select id="myPayment" parameterType="Map" resultType="Map">
+		select * from (select t.*,rownum r 
+    	from (select p.*,co.period,co.title,p.created_at payment_created
 		from members m
 		JOIN payment p ON m.member_id=p.member_id
 		JOIN courses co ON p.course_id=co.course_id
-		where p.payment_state='결제 완료' and m.member_id=#{userId}
+		where p.payment_state='결제 완료' and m.member_id=#{userId}) t)where r between #{start} and #{end}
 	</select>
 
 	<!-- 내 결제 상세보기 -->
@@ -146,12 +153,12 @@
 		JOIN courses co ON p.course_id=co.course_id
 		WHERE m.member_id=#{userId} AND p.payment_code=#{pay_code}
 	</select>
-
+	
 	<!-- 내 문의 제목,시간 -->
-	<select id="myInquiry" parameterType="int" resultType="Map">
-		select i.*
-		from members m JOIN inquiry i ON m.member_id=i.member_id
-		WHERE m.member_id=#{userId}
+	<select id="myInquiry" parameterType="Map" resultType="Map">
+		select * from(select t.*,rownum r 
+    	from (select * FROM members m JOIN inquiry i ON m.member_id=i.member_id
+    	WHERE m.member_id =#{userId} order by i.created_at desc) t )where r between #{start} and #{end}
 	</select>
 
 	<!-- 내 문의 상세보기 -->
@@ -177,20 +184,22 @@
 
 	<!-- 내 댓글 제목,시간 -->
 	<select id="myComments" parameterType="Map" resultType="Map">
-	<!-- 
-		select co.content,co.created_at
-		from members m JOIN comments co ON m.member_id=co.member_id
-		WHERE m.member_id=#{userId} and
-		order by created_at desc
-	 -->
-		select * from(select co.content,co.created_at,rownum r 
-		from members m JOIN comments co ON m.member_id=co.member_id
-		WHERE m.member_id=#{userId}
-		order by created_at desc) t where r between #{start} and #{end}
+		select * from(select t.comment_id,t.content,t.created_at,rownum r 
+    	from (select * FROM members m JOIN comments co ON m.member_id=co.member_id
+    	WHERE m.member_id = #{userId} order by co.created_at desc) t )where r between #{start} and #{end}
 	</select>
-	<!-- 댓글 상세보기 <select id="commentsDetails" parameterType="String" resultType="Map"> 
-		select m.username,co.title </select> -->
-
+	<!-- 댓글 상세보기에서 질문 아이디가져오기 -->
+	<select id="commentsDetails" parameterType="String" resultType="String"> 
+		select question_id from comments
+		where comment_id=#{commentId}
+	</select> 
+	<!-- 댓글의 질문 가져오기 -->
+	<select id="commentQuestion" parameterType="String" resultType="Map">
+		select
+		m.member_id,m.username,q.title,q.created_at,q.like_count,q.comment_count,to_char(q.content)question_content
+		from question q join members m on m.member_id=q.member_id
+		where q.question_id=#{questionId}
+	</select>
 
 	<!-- 이메일로 emailvalidate값 얻기 -->
 	<update id="updateEmailValidate" parameterType="Map">
@@ -199,10 +208,14 @@
 	</update>
 
 	<!-- 내 질문 -->
-	<select id="myQuestion" parameterType="int" resultType="Map">
-		select q.* from question q where q.member_id=#{userId}
-		order by created_at desc
+	<select id="myQuestion" parameterType="Map" resultType="Map">
+		select * from(select t.*,rownum r 
+    	from (select * FROM members m JOIN question q 
+        ON m.member_id=q.member_id
+        WHERE m.member_id =#{userId} order by q.created_at desc) t )
+        where r between #{start} and #{end}
 	</select>
+	
 
 	<!-- 커리큘럼 얻기 -->
 	<select id="getCurriculum" parameterType="String"
@@ -281,8 +294,7 @@
 	<!-- 좋아요 관련 쿼리 끝 -->
 
 	<!-- 내 질문 댓글 -->
-	<select id="commentList" parameterType="String"
-		resultType="MyCommentDTO">
+	<select id="commentList" parameterType="String" resultType="MyCommentDTO">
 		select c.*,m.username,m.avatar memavatar,a.name,a.avatar
 		from comments c full join members m on c.member_id=m.member_id
 		full join admins a on c.admin_id=a.admin_id

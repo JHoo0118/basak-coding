@@ -70,7 +70,6 @@
       }
    </style>
    <script>
-
       $(document).ready(function () {
          var userId = "[[${member.MEMBER_ID}]]";
          //닉네임 수정
@@ -203,7 +202,7 @@
                   대시보드</a>
                <a class="nav-link tab__link active" th:href="@{/personal/profile}">나의
                   프로필</a>
-               <a class="nav-link tab__link" th:href="@{/personal/qAndA/questions?page=1}">나의
+               <a class="nav-link tab__link" th:href="@{/personal/qAndA/questions?nowPage=1&where=1}">나의
                   질문답변</a>
             </div>
          </nav>
@@ -274,9 +273,9 @@
                </div>
                <!-- 나의 계정 끝 -->
                <!-- 나의 결제 시작 -->
-               <div class="tab-pane fade" id="pills-payment">
-                  <th:block th:if="${myPayment}!=null">
-                     <div class="payement__card row" th:each="myPayments :${myPayment}" onclick="detailsView(this)">
+               <div class="tab-pane fade d-flex flex-column justify-content-between" style="min-height: 50rem;" id="pills-payment">
+                  <div th:if="${myPayment}!=null">
+                     <div class="payement__card row" th:each="myPayments :${myPayment.lists}" onclick="detailsView(this)">
                         <div class="payment__state col-sm-2">
                            <div class="state__upper">
                               <span>[[${myPayments.PAYMENT_STATE}]]</span></div>
@@ -311,15 +310,15 @@
                               </div>
                            </div>
                         </div>
-                        <div class="payment__detail col-sm-2">
+                        <div class="payment__detail col-sm-2" >
                            <a class="payment__modal" data-toggle="modal" data-target="#paymentModal">
                               상세보기
                            </a>
                         </div>
                      </div>
-                  </th:block>
-                  <div class="d-flex justify-content-center w-100">
-                     <div class="notExist" th:if="${myPayment}==null">
+                  </div>
+                  <div class="d-flex justify-content-center w-100" th:if="${myPayment.lists.size()}==0">
+                     <div class="notExist" >
                         <div class="notExist__inner">
                            <div class="inner__upper">
                               <p>결제 내역이 없습니다.<br />
@@ -335,6 +334,9 @@
                         </div>
                      </div>
                   </div>
+                  <div class="d-flex justify-content-center" th:if="${myPayment}!=null">
+                     	<div id="paging" class="text-center" style="width:min-content" th:utext="${myPayment.pagingString}"></div>
+                 	 </div>
                   <!-- 나의 결제 끝 -->
                </div>
             </div>
