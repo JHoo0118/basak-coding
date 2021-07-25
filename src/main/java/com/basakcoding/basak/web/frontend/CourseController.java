@@ -35,6 +35,7 @@ import com.basakcoding.basak.service.CourseService;
 import com.basakcoding.basak.service.CurriculumDTO;
 import com.basakcoding.basak.service.FileDTO;
 import com.basakcoding.basak.service.InquiryService;
+import com.basakcoding.basak.service.QuestionDTO;
 import com.basakcoding.basak.service.VideoDTO;
 import com.basakcoding.basak.util.FileUploadUtil;
 
@@ -128,11 +129,14 @@ public class CourseController {
 			fileList.get(0).put("INITIAL_CODE", "abc");
 		}
 		
-		//비디오 관련 질문리스트
-		List<Map> questionList = courseService.questionList();
+		//강의별 질문리스트
+		List<QuestionDTO> questionList = courseService.questionList(courseId);
 		
-		//String questionClobText = courseService.questionClobText();
+			
 		System.out.println("questionList:"+questionList);
+		
+		
+		
 		
 		
 		model.addAttribute("questionList", questionList);
@@ -260,10 +264,6 @@ public class CourseController {
 		return Integer.toString(result);
 		
 	}
-
-	
-	
-
 	
 	
 	

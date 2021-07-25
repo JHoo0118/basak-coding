@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 
 import com.basakcoding.basak.mapper.CourseMapper;
 import com.basakcoding.basak.util.ListPagingData;
-import com.basakcoding.basak.util.PagingUtil;
+import com.basakcoding.basak.util.CoursePagingUtil;
 
 @Service
 public class CourseService {
 	
-	private int pageSize = 3;
+	private int pageSize = 5;
 	private int blockPage = 5;
 	
 	
@@ -29,7 +29,8 @@ public class CourseService {
 	
 	// 강의 목록
 	public ListPagingData<CourseDTO> selectList(Map map, int nowPage) {
-		int totalCourseCount = courseMapper.totalCount();
+		int totalCourseCount = courseMapper.totalCount(map);
+		System.out.println(totalCourseCount);
 		//전체 페이지수
 		int totalPage =(int)Math.ceil((double)totalCourseCount/pageSize);		
 		//시작 및 끝 ROWNUM구하기
@@ -40,7 +41,7 @@ public class CourseService {
 		map.put("end", end);
 		List lists = courseMapper.selectList(map);
 		String page = "/admin/course/management";
-		String pagingString=PagingUtil.pagingBootStrapStyle(totalCourseCount,pageSize, blockPage, nowPage, page);		
+		String pagingString=CoursePagingUtil.pagingBootStrapStyle(totalCourseCount,pageSize, blockPage, nowPage, page, map);		
 		ListPagingData<CourseDTO> listPagingData = 
 				ListPagingData.builder()
 				.lists(lists)
@@ -130,10 +131,9 @@ public class CourseService {
 		return courseMapper.updateSeen(params);
 	}
 
-	
-	public List<Map> questionList(){
-		return courseMapper.questionList();
+	//강의별 질문 가져오기
+	public List<QuestionDTO> questionList(String courseId){
+		return courseMapper.questionList(courseId);
 	}
-	
 
 }

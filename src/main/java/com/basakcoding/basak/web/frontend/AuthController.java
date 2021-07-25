@@ -5,6 +5,7 @@ import java.lang.ProcessBuilder.Redirect;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -31,8 +32,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.basakcoding.basak.mapper.MemberMapper;
+import com.basakcoding.basak.service.CertificationService;
 import com.basakcoding.basak.service.MemberDTO;
 import com.basakcoding.basak.service.MemberService;
 import com.basakcoding.basak.service.OAuthToken;
@@ -74,15 +77,15 @@ public class AuthController {
    //인증메일 인증확인시 emailvalidate=Y로 업데이트
    @PostMapping("/email-information")
    public String emailValidate(@RequestParam Map map) {
-	   if(memberService.updateEmailValidate(map)==1) 
-	   {
-		  return "frontend/signin";
-	   }
-	   return "frontend/signupConfirm";
+      if(memberService.updateEmailValidate(map)==1) 
+      {
+        return "frontend/signin";
+      }
+      return "frontend/signupConfirm";
    }
    
  
-    @GetMapping("/doLogin")
+    @GetMapping("/kakaoLogin")
       public @ResponseBody String kakaoCallback(String code) {//Data를 리턴해주는 컨트롤러 함수
          
          //POST방식으로 key=value 데이터를 요청 (카카오쪽으로)
@@ -102,7 +105,7 @@ public class AuthController {
          MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
          params.add("grant_type","authorization_code");
          params.add("client_id","702e704b386e7afd4fdd82adab67d698");
-         params.add("redirect_uri","http://localhost:9090/auth/doLogin");
+         params.add("redirect_uri","http://localhost:9090/auth/kakaoLogin");
          params.add("code",code);
          
          //HttpHeaders와 HttpBody를 하나의 오브젝트에 담기
@@ -166,92 +169,201 @@ public class AuthController {
  
     
     @PostMapping("/signup")
-    public 	String signup(@RequestParam Map map , Model model) throws IOException{
-    	int affected = memberService.registerMember(map);
-    	
-    	  String host ="http://localhost:9090/auth";
-		  String from = "basakcoding@gmail.com";
-		  String to = memberService.getMemberById(map.get("memberId").toString()).getEmail();
-		  String subject = "사이트 이용을 위한 이메일 인증 메일 입니다.";
-		  String content = "다음 링크에 접속하여 이메일 인증을 진행하세요."+
-		  "<form id='emailfrm' action='"+host+"/email-information' method='POST'>"
-		  		+ "<input type='hidden' name='code' value='"+new SHA256().getSHA256(to)+"'/>"
-		  		+ "<input type='submit' value='이메일 인증하기'/></form>";
+    public    String signup(@RequestParam Map map , Model model) throws IOException{
+       int affected = memberService.registerMember(map);
+       
+         String host ="http://localhost:9090/auth";
+        String from = "basakcoding@gmail.com";
+        String to = memberService.getMemberById(map.get("memberId").toString()).getEmail();
+        String subject = "사이트 이용을 위한 이메일 인증 메일 입니다.";
+        String content = "다음 링크에 접속하여 이메일 인증을 진행하세요."+
+        "<form id='emailfrm' action='"+host+"/email-information' method='POST'>"
+              + "<input type='hidden' name='code' value='"+new SHA256().getSHA256(to)+"'/>"
+              + "<input type='submit' value='이메일 인증하기'/></form>";
 
-		  
+        
       if(affected==1) {
 
-    		// SMTP에 접속하기 위한 정보를 기입합니다.
+          // SMTP에 접속하기 위한 정보를 기입합니다.
 
-    		Properties p = new Properties();
+          Properties p = new Properties();
 
-    		p.put("mail.smtp.user", from);
+          p.put("mail.smtp.user", from);
 
-    		p.put("mail.smtp.host", "smtp.googlemail.com");
+          p.put("mail.smtp.host", "smtp.googlemail.com");
 
-    		p.put("mail.smtp.port", "465");
+          p.put("mail.smtp.port", "465");
 
-    		p.put("mail.smtp.starttls.enable", "true");
+          p.put("mail.smtp.starttls.enable", "true");
 
-    		p.put("mail.smtp.auth", "true");
+          p.put("mail.smtp.auth", "true");
 
-    		p.put("mail.smtp.debug", "true");
+          p.put("mail.smtp.debug", "true");
 
-    		p.put("mail.smtp.socketFactory.port", "465");
+          p.put("mail.smtp.socketFactory.port", "465");
 
-    		p.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+          p.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
-    		p.put("mail.smtp.socketFactory.fallback", "false");
+          p.put("mail.smtp.socketFactory.fallback", "false");
 
-    		try{
+          try{
 
-    		    Authenticator auth = new Gmail();
+              Authenticator auth = new Gmail();
 
-    		    Session ses = Session.getInstance(p, auth);
+              Session ses = Session.getInstance(p, auth);
 
-    		    ses.setDebug(true);
+              ses.setDebug(true);
 
-    		    MimeMessage msg = new MimeMessage(ses); 
+              MimeMessage msg = new MimeMessage(ses); 
 
-    		    msg.setSubject(subject);
+              msg.setSubject(subject);
 
-    		    Address fromAddr = new InternetAddress(from);
+              Address fromAddr = new InternetAddress(from);
 
-    		    msg.setFrom(fromAddr);
+              msg.setFrom(fromAddr);
 
-    		    Address toAddr = new InternetAddress(to);
+              Address toAddr = new InternetAddress(to);
 
-    		    msg.addRecipient(Message.RecipientType.TO, toAddr);
+              msg.addRecipient(Message.RecipientType.TO, toAddr);
 
-    		    msg.setContent(content, "text/html;charset=UTF-8"); 	
-    		    Transport.send(msg);
+              msg.setContent(content, "text/html;charset=UTF-8");    
+              Transport.send(msg);
    
-    		} catch(Exception e){
+          } catch(Exception e){
 
-    		    e.printStackTrace();   		    
-    		    	System.out.println("오류입니다.");   		
-    		}
-  		
-		  return "frontend/signupConfirm";
+              e.printStackTrace();             
+                 System.out.println("오류입니다.");         
+          }
+        
+        return "frontend/signupConfirm";
   
       }///if
-    	  
+         
       else {model.addAttribute("signupfail", "회원가입에 실패하였습니다.");
-      		return "frontend/signup";
-      	}//else
+            return "frontend/signup";
+         }//else
     }/////signup
    
-    	
+       
 
-	@PostMapping("/signup2")
-	@ResponseBody
-	public String signupAjax (@RequestParam String email, Model model) throws IOException{
-		if(memberService.isEmailUnique(email)==false) {
-		    //이메일 중복 입니다.       
-			// model.addAttribute("errormsg", "이메일 중복 입니다.");     
-			return "1";
-		}
-		return "-1";
-	}
+   @PostMapping("/signup2")
+   @ResponseBody
+   public String signupAjax (@RequestParam String email, Model model) throws IOException{
+      if(memberService.isEmailUnique(email)==false) {
+          //이메일 중복 입니다.       
+         // model.addAttribute("errormsg", "이메일 중복 입니다.");     
+         return "1";
+      }
+      return "-1";
+   }
+   
+ //임시 비밀번호 발급 컨트롤러
+   @PostMapping("/getresetpassword")
+   public String getresetpassword(@RequestParam Map map , Model model, RedirectAttributes redirectAttributes) throws IOException {
+      //임시비밀번호 랜덤으로 발생
+       Random rand  = new Random();
+           String password = "";
+           for(int i=0; i<6; i++) {
+               String ran = Integer.toString(rand.nextInt(10));
+               password+=ran;
+           }
+           
+           
+         String email=(String)map.get("email");
+         
+         //입력된 이메일값=테이블 이메일값 중복
+         if(memberService.isEmailUnique(email)==false) {
+         
+         Map params = new HashMap();
+         params.put("password", password);
+         params.put("email", email);
+         memberService.updatepassword(params);
+         
+          String host ="http://localhost:9090/auth";
+          String from = "basakcoding@gmail.com";
+          String to = email;
+          String subject = "바삭코딩 임시 비밀번호 발급 입니다.";
+          String content = "귀하의 비밀번호가 아래와 같이 임시로 발급 되었습니다."+"["+password+"]";
+        
+        //구글 smtp 설정
+        Properties p = new Properties();
+        
+        p.put("mail.smtp.user", from);
+
+        p.put("mail.smtp.host", "smtp.googlemail.com");
+
+        p.put("mail.smtp.port", "465");
+
+        p.put("mail.smtp.starttls.enable", "true");
+
+        p.put("mail.smtp.auth", "true");
+
+        p.put("mail.smtp.debug", "true");
+
+        p.put("mail.smtp.socketFactory.port", "465");
+
+        p.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+
+        p.put("mail.smtp.socketFactory.fallback", "false");
+
+        try{
+
+            Authenticator auth = new Gmail();
+
+            Session ses = Session.getInstance(p, auth);
+
+            ses.setDebug(true);
+
+            MimeMessage msg = new MimeMessage(ses); 
+
+            msg.setSubject(subject);
+
+            Address fromAddr = new InternetAddress(from);
+
+            msg.setFrom(fromAddr);
+
+            Address toAddr = new InternetAddress(to);
+
+            msg.addRecipient(Message.RecipientType.TO, toAddr);
+
+            msg.setContent(content, "text/html;charset=UTF-8");    
+            Transport.send(msg);
+ 
+        } catch(Exception e){
+
+            e.printStackTrace();             
+               System.out.println("오류입니다.");        
+        }
+        return "frontend/signin";  
+         }//if 
+         
+         else {
+        	 //등록된 이메일 x
+        	 redirectAttributes.addFlashAttribute("message", "등록된 이메일이 아닙니다.");
+             return "redirect:/auth/reset-pass";	
+         }
+        	 
+      
+   }
+      
+      //SMS 인증 서비스
+      CertificationService certificationService = new CertificationService();
+
+      @PostMapping("/check/sendSMS")
+       public @ResponseBody
+       String sendSMS(@RequestParam String phoneNumber) {      
+           Random rand  = new Random();
+           String numStr = "";
+           for(int i=0; i<4; i++) {
+               String ran = Integer.toString(rand.nextInt(10));
+               numStr+=ran;
+           }
+
+           System.out.println("수신자 번호 : " + phoneNumber);
+           System.out.println("인증번호 : " + numStr);
+           
+         certificationService.certifiedPhoneNumber(phoneNumber,numStr);
+           return numStr;
+       }
+
 }
-

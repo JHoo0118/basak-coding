@@ -114,6 +114,10 @@
   .form__group label {
     font-size: 1.6rem !important;
   }
+  
+  .button--margin {
+  	margin-top: 20rem !important;
+  }
 }
 
 @media (max-width: 768px) {
@@ -143,4 +147,60 @@
     padding: 2rem;
   }
 
+}
+
+/* Reset Password */
+.text--phone {
+	color: #ff9300;
+	font-size: 1.4rem;
+}
+
+.select--phone {
+	border: none;
+	background-color: transparent;
+	color: #0fd;
+	height: 5rem;
+	font-size: 1.6rem;
+	border: 1px solid #383a43;
+	padding: 0 1rem;
+}
+
+.select--phone:focus {
+	background-color: transparent;
+
+}
+
+.input--phone {
+	border: none;
+	border: 1px solid #383a43;
+	background-color: transparent; 
+	height: 5rem;
+	width: 8rem;
+	color: #0fd;
+	font-size: 1.6rem;
+	padding: 0 1rem;
+	
+}
+
+.button--phone {
+	background-color: #ff9300;
+	color: #fff;
+	border: none;
+	height: 5rem;
+	font-size: 1.4rem;
+	margin-left: 2rem;
+	border-radius: 4px;
+}
+
+.confirm--phone {
+	border: none;
+	background-color: transparent;
+	color: #fff;
+	border-bottom: 5px solid #383a43;
+	font-size: 1.6rem;
+	padding: 1rem 0;
+}
+
+.button--margin {
+	margin-top: 20rem;
 }

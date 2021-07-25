@@ -26,5 +26,56 @@
 		AND member_id = #{memberId} AND vm.seen = 'Y'
 	</select>
 	
+	<!-- 강의 상세보기 강의 정보 얻기 -->
+	<select id="getCourseDetail" parameterType="String" resultType="Map">
+		SELECT co.course_id, co.title, co.short_description, co.price, co.difficulty,
+		co.course_length, co.thumbnail, co.created_at, co.like_count, co.period, co.video_count, a.name,
+		(SELECT COUNT(review_id) FROM review WHERE course_id = #{courseId}) review_count
+		FROM courses co JOIN admins a ON a.admin_id = co.admin_id WHERE co.course_id = #{courseId}
+	</select>
+	
+	<!-- 강의 내용 -->
+	<select id="getCourseDescription" parameterType="String" resultType="String">
+		SELECT description FROM courses WHERE course_id = #{courseId}
+	</select>
+	
+	<resultMap type="CurriculumDTO" id="curriculums">
+		<collection column="curriculum_id" 
+                    property="videos" 
+                    javaType="java.util.List" 
+                    ofType="VideoDTO" 
+                    select="getVideoList">
+        </collection>
+	</resultMap>
+	
+	<!-- 커리큘럼 얻기 -->
+	<select id="getCurriculumList" parameterType="String" resultMap="curriculums">
+		SELECT * FROM curriculum WHERE course_id = #{courseId}
+	</select>
+	
+    <select id="getVideoList" resultType="VideoDTO">
+       	SELECT video_id, curriculum_id, video_uri, video_length, video_title, video_content 
+       	FROM video WHERE curriculum_id = #{curriculums} ORDER BY video_id
+    </select>
+    
+    <!-- FAQ 얻기 -->
+    <select id="getFAQList" parameterType="String" resultType="FAQDTO">
+    	SELECT * FROM FAQ WHERE course_id = #{courseId}
+    </select>
+    
+    <!-- 후기 얻기 -->
+    <select id="getReviewList" parameterType="String" resultType="ReviewDTO">
+    	SELECT * FROM 
+    	review WHERE course_id = #{courseId}
+    </select>
+    
+    <!-- 이미 결제한 강의인지 확인 -->
+    <select id="alreadyPayment" parameterType="Map" resultType="int">
+		SELECT COUNT(*)
+		FROM courses co
+		JOIN payment pa ON pa.course_id = co.course_id
+		JOIN category ca ON ca.category_id = co.category_id
+		JOIN admins a ON co.admin_id = a.admin_id WHERE co.course_id = #{courseId} AND pa.member_id = #{memberId}
+	</select>
 	
 </mapper>

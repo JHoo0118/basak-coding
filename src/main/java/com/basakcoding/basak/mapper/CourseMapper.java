@@ -11,6 +11,7 @@ import com.basakcoding.basak.service.CourseDTO;
 import com.basakcoding.basak.service.CurriculumDTO;
 import com.basakcoding.basak.service.FAQDTO;
 import com.basakcoding.basak.service.FileDTO;
+import com.basakcoding.basak.service.QuestionDTO;
 import com.basakcoding.basak.service.VideoDTO;
 import com.basakcoding.basak.util.ListPagingData;
 
@@ -24,7 +25,7 @@ public interface CourseMapper {
 	List<CourseDTO> selectList(Map map);
 	
 	// 강의 총 갯수
-	int totalCount();
+	int totalCount(Map map);
 	// 강의 만들기
 	int createCourse(Map map);
 
@@ -72,8 +73,10 @@ public interface CourseMapper {
 	int updateSeen(Map params);
 
 	
-	//비디오별 질문 가져오기
-	List<Map> questionList();
+	//강의 질문 리스트 가져오기
+	List<QuestionDTO> questionList(String courseId);
 	
+	//강의 별 질문 가져오기
+	Map questionOne(String questionId);
 
 }

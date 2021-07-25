@@ -1,5 +1,6 @@
 package com.basakcoding.basak.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,10 +9,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.basakcoding.basak.mapper.MemberMapper;
+import com.basakcoding.basak.util.ListPagingData;
+import com.basakcoding.basak.util.CommentPagingUtil;
 import com.basakcoding.basak.util.SHA256;
+import com.basakcoding.basak.util.myListPagingData;
 
 @Service
 public class MemberService {
+	
+	private int pageSize = 5;
+	private int blockPage = 5;
+	
    @Autowired
    private MemberMapper memberMapper;
     public MemberService(MemberMapper memberMapper) {
@@ -125,8 +133,30 @@ public class MemberService {
       return memberMapper.inquDetails(userId,inquiry_id);
    }
    //내 댓글 제목,시간
-   public List<Map> myComments(int userId) {
-      return memberMapper.myComments(userId);
+   public myListPagingData myComments(int userId, int nowPage) {
+	   	int totalCourseCount = memberMapper.commentsCount(userId);
+		//전체 페이지수
+		int totalPage =(int)Math.ceil((double)totalCourseCount/pageSize);		
+		//시작 및 끝 ROWNUM구하기
+		int start = (nowPage -1)*pageSize+1;
+		int end = nowPage * pageSize;	
+		//페이징을 위한 로직 끝]
+		Map map=new HashMap();
+		map.put("start", start);
+		map.put("end", end);
+		map.put("userId",userId);
+		List lists = memberMapper.myComments(map);
+		String page = "/personal/qAndA/questions";
+		String pagingString=CommentPagingUtil.pagingBootStrapStyle(totalCourseCount,pageSize, blockPage, nowPage, page);		
+		myListPagingData<Map> listPagingData = 
+				myListPagingData.builder()
+				.lists(lists)
+				.nowPage(nowPage)
+				.pageSize(pageSize)
+				.pagingString(pagingString)
+				.TotalCourseCount(totalCourseCount)
+				.build(); 
+		return listPagingData;
    }
    //내 댓글 상세보기
    public Map commentsDetails(String userId, String commenTitle) {
@@ -204,7 +234,17 @@ public class MemberService {
    //질문별 댓글수 증가
    public int commentCountUpdate(Map map) {
 	   return memberMapper.commentCountUpdate(map);
-}
+   }
+
+   public int commentCountUpdateAtQuestion(Map map) {
+	   return memberMapper.commentCountUpdateAtQuestion(map);
+   }
+   
+   //임시 비밀번호로 비밀번호 변경
+   public int updatepassword(Map map) {
+      encodePassword(map);
+      return memberMapper.updatepassword(map);
+   }
 
    
 

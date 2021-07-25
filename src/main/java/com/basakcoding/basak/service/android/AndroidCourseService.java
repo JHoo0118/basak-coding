@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.basakcoding.basak.mapper.android.AndroidCourseMapper;
+import com.basakcoding.basak.service.CurriculumDTO;
+import com.basakcoding.basak.service.FAQDTO;
+import com.basakcoding.basak.service.ReviewDTO;
 
 @Service
 public class AndroidCourseService {
@@ -25,6 +28,26 @@ public class AndroidCourseService {
 
 	public int getSeenCount(Map params) {
 		return androidCourseMapper.getSeenCount(params);
+	}
+
+	public Map getCourseDetail(String courseId) {
+		return androidCourseMapper.getCourseDetail(courseId);
+	}
+
+	public List<CurriculumDTO> getCurriculumList(String courseId) {
+		return androidCourseMapper.getCurriculumList(courseId);
+	}
+
+	public List<FAQDTO> getFAQList(String courseId) {
+		return androidCourseMapper.getFAQList(courseId);
+	}
+
+	public List<ReviewDTO> getReviewList(String courseId) {
+		return androidCourseMapper.getReviewList(courseId);
+	}
+
+	public String getCourseDescription(String courseId) {
+		return androidCourseMapper.getCourseDescription(courseId);
 	}
 	
 }

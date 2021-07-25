@@ -74,7 +74,7 @@ public interface MemberMapper {
    Map inquDetails(String userId, String inquiry_id);
 
    //내 댓글 제목,시간
-   List<Map> myComments(int userId);
+   List<Map> myComments(Map map);
 
    //내 댓글 상세보기
    Map commentsDetails(String userId, String commenTitle);
@@ -133,5 +133,9 @@ public interface MemberMapper {
    //질문별 댓글수 증가
    int commentCountUpdate(Map map);
 
+   int commentCountUpdateAtQuestion(Map map);
+
+   //임시비밀번호
+   int updatepassword(Map map);
    
 }
