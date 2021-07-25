@@ -1,6 +1,7 @@
 package com.basakcoding.basak.web.admin;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.basakcoding.basak.mapper.InquiryMapper;
+import com.basakcoding.basak.service.AdminDTO;
+import com.basakcoding.basak.service.CategoryDTO;
 import com.basakcoding.basak.service.ClassificationDTO;
 import com.basakcoding.basak.service.InquiryDTO;
 import com.basakcoding.basak.service.InquiryService;
@@ -125,8 +128,19 @@ public class AdminInquiryController {
 			}
 		}	
 	
-
-
+		@GetMapping("/management/form")
+		public String memberForm(@RequestParam Map map, Model model) {
+//
+//			
+//			List<CategoryDTO> listCategories = courseService.categoryList();
+//			List<AdminDTO> listAdmin = AdminService.getAdminList();
+//			Map course = new HashMap<>();
+//			model.addAttribute("listAdmin", listAdmin);
+//			model.addAttribute("listCategories", listCategories);
+//			model.addAttribute("course", course);
+//			model.addAttribute("title", "강의 관리");
+			return "admin/inquiryEdit";
+		}
 
 	
 	
