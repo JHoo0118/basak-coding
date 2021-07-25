@@ -3,6 +3,7 @@ package com.basakcoding.basak.web.frontend;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +36,6 @@ import com.basakcoding.basak.service.MemberService;
 import com.basakcoding.basak.service.MyCommentDTO;
 import com.basakcoding.basak.util.FileUploadUtil;
 import com.basakcoding.basak.util.ListPagingData;
-import com.basakcoding.basak.util.myListPagingData;
 
 @Controller
 @RequestMapping("/personal")
@@ -125,41 +125,40 @@ public class MyPageController {
    }
 
    @GetMapping("/profile")
-   public String profile(Model model, Authentication auth) {
+   public String profile(@RequestParam(required = false, defaultValue = "1") int nowPage,@RequestParam (required = false, defaultValue = "1")int where,Model model, Authentication auth) {
       userInfo(model, auth);
       // 내결제
       int userId = (int) model.getAttribute("userId");
-      List<Map> map = memberService.myPayment(userId);
-      if (!map.isEmpty())
-         model.addAttribute("myPayment", map);
+      ListPagingData listPayment = memberService.myPayment(userId,nowPage,where);
+      if (listPayment!=null)
+         model.addAttribute("myPayment", listPayment);
       return "frontend/profile";
    }
 
    @GetMapping("/qAndA/questions")
-   public String qAndA(@RequestParam(required = false, defaultValue = "1") int nowPage,Model model, Authentication auth) {
-      userInfo(model, auth);
+   public String qAndA(@RequestParam(required = false, defaultValue = "1") int nowPage,@RequestParam (required = false, defaultValue = "1")int where,Model model, Authentication auth) {
+	  
+	  userInfo(model, auth);
       int userId = (int) model.getAttribute("userId");
       // 내 질문
-      List<Map> map = memberService.myQuestion(userId);
-      if (!map.isEmpty())
-         model.addAttribute("myQuestion", map);
+      ListPagingData listQuestion = memberService.myQuestion(userId,nowPage,where);
+      if (listQuestion!=null)
+         model.addAttribute("myQuestion", listQuestion);
       // 내 문의 제목,시간
-      List<Map> map1 = memberService.myInquiry(userId);
-      if (!map1.isEmpty())
-         model.addAttribute("myInquiry", map1);
+      ListPagingData listInquiry= memberService.myInquiry(userId,nowPage,where);
+      if (listInquiry!=null)
+         model.addAttribute("myInquiry", listInquiry);
       // 내 댓글 제목,시간
-      myListPagingData listComment = memberService.myComments(userId,nowPage);
-      //List<Map> map2 = memberService.myComments(userId);
+      ListPagingData listComment = memberService.myComments(userId,nowPage,where);
       if (listComment!=null)
          model.addAttribute("myComments", listComment);
 
       return "frontend/qAndA";
    }
 
-   // 내 프로필 이미지
+   // 내 프로필 이미지 변경
    @RequestMapping("/dashBoard/profileImgUpdate")
-   public @ResponseBody int profileImgUpdate(@RequestParam String imgname, @RequestParam MultipartFile file,
-         Authentication auth) throws IllegalStateException, IOException {
+   public @ResponseBody int profileImgUpdate(@RequestParam String imgname, @RequestParam MultipartFile file,Authentication auth) throws IllegalStateException, IOException {
       String filename = StringUtils.cleanPath(file.getOriginalFilename());
       int userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
       String uploadDir = "upload/member/" + userId;
@@ -288,7 +287,12 @@ public class MyPageController {
    @RequestMapping("/questionEdit.do")
    public @ResponseBody int questionEdit(@RequestParam("title")String title,@RequestParam("content")String content,@RequestParam("questionId")String questionId){
 	   questionId.toString();
-	   int succese=memberService.questionUpdate(title,content,questionId);
+	   int succese;
+	   if(title=="" || content=="") {
+		   succese=0;
+		   return succese;
+	   }
+	   succese=memberService.questionUpdate(title,content,questionId);
 	   return succese;
    }
    //질문에 답변 추가
@@ -319,10 +323,21 @@ public class MyPageController {
    }
    // 댓글 상세보기
    @RequestMapping(value = "/commentsDetails.do", method = RequestMethod.POST)
-   public @ResponseBody Map commentDetails(@RequestParam("commenTitle") String commenTitle, Model model,
-         Authentication auth) {
-      String userId = ((UserDetails) auth.getPrincipal()).getUsername();
-      Map map = memberService.commentsDetails(userId, commenTitle);
+   public @ResponseBody Map commentDetails(@RequestParam("commentId") String commentId,Authentication auth) {
+	   String userId = ((UserDetails) auth.getPrincipal()).getUsername();
+	   String questionId = memberService.commentsDetails(commentId);
+      // 질문
+      Map map=memberService.commentQuestion(questionId);
+      if(!userId.equals(map.get("MEMBER_ID").toString())) {
+    	  map.remove("MEMBER_ID");
+      }
+      // 댓글
+      List<MyCommentDTO> commentList = memberService.commentList(questionId);
+      for (MyCommentDTO dto : commentList) {
+         dto.setAdminPath(dto.getAdminAvatarImagePath());
+         dto.setMemberPath(dto.getMemberAvatarImagePath());
+      }
+      map.put("commentLists", commentList);
       return map;
    }
    

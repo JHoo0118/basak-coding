@@ -132,16 +132,8 @@ public class CourseService {
 	}
 
 	//강의별 질문 가져오기
-	public List<Map> questionList(String courseId){
+	public List<QuestionDTO> questionList(String courseId){
 		return courseMapper.questionList(courseId);
-	}
-	//질문별 질문 내용 가져오기
-	public List<String> getClobQuestionText(String courseId) {
-		return courseMapper.getClobQuestionText(courseId);
-	}
-	//질문별 답변 가져오기
-	public List<Map> commentsList(String questionId){
-		return courseMapper.commentsList(questionId);
 	}
 
 }

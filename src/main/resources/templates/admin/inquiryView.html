@@ -50,8 +50,10 @@
 					<!-- .center-block 사용시 해당 블락의 크기를 지정하자 -->
 					<ul id="pillMenu" class="nav nav-pills center-block" style="width: 200px; margin-bottom: 10px">
 						<sec:authentication property="principal.username" var="username" />
+						<li><a th:href="@{/admin/inquiry/management/form}" class="btn btn-success">문의</a></li>
+						<br>
 						<li><a href="javascript:isDelete();" class="btn btn-success">삭제</a></li>
-
+						<br>
 						<li><a th:href="@{/admin/inquiry/management}" class="btn btn-success">목록</a></li>
 					</ul>
 				</div>

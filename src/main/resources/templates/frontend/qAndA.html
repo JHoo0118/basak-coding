@@ -125,13 +125,14 @@
 		}
 		//내 질문 수정하기
 		function questionEdit() {
-			if (title.type = Object && content.type != Object) {
+			if (title.type == Object && content.type != Object) {
 				title = $('#questionformTitle').val();
 			}
-			if (content.type = Object && title.type != Object) {
+			if (content.type == Object && title.type != Object) {
 				content = $('#questionformContent').val();
 			}
-			else if ((title.type = Object) && (content.type = Object)) {
+			else if ((title== "") || (content=="")) {
+				alert("모두 작성해주세요");
 				return false;
 			}
 			$.ajax({
@@ -140,13 +141,15 @@
 				type: 'post',
 				dataType: "json",
 				success: function (data) {
+					if(data==0){
+						alert("모두 작성해주세요");
+						return false;
+					}
 					alert("수정 완료되었습니다.");
-					$('#realTitle').text(title);
-					$('#questionTitle').text(title);
-					$('#questionContent').text(content);
+					location.reload();
 				},
 				error: function () {
-					alert("오류가 발생했습니다.다시시도해주세요");
+					alert("오류가 발생햇습니다 다시시도해주세요.");
 				}
 			});
 
@@ -162,7 +165,6 @@
 		//답변 작성하기
 		function newComment() {
 			newContent = $('#newCommentContent').val();
-			console.log("새로작성한값" + newContent);
 			if (newContent == "") {
 				alert("내용을 작성해주세요");
 				return false;
@@ -209,7 +211,6 @@
 							}
 							commentList.insertAdjacentHTML("beforeend", commentHtmls);
 							$('#formModalComment').modal("hide");
-							console.log('와이!!!!?!?' + data.commentCount, data);
 							$('#questionComment').html('<i class="far fa-comment-dots" ></i>' + data.commentCount);
 							$('#myquestionCommentCount').html('<i class="far fa-comment-dots" ></i>' + data.commentCount);
 							$('#mycomment').text(data.mycomment);
@@ -257,27 +258,71 @@
 			});
 		}
       //댓글 상세보기
-		/*
-		function commentsDetails() {
-		   var commenTitle = $('#commenTitle').text();
-		   console.log("함수발생")
+		function commentsDetails(comment) {
+			//questionId=comment.querySelectorAll("span")[0].innerText;
+		   var commentId = comment.querySelectorAll("span")[0].innerText;
 		   $.ajax({
 			  url: '/personal/commentsDetails.do',
-			  data: {"commenTitle": commenTitle},
+			  data: {"commentId": commentId},
 			  type: 'post',
 			  dataType: "json",
 			  success: function (data) {
-				 $('#inqmem').text(data.USERNAME);
-				 $('#inqtime').text(data.CREATED_AT);
-				 $('#inqtitle').text(data.TITLE);
-				 $('#inqcontent').text(data.CONTENT);
-				 $('#clname').text(data.NAME);
+					$('#questionformTitle').val(data.TITLE);
+					$('#questionformContent').text(data.QUESTION_CONTENT);
+					$('#questionMem').text(data.USERNAME);
+					$('#questionTime').text(data.CREATED_AT.split('T')[0]);
+					$('#questionTitle').text(data.TITLE);
+					$('#questionContent').text(data.QUESTION_CONTENT);
+					$('#questionLike').html('<i class="far fa-thumbs-up" ></i>' + data.LIKE_COUNT);
+					$('#questionComment').html('<i class="far fa-comment-dots" ></i>' + data.COMMENT_COUNT);
+					if(data.MEMBER_ID==null){
+						$('#editbutton').hide();
+					}
+					document.querySelector(".question__list").style.display = "none";
+					document.querySelector(".question__noAnswer").style.display = "block";
+					if (data.commentLists != "") {
+						document.querySelector(".question__list").style.display = "block";
+						document.querySelector(".question__noAnswer").style.display = "none";
+						commentList.innerHTML = '';
+						$.each(data.commentLists, function (index, value) {
+							var commentHtml;
+							if (data.commentLists[index].adminId) {
+								commentHtml = `
+                           <li class="comment__item" >
+                              <div class="comment__user">
+                                 <img src="${data.commentLists[index].adminPath}" alt="admin avatar" />
+                                 <div class="user__info">
+                                    <h5 style="color: #0fd">${data.commentLists[index].name}</h5>
+                                    <span>${data.commentLists[index].createdAt}</span>
+                                 </div>
+                              </div>
+                              <p class="qModal__content">${data.commentLists[index].content}</p>
+                           </li>
+                        `;
+							} else if (data.commentLists[index].memberId) {
+								commentHtml = `
+                           <li class="comment__item" >
+                              <div class="comment__user">
+                                 <img src="${data.commentLists[index].memberPath}" alt="admin avatar" />
+                                 <div class="user__info">
+                                    <h5>${data.commentLists[index].username}</h5>
+                                    <span>${data.commentLists[index].createdAt}</span>
+                                 </div>
+                              </div>
+                              <p class="qModal__content">${data.commentLists[index].content}</p>
+                           </li>
+                        `;
+							}
+							commentList.insertAdjacentHTML("beforeend", commentHtml);
+						});
+					}
 			  },
 			  error: function () {
 				 alert("오류가 발생했습니다.다시시도해주세요");
 			  }
 		   });
-		}*/
+		   
+		}
 
 
 
@@ -299,36 +344,36 @@
 						대시보드</a>
 					<a class="nav-link tab__link" th:href="@{/personal/profile}">나의
 						프로필</a>
-					<a class="nav-link tab__link active" th:href="@{/personal/qAndA/questions?page=1}">나의
+					<a class="nav-link tab__link active" th:href="@{/personal/qAndA/questions?nowPage=1&where=1}" >나의
 						질문답변</a>
 				</div>
 			</nav>
 		</div>
 
 		<!-- 나의 질문 시작 -->
-		<div class="tab-pane tab__page fade show tab__content">
+		<div class="tab__page tab__content">
 			<div class="container-fluid container--main">
 				<ul class="nav nav-pills mb-3 row" id="pills-tab">
 					<li class="nav-item tab__menu col-4 p-0">
-						<a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-question">나의
+						<a class="nav-link active" id="pills-home-tab" href="javascript:void(0)">나의
 							질문</a>
 						<i class="fas fa-circle"></i>
 					</li>
 					<li class="nav-item tab__menu col-4 p-0">
-						<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-answer">나의 문의</a>
+						<a class="nav-link" id="pills-profile-tab" href="javascript:void(0)">나의 문의</a>
 						<i class="fas fa-circle"></i>
 					</li>
 					<li class="nav-item tab__menu col-4 p-0">
-						<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-comment">나의 댓글</a>
+						<a class="nav-link" id="pills-comment-tab" href="javascript:void(0)">나의 댓글</a>
 						<i class="fas fa-circle"></i>
 					</li>
 				</ul>
 				<div class="tab-content" id="pills-tabContent">
-					<div class="tab-pane fade show active d-flex justify-content-center" id="pills-question">
+					<div class="tab-pane active d-flex align-items-center flex-column tab-tab justify-content-between" style="min-height:50rem;" id="pills-question">
 						<th:block th:if="${myQuestion}!=null">
 							<ul class="qAndA">
 								<li class="qAndA__box row m-0" data-toggle="modal" data-target="#questionModal"
-									th:each="myQuestions :${myQuestion}" onclick="questionDetails(this)">
+									th:each="myQuestions :${myQuestion.lists}" onclick="questionDetails(this)">
 									<div class="qAndA__left col-2">
 										<span id="question_id"
 											style="display:none">[[${myQuestions.QUESTION_ID}]]</span>
@@ -344,8 +389,9 @@
                            </div>
                         </li>
                      </ul>
+                     
                   </th:block>
-                  <div class="d-flex justify-content-center w-100" th:if="${myQuestion}==null">
+                  <div class="d-flex justify-content-center w-100" th:if="${myQuestion.lists.size()}==0">
                      <div class="notExist">
                         <div class="notExist__inner">
                            <div class="inner__upper">
@@ -362,12 +408,13 @@
                         </div>
                      </div>
                   </div>
+                  <div th:if="${myQuestion.lists.size()}!=0" class="col-off-md-12 text-center" th:utext="${myQuestion.pagingString}"></div>
                </div>
-               <div class=" tab-pane fade d-flex justify-content-center" id="pills-answer">
+               <div class="tab-pane fade d-flex align-items-center flex-column tab-tab justify-content-between" style="min-height:50rem;" id="pills-answer">
                   <th:block th:if="${myInquiry}!=null">
                      <ul class="qAndA">
                         <li class="qAndA__box row m-0" data-toggle="modal" data-target="#inquiryModal"
-                           th:each="myInquirys :${myInquiry}" onclick="inquDetails(this)">
+                           th:each="myInquirys :${myInquiry.lists}" onclick="inquDetails(this)">
                            <div class="qAndA__left col-2">
                               <span>문의</span>
                               <span id="inquiry_id" style="display:none">[[${myInquirys.INQUIRY_ID}]]</span>
@@ -381,8 +428,9 @@
                            </div>
                         </li>
                      </ul>
+                     
                   </th:block>
-                  <div class="d-flex justify-content-center w-100" th:if="${myInquiry}==null">
+                  <div class="d-flex justify-content-center w-100" th:if="${myInquiry.lists.size()}==0">
                      <div class="notExist">
                         <div class="notExist__inner">
                            <div class="inner__upper">
@@ -399,13 +447,16 @@
                         </div>
                      </div>
                   </div>
+                  <div th:if="${myInquiry.lists.size()}!=0" class="col-off-md-12 text-center" th:utext="${myInquiry.pagingString}"></div>
                </div>
-               <div class="tab-pane fade d-flex align-items-center flex-column" id="pills-comment">
+               <div class="tab-pane fade d-flex align-items-center flex-column tab-tab justify-content-between" style="min-height:50rem;" id="pills-comment">
                   <th:block th:if="${myComments}!=null">
                      <ul class="qAndA">
                         <li class="qAndA__box row m-0" data-toggle="modal" data-target="#questionModal"
-                           th:each="myComment :${myComments.lists}">
+                           th:each="myComment :${myComments.lists}" onclick="commentsDetails(this)">
                            <div class="qAndA__left col-2">
+                           
+                           <span id="commentId" style="display:none">[[${myComment.COMMENT_ID}]]</span>
                               <span>댓글</span>
                            </div>
                            <div class="qAndA__middle col-8">
@@ -413,14 +464,13 @@
                               <h4 class="iine-clamp">[[${myComment.CONTENT}]]</h4>
                            </div>
                            <div class="qAndA__right col-2">
-                              <span><i class="far fa-comment-dots" onclick="commentsDetails()"></i></span>
+                              <span><i class="far fa-comment-dots"></i></span>
                            </div>
                         </li>
                      </ul>
                      
                   </th:block>
-                  
-                  <div class="d-flex justify-content-center w-100" th:if="${myComments}==null">
+                  <div class="d-flex justify-content-center w-100" th:if="${myComments.lists.size()}==0">
                      <div class="notExist">
                         <div class="notExist__inner">
                            <div class="inner__upper">
@@ -437,9 +487,7 @@
                         </div>
                      </div>
                   </div>
-                  
-					<div id="paging" class="col-off-md-12 text-center" th:utext="${myComments.pagingString}"></div>
-					
+                  <div th:if="${myComments.lists.size()}!=0" id="paging" class="col-off-md-12 text-center" th:utext="${myComments.pagingString}"></div>
                </div>
             </div>
             
@@ -484,7 +532,7 @@
                                  </span>
                               </div>
                               <div class="state__edit">
-                                 <span data-toggle="modal" data-target="#formModal">수정하기</span>
+                                 <span id="editbutton" data-toggle="modal" data-target="#formModal">수정하기</span>
                               </div>
                            </div>
                            <div class="state__right">
@@ -612,6 +660,63 @@
    <!-- 메인 섹션 끝 -->
    <!-- footer -->
     <div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
+    <script>
+    	var question = document.getElementById("pills-question")
+    	var inquiry = document.getElementById("pills-answer")
+    	var comment = document.getElementById("pills-comment")
+    
+		$( document ).ready(function() {
+    		let where = getType();
+    		if (where == 3) {
+				activeOff();
+				document.getElementById("pills-comment-tab").classList.add("active");				
+				comment.classList.remove("fade");
+				comment.classList.add("active");
+			}
+		})
+    
+    	
+    	function activeOff() {
+			Array.prototype.slice.call(document.querySelectorAll("#pills-tab li a")).forEach(function(aTag) {
+					aTag.classList.remove('active');
+			});
+			Array.prototype.slice.call(document.querySelectorAll(".tab-tab")).forEach(function(ele) {
+					ele.classList.remove('active');
+					ele.classList.add('fade')
+			});
+		}
+		
+		function getType() {
+			const urlSearchParams = new URLSearchParams(window.location.search);
+    		const {where} = Object.fromEntries(urlSearchParams.entries());
+			return where;
+		}
+		
+    	Array.prototype.slice.call(document.querySelectorAll("#pills-tab li a")).forEach(function(aTag) {
+			
+	    	
+			aTag.addEventListener('click', function() {
+				activeOff();
+				
+				aTag.classList.add('active');
+				if (aTag.id === 'pills-home-tab') {
+					history.pushState({}, null, "http://localhost:9090/personal/qAndA/questions?nowPage=1&where=1");
+					question.classList.remove("fade");
+					question.classList.add("active");
+				} else if (aTag.id === 'pills-profile-tab') {
+					history.pushState({}, null, "http://localhost:9090/personal/qAndA/questions?nowPage=1&where=2");
+					inquiry.classList.remove("fade");
+					inquiry.classList.add("active");
+				} else if (aTag.id === 'pills-comment-tab') {
+					history.pushState({}, null, "http://localhost:9090/personal/qAndA/questions?nowPage=1&where=3");
+					comment.classList.remove("fade");
+					comment.classList.add("active");
+				}
+			})
+	
+		})
+    	
+    </script>
 </body>
 
 </html>

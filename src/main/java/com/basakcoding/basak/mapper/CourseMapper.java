@@ -11,6 +11,7 @@ import com.basakcoding.basak.service.CourseDTO;
 import com.basakcoding.basak.service.CurriculumDTO;
 import com.basakcoding.basak.service.FAQDTO;
 import com.basakcoding.basak.service.FileDTO;
+import com.basakcoding.basak.service.QuestionDTO;
 import com.basakcoding.basak.service.VideoDTO;
 import com.basakcoding.basak.util.ListPagingData;
 
@@ -73,13 +74,9 @@ public interface CourseMapper {
 
 	
 	//강의 질문 리스트 가져오기
-	List<Map> questionList(String courseId);
+	List<QuestionDTO> questionList(String courseId);
 	
 	//강의 별 질문 가져오기
 	Map questionOne(String questionId);
-	//질문 별 질문내용 가져오기
-	List<String> getClobQuestionText(String questionId);
-	//질문 별 답변내용 가져오기
-	List<Map> commentsList(String questionId);
 
 }
