@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuestionDTO {
-	
-
 
 	private Integer questionId;
 	private Integer memberId;

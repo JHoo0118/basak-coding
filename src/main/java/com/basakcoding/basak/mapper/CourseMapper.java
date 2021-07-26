@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.basakcoding.basak.service.CategoryDTO;
+import com.basakcoding.basak.service.CommentDTO;
 import com.basakcoding.basak.service.CourseDTO;
 import com.basakcoding.basak.service.CurriculumDTO;
 import com.basakcoding.basak.service.FAQDTO;
@@ -75,6 +76,8 @@ public interface CourseMapper {
 	
 	//강의 질문 리스트 가져오기
 	List<QuestionDTO> questionList(String courseId);
+
+	
 	
 	//강의 별 질문 가져오기
 	Map questionOne(String questionId);
