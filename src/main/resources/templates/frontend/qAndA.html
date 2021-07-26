@@ -12,10 +12,9 @@
 	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
 	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
 	<script>
-
+		var questionId;
 		//좋아요 처리
 		$(document).ready(function () {
-			var questionId;
 			var title;
 			var content;
 			var likeCount = $('#likeCount').text();
@@ -29,7 +28,6 @@
 				$('#likeCount').html('<i class="far fa-thumbs-up"></i>' + likeCount);
 				$('#likeCount').prop("style", "color: gray;");
 			}
-
 		});
 		//모달 좋아요 기능
 		function like(like) {
@@ -125,15 +123,10 @@
 		}
 		//내 질문 수정하기
 		function questionEdit() {
-			if (title.type == Object && content.type != Object) {
-				title = $('#questionformTitle').val();
-			}
-			if (content.type == Object && title.type != Object) {
-				content = $('#questionformContent').val();
-			}
-			else if ((title== "") || (content=="")) {
-				alert("모두 작성해주세요");
-				return false;
+			inputTage();
+			textTage();
+			if (!questionId) {
+				questionId = $('#comquestionId').text();
 			}
 			$.ajax({
 				url: '/personal/questionEdit.do',
@@ -141,12 +134,17 @@
 				type: 'post',
 				dataType: "json",
 				success: function (data) {
-					if(data==0){
+					if (data == -1) {
 						alert("모두 작성해주세요");
 						return false;
 					}
-					alert("수정 완료되었습니다.");
-					location.reload();
+					else if (data == 0) {
+						alert("수정에 실패했습니다 다시시도해주세요.");
+					}
+					else {
+						alert("수정 완료되었습니다.");
+						location.reload();
+					}
 				},
 				error: function () {
 					alert("오류가 발생햇습니다 다시시도해주세요.");
@@ -216,13 +214,11 @@
 							$('#mycomment').text(data.mycomment);
 						});
 					}
-
 				},
 				error: function () {
 					alert("오류가 발생했습니다.다시시도해주세요");
 				}
 			});
-
 		}////////답변작성하기
 		//문의 상세보기
 		function inquDetails(inquiry) {
@@ -241,7 +237,6 @@
 					if (data.ANSWER_ID != null) {
 						document.querySelector(".inquiry__list").style.display = "block";
 						document.querySelector(".inquiry__noAnswer").style.display = "none";
-
 						$('#admin').text(data.ADMIN_NAME);
 						$('#admintime').text(data.ANSWER_CREATED.split('T')[0]);
 						$('#adminAnswer').text(data.ANS_CONTENT);
@@ -250,23 +245,22 @@
 						document.querySelector(".inquiry__list").style.display = "none";
 						document.querySelector(".inquiry__noAnswer").style.display = "block";
 					}
-
 				},
 				error: function () {
 					alert("오류가 발생했습니다.다시시도해주세요");
 				}
 			});
 		}
-      //댓글 상세보기
+		//댓글 상세보기
 		function commentsDetails(comment) {
-			//questionId=comment.querySelectorAll("span")[0].innerText;
-		   var commentId = comment.querySelectorAll("span")[0].innerText;
-		   $.ajax({
-			  url: '/personal/commentsDetails.do',
-			  data: {"commentId": commentId},
-			  type: 'post',
-			  dataType: "json",
-			  success: function (data) {
+			var commentId = comment.querySelectorAll("span")[0].innerText;
+			$.ajax({
+				url: '/personal/commentsDetails.do',
+				data: {"commentId": commentId},
+				type: 'post',
+				dataType: "json",
+				success: function (data) {
+					$("#comquestionId").text(data.comquestionId);
 					$('#questionformTitle').val(data.TITLE);
 					$('#questionformContent').text(data.QUESTION_CONTENT);
 					$('#questionMem').text(data.USERNAME);
@@ -275,7 +269,7 @@
 					$('#questionContent').text(data.QUESTION_CONTENT);
 					$('#questionLike').html('<i class="far fa-thumbs-up" ></i>' + data.LIKE_COUNT);
 					$('#questionComment').html('<i class="far fa-comment-dots" ></i>' + data.COMMENT_COUNT);
-					if(data.MEMBER_ID==null){
+					if (data.MEMBER_ID == null) {
 						$('#editbutton').hide();
 					}
 					document.querySelector(".question__list").style.display = "none";
@@ -316,12 +310,12 @@
 							commentList.insertAdjacentHTML("beforeend", commentHtml);
 						});
 					}
-			  },
-			  error: function () {
-				 alert("오류가 발생했습니다.다시시도해주세요");
-			  }
-		   });
-		   
+				},
+				error: function () {
+					alert("오류가 발생했습니다.다시시도해주세요");
+				}
+			});
+
 		}
 
 
@@ -344,7 +338,7 @@
 						대시보드</a>
 					<a class="nav-link tab__link" th:href="@{/personal/profile}">나의
 						프로필</a>
-					<a class="nav-link tab__link active" th:href="@{/personal/qAndA/questions?nowPage=1&where=1}" >나의
+					<a class="nav-link tab__link active" th:href="@{/personal/qAndA/questions?nowPage=1&where=1}">나의
 						질문답변</a>
 				</div>
 			</nav>
@@ -369,7 +363,8 @@
 					</li>
 				</ul>
 				<div class="tab-content" id="pills-tabContent">
-					<div class="tab-pane active d-flex align-items-center flex-column tab-tab justify-content-between" style="min-height:50rem;" id="pills-question">
+					<div class="tab-pane active d-flex align-items-center flex-column tab-tab justify-content-between"
+						style="min-height:50rem;" id="pills-question">
 						<th:block th:if="${myQuestion.lists.size()}!=0">
 							<ul class="qAndA">
 								<li class="qAndA__box row m-0" data-toggle="modal" data-target="#questionModal"
@@ -455,8 +450,8 @@
                         <li class="qAndA__box row m-0" data-toggle="modal" data-target="#questionModal"
                            th:each="myComment :${myComments.lists}" onclick="commentsDetails(this)">
                            <div class="qAndA__left col-2">
-                           
                            <span id="commentId" style="display:none">[[${myComment.COMMENT_ID}]]</span>
+                           <span id="comquestionId" style="display:none"></span>
                               <span>댓글</span>
                            </div>
                            <div class="qAndA__middle col-8">
@@ -510,7 +505,7 @@
                      <div class="qModal__upper">
                         <div class="comment__user">
                            <img th:if="${member.AVATAR == null}" th:src="@{/images/image4.jpg}" />
-                           <img th:if="${member.AVATAR != null}" th:src="@{${PATH}}" />
+                           <img id="questionImage" th:if="${member.AVATAR != null}" th:src="@{${PATH}}" />
                            <div class="user__info">
                               <h5 id="questionMem"></h5>
                               <span id="questionTime"></span>
@@ -661,43 +656,43 @@
    <!-- footer -->
     <div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
     <script>
-    	var question = document.getElementById("pills-question")
-    	var inquiry = document.getElementById("pills-answer")
-    	var comment = document.getElementById("pills-comment")
-    
-		$( document ).ready(function() {
-    		let where = getType();
-    		if (where == 3) {
+		var question = document.getElementById("pills-question")
+		var inquiry = document.getElementById("pills-answer")
+		var comment = document.getElementById("pills-comment")
+
+		$(document).ready(function () {
+			let where = getType();
+			if (where == 3) {
 				activeOff();
-				document.getElementById("pills-comment-tab").classList.add("active");				
+				document.getElementById("pills-comment-tab").classList.add("active");
 				comment.classList.remove("fade");
 				comment.classList.add("active");
 			}
 		})
-    
-    	
-    	function activeOff() {
-			Array.prototype.slice.call(document.querySelectorAll("#pills-tab li a")).forEach(function(aTag) {
-					aTag.classList.remove('active');
+
+
+		function activeOff() {
+			Array.prototype.slice.call(document.querySelectorAll("#pills-tab li a")).forEach(function (aTag) {
+				aTag.classList.remove('active');
 			});
-			Array.prototype.slice.call(document.querySelectorAll(".tab-tab")).forEach(function(ele) {
-					ele.classList.remove('active');
-					ele.classList.add('fade')
+			Array.prototype.slice.call(document.querySelectorAll(".tab-tab")).forEach(function (ele) {
+				ele.classList.remove('active');
+				ele.classList.add('fade')
 			});
 		}
-		
+
 		function getType() {
 			const urlSearchParams = new URLSearchParams(window.location.search);
-    		const {where} = Object.fromEntries(urlSearchParams.entries());
+			const {where} = Object.fromEntries(urlSearchParams.entries());
 			return where;
 		}
-		
-    	Array.prototype.slice.call(document.querySelectorAll("#pills-tab li a")).forEach(function(aTag) {
-			
-	    	
-			aTag.addEventListener('click', function() {
+
+		Array.prototype.slice.call(document.querySelectorAll("#pills-tab li a")).forEach(function (aTag) {
+
+
+			aTag.addEventListener('click', function () {
 				activeOff();
-				
+
 				aTag.classList.add('active');
 				if (aTag.id === 'pills-home-tab') {
 					history.pushState({}, null, "http://localhost:9090/personal/qAndA/questions?nowPage=1&where=1");
@@ -713,10 +708,10 @@
 					comment.classList.add("active");
 				}
 			})
-	
+
 		})
-    	
-    </script>
+
+	</script>
 </body>
 
 </html>

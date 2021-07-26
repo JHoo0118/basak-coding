@@ -274,7 +274,7 @@
                <!-- 나의 계정 끝 -->
                <!-- 나의 결제 시작 -->
                <div class="tab-pane fade d-flex flex-column justify-content-between" style="min-height: 50rem;" id="pills-payment">
-                  <div th:if="${myPayment}!=null">
+                  <div th:if="${myPayment.lists.size()}!=0">
                      <div class="payement__card row" th:each="myPayments :${myPayment.lists}" onclick="detailsView(this)">
                         <div class="payment__state col-sm-2">
                            <div class="state__upper">
@@ -334,7 +334,7 @@
                         </div>
                      </div>
                   </div>
-                  <div class="d-flex justify-content-center" th:if="${myPayment}!=null">
+                  <div class="d-flex justify-content-center" th:if="${myPayment.lists.size()}!=0">
                      	<div id="paging" class="text-center" style="width:min-content" th:utext="${myPayment.pagingString}"></div>
                  	 </div>
                   <!-- 나의 결제 끝 -->

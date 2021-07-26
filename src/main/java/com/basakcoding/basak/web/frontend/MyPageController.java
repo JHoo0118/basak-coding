@@ -48,10 +48,8 @@ public class MyPageController {
 
    @RequestMapping("/password/edit.do")
    public @ResponseBody boolean passwordEdit(@RequestBody Map map, Authentication auth) {
-      // System.out.println("넘어오는 비밀번호:"+map);
       boolean booleanpass = passwordEncoder.matches((map.get("pass").toString()),
             ((UserDetails) auth.getPrincipal()).getPassword());
-      // System.out.println("비밀번호가 일치하는지!"+booleanpass);
       return booleanpass;
    }
 
@@ -235,13 +233,15 @@ public class MyPageController {
    public @ResponseBody Map questionDetails(@RequestParam("questionId") String questionId, Model model,
          Authentication auth) {
       String userId = ((UserDetails) auth.getPrincipal()).getUsername();
+      String path;
       // 질문
       Map map = memberService.questionDetails(userId, questionId);
       // 댓글
       List<MyCommentDTO> commentLists = memberService.commentList(questionId);
       for (MyCommentDTO dto : commentLists) {
          dto.setAdminPath(dto.getAdminAvatarImagePath());
-         dto.setMemberPath(dto.getMemberAvatarImagePath());
+         path=dto.getMemberAvatarImagePath();
+         dto.setMemberPath(path);
       }
       map.put("commentList", commentLists);
       return map;
@@ -288,8 +288,8 @@ public class MyPageController {
    public @ResponseBody int questionEdit(@RequestParam("title")String title,@RequestParam("content")String content,@RequestParam("questionId")String questionId){
 	   questionId.toString();
 	   int succese;
-	   if(title=="" || content=="") {
-		   succese=0;
+	   if((title.trim().equals("")) || (content.trim().equals(""))) {
+		   succese=-1;
 		   return succese;
 	   }
 	   succese=memberService.questionUpdate(title,content,questionId);
@@ -338,6 +338,7 @@ public class MyPageController {
          dto.setMemberPath(dto.getMemberAvatarImagePath());
       }
       map.put("commentLists", commentList);
+      map.put("comquestionId", questionId);
       return map;
    }
    
