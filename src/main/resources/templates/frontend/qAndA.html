@@ -370,7 +370,7 @@
 				</ul>
 				<div class="tab-content" id="pills-tabContent">
 					<div class="tab-pane active d-flex align-items-center flex-column tab-tab justify-content-between" style="min-height:50rem;" id="pills-question">
-						<th:block th:if="${myQuestion}!=null">
+						<th:block th:if="${myQuestion.lists.size()}!=0">
 							<ul class="qAndA">
 								<li class="qAndA__box row m-0" data-toggle="modal" data-target="#questionModal"
 									th:each="myQuestions :${myQuestion.lists}" onclick="questionDetails(this)">
@@ -382,15 +382,15 @@
 									</div>
 									<div class="qAndA__middle col-8">
 										<span th:text="${#dates.format(myQuestions.CREATED_AT, 'yyyy.MM.dd')}"></span>
-                              <h4 id="realTitle"class="iine-clamp">[[${myQuestions.TITLE}]]</h4>
-                           </div>
-                           <div class="qAndA__right col-2">
-                              <span id="myquestionCommentCount"><i class="far fa-comment-dots"></i>[[${myQuestions.COMMENT_COUNT}]]</span>
-                           </div>
-                        </li>
-                     </ul>
+	                              <h4 id="realTitle"class="iine-clamp">[[${myQuestions.TITLE}]]</h4>
+	                           </div>
+	                           <div class="qAndA__right col-2">
+	                              <span id="myquestionCommentCount"><i class="far fa-comment-dots"></i>[[${myQuestions.COMMENT_COUNT}]]</span>
+	                           </div>
+	                        </li>
+	                     </ul>
                      
-                  </th:block>
+                  	</th:block>
                   <div class="d-flex justify-content-center w-100" th:if="${myQuestion.lists.size()}==0">
                      <div class="notExist">
                         <div class="notExist__inner">
@@ -411,7 +411,7 @@
                   <div th:if="${myQuestion.lists.size()}!=0" class="col-off-md-12 text-center" th:utext="${myQuestion.pagingString}"></div>
                </div>
                <div class="tab-pane fade d-flex align-items-center flex-column tab-tab justify-content-between" style="min-height:50rem;" id="pills-answer">
-                  <th:block th:if="${myInquiry}!=null">
+                  <th:block th:if="${myInquiry.lists.size()}!=0" >
                      <ul class="qAndA">
                         <li class="qAndA__box row m-0" data-toggle="modal" data-target="#inquiryModal"
                            th:each="myInquirys :${myInquiry.lists}" onclick="inquDetails(this)">
@@ -450,7 +450,7 @@
                   <div th:if="${myInquiry.lists.size()}!=0" class="col-off-md-12 text-center" th:utext="${myInquiry.pagingString}"></div>
                </div>
                <div class="tab-pane fade d-flex align-items-center flex-column tab-tab justify-content-between" style="min-height:50rem;" id="pills-comment">
-                  <th:block th:if="${myComments}!=null">
+                  <th:block th:if="${myComments.lists.size()}!=0">
                      <ul class="qAndA">
                         <li class="qAndA__box row m-0" data-toggle="modal" data-target="#questionModal"
                            th:each="myComment :${myComments.lists}" onclick="commentsDetails(this)">
