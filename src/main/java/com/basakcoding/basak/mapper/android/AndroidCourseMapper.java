@@ -45,4 +45,6 @@ public interface AndroidCourseMapper {
 
 	int isSeen(Map params);
 
+	int updateSeen(Map params);
+
 }

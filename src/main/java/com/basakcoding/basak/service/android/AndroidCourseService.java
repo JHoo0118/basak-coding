@@ -77,5 +77,10 @@ public class AndroidCourseService {
 	public int isSeen(Map params) {
 		return androidCourseMapper.isSeen(params);
 	}
+
+
+	public int updateSeen(Map params) {
+		return androidCourseMapper.updateSeen(params);
+	}
 	
 }

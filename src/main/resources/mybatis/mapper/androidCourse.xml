@@ -113,4 +113,9 @@
 		WHERE video_id = #{videoId} AND member_id = #{memberId} AND seen = 'Y'
 	</select>
 	
+	<!-- 본 동영상 업데이트 -->
+	<update id="updateSeen" parameterType="Map">
+		UPDATE videoMember SET seen = 'Y' WHERE video_id = #{videoId} AND member_id = #{memberId}
+	</update>
+	
 </mapper>
