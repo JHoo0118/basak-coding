@@ -26,6 +26,17 @@
 		UPDATE members SET username=#{username}, password=#{password}
 		WHERE member_id = #{memberId}
 	</update>
+	
+	<select id="isAlreadyJoined" parameterType="String" resultType="String">
+		SELECT member_id FROM members WHERE email = #{email}
+	</select>
+
+	<insert id="googleJoin" parameterType="Map">
+		<selectKey keyProperty="memberId" resultType="String" order="BEFORE">
+			SELECT seq_members.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO members VALUES(#{memberId}, #{email}, #{password}, #{username}, 'Y', DEFAULT, 'google', 'NULL', 'NULL')
+	</insert>
 
 </mapper>
 	

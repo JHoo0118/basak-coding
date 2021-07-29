@@ -39,4 +39,16 @@ public class AndroidAuthRestController {
 		}
 		return member;
 	}
+	
+	@CrossOrigin
+	@PostMapping("/google")
+	public int googleSignUp(@RequestBody Map<String, String> map) {
+		String memberId = androidMemberService.isAlreadyJoined(map.get("email"));
+		if (memberId == null) {
+			androidMemberService.googleJoin(map);
+			memberId = map.get("memberId");
+		}
+		
+		return Integer.parseInt(memberId);
+	}
 }

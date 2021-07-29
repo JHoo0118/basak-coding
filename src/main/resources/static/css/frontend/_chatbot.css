@@ -46,20 +46,18 @@
 }
 
 .bot-message {
-  background: #f3981c;
+  background: #984ed6;
   max-width: 200px;
   color: white;
-  font-weight: 700;
   margin-right: auto;
   font-size: 14px;
   margin-bottom: 20px;
 }
 
 .human-message {
-  background: #0fd;
+  background: #4C5270;
   max-width: 200px;
-  color: white;
-  font-weight: 700;
+  color: #fff;
   margin-left: auto;
   font-size: 14px;
   margin-bottom: 20px;

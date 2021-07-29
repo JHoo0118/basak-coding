@@ -1,5 +1,6 @@
 package com.basakcoding.basak.frontend.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -11,9 +12,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.basakcoding.basak.frontend.security.oauth.MemberOAuth2UserService;
+import com.basakcoding.basak.frontend.security.oauth.OAuth2LoginSuccessHandler;
+
 @EnableWebSecurity
 @Configuration
 public class FrontendSecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	@Autowired private MemberOAuth2UserService oAuth2UserService;
+	@Autowired private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 	
 	private static final String[] PERMIT_ALL = {
 	        "/",
@@ -48,6 +55,13 @@ public class FrontendSecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginPage("/auth/signin")
 				.usernameParameter("email")
 				.permitAll()
+			.and()
+			.oauth2Login()
+				.loginPage("/auth/signin")
+				.userInfoEndpoint()
+				.userService(oAuth2UserService)
+				.and()
+				.successHandler(oAuth2LoginSuccessHandler)
 			.and()
 			.logout()
 				.logoutUrl("/logout")
