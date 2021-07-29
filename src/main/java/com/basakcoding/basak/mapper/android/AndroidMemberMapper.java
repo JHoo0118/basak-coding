@@ -25,6 +25,12 @@ public interface AndroidMemberMapper {
 	   
 	//결제 강의개수가져오기
 	int paymentCount(int userId);
+
+	//회원가입
+	int signUp(Map map);
+
+	//이메일 중복체크
+	int emailCheck(String email);
 	   
 }
 
