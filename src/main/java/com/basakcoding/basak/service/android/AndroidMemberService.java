@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.basakcoding.basak.mapper.android.AndroidMemberMapper;
@@ -14,7 +15,11 @@ public class AndroidMemberService {
 	
 	@Autowired
 	private AndroidMemberMapper androidMemberMapper;
-	    
+	
+	@Autowired
+    private PasswordEncoder passwordEncoder;
+	
+	//로그인 처리
     public MemberDTO login(String email) {
     	return androidMemberMapper.login(email);
     }
@@ -23,6 +28,7 @@ public class AndroidMemberService {
 		return androidMemberMapper.getPassword(password);
 	}
 
+	//마이페이지 뿌려주기
 	public Map getMyPage(String memberId) {
 		return androidMemberMapper.getMyPage(memberId);
 	}
@@ -36,4 +42,16 @@ public class AndroidMemberService {
     public int paymentCount(int userId) {
        return androidMemberMapper.paymentCount(userId);
     }
+    
+    // 비밀번호 해싱
+    private void encodePassword(Map map) {
+       String encodedPassword = passwordEncoder.encode(map.get("password").toString());
+       map.put("password", encodedPassword);
+    }
+
+    //회원정보 수정
+	public int updateMem(Map map) {
+		encodePassword(map);
+		return androidMemberMapper.updateMem(map);
+	}
 }

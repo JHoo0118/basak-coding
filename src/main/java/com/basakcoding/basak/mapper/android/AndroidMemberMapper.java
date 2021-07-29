@@ -25,6 +25,9 @@ public interface AndroidMemberMapper {
 	   
 	//결제 강의개수가져오기
 	int paymentCount(int userId);
+
+	//회원정보 수정
+	int updateMem(Map map);
 	   
 }
 
