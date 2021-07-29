@@ -18,7 +18,8 @@ public class AndroidMemberService {
 	private AndroidMemberMapper androidMemberMapper;
 	@Autowired
     private PasswordEncoder passwordEncoder;
-	
+
+	//로그인 처리
     public MemberDTO login(String email) {
     	return androidMemberMapper.login(email);
     }
@@ -27,6 +28,7 @@ public class AndroidMemberService {
 		return androidMemberMapper.getPassword(password);
 	}
 
+	//마이페이지 뿌려주기
 	public Map getMyPage(String memberId) {
 		return androidMemberMapper.getMyPage(memberId);
 	}
@@ -56,5 +58,11 @@ public class AndroidMemberService {
 	//email중복체크
 	public int emailCheck(String email) {
 		return androidMemberMapper.emailCheck(email);
+	}
+
+    //회원정보 수정
+	public int updateMem(Map map) {
+		encodePassword(map);
+		return androidMemberMapper.updateMem(map);
 	}
 }
