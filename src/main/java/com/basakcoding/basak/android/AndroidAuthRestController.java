@@ -39,7 +39,7 @@ public class AndroidAuthRestController {
 		}
 		return member;
 	}
-<<<<<<< HEAD
+
 	//회원가입
 	@CrossOrigin
 	@PostMapping("/signUp")
@@ -52,7 +52,7 @@ public class AndroidAuthRestController {
 		return androidMemberService.signUp(map);
 	}
 	
-=======
+
 	
 	@CrossOrigin
 	@PostMapping("/google")
@@ -65,5 +65,4 @@ public class AndroidAuthRestController {
 		
 		return Integer.parseInt(memberId);
 	}
->>>>>>> branch 'master' of https://github.com/JHoo0118/basak-coding.git
 }
