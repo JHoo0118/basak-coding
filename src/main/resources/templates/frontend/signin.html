@@ -75,10 +75,17 @@
                 <button type="submit" class="button button--rounded button--full" style="color: #0fd; margin-top: 60px">
                     로그인하기
                 </button>
-                
-                    <a href="https://kauth.kakao.com/oauth/authorize?client_id=702e704b386e7afd4fdd82adab67d698&redirect_uri=http://localhost:9090/auth/doLogin&response_type=code" style="margin-top: 20px; "><img src="/images/kakao_login_button.png"/>
-
-
+                <!-- 구글 로그인 -->
+                <div class="w-100 d-flex align-items-center justify-content-between" style="margin-top: 24px;">
+	               	<a class="sns-login__btn sns-login__btn--google" th:href="@{/oauth2/authorization/google}">
+	                	<i class="fab fa-google" style="color:#fff; margin-right:3.4rem; font-size:16px"></i>
+	                	구글로 로그인
+	               	</a>
+                    <a class="sns-login__btn sns-login__btn--kakao" style="color:#2e2e30 !important" href="https://kauth.kakao.com/oauth/authorize?client_id=702e704b386e7afd4fdd82adab67d698&redirect_uri=http://localhost:9090/auth/doLogin&response_type=code">
+                    	<i class="fa fa-comment" style="color:#2e2e30; margin-right:3.4rem; font-size:16px"></i>
+	                	카카오로 로그인
+					</a>
+               	</div>
             </form>
             <a class="signin__toSignup" th:href="@{/auth/signup}">아직 코드라이언 회원이 아니신가요?&nbsp;<span>회원가입하기</span></a>
         </div>

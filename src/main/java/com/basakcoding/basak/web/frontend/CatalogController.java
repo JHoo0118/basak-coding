@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.basakcoding.basak.service.CatalogService;
 import com.basakcoding.basak.service.CourseDTO;
 import com.basakcoding.basak.service.CurriculumDTO;
+import com.basakcoding.basak.service.MemberService;
 
 
 @Controller
@@ -36,6 +38,9 @@ public class CatalogController {
 	
 	
 	//리뷰서비스 주입
+	@Autowired
+	private MemberService memberService;
+	
 	@Autowired
 	private CatalogService catalogService;
 	
@@ -96,8 +101,14 @@ public class CatalogController {
 		
 		
 		if(auth != null) {//로그인이 됐을때
+			String memberId = null;
+			if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+				memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+			} else {
+				memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+			}
 		
-			map.put("memberId",((UserDetails)auth.getPrincipal()).getUsername());
+			map.put("memberId",memberId);
 			map.put("courseId",courseId);
 			
 			//결제 내역 판단 여부
@@ -157,7 +168,8 @@ public class CatalogController {
 	//좋아요 안좋아요
 	@PostMapping("/catalog/count_like")
 	public @ResponseBody int catalogLike(Authentication auth , @RequestBody Map map) throws IOException {
-		String memberId;
+		String memberId = null;
+		
 		int likeCheck;
 		int affected;
 		String courseId	= (String) map.get("courseId");
@@ -166,7 +178,11 @@ public class CatalogController {
 			return affected=2;
 		
 		} else {
-			memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+			if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+				memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+			} else {
+				memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+			}
 			map.put("memberId", memberId);
 			likeCheck = catalogService.likeCheck(map);
 			
@@ -192,7 +208,7 @@ public class CatalogController {
 	public @ResponseBody Map reviewWrite(Authentication auth  ,@RequestBody Map map, Model model) {
 		int affected;
 		int checkPayment;
-		String memberId;
+		String memberId = null;
 		String courseId	= (String) map.get("courseId");
 		
 		if(auth == null){//로그인 돼있지 않을시
@@ -201,7 +217,11 @@ public class CatalogController {
 			return map;
 		}
 		else {//로그인 돼있을시
-			memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+			if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+				memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+			} else {
+				memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+			}
 			map.put("memberId", memberId);
 			map.put("courseId",courseId);
 			checkPayment = catalogService.checkPayment(map);
@@ -244,7 +264,12 @@ public class CatalogController {
 	@PostMapping("/catalog/reviewDelete")
 	public @ResponseBody int reviewDelete(Authentication auth,@RequestBody Map map,Model model) {
 		
-		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+		String memberId = null;
+		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+			memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+		} else {
+			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+		}
 		map.put("memberId", memberId);
 		
 		String courseId	= (String) map.get("courseId");
@@ -259,8 +284,12 @@ public class CatalogController {
 	@PostMapping("/catalog/reviewInsert")
 	public @ResponseBody Map reviewInsert(Authentication auth  ,@RequestBody Map map) {
 		int affected;
-		String memberId;
-		memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+		String memberId = null;
+		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+			memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+		} else {
+			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+		}
 
 
 		String content = (String) map.get("content");

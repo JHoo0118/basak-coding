@@ -34,6 +34,11 @@ public interface AndroidMemberMapper {
 
 	//회원정보 수정
 	int updateMem(Map map);
-	   
+
+	// 회원인지 확인
+	String isAlreadyJoined(String email);
+
+	// 구글 회원가입
+	int googleJoin(Map<String, String> map);
 }
 

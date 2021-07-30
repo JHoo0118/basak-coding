@@ -32,6 +32,10 @@ body {
   z-index: 1000;
 }
 
+.none {
+	display: none;
+}
+
 a,
 a:link,
 a:visited {

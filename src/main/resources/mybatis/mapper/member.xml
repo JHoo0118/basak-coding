@@ -344,5 +344,17 @@
       UPDATE members SET password=#{password} WHERE email=#{email}
     </update>
 	
-
+	<!-- 가입 방식 업데이트 -->
+	<update id="updateAuthenticationType" parameterType="Map">
+		UPDATE members SET login_method = #{type} WHERE email = #{email}
+	</update>
+	
+	<!-- OAuth 가입 -->
+	<insert id="addNewMemberByOAuthLogin" parameterType="MemberDTO">
+		<selectKey keyProperty="memberId" resultType="int"
+			order="BEFORE">
+			SELECT seq_members.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO members VALUES(#{memberId}, #{email}, #{password}, #{username}, 'Y', DEFAULT, DEFAULT, NULL, NULL)
+	</insert>
 </mapper>

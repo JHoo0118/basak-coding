@@ -42,8 +42,76 @@
 		        <a class="button button--rounded" style="margin-top: 12.8rem" th:href="@{/personal/dashboard}">코딩 공부 시작하기</a>
 		    </div>
 		</div>
+		
+		
+		<!-- 챗봇 -->
+		<div class="chatbot">
+		<div class="chatbot__icon"></div>
+			<div class="chatbot__wrapper none">
+		        <div class="chat-container">
+		            <div class="chat-message bot-message">
+		                안녕하세요. 바삭코딩 이용 도우미 바삭이입니다!
+		            </div>
+		        </div>
+		        <input class="chatbot__input" type="text" placeholder="무엇이든 물어보세요!" id="query"/>
+	        </div>
+        </div>
 	</section>
+	
 	<!-- 메인 섹션 끝 -->
+	<script>
+		const chatbotUri = "https://e083fe676395.ngrok.io"
+		const chatbotIcon = document.querySelector(".chatbot__icon");
+		const chatbotWrapper = document.querySelector(".chatbot__wrapper");
+		chatbotIcon.addEventListener("click", function() {
+			chatbotWrapper.classList.toggle("none");
+		});
+	
+		function sendMessage(message) {
+		    console.log('입력메시지:',message)
+		
+		    $.ajax({
+	   			url: chatbotUri + "/message",
+	    		data:{
+	    			'message': message, 
+	    			'session_id': "[[${session}]]"
+	   			},
+	   			type:'post',
+	   			success:receiveResponse
+			});
+		
+		    //flask서버로부터 응답을 받으면 receiveResponse콜백함수가 호출됨
+		    function receiveResponse(data) {//data는 flask로부터 받은 응답 {'message':'다이얼로그플로우가 보내준값'}
+		      //chat-container에 bot의 응답 추가
+		      $('.chat-container').append('<div class="chat-message bot-message">'+data.message+'</div>')
+		      //스크롤바 아래로
+		      $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+		
+		         console.log('받은 메시지:',data)
+		    }
+		}
+		$("#query").on('keypress',function(e) {
+		
+		if (e.keyCode == 13){
+		    //e.preventDefault();
+		    var query = $(this).val()
+		    console.log(query)
+		    if (!query) {//텍스트를 입력하지 않는 경우
+		      return
+		    }
+		    //chat-container에 사용자의 응답 추가
+		    $('.chat-container').append('<div class="chat-message col-md-5 offset-md-7 human-message">'+query+'</div>')
+		    // 입력창 클리어
+		    $('#query').val('')
+		    //스크롤바 아래로
+		    $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+		    //메시지 전송
+		    sendMessage(query)
+		}
+		});
+	
+	</script>
+	
 </body>
 
 </html>

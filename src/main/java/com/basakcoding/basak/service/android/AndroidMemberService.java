@@ -65,4 +65,14 @@ public class AndroidMemberService {
 		encodePassword(map);
 		return androidMemberMapper.updateMem(map);
 	}
+
+	public String isAlreadyJoined(String email) {
+		return androidMemberMapper.isAlreadyJoined(email);
+	}
+
+	public int googleJoin(Map<String, String> map) {
+		map.put("password", "1234");
+		encodePassword(map);
+		return androidMemberMapper.googleJoin(map);
+	}
 }
