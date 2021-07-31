@@ -20,7 +20,16 @@
 		FROM members 
 		WHERE member_id = #{memberId}
 	</select>
+
+	<insert id="signUp" parameterType="Map">
+		INSERT INTO members VALUES(seq_members.NEXTVAL, #{email}, #{password}, 
+    #{username}, 'Y', DEFAULT, DEFAULT, null, null)
+	</insert>
 	
+	<select id="emailCheck" parameterType="String" resultType="Int">
+		select count(*) from members m where m.email=#{email} 
+	</select>
+
 	<!-- 회원정보 수정 -->
 	<update id="updateMem" parameterType="Map" >
 		UPDATE members SET username=#{username}, password=#{password}
