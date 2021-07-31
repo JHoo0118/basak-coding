@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.basakcoding.basak.frontend.security.oauth.MemberOAuth2User;
 import com.basakcoding.basak.service.CatalogService;
 import com.basakcoding.basak.service.CourseDTO;
 import com.basakcoding.basak.service.CurriculumDTO;
@@ -103,7 +104,8 @@ public class CatalogController {
 		if(auth != null) {//로그인이 됐을때
 			String memberId = null;
 			if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-				memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+				MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+				memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 			} else {
 				memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 			}
@@ -179,7 +181,8 @@ public class CatalogController {
 		
 		} else {
 			if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-				memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+				MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+				memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 			} else {
 				memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 			}
@@ -218,7 +221,8 @@ public class CatalogController {
 		}
 		else {//로그인 돼있을시
 			if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-				memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+				MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+				memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 			} else {
 				memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 			}
@@ -266,7 +270,8 @@ public class CatalogController {
 		
 		String memberId = null;
 		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-			memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+			MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+			memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 		} else {
 			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 		}
@@ -286,7 +291,8 @@ public class CatalogController {
 		int affected;
 		String memberId = null;
 		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-			memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+			MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+			memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 		} else {
 			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 		}

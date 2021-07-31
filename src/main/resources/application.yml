@@ -28,7 +28,21 @@ spring:
             client-secret: 3g_pf4WamnfDWDZBe3WElJMu
             scope:
               - email
-              - profile        
+              - profile
+          kakao:
+            client-id: 7dbae453ce679c376fb6ab1b3d420596
+            client-secret: LYGSTTxR4LRFGZbzJRDCTfsG00mKTyAb
+            redirect-uri: http://localhost:9090/login/oauth2/code/kakao
+            authorization-grant-type: authorization_code
+            scope:
+              - account_email
+            client-name: kakao
+            client-authentication-method: POST  
+        provider:          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
 
 # MyBatis
 # 패키지 경로에 따라 다르게 설정

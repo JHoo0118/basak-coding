@@ -409,9 +409,15 @@
 				</button>
 				<div class="position-relative w-100 text-center py-2">
 					<span onclick="closeMinibrowserModal()" class="d-block"
-						style="font-size: 14px; cursor:pointer; position:absolute; top:-5px; left:8px; padding:2px 0;"><i
-							class="far fa-window-minimize"></i></span>
+						style="font-size: 14px; cursor:pointer; position:absolute; top:-5px; left:8px; padding:2px 0;">
+						<i class="far fa-window-minimize"></i></span>
 					<span>Basak-browser</span>
+					
+					<div class="util-btn__group">
+						<span class="util-btn" onclick="fullSizeBrowser(this)">
+							<i class="far fa-window-maximize"></i>
+						</span>
+					</div>
 				</div>
 				<form class="address-container d-flex pr-2">
 					<button type="button" class="mr-2 btn btn-link">
@@ -425,7 +431,7 @@
 				</form>
 			</div>
 			<div class="editor__preview">
-				<iframe id="editorPreview" frameborder="0"></iframe>
+				<iframe id="editorPreview" name="editorPreview"></iframe>
 			</div>
 		</div>
 	</div>
@@ -544,17 +550,25 @@
 		var editor;
 
 		// 미니브라우저 드래그 가능하게 하기
+		
+		// getElementById Chaining
+		Element.prototype.getElementById = function(id) {
+		    return document.getElementById(id);
+		}
+		
 		var miniBrowser = document.getElementById("miniBrowser");
 		var chrome = document.querySelector(".file__folder .fa-chrome");
 		$(function () {
 			$("#miniBrowser").draggable({
 				containment: 'parent'
 			});
-
 		});
 
 		// 미니브라우저 열기
+		let iframeBody = window.editorPreview.document.getElementsByTagName("body")[0];
 		function toggleMinibrowserModal() {
+			iframeBody.style.zoom = "0.5";
+			
 			miniBrowser.classList.toggle("none");
 			if (!miniBrowser.classList.contains("none")) {
 				chrome.style.color = "#fff";
@@ -567,6 +581,29 @@
 		function closeMinibrowserModal() {
 			miniBrowser.classList.add("none");
 			chrome.style.color = "#919191";
+		}
+		
+		// 미니브라우저 최대화
+		let maximize = false;
+		let originMiniBrowserWidth = Number.parseInt(miniBrowser.style.width)
+		let originMiniBrowserHeight = Number.parseInt(miniBrowser.style.height)
+		function fullSizeBrowser(ele) {
+			maximize = !maximize;
+			if (maximize) {
+				iframeBody.style.zoom = "1";
+				ele.innerHTML = '<i class="fas fa-window-maximize"></i>';
+				miniBrowser.classList.add("full-screen");
+				$("#miniBrowser").draggable('disable');
+				miniBrowser.style.width = screen.width + "px";
+				miniBrowser.style.height = screen.height + "px";
+			} else {
+				iframeBody.style.zoom = "0.5";
+				ele.innerHTML = '<i class="far fa-window-maximize"></i>';
+				miniBrowser.classList.remove("full-screen");
+				$("#miniBrowser").draggable('enable');
+				miniBrowser.style.width = originMiniBrowserWidth + "px";
+				miniBrowser.style.height = originMiniBrowserHeight + "px";
+			}
 		}
 
 		// 사이드바 처리

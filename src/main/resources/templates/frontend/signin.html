@@ -81,7 +81,7 @@
 	                	<i class="fab fa-google" style="color:#fff; margin-right:3.4rem; font-size:16px"></i>
 	                	구글로 로그인
 	               	</a>
-                    <a class="sns-login__btn sns-login__btn--kakao" style="color:#2e2e30 !important" href="https://kauth.kakao.com/oauth/authorize?client_id=702e704b386e7afd4fdd82adab67d698&redirect_uri=http://localhost:9090/auth/doLogin&response_type=code">
+                    <a class="sns-login__btn sns-login__btn--kakao" style="color:#2e2e30 !important" th:href="@{/oauth2/authorization/kakao}">
                     	<i class="fa fa-comment" style="color:#2e2e30; margin-right:3.4rem; font-size:16px"></i>
 	                	카카오로 로그인
 					</a>

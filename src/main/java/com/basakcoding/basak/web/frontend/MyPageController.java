@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.basakcoding.basak.frontend.security.oauth.MemberOAuth2User;
 import com.basakcoding.basak.service.MemberService;
 import com.basakcoding.basak.service.MyCommentDTO;
 import com.basakcoding.basak.util.FileUploadUtil;
@@ -57,7 +58,8 @@ public class MyPageController {
    public Model userInfo(Model model, Authentication auth) {
 	  int userId = -1;
 	  if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-		  userId = memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId();
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId();
 	  } else {
 	      userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
 	  }
@@ -166,7 +168,8 @@ public class MyPageController {
       String filename = StringUtils.cleanPath(file.getOriginalFilename());
       int userId = -1;
 	  if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-		  userId = memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId();
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId();
 	  } else {
 	      userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
 	  }
@@ -195,7 +198,8 @@ public class MyPageController {
    public @ResponseBody int userNameEdit(@RequestBody Map map, Authentication auth) {
 	  int userId = -1;
 	  if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-		  userId = memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId();
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId();
 	  } else {
 	      userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
 	  }
@@ -240,7 +244,8 @@ public class MyPageController {
          Authentication auth) {
 	  String userId = null;
 	  if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-		  userId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 	  } else {
 	      userId = ((UserDetails) auth.getPrincipal()).getUsername();
 	  }
@@ -255,7 +260,8 @@ public class MyPageController {
          Authentication auth) {
 	  String userId = null;
 	  if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-		  userId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 	  } else {
 	      userId = ((UserDetails) auth.getPrincipal()).getUsername();
 	  }
@@ -277,7 +283,8 @@ public class MyPageController {
    public @ResponseBody int like(@RequestParam("questionId")int questionId,@RequestParam("likeCount")int likeCount, Authentication auth) {
 	  int userId = -1;
 	  if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-		  userId = memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId();
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId();
 	  } else {
 	      userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
 	  }
@@ -303,7 +310,8 @@ public class MyPageController {
          Authentication auth) {
 	  String userId = null;
 	  if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-		  userId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 	  } else {
 	      userId = ((UserDetails) auth.getPrincipal()).getUsername();
 	  }
@@ -336,7 +344,8 @@ public class MyPageController {
    public @ResponseBody Map newComment(@RequestParam("newContent")String content,@RequestParam("questionId")String questionId,Authentication auth,Map map) {
 	   String userId = null;
 	   if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-		  userId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 	   } else {
 	      userId = ((UserDetails) auth.getPrincipal()).getUsername();
 	   }
@@ -367,7 +376,8 @@ public class MyPageController {
    public @ResponseBody Map commentDetails(@RequestParam("commentId") String commentId,Authentication auth) {
 	  String userId = null;
 	  if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-		  userId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 	  } else {
 	      userId = ((UserDetails) auth.getPrincipal()).getUsername();
 	  }

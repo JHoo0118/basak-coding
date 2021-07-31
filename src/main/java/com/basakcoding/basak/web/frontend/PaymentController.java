@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.basakcoding.basak.frontend.security.oauth.MemberOAuth2User;
 import com.basakcoding.basak.service.MemberDTO;
 import com.basakcoding.basak.service.MemberService;
 import com.basakcoding.basak.service.PaymentService;
@@ -40,7 +41,8 @@ public class PaymentController {
 		Map map = paymentService.listAll(courseId);
 		String memberId = null;
 		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-			memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+			MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+			memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 		} else {
 			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 		}
@@ -66,7 +68,8 @@ public class PaymentController {
 		Map map2 = new HashMap();
 		String memberId = null;
 		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-			memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+			MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+			memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 		} else {
 			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 		}
@@ -99,7 +102,8 @@ public class PaymentController {
 	public String paymentsComplete (@RequestParam Map map, Authentication auth) throws IOException {
 		String memberId = null;
 		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-			memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+			MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+			memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 		} else {
 			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 		}
@@ -131,7 +135,8 @@ public class PaymentController {
 	public String paymentsCheck (@RequestParam Map map, Authentication auth) {
 		String memberId = null;
 		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-			memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+			MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+			memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 		} else {
 			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 		}

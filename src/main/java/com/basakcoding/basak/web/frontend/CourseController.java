@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.basakcoding.basak.frontend.security.oauth.MemberOAuth2User;
 import com.basakcoding.basak.service.CourseService;
 import com.basakcoding.basak.service.CurriculumDTO;
 import com.basakcoding.basak.service.FileDTO;
@@ -65,7 +66,8 @@ public class CourseController {
 		String courseId = courseService.getCourseId(videoId);
 		String memberId = null;
 		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-			memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+			MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+			memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 		} else {
 			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 		}
@@ -164,7 +166,8 @@ public class CourseController {
 		String filename = map.get("filename");
 		String memberId = null;
 		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-			memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+			MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+			memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 		} else {
 			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 		}
@@ -209,7 +212,8 @@ public class CourseController {
 		String courseId = courseService.getCourseId(map.get("videoId"));
 		String memberId = null;
 		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-			memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+			MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+			memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 		} else {
 			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 		}
@@ -252,7 +256,8 @@ public class CourseController {
 		String courseId = courseService.getCourseId(map.get("videoId"));
 		String memberId = null;
 		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-			memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+			MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+			memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 		} else {
 			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 		}
@@ -273,7 +278,8 @@ public class CourseController {
 	public String saveCode(@RequestParam String videoId, Authentication auth) {
 		String memberId = null;
 		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-			memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+			MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+			memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 		} else {
 			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 		}
@@ -290,7 +296,8 @@ public class CourseController {
 	public String inquiryProcess(@RequestParam Map map, Authentication auth) {
 		String memberId = null;
 		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-			memberId = Integer.toString(memberService.getMemberByEmail(((OAuth2User) auth.getPrincipal()).getAttribute("email")).getMemberId());
+			MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+			memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
 		} else {
 			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 		}
