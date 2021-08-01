@@ -292,5 +292,12 @@
 	</update>
 	<!--―――――――――――――――――――――――――――― 강의 수정하기 ―――――――――――――――――――――――――――――― -->
 
+	<!-- 강의 질문 등록하기 -->
+   <insert id="newQuestion" parameterType="Map">
+      INSERT INTO question VALUES(seq_question.NEXTVAL, #{memberId}, #{courseId}, 
+      #{questionTitle},#{questionContent}, DEFAULT, DEFAULT, DEFAULT)
+   </insert>
+
+
 
 </mapper>

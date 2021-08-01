@@ -135,6 +135,10 @@ public class CourseService {
 	public List<QuestionDTO> questionList(String courseId){
 		return courseMapper.questionList(courseId);
 	}
+	//질문 등록하기
+	   public int newQuestion(Map map) {
+	      return courseMapper.newQuestion(map);
+	   }
 
 
 }
