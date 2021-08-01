@@ -47,9 +47,6 @@ public class MemberService {
        return memberMapper.registerMember(map);
     }
     
-   
-    
-    
     // 비밀번호 해싱
     private void encodePassword(Map map) {
        String encodedPassword = passwordEncoder.encode(map.get("password").toString());
@@ -60,6 +57,11 @@ public class MemberService {
     public boolean isEmailUnique(String email) {
        MemberDTO memberByEmail = memberMapper.getMemberByEmail(email);
        return memberByEmail == null;
+    }
+    
+    // 이메일로 사용자 얻기
+    public MemberDTO getMemberByEmail(String email) {
+    	return memberMapper.getMemberByEmail(email);
     }
 
     // 사용자 수정
@@ -318,7 +320,18 @@ public class MemberService {
       return memberMapper.updatepassword(map);
    }
 
+   // 가입 방법 업데이트
+   public int updateAuthenticationType(Map map) {
+	   return memberMapper.updateAuthenticationType(map);
+   }
 
-   
+	public int addNewMemberByOAuthLogin(String name, String email) {
+		MemberDTO member = MemberDTO.builder()
+				.email(email)
+				.username(name)
+				.password("1234")
+				.build();
+		return memberMapper.addNewMemberByOAuthLogin(member);
+	}
 
 }

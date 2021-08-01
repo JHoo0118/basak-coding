@@ -491,3 +491,29 @@ button.btn-settings:active {
 	box-shadow: none;
 	color: #212224;
 }
+
+.full-screen {
+	position:absolute;
+	top:0 !important;
+	left:0 !important;
+	right:0 !important;
+	bottom:0 !important;
+}
+
+.util-btn__group {
+	position:absolute;
+	top:5px;
+	right:0;
+	margin-right:20px;
+}
+
+.util-btn {
+	width: auto;
+	cursor: pointer;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.util-btn i {
+	font-size:16px;
+}

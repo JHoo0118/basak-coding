@@ -7,10 +7,14 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.basakcoding.basak.service.CurriculumDTO;
@@ -87,14 +91,15 @@ public class AndroidCourseController {
 	}
 	
 	@GetMapping("/course/video")
-	public Map getCourseVideo(@Param("memberId") String memberId, @Param("courseId") String courseId, @Param("videoId") String videoId) {
+	public Map getCourseVideo(@Param("memberId") String memberId, @Param("courseId") String courseId) {
 		Map result = new HashMap();
 		Map params = new HashMap();
 		params.put("memberId", memberId);
 		params.put("courseId", courseId);
-		params.put("videoId", videoId);
+		String lastVideoId = getLastVideoId(params);
 		
-		VideoDTO video = androidCourseService.getCurrVideo(videoId);
+		VideoDTO video = androidCourseService.getCurrVideo(lastVideoId);
+		System.out.println(video.getVideoId());
 		video.setCourseId(courseId);
 		
 		// 커리큘럼과 비디오 얻기
@@ -103,7 +108,7 @@ public class AndroidCourseController {
 		for (int i=0; i<curriculumList.size(); i++) {
 			for (VideoDTO v : curriculumList.get(i).getVideos()) {
 				params.put("videoId", v.getVideoId());
-				int videoLength = Integer.parseInt(v.getVideoLength());
+				int videoLength = (int)(Math.ceil(Double.parseDouble(v.getVideoLength())));
 				int mins = videoLength/60;
 				int secs = videoLength%60;
 				String timeFormat = "" + (mins < 10 ? "0" + mins : mins) + ":" + (secs < 10 ? "0" + secs : secs);
@@ -115,9 +120,19 @@ public class AndroidCourseController {
 			}
 		}
 		
+		result.put("LAST_VIDEO_ID", lastVideoId);
 		result.put("currVideo", video);
 		result.put("curriculum", curriculumList);
 		return result;
+	}
+	
+	@PostMapping("/seen")
+	public String updateSeen(@Param("memberId") String memberId, @Param("videoId") String videoId) {
+		Map params = new HashMap();
+		params.put("memberId", memberId);
+		params.put("videoId", videoId);
+		int result = androidCourseService.updateSeen(params);
+		return Integer.toString(result);
 	}
 	
 	private String getLastVideoId(Map params) {

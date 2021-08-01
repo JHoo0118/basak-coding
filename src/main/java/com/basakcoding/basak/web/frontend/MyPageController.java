@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.basakcoding.basak.frontend.security.oauth.MemberOAuth2User;
 import com.basakcoding.basak.service.MemberService;
 import com.basakcoding.basak.service.MyCommentDTO;
 import com.basakcoding.basak.util.FileUploadUtil;
@@ -48,15 +50,19 @@ public class MyPageController {
 
    @RequestMapping("/password/edit.do")
    public @ResponseBody boolean passwordEdit(@RequestBody Map map, Authentication auth) {
-      // System.out.println("넘어오는 비밀번호:"+map);
       boolean booleanpass = passwordEncoder.matches((map.get("pass").toString()),
             ((UserDetails) auth.getPrincipal()).getPassword());
-      // System.out.println("비밀번호가 일치하는지!"+booleanpass);
       return booleanpass;
    }
 
    public Model userInfo(Model model, Authentication auth) {
-      int userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
+	  int userId = -1;
+	  if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId();
+	  } else {
+	      userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
+	  }
       // 내결제정보
       int paymentCount = memberService.paymentCount(userId);
       model.addAttribute("paymentCount", paymentCount);
@@ -160,7 +166,13 @@ public class MyPageController {
    @RequestMapping("/dashBoard/profileImgUpdate")
    public @ResponseBody int profileImgUpdate(@RequestParam String imgname, @RequestParam MultipartFile file,Authentication auth) throws IllegalStateException, IOException {
       String filename = StringUtils.cleanPath(file.getOriginalFilename());
-      int userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
+      int userId = -1;
+	  if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId();
+	  } else {
+	      userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
+	  }
       String uploadDir = "upload/member/" + userId;
       FileUploadUtil.cleanDir(uploadDir);
       FileUploadUtil.saveFile(uploadDir, filename, file);
@@ -184,7 +196,13 @@ public class MyPageController {
 
    @RequestMapping("/userprofile/edit.do")
    public @ResponseBody int userNameEdit(@RequestBody Map map, Authentication auth) {
-      int userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
+	  int userId = -1;
+	  if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId();
+	  } else {
+	      userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
+	  }
       String username = (String) map.get("username");
       if (username.length() >= 11) { // 11글자이상입력했을경우
          return -1;
@@ -224,7 +242,13 @@ public class MyPageController {
    @RequestMapping(value = "/viewDetails.do", method = RequestMethod.POST)
    public @ResponseBody Map viewDetails(@RequestParam("payment_code") String payment_code, Model model,
          Authentication auth) {
-      String userId = ((UserDetails) auth.getPrincipal()).getUsername();
+	  String userId = null;
+	  if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+	  } else {
+	      userId = ((UserDetails) auth.getPrincipal()).getUsername();
+	  }
       String pay_code = payment_code;
       Map map = memberService.viewDetails(userId, pay_code);
       return map;
@@ -234,14 +258,22 @@ public class MyPageController {
    @RequestMapping(value = "/questionDetails.do", method = RequestMethod.POST)
    public @ResponseBody Map questionDetails(@RequestParam("questionId") String questionId, Model model,
          Authentication auth) {
-      String userId = ((UserDetails) auth.getPrincipal()).getUsername();
+	  String userId = null;
+	  if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+	  } else {
+	      userId = ((UserDetails) auth.getPrincipal()).getUsername();
+	  }
+      String path;
       // 질문
       Map map = memberService.questionDetails(userId, questionId);
       // 댓글
       List<MyCommentDTO> commentLists = memberService.commentList(questionId);
       for (MyCommentDTO dto : commentLists) {
          dto.setAdminPath(dto.getAdminAvatarImagePath());
-         dto.setMemberPath(dto.getMemberAvatarImagePath());
+         path=dto.getMemberAvatarImagePath();
+         dto.setMemberPath(path);
       }
       map.put("commentList", commentLists);
       return map;
@@ -249,7 +281,13 @@ public class MyPageController {
    //질문 좋아요 
    @RequestMapping(value="/like.do", method = RequestMethod.POST)
    public @ResponseBody int like(@RequestParam("questionId")int questionId,@RequestParam("likeCount")int likeCount, Authentication auth) {
-      int userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
+	  int userId = -1;
+	  if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId();
+	  } else {
+	      userId = Integer.parseInt(((UserDetails) auth.getPrincipal()).getUsername());
+	  }
       int affected;
       likeCount = memberService.likeCheck(userId,questionId);
       
@@ -270,7 +308,13 @@ public class MyPageController {
    @RequestMapping(value = "/inquDetails.do", method = RequestMethod.POST)
    public @ResponseBody Map inquDetails(@RequestParam("inquiry_id") String inquiry_id, Model model,
          Authentication auth) {
-      String userId = ((UserDetails) auth.getPrincipal()).getUsername();
+	  String userId = null;
+	  if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+	  } else {
+	      userId = ((UserDetails) auth.getPrincipal()).getUsername();
+	  }
       Map map = memberService.inquDetails(userId, inquiry_id);
       if (map == null) {
          map = memberService.inquDetailNotExist(userId, inquiry_id);
@@ -288,8 +332,8 @@ public class MyPageController {
    public @ResponseBody int questionEdit(@RequestParam("title")String title,@RequestParam("content")String content,@RequestParam("questionId")String questionId){
 	   questionId.toString();
 	   int succese;
-	   if(title=="" || content=="") {
-		   succese=0;
+	   if((title.trim().equals("")) || (content.trim().equals(""))) {
+		   succese=-1;
 		   return succese;
 	   }
 	   succese=memberService.questionUpdate(title,content,questionId);
@@ -298,7 +342,13 @@ public class MyPageController {
    //질문에 답변 추가
    @RequestMapping("/newComment.do")
    public @ResponseBody Map newComment(@RequestParam("newContent")String content,@RequestParam("questionId")String questionId,Authentication auth,Map map) {
-	   String userId = ((UserDetails) auth.getPrincipal()).getUsername();
+	   String userId = null;
+	   if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+	   } else {
+	      userId = ((UserDetails) auth.getPrincipal()).getUsername();
+	   }
 	   map.put("userId", userId);
 	   map.put("content", content);
 	   map.put("questionId", questionId);
@@ -324,8 +374,14 @@ public class MyPageController {
    // 댓글 상세보기
    @RequestMapping(value = "/commentsDetails.do", method = RequestMethod.POST)
    public @ResponseBody Map commentDetails(@RequestParam("commentId") String commentId,Authentication auth) {
-	   String userId = ((UserDetails) auth.getPrincipal()).getUsername();
-	   String questionId = memberService.commentsDetails(commentId);
+	  String userId = null;
+	  if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+		  MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		  userId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+	  } else {
+	      userId = ((UserDetails) auth.getPrincipal()).getUsername();
+	  }
+	  String questionId = memberService.commentsDetails(commentId);
       // 질문
       Map map=memberService.commentQuestion(questionId);
       if(!userId.equals(map.get("MEMBER_ID").toString())) {
@@ -338,6 +394,7 @@ public class MyPageController {
          dto.setMemberPath(dto.getMemberAvatarImagePath());
       }
       map.put("commentLists", commentList);
+      map.put("comquestionId", questionId);
       return map;
    }
    

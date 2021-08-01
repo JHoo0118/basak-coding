@@ -56,6 +56,7 @@
 							var reader = new FileReader();
 							reader.onload = function (e) {
 								$('#userImg').attr('src', e.target.result);
+								$('#questionImage').attr('src', e.target.result);
 							};
 							reader.readAsDataURL(file);
 						}

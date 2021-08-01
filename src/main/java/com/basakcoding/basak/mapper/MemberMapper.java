@@ -143,7 +143,10 @@ public interface MemberMapper {
    //댓글의 질문가져오기
    Map commentQuestion(String questionId);
 
-   
- 
+   // 가입 방식 업데이트
+   int updateAuthenticationType(Map map);
+
+   // OAuth 가입
+   int addNewMemberByOAuthLogin(MemberDTO member);
    
 }
