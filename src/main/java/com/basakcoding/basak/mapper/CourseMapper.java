@@ -82,4 +82,5 @@ public interface CourseMapper {
 	//강의 별 질문 가져오기
 	Map questionOne(String questionId);
 
+
 }

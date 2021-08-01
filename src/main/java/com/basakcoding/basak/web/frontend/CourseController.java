@@ -150,7 +150,7 @@ public class CourseController {
 		
 		
 		
-		
+		model.addAttribute("courseId",courseId);
 		model.addAttribute("questionList", questionList);
 		model.addAttribute("cssFileList", cssFileList);
 		model.addAttribute("fileList", fileList);
@@ -306,5 +306,6 @@ public class CourseController {
 		return Integer.toString(result);
 		
 	}
+	
 
 }
