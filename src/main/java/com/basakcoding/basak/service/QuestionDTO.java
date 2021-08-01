@@ -27,7 +27,12 @@ public class QuestionDTO {
 	private String courseTitle;
 	private String questionTitle;
 	
+	private long updateDays;
+	private long updateHours;
 	
 	List<CommentDTO> comments = new ArrayList<CommentDTO>();
+
+
+
 	
 }
