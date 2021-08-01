@@ -25,6 +25,20 @@ public interface AndroidMemberMapper {
 	   
 	//결제 강의개수가져오기
 	int paymentCount(int userId);
-	   
+
+	//회원가입
+	int signUp(Map map);
+
+	//이메일 중복체크
+	int emailCheck(String email);
+
+	//회원정보 수정
+	int updateMem(Map map);
+
+	// 회원인지 확인
+	String isAlreadyJoined(String email);
+
+	// 구글 회원가입
+	int googleJoin(Map<String, String> map);
 }
 

@@ -136,4 +136,10 @@ public class CourseService {
 		return courseMapper.questionList(courseId);
 	}
 
+	//질문 등록하기
+	   public int newQuestion(Map map) {
+	      return courseMapper.newQuestion(map);
+	   }
+
+
 }

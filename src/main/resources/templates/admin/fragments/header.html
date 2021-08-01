@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="kr" xmlns:th="http://www.thymeleaf.org"
             xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
@@ -45,6 +44,12 @@
                      <li th:classappend="${title == '문의 관리'} ? current" class="nav-item mb-2">
                         <a th:href="@{/admin/inquiry/management}" th:classappend="${title != '문의 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>문의 관리</a>
                      </li>
+                     
+							
+							
+					<li th:classappend="${title == '문의 카테고리 관리'} ? current" class="nav-item mb-2">
+						<a th:href="@{/admin/inquiry/category/management}" th:classappend="${title != '문의 카테고리 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>문의 카테고리 관리</a>
+					</li>
                        </ul>
                 </div>
                 <!-- END (SIDEBAR) -->
@@ -76,100 +81,6 @@
           </div>
        </div>
    </nav>
-   
-   <div th:replace="/admin/fragments/logoutModal.html :: fragment-logout"></div>
-   </div>
-
-<!DOCTYPE html>
-<html lang="kr" xmlns:th="http://www.thymeleaf.org"
-				xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-
-	<div th:fragment="fragment-header(title)">
-	<!-- HEADER -->
-	<nav class="navbar navbar-expand-md navbar-light">
-		<button class="navbar-toggler ml-auto mb-2 bg-light" type="button" data-toggle="collapse" data-target="#myNavbar">
-	      <span class="navbar-toggler-icon"></span>
-	    </button>
-	    <div class="collapse navbar-collapse" id="myNavbar">
-	    	<div class="container-fluid">
-	    		<div class="row">
-	    			<!-- SIDEBAR -->
-	    			<div class="col-xl-2 col-lg-3 col-md-4 sidebar fixed-top">
-	   					<div class="col-md-7 mt-4 brand">
-	   						<a th:href="@{/admin}" class="navbar-brand text-white d-block mx-auto py-3 text-center bottom-border">BASAK</a>
-	   					</div>
-	            		<ul class="navbar-nav flex-column mt-4">
-							<li th:classappend="${title == '홈'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin}" th:classappend="${title != '홈'} ? sidebar-link" class="nav-link py-3 text-white"><i class="fas fa-home text-light fa-lg mr-3"></i>홈</a>
-							</li>
-							<li th:classappend="${title == '강사 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/admin/management}" th:classappend="${title != '강사 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>강사 관리</a>
-							</li>
-							<li th:classappend="${title == '결제 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/price/management}" th:classappend="${title != '결제 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>결제 관리</a>
-							</li>
-							<li th:classappend="${title == '사용자 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/member/management}" th:classappend="${title != '사용자 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>사용자 관리</a>
-							</li>
-							<li th:classappend="${title == '카테고리 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/category/management}" th:classappend="${title != '카테고리 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>카테고리 관리</a>
-							</li>
-							<li th:classappend="${title == '강의 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/course/management}" th:classappend="${title != '강의 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>강의 관리</a>
-							</li>
-							<li th:classappend="${title == '댓글 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/comment/management}" th:classappend="${title != '댓글 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>댓글 관리</a>
-							</li>
-							<li th:classappend="${title == '좋아요 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/like/management}" th:classappend="${title != '좋아요 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>좋아요 관리</a>
-							</li>
-							<li th:classappend="${title == '질문 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/question/management}" th:classappend="${title != '질문 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>질문 관리</a>
-							</li>
-							<li th:classappend="${title == '문의 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/inquiry/management}" th:classappend="${title != '문의 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>문의 관리</a>
-							</li>
-							<li th:classappend="${title == '문의 답변 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/answer/management}" th:classappend="${title != '문의 답변 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>문의 답변 관리</a>
-							</li>
-							
-							
-							
-							<li th:classappend="${title == '문의 카테고리 관리'} ? current" class="nav-item mb-2">
-								<a th:href="@{/admin/inquiry/category/management}" th:classappend="${title != '문의 카테고리 관리'} ? sidebar-link" class="nav-link text-white py-3 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>문의 카테고리 관리</a>
-							</li>
-
-	
-														
-	                    </ul>
-	    			</div>
-	    			<!-- END (SIDEBAR) -->
-	    			
-	    			<!-- TOP NAV -->
-	    			<div class="col-xl-10 col-lg-9 col-md-8 ml-auto fixed-top bg-white py-2 top-navbar">
-	    				<div class="row align-items-center">
-	    					<div class="col-md-5">
-				            	<h4 class="mb-0 font-weight-bold">
-									<span th:text="${title}"></span>
-								</h4>
-			            	</div>
-				            <div class="col-md-7">
-				                <ul class="navbar-nav">
-					                <li class="ml-md-auto d-flex align-items-center">
-					                	<!-- <span class="font-weight-bold" sec:authentication="principal.username"></span> -->
-					                	<span class="nav-link" style="cursor:pointer;" data-toggle="modal" data-target="#modalLogout">
-					                		<i class="fas fa-sign-out-alt text-primary--1 fa-lg"></i>
-					                	</span>
-					                	
-				                	</li>
-				            	</ul>
-				            </div>
-	    				</div>
-	    			</div>
-	    		</div>
-	    	</div>
-	    </div>
-	</nav>
 	
 	<div th:replace="/admin/fragments/logoutModal.html :: fragment-logout"></div>
 	</div>

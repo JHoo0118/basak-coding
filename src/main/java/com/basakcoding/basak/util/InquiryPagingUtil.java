@@ -2,10 +2,10 @@ package com.basakcoding.basak.util;
 
 import java.util.Map;
 
-public class CommentPagingUtil {
+public class InquiryPagingUtil {
 
 	public static String pagingBootStrapStyle(int totalCourseCount,int pageSize,int blockPage,int nowPage,String page,int where){
-	      where = 3;
+	      where = 2;
 	      String pagingStr="<ul class=\"pagination\" >";
 	      
 	      //1.전체 페이지 구하기

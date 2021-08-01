@@ -39,4 +39,30 @@ public class AndroidAuthRestController {
 		}
 		return member;
 	}
+
+	//회원가입
+	@CrossOrigin
+	@PostMapping("/signUp")
+	public int signUp(@RequestBody Map map) {
+		String email=map.get("email").toString();
+		int result = androidMemberService.emailCheck(email);
+		if(result==1) {
+			return -1;
+		}
+		return androidMemberService.signUp(map);
+	}
+	
+
+	
+	@CrossOrigin
+	@PostMapping("/google")
+	public int googleSignUp(@RequestBody Map<String, String> map) {
+		String memberId = androidMemberService.isAlreadyJoined(map.get("email"));
+		if (memberId == null) {
+			androidMemberService.googleJoin(map);
+			memberId = map.get("memberId");
+		}
+		
+		return Integer.parseInt(memberId);
+	}
 }

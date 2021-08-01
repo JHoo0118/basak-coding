@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.basakcoding.basak.frontend.security.oauth.MemberOAuth2User;
 import com.basakcoding.basak.service.MemberDTO;
+import com.basakcoding.basak.service.MemberService;
 import com.basakcoding.basak.service.PaymentService;
 import com.basakcoding.basak.util.FileUploadUtil;
 
@@ -26,6 +29,9 @@ import com.basakcoding.basak.util.FileUploadUtil;
 public class PaymentController {
 	
 	@Autowired
+	private MemberService memberService;
+	
+	@Autowired
 	private PaymentService paymentService;
 	
 	//결제 시작전 페이지, 취소시 이동할 기본 창
@@ -33,7 +39,13 @@ public class PaymentController {
 	@GetMapping("/orders/payments/{courseId}")
 	public String payment(@PathVariable String courseId, Model model, Authentication auth) {
 		Map map = paymentService.listAll(courseId);
-		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+		String memberId = null;
+		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+			MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+			memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+		} else {
+			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+		}
 		
 		MemberDTO memberDto = paymentService.getMemberById(memberId);
 		map.put("EMAIL", memberDto.getEmail());
@@ -54,7 +66,13 @@ public class PaymentController {
 	@GetMapping("/orders/complete/{courseId}")
 	public String paymentResult(@PathVariable String courseId, Model model, Authentication auth) {
 		Map map2 = new HashMap();
-		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+		String memberId = null;
+		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+			MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+			memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+		} else {
+			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+		}
 		map2.put("courseId", courseId);
 		map2.put("memberId", memberId);
 		Map map = paymentService.priceList(map2);
@@ -82,7 +100,13 @@ public class PaymentController {
 	@PostMapping("/payments/complete")
 	@ResponseBody
 	public String paymentsComplete (@RequestParam Map map, Authentication auth) throws IOException {
-		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+		String memberId = null;
+		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+			MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+			memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+		} else {
+			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+		}
 		map.put("memberId", memberId);
 
 		int affected = paymentService.insertPayment(map);
@@ -109,7 +133,13 @@ public class PaymentController {
 	@PostMapping("/payments/check")
 	@ResponseBody
 	public String paymentsCheck (@RequestParam Map map, Authentication auth) {
-		String memberId = ((UserDetails)auth.getPrincipal()).getUsername();
+		String memberId = null;
+		if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+			MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+			memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+		} else {
+			memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+		}
 		map.put("memberId", memberId);
 		int count = paymentService.alreadyPayment(map);
 		if (count >= 1)

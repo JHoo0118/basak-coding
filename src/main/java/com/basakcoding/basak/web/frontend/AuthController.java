@@ -10,33 +10,23 @@ import java.util.Random;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.basakcoding.basak.mapper.MemberMapper;
 import com.basakcoding.basak.service.CertificationService;
-import com.basakcoding.basak.service.MemberDTO;
 import com.basakcoding.basak.service.MemberService;
 import com.basakcoding.basak.service.OAuthToken;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -172,7 +162,7 @@ public class AuthController {
     public    String signup(@RequestParam Map map , Model model) throws IOException{
        int affected = memberService.registerMember(map);
        
-         String host ="http://localhost:9090/auth";
+        String host ="http://localhost:9090/auth";
         String from = "basakcoding@gmail.com";
         String to = memberService.getMemberById(map.get("memberId").toString()).getEmail();
         String subject = "사이트 이용을 위한 이메일 인증 메일 입니다.";
@@ -183,66 +173,41 @@ public class AuthController {
 
         
       if(affected==1) {
-
-          // SMTP에 접속하기 위한 정보를 기입합니다.
-
+          // SMTP
           Properties p = new Properties();
-
           p.put("mail.smtp.user", from);
-
           p.put("mail.smtp.host", "smtp.googlemail.com");
-
           p.put("mail.smtp.port", "465");
-
           p.put("mail.smtp.starttls.enable", "true");
-
           p.put("mail.smtp.auth", "true");
-
           p.put("mail.smtp.debug", "true");
-
           p.put("mail.smtp.socketFactory.port", "465");
-
           p.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-
           p.put("mail.smtp.socketFactory.fallback", "false");
-
           try{
-
               Authenticator auth = new Gmail();
-
               Session ses = Session.getInstance(p, auth);
-
               ses.setDebug(true);
-
               MimeMessage msg = new MimeMessage(ses); 
-
               msg.setSubject(subject);
-
               Address fromAddr = new InternetAddress(from);
-
               msg.setFrom(fromAddr);
-
               Address toAddr = new InternetAddress(to);
-
               msg.addRecipient(Message.RecipientType.TO, toAddr);
-
               msg.setContent(content, "text/html;charset=UTF-8");    
               Transport.send(msg);
-   
           } catch(Exception e){
-
               e.printStackTrace();             
                  System.out.println("오류입니다.");         
           }
-        
-        return "frontend/signupConfirm";
-  
+          return "frontend/signupConfirm";
       }///if
          
-      else {model.addAttribute("signupfail", "회원가입에 실패하였습니다.");
-            return "frontend/signup";
-         }//else
-    }/////signup
+      else {
+    	  model.addAttribute("signupfail", "회원가입에 실패하였습니다.");
+          return "frontend/signup";
+      }//else
+   }/////signup
    
        
 
@@ -287,50 +252,28 @@ public class AuthController {
         
         //구글 smtp 설정
         Properties p = new Properties();
-        
         p.put("mail.smtp.user", from);
-
         p.put("mail.smtp.host", "smtp.googlemail.com");
-
         p.put("mail.smtp.port", "465");
-
         p.put("mail.smtp.starttls.enable", "true");
-
         p.put("mail.smtp.auth", "true");
-
         p.put("mail.smtp.debug", "true");
-
         p.put("mail.smtp.socketFactory.port", "465");
-
         p.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-
         p.put("mail.smtp.socketFactory.fallback", "false");
-
         try{
-
             Authenticator auth = new Gmail();
-
             Session ses = Session.getInstance(p, auth);
-
             ses.setDebug(true);
-
             MimeMessage msg = new MimeMessage(ses); 
-
             msg.setSubject(subject);
-
             Address fromAddr = new InternetAddress(from);
-
             msg.setFrom(fromAddr);
-
             Address toAddr = new InternetAddress(to);
-
             msg.addRecipient(Message.RecipientType.TO, toAddr);
-
             msg.setContent(content, "text/html;charset=UTF-8");    
             Transport.send(msg);
- 
         } catch(Exception e){
-
             e.printStackTrace();             
                System.out.println("오류입니다.");        
         }

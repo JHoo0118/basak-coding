@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuestionDTO {
-	
-
 
 	private Integer questionId;
 	private Integer memberId;
@@ -29,7 +27,12 @@ public class QuestionDTO {
 	private String courseTitle;
 	private String questionTitle;
 	
+	private long updateDays;
+	private long updateHours;
 	
 	List<CommentDTO> comments = new ArrayList<CommentDTO>();
+
+
+
 	
 }

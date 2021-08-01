@@ -167,7 +167,7 @@
 						<input onkeydown="queryQuestion()" class="question__input" placeholder="질문 제목 및 내용"
 							type="text" />
 					</div>
-					<button class="question__btn" data-toggle="modal" data-target="#formModal">
+					<button class="question__btn" data-toggle="modal" data-target="#questionFormModal">
 						Q&nbsp;&nbsp;질문하기
 					</button>
 				</div>
@@ -179,123 +179,77 @@
 						<div class="comment__user">
 							<img th:src="@{/images/user.png}" />
 							<div class="user__info">
-								<h5>[[${question.USERNAME}]]</h5>
-								<span>4시간 전(로직미완성)</span>
+								<h5>[[${question.userName}]]</h5>
+								<span>[[${question.createdAt}]]</span>
 							</div>
 						</div>
 
-						<h3 class="qModal__title qModal__title-course" onclick="seeQuestionDetail(this)" >[[${question.TITLE}]] </h3>
+						<h3 class="qModal__title qModal__title-course" onclick="seeQuestionDetail(this)" >[[${question.title}]] </h3>
 						
 
 						<div class="qModal__state">
 							<div class="state__left">
 								<div class="state__like">
-									<a href="javascript:void(0)"><span><i class="far fa-thumbs-up"></i>6</span></a>
+									<a href="javascript:void(0)"><span><i class="far fa-thumbs-up"></i>[[${question.likeCount}]]</span></a>
 								</div>
 								<div class="state__edit">
-									<span data-toggle="modal" data-target="#formModal">수정하기</span>
+									<span data-toggle="modal" data-target="#questionUpdateFormModal">수정하기</span>
 								</div>
 							</div>
 							<div class="state__right">
-								<span data-toggle="modal" data-target="#formModal">답변 작성하기</span>
+								<span data-toggle="modal" data-target="#questionCommentFormModal">답변 작성하기</span>
 							</div>
 						</div>
 					</div>
 
-					<!-- 목록 2 -->
-					<!--
-					<div class="qModal__upper">
-						<div class="comment__user">
-							<img th:src="@{/images/user.png}" />
-							<div class="user__info">
-								<h5>질문자</h5>
-								<span>4시간 전</span>
-							</div>
-						</div>
-						<h3 class="qModal__title qModal__title-course" onclick="seeQuestionDetail(this)">강의 잘 듣고 있습니다.
-						</h3>
-
-						<div class="qModal__state">
-							<div class="state__left">
-								<div class="state__like">
-									<a href="javascript:void(0)"><span><i class="far fa-thumbs-up"></i>6</span></a>
-								</div>
-								<div class="state__edit">
-									<span data-toggle="modal" data-target="#formModal">수정하기</span>
-								</div>
-							</div>
-							<div class="state__right">
-								<span data-toggle="modal" data-target="#formModal">답변 작성하기</span>
-							</div>
-						</div>
-					</div>
-				-->
 				
 				</div>
 
 				<!-- 질문 상세보기 -->
-				<div class="qModal__box none" id="questionDetail">
-					<div th:each=" question : ${questionList}" class="qModal__upper">
+				<div th:each=" question : ${questionList}" class="qModal__box none" id="questionDetail">
+					<div  class="qModal__upper">
 						<div class="comment__user">
 							<img th:src="@{/images/user.png}" />
 							<div class="user__info">
-								<h5>[[${question.USERNAME}]]</h5>
-								<span>4시간 전(수정필요)</span>
+								<h5>[[${question.userName}]]</h5>
+								<span>[[${question.createdAt}]]</span>
 							</div>
 						</div>
-						<h3 class="qModal__title">[[${question.TITLE}]]</h3>
-						<p class="qModal__content">[[${question.CONTENT}]]</p>
-						<span class="qModal__updated">4시간 전에 수정됨</span>
+						<h3 class="qModal__title">[[${question.title}]]</h3>
+						<p class="qModal__content">[[${question.content}]]</p>
+						<span class="qModal__updated" th:if="${question.updateDays<1}">[[${question.updateHours}]]시간 전 등록 됨</span>
+						<span class="qModal__updated" th:if="${question.updateDays>=1}">[[${question.updateDays}]]일 전 등록 됨</span>
 						<div class="qModal__state">
 							<div class="state__left">
 								<div class="state__like">
-									<a href="javascript:void(0)"><span><i class="far fa-thumbs-up"></i>6</span></a>
-									<span><i class="far fa-comment-dots"></i>6</span>
+									<a href="javascript:void(0)"><span><i class="far fa-thumbs-up"></i>[[${question.likeCount}]]</span></a>
+									<span><i class="far fa-comment-dots"></i>[[${question.commentCount}]]</span>
 								</div>
 								<div class="state__edit">
-									<span data-toggle="modal" data-target="#formModal">수정하기</span>
+									<span  data-toggle="modal" data-target="#questionUpdateFormModal">수정하기</span>
 								</div>
 							</div>
 							<div class="state__right">
-								<span data-toggle="modal" data-target="#formModal">답변 작성하기</span>
+								<span data-toggle="modal" data-target="#questionCommentFormModal">답변 작성하기</span>
 							</div>
 						</div>
 					</div>
 					
 					
-					<div class="qModal__lower">
+					<div th:each=" comment : ${question.comments}" class="qModal__lower">
 						<ul class="comment__list">
 							<li class="comment__item">
 								<div class="comment__user">
 									<img th:src="@{/images/user.png}" />
 									<div class="user__info">
-										<h5 style="color: #0fd">강사</h5>
-										<span>4시간 전</span>
+										<h5 th:if="${comment.name != null}" style="color: #0fd" th:text="${comment.name}"></h5>
+										<h5 th:if="${comment.username != null}" style="color: red" th:text="${comment.username}"></h5>
+										<span>[[${comment.createdAt}]]</span>
 									</div>
 								</div>
-								<p class="qModal__content">dd </p>
+								<p class="qModal__content">[[${comment.content}]] </p>
 							</li>
-							
-							
-							<!--li class="comment__item">
-								<div class="comment__user">
-									<img th:src="@{/images/user.png}" />
-									<div class="user__info">
-										<h5>질문자</h5>
-										<span>4시간 전</span>
-									</div>
-								</div>
-								<p class="qModal__content">안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
-									있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
-									있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은
-									어디
-									있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은
-									어디
-									있나요?ㅠㅠ
-								</p>
-							</li -->
-							
-							
+						
 						</ul>
 					</div>
 				</div>
@@ -398,13 +352,77 @@
 		</div>
 		<!-- 강의 메인 끝 -->
 	</section>
-
-	<!-- 폼 모달 -->
+<<<<<<< HEAD
+      
+	<!-- 폼 모달-->
 	<div class="modal fade" id="formModal">
+=======
+
+<!-- 질문 등록하기 폼 모달 -->
+      <div class="modal fade" id="questionFormModal">
+         <div class="modal-dialog fModal__dialog">
+            <div class="modal-content fModal__body">
+               <div class="modal-header fModal__header">
+                  <h3 style="margin-left: 15px;">질문 등록하기</h3>
+                  <button type="button" class="close" data-dismiss="modal">
+                     <span>&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body p-0">
+                  <form class="fModal__box">
+                     <input id="questionTitle" style="border: none;width:400px;height:50px;font-size:20px;" placeholder="제목을 작성해주세요"></input>
+                        <textarea id="questionContent" class="form-control"
+                           style="height:200px;font-size: 16px;background-color: #25262b; color:#fff;border-radius:6px;padding: 10px;"
+                           placeholder="수업을 진행하면서 궁금한 코딩 관련 질문을 등록해 주세요."></textarea>
+                     <div class="flex__end">
+                        <button type="button" class="button--square mt-5" onclick="newQuestion()">등록하기</button>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!--질문 등록하기 폼 모달 끝 -->
+      
+      
+	
+	<!-- 수정 폼 모달 -->
+	<div class="modal fade" id="questionUpdateFormModal">
+>>>>>>> branch 'master' of https://github.com/JHoo0118/basak-coding.git
 		<div class="modal-dialog fModal__dialog">
 			<div class="modal-content fModal__body">
 				<div class="modal-header fModal__header">
-					<h3>강의 잘 듣고 있습니다</h3>
+<<<<<<< HEAD
+					<h3 style="margin-left: 15px;"></h3>
+=======
+					<h3>수정하기</h3>
+					<button type="button" class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-0">
+					<div  class="fModal__box">
+						<form>
+							<textarea class="form-control" placeholder="수정할 내용을 입력해 주세요."></textarea>
+						</form>
+						<div class="flex__end">
+							<button class="button--square mt-5">수정</button>
+							<button class="button--square mt-5" style="background-color: red;">삭제</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--수정 폼 모달 끝 -->
+	
+	<!-- 답변 폼 모달 -->
+	<div class="modal fade" id="questionCommentFormModal">
+		<div class="modal-dialog fModal__dialog">
+			<div class="modal-content fModal__body">
+				<div class="modal-header fModal__header">
+					<h3>답변하기</h3>
+>>>>>>> branch 'master' of https://github.com/JHoo0118/basak-coding.git
 					<button type="button" class="close" data-dismiss="modal">
 						<span>&times;</span>
 					</button>
@@ -412,18 +430,23 @@
 				<div class="modal-body p-0">
 					<div class="fModal__box">
 						<form>
-							<textarea class="form-control" placeholder="수업을 진행하면서 궁금한 코딩 관련 질문을 등록해 주세요.">안녕하세요. 질문 삭제
-								기능은 어디 있나요?ㅠㅠ</textarea>
+							<textarea class="form-control" placeholder="답변 내용을 입력해 주세요."></textarea>
 						</form>
 						<div class="flex__end">
-							<button class="button--square mt-5">수정하기</button>
+							<button class="button--square mt-5">등록</button>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+<<<<<<< HEAD
+	</div> 
 	<!-- 폼 모달 끝 -->
+=======
+	</div>
+	<!--답변 폼 모달 끝 -->
+
+>>>>>>> branch 'master' of https://github.com/JHoo0118/basak-coding.git
 
 	<!-- 미니 브라우저 시작 -->
 
@@ -436,9 +459,15 @@
 				</button>
 				<div class="position-relative w-100 text-center py-2">
 					<span onclick="closeMinibrowserModal()" class="d-block"
-						style="font-size: 14px; cursor:pointer; position:absolute; top:-5px; left:8px; padding:2px 0;"><i
-							class="far fa-window-minimize"></i></span>
+						style="font-size: 14px; cursor:pointer; position:absolute; top:-5px; left:8px; padding:2px 0;">
+						<i class="far fa-window-minimize"></i></span>
 					<span>Basak-browser</span>
+					
+					<div class="util-btn__group">
+						<span class="util-btn" onclick="fullSizeBrowser(this)">
+							<i class="far fa-window-maximize"></i>
+						</span>
+					</div>
 				</div>
 				<form class="address-container d-flex pr-2">
 					<button type="button" class="mr-2 btn btn-link">
@@ -452,7 +481,7 @@
 				</form>
 			</div>
 			<div class="editor__preview">
-				<iframe id="editorPreview" frameborder="0"></iframe>
+				<iframe id="editorPreview" name="editorPreview"></iframe>
 			</div>
 		</div>
 	</div>
@@ -525,7 +554,44 @@
 	<!-- 문의 작성 모달 끝 -->
 
 	<script>
+<<<<<<< HEAD
+		
+=======
+	
+	//질문 등록하기
+      function newQuestion(){
+         var questionTitle=$('#questionTitle').val();
+         var questionContent = $('#questionContent').val();
+         if(questionTitle==""){
+            alert("제목을 작성해주세요");
+            return false;
+         }
+         if(questionContent==""){
+            alert("내용을 작성해주세요");
+            return false;
+         }
+         else{
+            $.ajax({
+            url: '/newQuestion.do',
+            data: {"questionTitle": questionTitle, "questionContent": questionContent,"courseId":"[[${courseId}]]"},
+            type: 'post',
+            dataType: "json",
+            success: function (data) {
+               if(data==1){
+               alert("등록 완료되었습니다.");
+               
+               }
+               },
+            error: function () {
+               alert("오류가 발생했습니다.다시시도해주세요");
+            }
+         });
+         }
+      }
+	
+	
 
+>>>>>>> branch 'master' of https://github.com/JHoo0118/basak-coding.git
 		// 비디오 본 것 처리
 		var myPlayer = videojs("my_video_1");
 		var seenCheck = false;
@@ -533,12 +599,14 @@
 		myPlayer.on('timeupdate', function () {
 			if (myPlayer.duration) {
 				if (myPlayer.duration() - myPlayer.currentTime() <= 5 && !seenCheck) {
+
 					$.post({
 						url: "[[@{/class/update-seen}]]",
 						data: {
 							"videoId": "[[${currVideo.videoId}]]",
 						},
 						success: function (data) {
+							console.log(data)
 							if (data === '1') {
 								seenCheck = true;
 								var parent = document.querySelector("a.curr__link.active");
@@ -569,17 +637,25 @@
 		var editor;
 
 		// 미니브라우저 드래그 가능하게 하기
+		
+		// getElementById Chaining
+		Element.prototype.getElementById = function(id) {
+		    return document.getElementById(id);
+		}
+		
 		var miniBrowser = document.getElementById("miniBrowser");
 		var chrome = document.querySelector(".file__folder .fa-chrome");
 		$(function () {
 			$("#miniBrowser").draggable({
 				containment: 'parent'
 			});
-
 		});
 
 		// 미니브라우저 열기
+		let iframeBody = window.editorPreview.document.getElementsByTagName("body")[0];
 		function toggleMinibrowserModal() {
+			iframeBody.style.zoom = "0.5";
+			
 			miniBrowser.classList.toggle("none");
 			if (!miniBrowser.classList.contains("none")) {
 				chrome.style.color = "#fff";
@@ -592,6 +668,29 @@
 		function closeMinibrowserModal() {
 			miniBrowser.classList.add("none");
 			chrome.style.color = "#919191";
+		}
+		
+		// 미니브라우저 최대화
+		let maximize = false;
+		let originMiniBrowserWidth = Number.parseInt(miniBrowser.style.width)
+		let originMiniBrowserHeight = Number.parseInt(miniBrowser.style.height)
+		function fullSizeBrowser(ele) {
+			maximize = !maximize;
+			if (maximize) {
+				iframeBody.style.zoom = "1";
+				ele.innerHTML = '<i class="fas fa-window-maximize"></i>';
+				miniBrowser.classList.add("full-screen");
+				$("#miniBrowser").draggable('disable');
+				miniBrowser.style.width = screen.width + "px";
+				miniBrowser.style.height = screen.height + "px";
+			} else {
+				iframeBody.style.zoom = "0.5";
+				ele.innerHTML = '<i class="far fa-window-maximize"></i>';
+				miniBrowser.classList.remove("full-screen");
+				$("#miniBrowser").draggable('enable');
+				miniBrowser.style.width = originMiniBrowserWidth + "px";
+				miniBrowser.style.height = originMiniBrowserHeight + "px";
+			}
 		}
 
 		// 사이드바 처리
@@ -683,6 +782,10 @@
 			questionBackBtn.classList.remove("none");
 			questionSearchBtn.classList.add("none")
 			questionSearchInput.classList.add("none");
+			
+			
+			
+			
 		}
 
 		questionBackBtn.addEventListener("click", function () {
@@ -694,6 +797,7 @@
 			questionSearchInput.classList.remove("none");
 			questionSearchInput.value = "";
 		});
+		
 		// 질문 상세보기 끝
 
 

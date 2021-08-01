@@ -6,7 +6,6 @@
 			<div class="common__left">
 				<input id="userImage" type="file" accept="image/*" name="file" style="display: none;" />
 				<label class="position-relative rounded-circle" for="userImage">
-					
 					<img th:if="${member.AVATAR == null}" id="userImg" th:src="@{/images/image4.jpg}" alt="프로필 이미지" />
 					<img th:if="${member.AVATAR != null}" id="userImg" th:src="@{${PATH}}"/>
 					<i class="fa fa-plus-circle"></i>
@@ -35,16 +34,16 @@
 		</div>
 	<script>
 		$(document).ready(function () {
-			var upload = "[[${paymentCount}]]"	;		
 			var imgname = "[[${member.AVATAR}]]";
 			$('#userImage').change(function (e) {
+				//이미지 변경을 하지 않고 취소했을때
 				if($('#userImage')[0].files[0]==null) return;
+				
 				var file = $('#userImage')[0].files[0];
 				var formData = new FormData();
 				formData.append('userId', 1);
 				formData.append('file', file);
 				formData.append('imgname', imgname);
-
 				$.ajax({
 					url: '/personal/dashBoard/profileImgUpdate',
 					processData: false,
@@ -54,10 +53,10 @@
 					success: function (result) {
 						if (result == 0) {alert("업로드 실패")}
 						else if (result == 1) {
-							//console.log("파일!!!!!!!!",file)
 							var reader = new FileReader();
 							reader.onload = function (e) {
 								$('#userImg').attr('src', e.target.result);
+								$('#questionImage').attr('src', e.target.result);
 							};
 							reader.readAsDataURL(file);
 						}

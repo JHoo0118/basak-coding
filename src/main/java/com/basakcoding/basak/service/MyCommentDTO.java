@@ -25,13 +25,13 @@ public class MyCommentDTO {
     private String memberPath;
 	
 	public String getAdminAvatarImagePath() {
-    	if (avatar == null) return "/images/user.png";
+    	if (avatar == null && adminId !=null) return "/images/user.png";
     	return "/upload/admin/" + this.adminId + "/" + this.avatar;
     }
 	
 	@Transient
     public String getMemberAvatarImagePath() {
-    	if (avatar == null) return "/images/image4.jpg";
-    	return "/upload/member/" + this.memberId + "/" + this.avatar;
+    	if (memavatar == null && memberId !=null) return "/images/image4.jpg";
+    	return "/upload/member/" + this.memberId + "/" + this.memavatar;
     }
 }

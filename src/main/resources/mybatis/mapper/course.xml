@@ -225,8 +225,8 @@
 	</select>
 	<!--―――――――――――――――――――――――――――― 질문 상세보기 ―――――――――――――――――――――――――――――― -->
 	
-	<resultMap type="QuestionDTO" id="question">
-		<collection column="questionId"
+	<resultMap type="QuestionDTO" id="questions">
+		<collection column="question_id"
 			 property="comments"
 			 javaType="java.util.List" 
 			 ofType="CommentDTO"
@@ -236,15 +236,29 @@
 	
 	
 	<!-- 강의별(course) 질문 뿌려주기 -->
-	<select id='questionList' parameterType="String"
-		resultType="QuestionDTO">
-		SELECT * FROM MEMBERS m
-		JOIN QUESTION q ON q.member_id = m.member_id
+	<select id="questionList" parameterType="String"
+		resultMap="questions">
+		SELECT * FROM QUESTION q
+		JOIN MEMBERS m ON q.member_id = m.member_id
 		WHERE COURSE_ID = #{courseId}
 		ORDER BY QUESTION_ID DESC
 	</select>
 	
-	<!-- 질문내용(클롭) 가져오기 -->
+
+	<!-- 질문별 댓글(COMMENTS 뿌려주기 -->
+	<select id="commentsList" resultType="CommentDTO">
+		SELECT c.*,name,username
+		FROM COMMENTS c
+		FULL JOIN MEMBERS m
+		ON m.MEMBER_ID=c.MEMBER_ID
+		FULL JOIN ADMINS a
+		ON a.ADMIN_ID=c.ADMIN_ID
+		WHERE QUESTION_ID = #{questions}
+		ORDER BY COMMENT_ID
+	</select>
+	
+	
+		<!-- 질문내용(클롭) 가져오기
 	<select id="getClobQuestionText" parameterType="String"
 		resultType="String">
 		SELECT CONTENT AS CONTENTS 
@@ -252,20 +266,8 @@
 		WHERE course_id=#{courseId}
 		ORDER BY QUESTION_ID DESC
 	</select>
+	 -->
 	
-	<!-- 질문별 댓글(COMMENTS 뿌려주기 -->
-	<select id='commentsList' parameterType="String"
-		resultType="CommentDTO">
-
-		SELECT c.*,name,username
-		FROM COMMENTS c
-		FULL JOIN MEMBERS m
-		ON m.MEMBER_ID=c.MEMBER_ID
-		FULL JOIN ADMINS a
-		ON a.ADMIN_ID=c.ADMIN_ID
-		WHERE QUESTION_ID = #{questionId}
-		ORDER BY COMMENT_ID
-	</select>
 
 	<!--―――――――――――――――――――――――――――― 강의 수정하기 ―――――――――――――――――――――――――――――― -->
 	<update id="updateCourse" parameterType="Map">
@@ -289,6 +291,13 @@
 		WHERE video_id=#{videoId}
 	</update>
 	<!--―――――――――――――――――――――――――――― 강의 수정하기 ―――――――――――――――――――――――――――――― -->
+
+	<!-- 강의 질문 등록하기 -->
+   <insert id="newQuestion" parameterType="Map">
+      INSERT INTO question VALUES(seq_question.NEXTVAL, #{memberId}, #{courseId}, 
+      #{questionTitle},#{questionContent}, DEFAULT, DEFAULT, DEFAULT)
+   </insert>
+
 
 
 </mapper>

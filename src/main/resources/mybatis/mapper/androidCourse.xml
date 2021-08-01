@@ -9,7 +9,7 @@
 	<select id="getCoursesList" resultType="Map">
 		SELECT ca.name CAT_NAME, co.title, co.short_description, co.course_id, co.thumbnail
 		FROM courses co
-		JOIN category ca ON ca.category_id = co.category_id
+		JOIN category ca ON ca.category_id = co.category_id ORDER BY co.created_at DESC
 	</select>
 	
 	<!-- 결제한 모든 강의 얻기 -->
@@ -50,7 +50,7 @@
 	
 	<!-- 커리큘럼 얻기 -->
 	<select id="getCurriculumList" parameterType="String" resultMap="curriculums">
-		SELECT * FROM curriculum WHERE course_id = #{courseId}
+		SELECT * FROM curriculum WHERE course_id = #{courseId} ORDER BY curriculum_id
 	</select>
 	
     <select id="getVideoList" resultType="VideoDTO">
@@ -77,5 +77,45 @@
 		JOIN category ca ON ca.category_id = co.category_id
 		JOIN admins a ON co.admin_id = a.admin_id WHERE co.course_id = #{courseId} AND pa.member_id = #{memberId}
 	</select>
+	
+	<!-- 비디오 링크 얻기 시작 -->
+	<select id="getCurriculum" parameterType="String"
+		resultType="String">
+		select curriculum_id FROM curriculum WHERE course_id = #{courseId} ORDER BY
+		curriculum_id
+	</select>
+	
+	<select id="getLastVideo" parameterType="String"
+		resultType="String">
+		select video_id FROM video WHERE curriculum_id = #{lastCurriculumId} and
+		rownum=1
+		order by video_id desc
+	</select>
+	
+	<select id="getVideo" parameterType="Map" resultType="String">
+		select vi.video_id FROM video vi JOIN videoMember vm ON vi.video_id =
+		vm.video_id
+		WHERE curriculum_id = #{curriculumId} AND vm.member_id = #{memberId} AND
+		vm.seen = 'N' AND ROWNUM = 1 ORDER BY vi.video_id
+	</select>
+	
+	<!-- 비디오 링크 얻기 끝 -->
+	
+	<!-- 현재 재생할 비디오 얻기 -->
+	<select id="getCurrVideo" parameterType="String"
+		resultType="VideoDTO">
+		SELECT * FROM video WHERE video_id = #{videoId}
+	</select>
+	
+	<!-- 본 동영상인지 체크 -->
+	<select id="isSeen" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM videoMember
+		WHERE video_id = #{videoId} AND member_id = #{memberId} AND seen = 'Y'
+	</select>
+	
+	<!-- 본 동영상 업데이트 -->
+	<update id="updateSeen" parameterType="Map">
+		UPDATE videoMember SET seen = 'Y' WHERE video_id = #{videoId} AND member_id = #{memberId}
+	</update>
 	
 </mapper>

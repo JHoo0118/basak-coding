@@ -10,15 +10,16 @@ import org.springframework.stereotype.Service;
 
 import com.basakcoding.basak.mapper.MemberMapper;
 import com.basakcoding.basak.util.ListPagingData;
+import com.basakcoding.basak.util.QuestionPagingUtil;
 import com.basakcoding.basak.util.CommentPagingUtil;
+import com.basakcoding.basak.util.InquiryPagingUtil;
 import com.basakcoding.basak.util.SHA256;
-import com.basakcoding.basak.util.myListPagingData;
 
 @Service
 public class MemberService {
 	
 	private int pageSize = 5;
-	private int blockPage = 5;
+	private int blockPage = 3;
 	
    @Autowired
    private MemberMapper memberMapper;
@@ -46,9 +47,6 @@ public class MemberService {
        return memberMapper.registerMember(map);
     }
     
-   
-    
-    
     // 비밀번호 해싱
     private void encodePassword(Map map) {
        String encodedPassword = passwordEncoder.encode(map.get("password").toString());
@@ -59,6 +57,11 @@ public class MemberService {
     public boolean isEmailUnique(String email) {
        MemberDTO memberByEmail = memberMapper.getMemberByEmail(email);
        return memberByEmail == null;
+    }
+    
+    // 이메일로 사용자 얻기
+    public MemberDTO getMemberByEmail(String email) {
+    	return memberMapper.getMemberByEmail(email);
     }
 
     // 사용자 수정
@@ -117,12 +120,56 @@ public class MemberService {
       return memberMapper.myCourses(userId);
    }
    //내 결제 정보
-   public List<Map> myPayment(int userId) {
-      return memberMapper.myPayment(userId);
+   public ListPagingData myPayment(int userId,int nowPage,int where) {
+	   int totalCourseCount = memberMapper.paymentCount(userId);
+		//전체 페이지수
+		int totalPage =(int)Math.ceil((double)totalCourseCount/pageSize);		
+		//시작 및 끝 ROWNUM구하기
+		int start = (nowPage -1)*pageSize+1;
+		int end = nowPage * pageSize;	
+		//페이징을 위한 로직 끝]
+		Map map=new HashMap();
+		map.put("start", start);
+		map.put("end", end);
+		map.put("userId",userId);
+		List lists = memberMapper.myPayment(map);
+		String page = "/personal/qAndA/questions";
+		String pagingString=QuestionPagingUtil.pagingBootStrapStyle(totalCourseCount,pageSize, blockPage, nowPage, page,where);		
+		ListPagingData<Map> listPagingData = 
+				ListPagingData.builder()
+				.lists(lists)
+				.nowPage(nowPage)
+				.pageSize(pageSize)
+				.pagingString(pagingString)
+				.TotalCourseCount(totalCourseCount)
+				.build(); 
+		return listPagingData;
    }
    //내 문의 제목,시간
-   public List<Map> myInquiry(int userId) {
-      return memberMapper.myInquiry(userId);
+   public ListPagingData myInquiry(int userId,int nowPage,int where) {
+	   int totalCourseCount = memberMapper.inquiryCount(userId);
+		//전체 페이지수
+		int totalPage =(int)Math.ceil((double)totalCourseCount/pageSize);		
+		//시작 및 끝 ROWNUM구하기
+		int start = (nowPage -1)*pageSize+1;
+		int end = nowPage * pageSize;	
+		//페이징을 위한 로직 끝]
+		Map map=new HashMap();
+		map.put("start", start);
+		map.put("end", end);
+		map.put("userId",userId);
+		List lists = memberMapper.myInquiry(map);
+		String page = "/personal/qAndA/questions";
+		String pagingString=InquiryPagingUtil.pagingBootStrapStyle(totalCourseCount,pageSize, blockPage, nowPage, page,where);		
+		ListPagingData<Map> listPagingData = 
+				ListPagingData.builder()
+				.lists(lists)
+				.nowPage(nowPage)
+				.pageSize(pageSize)
+				.pagingString(pagingString)
+				.TotalCourseCount(totalCourseCount)
+				.build(); 
+		return listPagingData;
    }
    //내 결제 상세보기
    public Map viewDetails(String userId,String pay_code) {
@@ -133,7 +180,7 @@ public class MemberService {
       return memberMapper.inquDetails(userId,inquiry_id);
    }
    //내 댓글 제목,시간
-   public myListPagingData myComments(int userId, int nowPage) {
+   public ListPagingData myComments(int userId, int nowPage,int where) {
 	   	int totalCourseCount = memberMapper.commentsCount(userId);
 		//전체 페이지수
 		int totalPage =(int)Math.ceil((double)totalCourseCount/pageSize);		
@@ -147,9 +194,9 @@ public class MemberService {
 		map.put("userId",userId);
 		List lists = memberMapper.myComments(map);
 		String page = "/personal/qAndA/questions";
-		String pagingString=CommentPagingUtil.pagingBootStrapStyle(totalCourseCount,pageSize, blockPage, nowPage, page);		
-		myListPagingData<Map> listPagingData = 
-				myListPagingData.builder()
+		String pagingString=CommentPagingUtil.pagingBootStrapStyle(totalCourseCount,pageSize, blockPage, nowPage, page,where);		
+		ListPagingData<Map> listPagingData = 
+				ListPagingData.builder()
 				.lists(lists)
 				.nowPage(nowPage)
 				.pageSize(pageSize)
@@ -158,10 +205,15 @@ public class MemberService {
 				.build(); 
 		return listPagingData;
    }
-   //내 댓글 상세보기
-   public Map commentsDetails(String userId, String commenTitle) {
-      return memberMapper.commentsDetails(userId,commenTitle);
+   //내 댓글 상세보기에서 질문아이디 가져오기
+   public String commentsDetails(String commentId) {
+      return memberMapper.commentsDetails(commentId);
    }
+   //댓글달린 질문 가져오기
+   public Map commentQuestion(String questionId) {
+		return memberMapper.commentQuestion(questionId);
+	}
+
    
     //사용자의 이메일벨리데이트 값 업데이트
     public int updateEmailValidate(Map map) {
@@ -173,8 +225,30 @@ public class MemberService {
       return memberMapper.inquDetailNotExist(userId, inquiry_id);
    }
    //내 질문
-   public List<Map> myQuestion(int userId) {
-      return memberMapper.myQuestion(userId);
+   public ListPagingData myQuestion(int userId,int nowPage,int where) {
+	   int totalCourseCount = memberMapper.questionCount(userId);
+		//전체 페이지수
+		int totalPage =(int)Math.ceil((double)totalCourseCount/pageSize);		
+		//시작 및 끝 ROWNUM구하기
+		int start = (nowPage -1)*pageSize+1;
+		int end = nowPage * pageSize;	
+		//페이징을 위한 로직 끝]
+		Map map=new HashMap();
+		map.put("start", start);
+		map.put("end", end);
+		map.put("userId",userId);
+		List lists = memberMapper.myQuestion(map);
+		String page = "/personal/qAndA/questions";
+		String pagingString=QuestionPagingUtil.pagingBootStrapStyle(totalCourseCount,pageSize, blockPage, nowPage, page,where);		
+		ListPagingData<Map> listPagingData = 
+				ListPagingData.builder()
+				.lists(lists)
+				.nowPage(nowPage)
+				.pageSize(pageSize)
+				.pagingString(pagingString)
+				.TotalCourseCount(totalCourseCount)
+				.build(); 
+		return listPagingData;
    }
    //내 강의 안본 비디오가져오기
 //   public String courseVideo(String courseId) {
@@ -246,6 +320,18 @@ public class MemberService {
       return memberMapper.updatepassword(map);
    }
 
-   
+   // 가입 방법 업데이트
+   public int updateAuthenticationType(Map map) {
+	   return memberMapper.updateAuthenticationType(map);
+   }
+
+	public int addNewMemberByOAuthLogin(String name, String email) {
+		MemberDTO member = MemberDTO.builder()
+				.email(email)
+				.username(name)
+				.password("1234")
+				.build();
+		return memberMapper.addNewMemberByOAuthLogin(member);
+	}
 
 }

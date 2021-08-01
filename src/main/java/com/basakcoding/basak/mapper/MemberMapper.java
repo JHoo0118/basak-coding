@@ -50,10 +50,12 @@ public interface MemberMapper {
    
    //내 질문 개수
    int questionCount(int userId);
+   
+   //내 문의 개수
+   int inquiryCount(int userId);
 
    //내 닉네임 변경
    int userNameEdit(Map map);
-
 
    //비밀번호 변경
    int passwordEdit(Map map);
@@ -62,10 +64,10 @@ public interface MemberMapper {
    List<Map> myCourses(int userId);
 
    //내 결제 정보가져오기
-   List<Map> myPayment(int userId);
+   List<Map> myPayment(Map map);
 
    //내 문의 제목,시간
-   List<Map> myInquiry(int userId);
+   List<Map> myInquiry(Map map);
    
    //내 결제 상세
    Map viewDetails(String userId,String pay_code);
@@ -76,8 +78,8 @@ public interface MemberMapper {
    //내 댓글 제목,시간
    List<Map> myComments(Map map);
 
-   //내 댓글 상세보기
-   Map commentsDetails(String userId, String commenTitle);
+   //내 댓글 질문아이디가져오기
+   String commentsDetails(String commentId);
       
    //사용자 emailvalidate 값 업데이트
    int updateEmailValidate(Map map);
@@ -86,7 +88,7 @@ public interface MemberMapper {
    Map inquDetailNotExist(String userId, String inquiry_id);
 
    //내 질문
-   List<Map> myQuestion(int userId);
+   List<Map> myQuestion(Map map);
 
    //내 강의 안본 비디오
    // String courseVideo(String courseId);
@@ -137,5 +139,14 @@ public interface MemberMapper {
 
    //임시비밀번호
    int updatepassword(Map map);
+
+   //댓글의 질문가져오기
+   Map commentQuestion(String questionId);
+
+   // 가입 방식 업데이트
+   int updateAuthenticationType(Map map);
+
+   // OAuth 가입
+   int addNewMemberByOAuthLogin(MemberDTO member);
    
 }

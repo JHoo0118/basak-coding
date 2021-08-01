@@ -26,7 +26,6 @@ public class VideoDTO {
 	// path용
 	private String courseId;
 	
-	@Transient
 	public char getSeen() {
 		return seen;
 	}

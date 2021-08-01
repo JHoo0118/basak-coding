@@ -42,13 +42,8 @@ public class AdminPriceController {
 	@GetMapping("/management")
 	public String priceList(Model model) {
 		List<Map> listPrices = priceService.getPriceList();
-		System.out.println(listPrices.size());
-		
-		
 		model.addAttribute("listPrices", listPrices);
 		model.addAttribute("title", "결제 관리");
-		System.out.println(listPrices);
-		
 		return "admin/priceManagement";
 	}
 	

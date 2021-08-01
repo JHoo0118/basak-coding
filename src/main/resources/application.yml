@@ -2,6 +2,7 @@
 server:
   port: 9090
   tomcat:    max-swallow-size: -1
+          
 
 # hikari - 커넥션 풀 설정
 # username과 password는 오라클 계정 정보 입력
@@ -20,7 +21,28 @@ spring:
     
   servlet:    multipart:      max-file-size: -1
       max-request-size: -1
-  main:    allow-bean-definition-overriding: true        
+  main:    allow-bean-definition-overriding: true
+      security:
+    oauth2:      client:        registration:          google:
+            client-id: 108903576103-oshart8m90pm3k3gpgalso17o6lf10qm.apps.googleusercontent.com
+            client-secret: 3g_pf4WamnfDWDZBe3WElJMu
+            scope:
+              - email
+              - profile
+          kakao:
+            client-id: 7dbae453ce679c376fb6ab1b3d420596
+            client-secret: LYGSTTxR4LRFGZbzJRDCTfsG00mKTyAb
+            redirect-uri: http://localhost:9090/login/oauth2/code/kakao
+            authorization-grant-type: authorization_code
+            scope:
+              - account_email
+            client-name: kakao
+            client-authentication-method: POST  
+        provider:          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
 
 # MyBatis
 # 패키지 경로에 따라 다르게 설정
