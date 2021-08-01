@@ -79,6 +79,7 @@
 	<script>
 		//문의하기
 		$('#btnInq').click(function () {
+			console.log($('input:checked').val())
 			$.ajax({
 				url: "[[@{/class/inquiry}]]",
 				type: "post",
