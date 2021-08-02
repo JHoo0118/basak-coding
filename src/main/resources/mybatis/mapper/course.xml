@@ -225,19 +225,9 @@
 	</select>
 	<!--―――――――――――――――――――――――――――― 질문 상세보기 ―――――――――――――――――――――――――――――― -->
 	
-	<resultMap type="QuestionDTO" id="questions">
-		<collection column="question_id"
-			 property="comments"
-			 javaType="java.util.List" 
-			 ofType="CommentDTO"
-			 select="commentsList">
-		</collection>
-	</resultMap>
-	
-	
 	<!-- 강의별(course) 질문 뿌려주기 -->
 	<select id="questionList" parameterType="String"
-		resultMap="questions">
+		resultType="QuestionDTO">
 		SELECT * FROM QUESTION q
 		JOIN MEMBERS m ON q.member_id = m.member_id
 		WHERE COURSE_ID = #{courseId}
@@ -246,14 +236,14 @@
 	
 
 	<!-- 질문별 댓글(COMMENTS 뿌려주기 -->
-	<select id="commentsList" resultType="CommentDTO">
+	<select id="commentsList" parameterType="String" resultType="MyCommentDTO">
 		SELECT c.*,name,username
 		FROM COMMENTS c
 		FULL JOIN MEMBERS m
 		ON m.MEMBER_ID=c.MEMBER_ID
 		FULL JOIN ADMINS a
 		ON a.ADMIN_ID=c.ADMIN_ID
-		WHERE QUESTION_ID = #{questions}
+		WHERE QUESTION_ID = #{quetionId}
 		ORDER BY COMMENT_ID
 	</select>
 	
@@ -297,6 +287,41 @@
       INSERT INTO question VALUES(seq_question.NEXTVAL, #{memberId}, #{courseId}, 
       #{questionTitle},#{questionContent}, DEFAULT, DEFAULT, DEFAULT)
    </insert>
+	
+	<!-- 강의 질문 등록하기 -->
+   <insert id="newComment" parameterType="Map">
+      INSERT INTO comments 
+      VALUES(seq_comments.NEXTVAL,#{questionId},null,#{memberId},#{commentContent},DEFAULT)
+   			  
+   </insert>
+   
+   
+	<!-- 강의 질문 수정하기 클릭시 기존값 받아오기 -->
+   <select id="clickUpdate" parameterType="String" resultType="QuestionDTO">
+		SELECT title,content FROM question
+		WHERE question_id= #{questionId} 
+		
+	</select>
+	
+   
+	<!-- 강의 질문 수정하기 -->
+   	<update id="updateQuestion" parameterType="Map">
+		UPDATE question SET
+		title=#{questionUpdateTitle}, content=#{questionUpdateContent}
+		WHERE question_id=#{questionId}
+	</update>
+   
+
+	<!-- 강의 질문 상세보기 -->
+	<select id="questionDetails" parameterType="String" resultType="Map">
+		select m.avatar,
+		m.username,q.title,q.created_at,q.like_count,q.comment_count,to_char(q.content)question_content
+		from question q join members m on m.member_id=q.member_id
+		where q.question_id=#{questionId}
+	</select>
+	
+
+
 
 
 

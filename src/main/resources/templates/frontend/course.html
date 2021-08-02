@@ -172,10 +172,10 @@
 					</button>
 				</div>
 
-				<!-- 질문 목록 -->
+				<!-- 질문목록 -->
 				<div class="qModal__box" id="questionList">
 					<!-- 목록 1 -->
-					<div th:each=" question : ${questionList}" class="qModal__upper">
+					<div th:each=" question, i : ${questionList}" class="qModal__upper">
 						<div class="comment__user">
 							<img th:src="@{/images/user.png}" />
 							<div class="user__info">
@@ -185,48 +185,52 @@
 						</div>
 
 						<h3 class="qModal__title qModal__title-course" onclick="seeQuestionDetail(this)" >[[${question.title}]] </h3>
+						<span class="questionId" style="display: none;">[[${question.questionId}]]</span>
 						
 
 						<div class="qModal__state">
 							<div class="state__left">
 								<div class="state__like">
-									<a href="javascript:void(0)"><span><i class="far fa-thumbs-up"></i>[[${question.likeCount}]]</span></a>
+									<span><i class="far fa-thumbs-up"></i>[[${question.likeCount}]]</span>
+									<span><i class="far fa-comment-dots"></i>[[${question.commentCount}]]</span>
 								</div>
-								<div class="state__edit">
-									<span data-toggle="modal" data-target="#questionUpdateFormModal">수정하기</span>
-								</div>
+								
 							</div>
 							<div class="state__right">
-								<span data-toggle="modal" data-target="#questionCommentFormModal">답변 작성하기</span>
+								<span data-toggle="modal" data-target="#임시">답변 보러가기</span>
 							</div>
 						</div>
 					</div>
 
 				
 				</div>
-
+				
+				
 				<!-- 질문 상세보기 -->
-				<div th:each=" question : ${questionList}" class="qModal__box none" id="questionDetail">
-					<div  class="qModal__upper">
+				<div class="qModal__box none" id="questionDetail">
+					<div class="qModal__upper">
 						<div class="comment__user">
 							<img th:src="@{/images/user.png}" />
 							<div class="user__info">
-								<h5>[[${question.userName}]]</h5>
-								<span>[[${question.createdAt}]]</span>
+								<h5 id="userName">사용자명</h5>
+								<span id="createdAt">생성날짜</span>
+
 							</div>
 						</div>
-						<h3 class="qModal__title">[[${question.title}]]</h3>
-						<p class="qModal__content">[[${question.content}]]</p>
-						<span class="qModal__updated" th:if="${question.updateDays<1}">[[${question.updateHours}]]시간 전 등록 됨</span>
-						<span class="qModal__updated" th:if="${question.updateDays>=1}">[[${question.updateDays}]]일 전 등록 됨</span>
+						<h3 id="title" class="qModal__title">제목</h3> 
+						<p id="content" class="qModal__content">내용</p> 
+						
+						<!--ㅅㅂ -->
+						<span id="questionId" style="display: none;">questionId</span>
+						
 						<div class="qModal__state">
 							<div class="state__left">
 								<div class="state__like">
-									<a href="javascript:void(0)"><span><i class="far fa-thumbs-up"></i>[[${question.likeCount}]]</span></a>
-									<span><i class="far fa-comment-dots"></i>[[${question.commentCount}]]</span>
+									<a href="javascript:void(0)"><span id="likeCount"><i class="far fa-thumbs-up"></i>좋아요수</span></a>
+									<span id="commentCount"><i class="far fa-comment-dots"></i>댓글수</span>
 								</div>
 								<div class="state__edit">
-									<span  data-toggle="modal" data-target="#questionUpdateFormModal">수정하기</span>
+									<span id="click_update" data-toggle="modal" data-target="#questionUpdateFormModal">수정하기</span>
 								</div>
 							</div>
 							<div class="state__right">
@@ -235,21 +239,22 @@
 						</div>
 					</div>
 					
-					
-					<div th:each=" comment : ${question.comments}" class="qModal__lower">
+					<h1></h1>
+					<div class="qModal__lower">
 						<ul class="comment__list">
+						<!--
 							<li class="comment__item">
 								<div class="comment__user">
 									<img th:src="@{/images/user.png}" />
 									<div class="user__info">
 										<h5 th:if="${comment.name != null}" style="color: #0fd" th:text="${comment.name}"></h5>
 										<h5 th:if="${comment.username != null}" style="color: red" th:text="${comment.username}"></h5>
-										<span>[[${comment.createdAt}]]</span>
+										<span>댓글 생성일</span>
 									</div>
 								</div>
-								<p class="qModal__content">[[${comment.content}]] </p>
+								<p class="qModal__content">댓글 내용 </p>
 							</li>
-						
+						-->
 						</ul>
 					</div>
 				</div>
@@ -363,6 +368,8 @@
                      <span>&times;</span>
                   </button>
                </div>
+               
+               
                <div class="modal-body p-0">
                   <form class="fModal__box">
                      <input id="questionTitle" style="border: none;width:400px;height:50px;font-size:20px;" placeholder="제목을 작성해주세요"></input>
@@ -374,38 +381,45 @@
                      </div>
                   </form>
                </div>
+               
+               
             </div>
          </div>
       </div>
       <!--질문 등록하기 폼 모달 끝 -->
       
+    <!-- 질문 수정하기 폼 모달 -->
+      <div class="modal fade" id="questionUpdateFormModal">
+         <div class="modal-dialog fModal__dialog">
+            <div class="modal-content fModal__body">
+               <div class="modal-header fModal__header">
+                  <h3 style="margin-left: 15px;">질문 수정하기</h3>
+                  <button type="button" class="close" data-dismiss="modal">
+                     <span>&times;</span>
+                  </button>
+               </div>
+               
+               
+               <div class="modal-body p-0">
+                  <form class="fModal__box">
+                     <input id="questionUpdateTitle" style="border: none;width:400px;height:50px;font-size:20px;" placeholder="제목을 수정해주세요"></input>
+                        <textarea id="questionUpdateContent" class="form-control"
+                           style="height:200px;font-size: 16px;background-color: #25262b; color:#fff;border-radius:6px;padding: 10px;"
+                           placeholder="질문을 수정해 주세요."></textarea>
+                     <div class="flex__end">
+                        <button type="button" class="button--square mt-5" onclick="updateQuestion()">수정하기</button>
+                     </div>
+                  </form>
+               </div>
+               
+               
+            </div>
+         </div>
+      </div>
+      <!--질문 수정하기 폼 모달 끝 -->
       
 	
-	<!-- 수정 폼 모달 -->
-	<div class="modal fade" id="questionUpdateFormModal">
-		<div class="modal-dialog fModal__dialog">
-			<div class="modal-content fModal__body">
-				<div class="modal-header fModal__header">
-					<h3>수정하기</h3>
-					<button type="button" class="close" data-dismiss="modal">
-						<span>&times;</span>
-					</button>
-				</div>
-				<div class="modal-body p-0">
-					<div  class="fModal__box">
-						<form>
-							<textarea class="form-control" placeholder="수정할 내용을 입력해 주세요."></textarea>
-						</form>
-						<div class="flex__end">
-							<button class="button--square mt-5">수정</button>
-							<button class="button--square mt-5" style="background-color: red;">삭제</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!--수정 폼 모달 끝 -->
+	
 	
 	<!-- 답변 폼 모달 -->
 	<div class="modal fade" id="questionCommentFormModal">
@@ -420,10 +434,10 @@
 				<div class="modal-body p-0">
 					<div class="fModal__box">
 						<form>
-							<textarea class="form-control" placeholder="답변 내용을 입력해 주세요."></textarea>
+							<textarea id="commentContent" class="form-control" placeholder="답변 내용을 입력해 주세요."></textarea>
 						</form>
 						<div class="flex__end">
-							<button class="button--square mt-5">등록</button>
+							<button class="button--square mt-5" onclick="newComment()">등록</button>
 						</div>
 					</div>
 				</div>
@@ -540,43 +554,10 @@
 
 	<script>
 	
-	//질문 등록하기
-      function newQuestion(){
-         var questionTitle=$('#questionTitle').val();
-         var questionContent = $('#questionContent').val();
-         if(questionTitle==""){
-            alert("제목을 작성해주세요");
-            return false;
-         }
-         if(questionContent==""){
-            alert("내용을 작성해주세요");
-            return false;
-         }
-         else{
-            $.ajax({
-            url: '/newQuestion.do',
-            data: {"questionTitle": questionTitle, "questionContent": questionContent,"courseId":"[[${courseId}]]"},
-            type: 'post',
-            dataType: "json",
-            success: function (data) {
-               if(data==1){
-               alert("등록 완료되었습니다.");
-               
-               }
-               },
-            error: function () {
-               alert("오류가 발생했습니다.다시시도해주세요");
-            }
-         });
-         }
-      }
-	
-	
-
 		// 비디오 본 것 처리
 		var myPlayer = videojs("my_video_1");
 		var seenCheck = false;
-
+		var courseId="[[${courseId}]]";
 		myPlayer.on('timeupdate', function () {
 			if (myPlayer.duration) {
 				if (myPlayer.duration() - myPlayer.currentTime() <= 5 && !seenCheck) {
@@ -754,7 +735,155 @@
 			}
 		}
 		// 질문 검색 끝
+		
+		
+		
+	  //질문 등록하기
+      function newQuestion(){
+   		
+					
+         var questionTitle=$('#questionTitle').val();
+         var questionContent = $('#questionContent').val();
+        
+		
+         if(questionTitle==""){
+            alert("제목을 작성해주세요");
+            return false;
+         }
+         if(questionContent==""){
+            alert("내용을 작성해주세요");
+            return false;
+         }
+         else{
+            $.ajax({
+            url: '/newQuestion.do',
+            data: {"questionTitle": questionTitle, "questionContent": questionContent,"courseId":courseId},
+            type: 'post',
+            dataType: "json",
+            success: function (data) {
+               if(data==1){
+               alert("등록 완료되었습니다.");
+               	$('#questionFormModal').modal('hide');
+               	
+               	location.reload();
+               }
+               },
+            error: function () {
+               alert("오류가 발생했습니다.다시시도해주세요");
+            }
+         });
+         
+         }
+      }
+      
+       //답변 작성
+      function newComment(){
+		
+        var commentContent = $('#commentContent').val();
+        var questionId= document.getElementById("questionId").innerText;
+        
+         if(commentContent==""){
+            alert("내용을 작성해주세요");
+            return false;
+         }
+         else{
+            $.ajax({
+            url: '/newComment.do',
+            data: {"commentContent": commentContent,"courseId":courseId,"questionId": questionId},
+            type: 'post',
+            dataType: "json",
+            success: function (data) {
+               if(data==1){
+               alert("답글이 작성 됐습니다.");
+               	$('#questionFormModal').modal('hide');
+               	
+               	location.reload();
+               }
+               },
+            error: function () {
+               alert("오류가 발생했습니다.다시시도해주세요");
+            }
+         });
+         
+         }
+      }
+			
+    
 
+		
+		
+		
+	  
+	  
+	  //질문 수정하기 눌렀을때 기존 값 불러오기
+	  $("#click_update").click(function(){
+     	  
+     	  var questionId= document.getElementById("questionId").innerText;
+				
+		
+			$.ajax({
+					
+			url: "/clickUpdate.do",
+            data: {"questionId":questionId}, //ㅅㅂ questionId
+            type: 'post',
+            dataType: "json",
+            success: function (data) {
+		
+				$('#questionUpdateTitle').val(data.title);
+				$('#questionUpdateContent').text(data.content);
+
+			}//success
+						
+		})//ajax
+		
+	});
+	  
+	  
+	  
+	  
+	  //질문 수정하기
+      function updateQuestion(){
+        
+         var questionUpdateTitle=$('#questionUpdateTitle').val();
+         var questionUpdateContent = $('#questionUpdateContent').val();
+         //ㅅㅂ
+     	  var questionId= document.getElementById("questionId").innerText;
+     	  
+		console.log("questionId:",questionId);
+		
+         if(questionUpdateTitle==""){
+            alert("제목을 작성해주세요");
+            return false;
+         }
+         if(questionUpdateContent==""){
+            alert("내용을 작성해주세요");
+            return false;
+         }
+         else{
+            $.ajax({
+            url: '/updateQuestion.do',
+            data: {"questionUpdateTitle": questionUpdateTitle, "questionUpdateContent": questionUpdateContent,"courseId":courseId,"questionId":questionId},  
+            type: 'post',
+            dataType: "json",
+            success: function (data) {
+			
+               if(data==1){
+               alert("수정 완료되었습니다.");
+               	$('#questionUpdateFormModal').modal('hide');
+               	
+               	location.reload();
+               }
+               },
+            error: function () {
+               alert("오류가 발생했습니다.다시시도해주세요");
+            }
+         });
+         
+         }
+      }
+		
+		
+	 
 		// 질문 상세보기 처리
 		function seeQuestionDetail(aTag) {
 			questionList.classList.add("none");
@@ -765,10 +894,57 @@
 			questionSearchInput.classList.add("none");
 			
 			
+			var questionId = aTag.closest(".qModal__upper").querySelector(".questionId").innerText;
+			var data = {'courseId':courseId ,'questionId': questionId };
+			var questionDetail = document.getElementById("questionDetail");
+			var commentList = document.querySelector(".comment__list");
+			commentList.innerHTML = "";
 			
 			
-		}
-
+			
+			$.ajax({
+				url: "[[@{/course/questionSelect/}]]",
+				type:"post",
+				data: JSON.stringify(data),
+				dataType:"json",
+				contentType:"application/json",
+				success: function (data) {
+					questionDetail.getElementById("userName").innerText = data.USERNAME;
+					questionDetail.getElementById("createdAt").innerText = data.CREATED_AT;
+					questionDetail.getElementById("title").innerText = data.TITLE;
+					questionDetail.getElementById("content").innerText = data.QUESTION_CONTENT;
+					$('#likeCount').html('<i class="fas fa-thumbs-up" ></i>' + data.LIKE_COUNT);
+					$('#commentCount').html('<i class="far fa-comment-dots" ></i>' + data.COMMENT_COUNT);
+					$("#questionId").text(questionId); 
+					
+					console.log("data",data);
+					
+					
+					$.each(data.commentList, function(index, val) {
+					
+						commentList.insertAdjacentHTML("beforeend", 
+							`
+								<li class="comment__item">
+									<div class="comment__user">
+										<img src="${val.adminId != null ? val.adminPath : val.memberPath}" />
+										<div class="user__info">
+											<h5>${val.username == null ? val.name : val.username}</h5>
+											<span>${val.createdAt} </span>
+										</div>
+									</div>
+									<p class="qModal__content">${val.content} </p>
+								</li>
+							`
+						);
+					
+					
+					})//$.each
+				}// success
+			 })//ajax
+			 
+		  }//seeQuestionDetail
+		
+		//질문 상세보기 뒤로가기
 		questionBackBtn.addEventListener("click", function () {
 			questionList.classList.remove("none");
 			questionSearchList.classList.add("none");
@@ -780,6 +956,9 @@
 		});
 		
 		// 질문 상세보기 끝
+		
+	
+		
 
 
 		/////////////////////////////////////////////////////////////////////////////

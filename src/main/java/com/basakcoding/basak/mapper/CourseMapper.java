@@ -83,6 +83,16 @@ public interface CourseMapper {
 	Map questionOne(String questionId);
 	
 	
-	//강의 질문등록하기
-	   int newQuestion(Map map);
+	//강의 질문 등록하기
+	int newQuestion(Map map);
+	//질문 답변 등록하기
+	int newComment(Map map);
+	
+	//강의 질문 수정하기 기존 값 받아오기
+	QuestionDTO clickUpdate(String questionId);
+	//강의 질문 수정하기
+	int updateQuestion(Map map);
+
+	//강의 질문 상세보기
+	Map questionDetails(String questionId);
 }

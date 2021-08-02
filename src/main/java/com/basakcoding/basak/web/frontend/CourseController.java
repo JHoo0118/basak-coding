@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.security.access.event.AuthenticationCredentialsNotFoundEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -33,6 +34,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -42,6 +44,7 @@ import com.basakcoding.basak.service.CurriculumDTO;
 import com.basakcoding.basak.service.FileDTO;
 import com.basakcoding.basak.service.InquiryService;
 import com.basakcoding.basak.service.MemberService;
+import com.basakcoding.basak.service.MyCommentDTO;
 import com.basakcoding.basak.service.QuestionDTO;
 import com.basakcoding.basak.service.VideoDTO;
 import com.basakcoding.basak.util.FileUploadUtil;
@@ -147,6 +150,7 @@ public class CourseController {
 		
 		//강의별 질문리스트
 		List<QuestionDTO> questionList = courseService.questionList(courseId);
+		//System.out.println("qestionList:"+questionList);
 		for(QuestionDTO questionDate : questionList) {
 			Date today = new Date();
 			SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
@@ -159,25 +163,14 @@ public class CourseController {
 			long diffHours= diffSec/ (60*60); //  60분*60초 나누면 시간
 			long diffDays = diffSec/ (24*60*60);// 24시간*60분*60초 나누면 일
 			//System.out.println(date.format(today));
-			System.out.println("수정시간:"+diffHours);
-			System.out.println("수정날짜:"+diffDays);
 			
 			questionDate.setUpdateDays(diffDays);
 			questionDate.setUpdateHours(diffHours);
 			
-			System.out.println("수정시간"+questionDate.getUpdateHours());
-			System.out.println("수정날짜"+questionDate.getUpdateDays());
 		}
 		
 		
-		
-			
-		System.out.println("questionList:"+questionList);
-		
-		
-		
-		
-		
+		model.addAttribute("courseId",courseId);
 		model.addAttribute("questionList", questionList);
 		model.addAttribute("cssFileList", cssFileList);
 		model.addAttribute("fileList", fileList);
@@ -335,7 +328,7 @@ public class CourseController {
 	}
 	
 	
-		/*
+	
 	   //질문 등록하기
 	   @PostMapping("/newQuestion.do")
 	   @ResponseBody
@@ -348,9 +341,116 @@ public class CourseController {
 	         memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 	      }
 	      map.put("memberId", memberId);
+	      //System.out.println("map안 요소들:"+map);
 	      int result= courseService.newQuestion(map);
 	      return result;
 	   }
-	   */
+	   
+	 //답변 등록하기
+	   @PostMapping("/newComment.do")
+	   @ResponseBody
+	   public int newComment(@RequestParam Map map,Authentication auth) {
+	      String memberId = null;
+	      if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+	         MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+	         memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+	      } else {
+	         memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+	      }
+	      map.put("memberId", memberId);
+	      
+	     
+	      
+	      System.out.println("map안 요소들:"+map);
+	      int result= courseService.newComment(map);
+	      return result;
+	   }
+	   
+	
+	   
+	   
+	   
+	   //질문 수정하기 전 값 뿌려주기
+	   @PostMapping("/clickUpdate.do")
+	   @ResponseBody
+	   public QuestionDTO clickUpdate(@RequestParam Map map,Authentication auth) {
+	      String memberId = null;
+	      if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+	         MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+	         memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+	      } else {
+	         memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+	      }
+	      map.put("memberId", memberId);
+	      //System.out.println("뷰단에서 받아온 map안 요소들:"+map);
+	      
+	      String questionId = map.get("questionId").toString();
+	      //DTO로 받아와야 question테이블의 CONTENT가 클롭형식인데 따른 작업 안하고 String값으로 받아올수 있음
+	      QuestionDTO ex_Result= (QuestionDTO) courseService.clickUpdate(questionId);
+	     // System.out.println("수정하기 클릭시 map안 요소들:"+ex_Result);
+	      
+	      
+	      return  ex_Result;
+	  
+	   }
+	  
+	   
+	   //질문 수정하기
+	   @PostMapping("/updateQuestion.do")
+	   @ResponseBody
+	   public int updateQuestion(@RequestParam Map map,Authentication auth) {
+	      String memberId = null;
+	      if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+	         MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+	         memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+	      } else {
+	         memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+	      }
+	      map.put("memberId", memberId);
+	      
+	      System.out.println("수정하기 map안 요소들:"+map);
+	      int updateResult= courseService.updateQuestion(map);
+	      return  updateResult;
+	  
+	   }
+	  
+	   
+	   
+	   
+	   //질문 상세보기 
+	   @PostMapping("/course/questionSelect")
+	   @ResponseBody
+	   public Map questionSelect(@RequestBody Map map, Authentication auth,Model model) {
+		  
+//		  String memberId = null;
+//	      if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+//	         MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+//	         memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+//	      } else {
+//	         memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+//	      }
+	   
+	      //System.out.println(map);
+	      String questionId = map.get("questionId").toString();
+	      //System.out.println(questionId);
+	      
+	      String path;
+	      // 질문
+	      Map questionDetails = courseService.questionDetails(questionId);
+	      //System.out.println(questionDetails);
+
+	      // 댓글
+	      List<MyCommentDTO> commentLists = memberService.commentList(questionId);
+	      
+	      System.out.println(commentLists);
+	      for (MyCommentDTO dto : commentLists) {
+	         dto.setAdminPath(dto.getAdminAvatarImagePath());
+	         path=dto.getMemberAvatarImagePath();
+	         dto.setMemberPath(path);
+	      }
+	      questionDetails.put("commentList", commentLists);
+	      return questionDetails;
+		     
+	   }
 
 }
