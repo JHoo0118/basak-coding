@@ -167,7 +167,7 @@
 						<input onkeydown="queryQuestion()" class="question__input" placeholder="질문 제목 및 내용"
 							type="text" />
 					</div>
-					<button class="question__btn" data-toggle="modal" data-target="#formModal">
+					<button class="question__btn" data-toggle="modal" data-target="#questionFormModal">
 						Q&nbsp;&nbsp;질문하기
 					</button>
 				</div>
@@ -180,7 +180,7 @@
 							<img th:src="@{/images/user.png}" />
 							<div class="user__info">
 								<h5>[[${question.userName}]]</h5>
-								<span>4시간 전(로직미완성)</span>
+								<span>[[${question.createdAt}]]</span>
 							</div>
 						</div>
 
@@ -193,11 +193,11 @@
 									<a href="javascript:void(0)"><span><i class="far fa-thumbs-up"></i>[[${question.likeCount}]]</span></a>
 								</div>
 								<div class="state__edit">
-									<span data-toggle="modal" data-target="#formModal">수정하기</span>
+									<span data-toggle="modal" data-target="#questionUpdateFormModal">수정하기</span>
 								</div>
 							</div>
 							<div class="state__right">
-								<span data-toggle="modal" data-target="#formModal">답변 작성하기</span>
+								<span data-toggle="modal" data-target="#questionCommentFormModal">답변 작성하기</span>
 							</div>
 						</div>
 					</div>
@@ -212,12 +212,13 @@
 							<img th:src="@{/images/user.png}" />
 							<div class="user__info">
 								<h5>[[${question.userName}]]</h5>
-								<span>4시간 전(수정필요)</span>
+								<span>[[${question.createdAt}]]</span>
 							</div>
 						</div>
 						<h3 class="qModal__title">[[${question.title}]]</h3>
 						<p class="qModal__content">[[${question.content}]]</p>
-						<span class="qModal__updated">4시간 전에 수정됨</span>
+						<span class="qModal__updated" th:if="${question.updateDays<1}">[[${question.updateHours}]]시간 전 등록 됨</span>
+						<span class="qModal__updated" th:if="${question.updateDays>=1}">[[${question.updateDays}]]일 전 등록 됨</span>
 						<div class="qModal__state">
 							<div class="state__left">
 								<div class="state__like">
@@ -225,11 +226,11 @@
 									<span><i class="far fa-comment-dots"></i>[[${question.commentCount}]]</span>
 								</div>
 								<div class="state__edit">
-									<span data-toggle="modal" data-target="#formModal">수정하기</span>
+									<span  data-toggle="modal" data-target="#questionUpdateFormModal">수정하기</span>
 								</div>
 							</div>
 							<div class="state__right">
-								<span data-toggle="modal" data-target="#formModal">답변 작성하기</span>
+								<span data-toggle="modal" data-target="#questionCommentFormModal">답변 작성하기</span>
 							</div>
 						</div>
 					</div>
@@ -243,32 +244,12 @@
 									<div class="user__info">
 										<h5 th:if="${comment.name != null}" style="color: #0fd" th:text="${comment.name}"></h5>
 										<h5 th:if="${comment.username != null}" style="color: red" th:text="${comment.username}"></h5>
-										<span>4시간 전</span>
+										<span>[[${comment.createdAt}]]</span>
 									</div>
 								</div>
 								<p class="qModal__content">[[${comment.content}]] </p>
 							</li>
-							
-							
-							<!--li class="comment__item">
-								<div class="comment__user">
-									<img th:src="@{/images/user.png}" />
-									<div class="user__info">
-										<h5>질문자</h5>
-										<span>4시간 전</span>
-									</div>
-								</div>
-								<p class="qModal__content">안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
-									있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디
-									있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은
-									어디
-									있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은 어디 있나요?ㅠㅠ안녕하세요. 질문 삭제 기능은
-									어디
-									있나요?ㅠㅠ
-								</p>
-							</li -->
-							
-							
+						
 						</ul>
 					</div>
 				</div>
@@ -371,13 +352,77 @@
 		</div>
 		<!-- 강의 메인 끝 -->
 	</section>
-
-	<!-- 폼 모달 -->
+<<<<<<< HEAD
+      
+	<!-- 폼 모달-->
 	<div class="modal fade" id="formModal">
+=======
+
+<!-- 질문 등록하기 폼 모달 -->
+      <div class="modal fade" id="questionFormModal">
+         <div class="modal-dialog fModal__dialog">
+            <div class="modal-content fModal__body">
+               <div class="modal-header fModal__header">
+                  <h3 style="margin-left: 15px;">질문 등록하기</h3>
+                  <button type="button" class="close" data-dismiss="modal">
+                     <span>&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body p-0">
+                  <form class="fModal__box">
+                     <input id="questionTitle" style="border: none;width:400px;height:50px;font-size:20px;" placeholder="제목을 작성해주세요"></input>
+                        <textarea id="questionContent" class="form-control"
+                           style="height:200px;font-size: 16px;background-color: #25262b; color:#fff;border-radius:6px;padding: 10px;"
+                           placeholder="수업을 진행하면서 궁금한 코딩 관련 질문을 등록해 주세요."></textarea>
+                     <div class="flex__end">
+                        <button type="button" class="button--square mt-5" onclick="newQuestion()">등록하기</button>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!--질문 등록하기 폼 모달 끝 -->
+      
+      
+	
+	<!-- 수정 폼 모달 -->
+	<div class="modal fade" id="questionUpdateFormModal">
+>>>>>>> branch 'master' of https://github.com/JHoo0118/basak-coding.git
 		<div class="modal-dialog fModal__dialog">
 			<div class="modal-content fModal__body">
 				<div class="modal-header fModal__header">
-					<h3>강의 잘 듣고 있습니다</h3>
+<<<<<<< HEAD
+					<h3 style="margin-left: 15px;"></h3>
+=======
+					<h3>수정하기</h3>
+					<button type="button" class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-0">
+					<div  class="fModal__box">
+						<form>
+							<textarea class="form-control" placeholder="수정할 내용을 입력해 주세요."></textarea>
+						</form>
+						<div class="flex__end">
+							<button class="button--square mt-5">수정</button>
+							<button class="button--square mt-5" style="background-color: red;">삭제</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--수정 폼 모달 끝 -->
+	
+	<!-- 답변 폼 모달 -->
+	<div class="modal fade" id="questionCommentFormModal">
+		<div class="modal-dialog fModal__dialog">
+			<div class="modal-content fModal__body">
+				<div class="modal-header fModal__header">
+					<h3>답변하기</h3>
+>>>>>>> branch 'master' of https://github.com/JHoo0118/basak-coding.git
 					<button type="button" class="close" data-dismiss="modal">
 						<span>&times;</span>
 					</button>
@@ -385,18 +430,23 @@
 				<div class="modal-body p-0">
 					<div class="fModal__box">
 						<form>
-							<textarea class="form-control" placeholder="수업을 진행하면서 궁금한 코딩 관련 질문을 등록해 주세요.">안녕하세요. 질문 삭제
-								기능은 어디 있나요?ㅠㅠ</textarea>
+							<textarea class="form-control" placeholder="답변 내용을 입력해 주세요."></textarea>
 						</form>
 						<div class="flex__end">
-							<button class="button--square mt-5">수정하기</button>
+							<button class="button--square mt-5">등록</button>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+<<<<<<< HEAD
+	</div> 
 	<!-- 폼 모달 끝 -->
+=======
+	</div>
+	<!--답변 폼 모달 끝 -->
+
+>>>>>>> branch 'master' of https://github.com/JHoo0118/basak-coding.git
 
 	<!-- 미니 브라우저 시작 -->
 
@@ -504,7 +554,44 @@
 	<!-- 문의 작성 모달 끝 -->
 
 	<script>
+<<<<<<< HEAD
+		
+=======
+	
+	//질문 등록하기
+      function newQuestion(){
+         var questionTitle=$('#questionTitle').val();
+         var questionContent = $('#questionContent').val();
+         if(questionTitle==""){
+            alert("제목을 작성해주세요");
+            return false;
+         }
+         if(questionContent==""){
+            alert("내용을 작성해주세요");
+            return false;
+         }
+         else{
+            $.ajax({
+            url: '/newQuestion.do',
+            data: {"questionTitle": questionTitle, "questionContent": questionContent,"courseId":"[[${courseId}]]"},
+            type: 'post',
+            dataType: "json",
+            success: function (data) {
+               if(data==1){
+               alert("등록 완료되었습니다.");
+               
+               }
+               },
+            error: function () {
+               alert("오류가 발생했습니다.다시시도해주세요");
+            }
+         });
+         }
+      }
+	
+	
 
+>>>>>>> branch 'master' of https://github.com/JHoo0118/basak-coding.git
 		// 비디오 본 것 처리
 		var myPlayer = videojs("my_video_1");
 		var seenCheck = false;
@@ -695,6 +782,10 @@
 			questionBackBtn.classList.remove("none");
 			questionSearchBtn.classList.add("none")
 			questionSearchInput.classList.add("none");
+			
+			
+			
+			
 		}
 
 		questionBackBtn.addEventListener("click", function () {

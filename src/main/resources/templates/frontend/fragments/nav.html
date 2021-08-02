@@ -8,6 +8,7 @@
 	        <a class="navbar__brand" th:href="@{/}">BASAK CODING</a>
 	        <div class="navbar__wrapper">
 	        <a class="navbar__item" th:href="@{/catalog}">카탈로그</a>
+	        <a class="navbar__item" th:href="@{/crawl}">유튜브</a>
 		        <ul class="navbar__menu">
 		          	<!-- 로그인 전 -->
 		          	<li sec:authorize="isAnonymous()" th:if="${session.id == null}" class="navbar__item">

@@ -11,7 +11,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,6 +147,29 @@ public class CourseController {
 		
 		//강의별 질문리스트
 		List<QuestionDTO> questionList = courseService.questionList(courseId);
+		for(QuestionDTO questionDate : questionList) {
+			Date today = new Date();
+			SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar baseTime = new GregorianCalendar();
+			baseTime.setTime(today);
+			Calendar targetTime = new GregorianCalendar();
+			targetTime.setTime(questionDate.getCreatedAt());
+			
+			long diffSec = (baseTime.getTimeInMillis()-targetTime.getTimeInMillis())/1000;
+			long diffHours= diffSec/ (60*60); //  60분*60초 나누면 시간
+			long diffDays = diffSec/ (24*60*60);// 24시간*60분*60초 나누면 일
+			//System.out.println(date.format(today));
+			System.out.println("수정시간:"+diffHours);
+			System.out.println("수정날짜:"+diffDays);
+			
+			questionDate.setUpdateDays(diffDays);
+			questionDate.setUpdateHours(diffHours);
+			
+			System.out.println("수정시간"+questionDate.getUpdateHours());
+			System.out.println("수정날짜"+questionDate.getUpdateDays());
+		}
+		
+		
 		
 			
 		System.out.println("questionList:"+questionList);
@@ -150,7 +177,7 @@ public class CourseController {
 		
 		
 		
-		
+		model.addAttribute("courseId",courseId);
 		model.addAttribute("questionList", questionList);
 		model.addAttribute("cssFileList", cssFileList);
 		model.addAttribute("fileList", fileList);
@@ -306,5 +333,23 @@ public class CourseController {
 		return Integer.toString(result);
 		
 	}
+
+	
+	   //질문 등록하기
+	   @PostMapping("/newQuestion.do")
+	   @ResponseBody
+	   public int newQuestion(@RequestParam Map map,Authentication auth) {
+	      String memberId = null;
+	      if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+	         MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+	         memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+	      } else {
+	         memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+	      }
+	      map.put("memberId", memberId);
+	      int result= courseService.newQuestion(map);
+	      return result;
+	   }
+	   
 
 }

@@ -34,6 +34,7 @@ public class AdminInquiryController {
 	@GetMapping("/management")
 	public String inquiryList(Model model) {
 		List<InquiryDTO> listInquirys = inquiryService.inquirySelect();
+		System.out.println(listInquirys);
 		model.addAttribute("listInquirys", listInquirys);
 		model.addAttribute("title", "문의 관리");
 		model.addAttribute("tab", "inq");
@@ -140,6 +141,13 @@ public class AdminInquiryController {
 //			model.addAttribute("course", course);
 //			model.addAttribute("title", "강의 관리");
 			return "admin/inquiryEdit";
+		}
+		
+		
+		@PostMapping("/management/form/save")
+		public String memberForm2(@RequestParam Map map, Model model) {
+
+			return "admin/inquiryManagement";
 		}
 
 	

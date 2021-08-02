@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>바삭 코딩 | 유튜브</title>
+	<link rel="stylesheet" th:href="@{/fontawesome/all.min.css}" />
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" th:href="@{/css/frontend/main.css}" />
+	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+  	<script th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js}"></script>
+  	<style>
+  	
+  	</style>
+</head>
+
+<body>
+   	<!-- Navbar -->
+	<div th:replace="/frontend/fragments/nav.html :: fragment-nav"></div>
+	
+    <!-- lecture 시작 -->
+    <section class="catalog">
+        <div class="container-fluid container--main d-flex flex-column align-items-between">
+            <h1 class="catalog__header">Basic Courses</h1>
+            <hr class="catalog__hr" />
+
+            <ul class="row p-0" style="list-style: none;">
+                <div id="caw"></div>
+                
+                
+            </ul>
+        </div>
+    </section>
+    <!-- lecture 끝 -->
+    <script>
+  		$.ajax({
+			url: "http://192.168.0.3:8181/youtube",
+			success: function(data){
+				console.log(data);
+				var crawString =  '<div class="card lecture" >'
+				$.each(data,function(index,element){
+					console.log(element['title']);
+					console.log(element['url']);
+					console.log(element['thumnail']);
+					
+					crawString += `
+			                        <img src ="`+element['thumnail']+`" class="card-img-top lecture__thumbnail"  alt="thumbnail" />
+			
+			                        
+									
+			
+			                        <div class="card-body">
+			                            <h5 class="card-title lecture__title iine-clamp">
+			                                `+element['title']+`
+			                            </h5>
+			                            <p class="card-text iine-clamp iine-clamp--4 lecture__text d-flex flex-columns justify-space-between">
+												`+element['url']+`
+			                           </p>`
+			                        
+				})
+				crawString += '</div>'
+				$('#caw').html(crawString);
+			}
+			
+			
+		})
+    
+   </script>
+
+    <!-- footer -->
+    <div th:replace="/frontend/fragments/footer.html :: fragment-footer"></div>
+</body>
+
+</html>

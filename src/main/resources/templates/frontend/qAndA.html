@@ -32,6 +32,10 @@
 		//모달 좋아요 기능
 		function like(like) {
 			var likeCount = like.querySelectorAll("span")[0].innerText
+			if(!questionId){	
+				questionId= $("#comquestionId").text();
+				console.log(questionId);
+				}
 			$.ajax({
 				url: '/personal/like.do',
 				data: {"questionId": questionId, "likeCount": likeCount},
