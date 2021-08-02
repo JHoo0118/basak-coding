@@ -22,7 +22,7 @@
     <!-- lecture 시작 -->
     <section class="catalog">
         <div class="container-fluid container--main d-flex flex-column align-items-between">
-            <h1 class="catalog__header">Basic Courses</h1>
+            <h1 class="catalog__header">Youtube Courses</h1>
             <hr class="catalog__hr" />
 
             <ul class="row p-0" style="list-style: none;">
@@ -34,8 +34,9 @@
     </section>
     <!-- lecture 끝 -->
     <script>
+    	const baseUri = "http://192.168.0.2:9292"
   		$.ajax({
-			url: "http://192.168.0.3:8181/youtube",
+			url: baseUri + "/youtube",
 			success: function(data){
 				console.log(data);
 				var crawString =  '<div class="card lecture" >'
