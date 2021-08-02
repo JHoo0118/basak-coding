@@ -1,5 +1,6 @@
 package com.basakcoding.basak.android;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,9 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.basakcoding.basak.service.CurriculumDTO;
 import com.basakcoding.basak.service.FAQDTO;
+import com.basakcoding.basak.service.PaymentService;
 import com.basakcoding.basak.service.ReviewDTO;
 import com.basakcoding.basak.service.VideoDTO;
 import com.basakcoding.basak.service.android.AndroidCourseService;
+import com.basakcoding.basak.util.FileUploadUtil;
 
 @RestController
 @RequestMapping("/api/1.0")
@@ -29,6 +34,9 @@ public class AndroidCourseController {
 	
 	@Autowired
 	AndroidCourseService androidCourseService;
+	
+	@Autowired
+	PaymentService paymentService;
 	
 	@GetMapping("/my-course")
 	public List<Map> getMyCourseList(@Param("memberId") String memberId) {
@@ -70,6 +78,8 @@ public class AndroidCourseController {
 		params.put("memberId", memberId);
 		params.put("courseId", courseId);
 		
+		int result = androidCourseService.alreadyPayment(params);
+		
 		String lastVideoId = getLastVideoId(params);
 		
 		for (CurriculumDTO c : curriculum) {
@@ -87,6 +97,7 @@ public class AndroidCourseController {
 		courseInfo.put("curriculum", curriculum);
 		courseInfo.put("faq", faq);
 		courseInfo.put("review", review);
+		courseInfo.put("ALREADY_PAYMENT", result);
 		return courseInfo;
 	}
 	
@@ -133,6 +144,30 @@ public class AndroidCourseController {
 		params.put("videoId", videoId);
 		int result = androidCourseService.updateSeen(params);
 		return Integer.toString(result);
+	}
+
+	@CrossOrigin
+	@PostMapping("/course/payment")
+	public Map payment(@RequestBody Map<String, String> map) throws IOException {
+		int result = androidCourseService.insertPayment(map);
+		if (result == 1) {
+			String courseId = map.get("courseId");
+			List<String> videoIds = paymentService.getAllVideoIds(courseId);
+			Map params = new HashMap();
+			params.put("memberId", map.get("memberId"));
+			for (int i=0; i<videoIds.size(); i++) {
+				params.put("videoId", videoIds.get(i));
+				int res = paymentService.insertVideoRecord(params);
+				List<String> filenameList = paymentService.getFilenameList(videoIds.get(i));
+				for (String filename : filenameList) {
+					String copyFileDirName = "upload/course/" + courseId + "/file/copy-" + map.get("memberId") + "-" + filename;
+					String originFileDirName =  "upload/course/" + courseId + "/file/" + filename;
+					FileUploadUtil.copyFile(originFileDirName, copyFileDirName);
+				}
+			}
+		}
+		Map resMap = androidCourseService.paymentResult(map);
+		return resMap;
 	}
 	
 	private String getLastVideoId(Map params) {

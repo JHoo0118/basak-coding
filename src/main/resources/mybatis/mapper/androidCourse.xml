@@ -118,4 +118,19 @@
 		UPDATE videoMember SET seen = 'Y' WHERE video_id = #{videoId} AND member_id = #{memberId}
 	</update>
 	
+	<!-- 결제하기 -->
+	<insert id="insertPayment" parameterType="Map">
+		INSERT INTO payment VALUES (seq_payment.NEXTVAL, #{memberId}, #{courseId},
+		'kakao', #{price}, '결제 완료', '11111111', #{name}, DEFAULT, #{paymentCode})
+	</insert>
+	
+	<!-- 결제내역 -->
+	<select id="paymentResult" parameterType="Map" resultType="Map">
+		SELECT pa.payment_method, pa.created_at, pa.payment_code, pa.phone_number, pa.name, pa.payment_id, pa.course_id, ca.name CAT_NAME, co.title, co.thumbnail, co.period, co.price, a.name ADM_NAME 
+		FROM courses co
+		JOIN payment pa ON pa.course_id = co.course_id
+		JOIN category ca ON ca.category_id = co.category_id
+		JOIN admins a ON co.admin_id = a.admin_id WHERE co.course_id = #{courseId} AND pa.member_id = #{memberId}
+	</select>
+	
 </mapper>

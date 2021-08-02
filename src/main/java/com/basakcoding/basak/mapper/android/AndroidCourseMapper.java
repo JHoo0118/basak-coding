@@ -47,4 +47,12 @@ public interface AndroidCourseMapper {
 
 	int updateSeen(Map params);
 
+	int alreadyPayment(Map params);
+
+	// 결제하기
+	int insertPayment(Map<String, String> map);
+
+	// 결제내역
+	Map paymentResult(Map<String, String> map);
+
 }

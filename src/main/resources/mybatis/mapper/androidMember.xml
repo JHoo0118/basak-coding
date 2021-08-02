@@ -32,7 +32,9 @@
 
 	<!-- 회원정보 수정 -->
 	<update id="updateMem" parameterType="Map" >
-		UPDATE members SET username=#{username}, password=#{password}
+		UPDATE members SET username=#{username}
+		<if test="password != null">, password=#{password}</if>
+		<if test="avatar != null">, avatar=#{avatar}</if>
 		WHERE member_id = #{memberId}
 	</update>
 	
