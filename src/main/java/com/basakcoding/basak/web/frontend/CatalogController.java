@@ -68,6 +68,10 @@ public class CatalogController {
 	
 	}
 	
+	@GetMapping("/crawl")
+	public String crawl() {
+		return "frontend/crawl";
+	}
 	
 	
 	//강의목록 상세 페이지
