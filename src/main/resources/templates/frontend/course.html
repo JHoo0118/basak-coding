@@ -191,8 +191,8 @@
 						<div class="qModal__state">
 							<div class="state__left">
 								<div class="state__like">
-									<span><i class="far fa-thumbs-up"></i>[[${question.likeCount}]]</span>
-									<span><i class="far fa-comment-dots"></i>[[${question.commentCount}]]</span>
+									<span id="listlikeCount"><i class="far fa-thumbs-up"></i>[[${question.likeCount}]]</span>
+									<span id="listComment"><i class="far fa-comment-dots"></i>[[${question.commentCount}]]</span>
 								</div>
 								
 							</div>
@@ -201,8 +201,6 @@
 							</div>
 						</div>
 					</div>
-
-				
 				</div>
 				
 				
@@ -222,11 +220,13 @@
 						
 						<!--ㅅㅂ -->
 						<span id="questionId" style="display: none;">questionId</span>
+						<span id="likeCheck" style="display: none;">likeCheck</span>
 						
 						<div class="qModal__state">
 							<div class="state__left">
 								<div class="state__like">
-									<a href="javascript:void(0)"><span id="likeCount"><i class="far fa-thumbs-up"></i>좋아요수</span></a>
+									<a href="javascript:void(0)">
+									<span id="likeCount"><i class="far fa-thumbs-up"></i>좋아요수</span></a>
 									<span id="commentCount"><i class="far fa-comment-dots"></i>댓글수</span>
 								</div>
 								<div class="state__edit">
@@ -357,13 +357,9 @@
 		</div>
 		<!-- 강의 메인 끝 -->
 	</section>
-<<<<<<< HEAD
-=======
+	
       
-	<!-- 폼 모달-->
-	<div class="modal fade" id="formModal">
->>>>>>> branch 'master' of https://github.com/JHoo0118/basak-coding.git
-
+	
 <!-- 질문 등록하기 폼 모달 -->
       <div class="modal fade" id="questionFormModal">
          <div class="modal-dialog fModal__dialog">
@@ -448,6 +444,7 @@
 				</div>
 			</div>
 		</div>
+	
 	</div>
 	<!--답변 폼 모달 끝 -->
 
@@ -558,14 +555,12 @@
 	<!-- 문의 작성 모달 끝 -->
 
 	<script>
-	
-	
-	
 
-		// 비디오 본 것 처리
 		var myPlayer = videojs("my_video_1");
 		var seenCheck = false;
 		var courseId="[[${courseId}]]";
+		
+		// 비디오 본 것 처리
 		myPlayer.on('timeupdate', function () {
 			if (myPlayer.duration) {
 				if (myPlayer.duration() - myPlayer.currentTime() <= 5 && !seenCheck) {
@@ -784,6 +779,102 @@
          }
       }
       
+      
+      // 질문 상세보기 처리
+		function seeQuestionDetail(aTag) {
+			questionList.classList.add("none");
+			questionSearchList.classList.add("none");
+			document.getElementById("questionDetail").classList.remove("none");
+			questionBackBtn.classList.remove("none");
+			questionSearchBtn.classList.add("none")
+			questionSearchInput.classList.add("none");
+			
+			
+			var questionId = aTag.closest(".qModal__upper").querySelector(".questionId").innerText;
+			var data = {'courseId':courseId ,'questionId': questionId };
+			var questionDetail = document.getElementById("questionDetail");
+			var commentList = document.querySelector(".comment__list");
+			commentList.innerHTML = "";
+			
+			
+			
+			$.ajax({
+				url: "[[@{/course/questionSelect/}]]",
+				type:"post",
+				data: JSON.stringify(data),
+				dataType:"json",
+				contentType:"application/json",
+				success: function (data) {
+					questionDetail.getElementById("userName").innerText = data.USERNAME;
+					questionDetail.getElementById("createdAt").innerText = data.CREATED_AT;
+					questionDetail.getElementById("title").innerText = data.TITLE;
+					questionDetail.getElementById("content").innerText = data.QUESTION_CONTENT;
+					$('#likeCount').html('<i class="fas fa-thumbs-up" ></i>' + data.LIKE_COUNT);
+					$('#commentCount').html('<i class="far fa-comment-dots" ></i>' + data.COMMENT_COUNT);
+					$("#questionId").text(questionId); 
+					$("#likeCheck").text(data.likeCheck);
+					
+					console.log("data",data);
+					
+				if (data.likeCheck == 1) {
+				$('#likeCount').html('<i class="fas fa-thumbs-up" ></i>' + data.LIKE_COUNT);
+				$('#likeCount').prop("style", "color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");
+
+
+				}
+				else {
+				$('#likeCount').html('<i class="far fa-thumbs-up"></i>' + data.LIKE_COUNT);
+				$('#likeCount').prop("style", "color: gray;");
+				}
+
+					
+					
+					
+					$.each(data.commentList, function(index, val) {
+					
+						commentList.insertAdjacentHTML("beforeend", 
+							`
+								<li class="comment__item">
+									<div class="comment__user">
+										<img src="${val.adminId != null ? val.adminPath : val.memberPath}" />
+										<div class="user__info">
+											<h5>${val.username == null ? val.name : val.username}</h5>
+											<span>${val.createdAt} </span>
+										</div>
+									</div>
+									<p class="qModal__content">${val.content} </p>
+								</li>
+							`
+						);
+					
+					
+					})//$.each
+				}// success
+				
+			 })//ajax
+			 
+		  }//seeQuestionDetail
+		  
+		
+		//질문 상세보기 뒤로가기
+		questionBackBtn.addEventListener("click", function () {
+			questionList.classList.remove("none");
+			questionSearchList.classList.add("none");
+			document.getElementById("questionDetail").classList.add("none");
+			questionBackBtn.classList.add("none");
+			questionSearchBtn.classList.remove("none")
+			questionSearchInput.classList.remove("none");
+			questionSearchInput.value = "";
+			
+			
+			
+			
+			
+		});
+		
+		// 질문 상세보기 끝
+      
+      
        //답변 작성
       function newComment(){
 		
@@ -803,7 +894,7 @@
             success: function (data) {
                if(data==1){
                alert("답글이 작성 됐습니다.");
-               	$('#questionFormModal').modal('hide');
+               	$('#questionCommentFormModal').modal('hide');
                	
                	location.reload();
                }
@@ -839,9 +930,6 @@
 		})//ajax
 		
 	});
-	  
-	  
-	  
 	  
 	  //질문 수정하기
       function updateQuestion(){
@@ -885,81 +973,61 @@
       }
 		
 		
-	 
-		// 질문 상세보기 처리
-		function seeQuestionDetail(aTag) {
-			questionList.classList.add("none");
-			questionSearchList.classList.add("none");
-			document.getElementById("questionDetail").classList.remove("none");
-			questionBackBtn.classList.remove("none");
-			questionSearchBtn.classList.add("none")
-			questionSearchInput.classList.add("none");
-			
-			
-			var questionId = aTag.closest(".qModal__upper").querySelector(".questionId").innerText;
-			var data = {'courseId':courseId ,'questionId': questionId };
-			var questionDetail = document.getElementById("questionDetail");
-			var commentList = document.querySelector(".comment__list");
-			commentList.innerHTML = "";
-			
-			
-			
-			$.ajax({
-				url: "[[@{/course/questionSelect/}]]",
-				type:"post",
-				data: JSON.stringify(data),
-				dataType:"json",
-				contentType:"application/json",
-				success: function (data) {
-					questionDetail.getElementById("userName").innerText = data.USERNAME;
-					questionDetail.getElementById("createdAt").innerText = data.CREATED_AT;
-					questionDetail.getElementById("title").innerText = data.TITLE;
-					questionDetail.getElementById("content").innerText = data.QUESTION_CONTENT;
-					$('#likeCount').html('<i class="fas fa-thumbs-up" ></i>' + data.LIKE_COUNT);
-					$('#commentCount').html('<i class="far fa-comment-dots" ></i>' + data.COMMENT_COUNT);
-					$("#questionId").text(questionId); 
-					
-					console.log("data",data);
-					
-					
-					$.each(data.commentList, function(index, val) {
-					
-						commentList.insertAdjacentHTML("beforeend", 
-							`
-								<li class="comment__item">
-									<div class="comment__user">
-										<img src="${val.adminId != null ? val.adminPath : val.memberPath}" />
-										<div class="user__info">
-											<h5>${val.username == null ? val.name : val.username}</h5>
-											<span>${val.createdAt} </span>
-										</div>
-									</div>
-									<p class="qModal__content">${val.content} </p>
-								</li>
-							`
-						);
-					
-					
-					})//$.each
-				}// success
-			 })//ajax
-			 
-		  }//seeQuestionDetail
-		
-		//질문 상세보기 뒤로가기
-		questionBackBtn.addEventListener("click", function () {
-			questionList.classList.remove("none");
-			questionSearchList.classList.add("none");
-			document.getElementById("questionDetail").classList.add("none");
-			questionBackBtn.classList.add("none");
-			questionSearchBtn.classList.remove("none")
-			questionSearchInput.classList.remove("none");
-			questionSearchInput.value = "";
-		});
-		
-		// 질문 상세보기 끝
-		
 	
+		/////////////////////////////////////////////////////////////////////////////
+		//좋아요
+	
+	
+
+		
+		$('#likeCount').click(function(){
+		    var listlikeCount= Number($('#listlikeCount').text());
+		    console.log("listlikeCount:",listlikeCount);
+			var likeCount = Number.parseInt($('#likeCount').text()); 
+			 
+			 
+	        var questionId= document.getElementById("questionId").innerText;
+			
+			var data = {'questionId': questionId};
+			
+				$.ajax({
+
+					url: "[[@{/course/count_like}]]",
+					type: "post",
+					data: JSON.stringify(data),//courseId=1
+					contentType: "application/json",
+					success: function (data) {
+						
+						console.log("data:", data)
+						if (data == 0) {//기존에 좋아요 누른적이 없을때
+							likeCount++;
+							listlikeCount++;
+							console.log("likeCount:", likeCount);
+							console.log("listlikeCount:", listlikeCount);
+							$('#likeCount').html('<i class="fas fa-thumbs-up" ></i>' + likeCount);
+							$("#listlikeCount").html('<i class="far fa-thumbs-up"></i>' + listlikeCount);
+							$('#likeCount').prop("style", "color: rgb(0, 255, 255); border-color:rgb(0, 255, 255); ");
+
+						}
+						else if (data == 1) {////기존에 좋아요를 눌렀놨을때
+							likeCount--;
+							listlikeCount--;
+							console.log("likeCount:", likeCount);
+							console.log("listlikeCount:", listlikeCount);
+							
+							$('#likeCount').html('<i class="far fa-thumbs-up"></i>' + likeCount);
+							$('#listlikeCount').html('<i class="far fa-thumbs-up"></i>' + listlikeCount);
+							$('#likeCount').prop("style", "color: gray;");
+
+						}
+
+					}
+
+				})
+
+			
+			});//좋아요 
+		
 		
 
 

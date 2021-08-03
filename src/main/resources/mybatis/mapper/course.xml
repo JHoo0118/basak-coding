@@ -280,7 +280,7 @@
 		video_url=#{videoUri}, video_title=#{videoTitle},video_content=#{videoContent}
 		WHERE video_id=#{videoId}
 	</update>
-	<!--―――――――――――――――――――――――――――― 강의 수정하기 ―――――――――――――――――――――――――――――― -->
+	<!--―――――――――――――――――――――――――――― 강의 질문/답변하기 ―――――――――――――――――――――――――――――― -->
 
 	<!-- 강의 질문 등록하기 -->
    <insert id="newQuestion" parameterType="Map">
@@ -320,9 +320,43 @@
 		where q.question_id=#{questionId}
 	</select>
 	
+	
+	
+	<!--―――――――――――――――――――――――――――― 강의 좋아요 ―――――――――――――――――――――――――――――― -->
+	
+	<select id="likeCheck" parameterType="Map" resultType="Int">
+	
+	SELECT COUNT(*)
+	FROM LIKES
+	WHERE member_id=#{memberId} AND question_id=#{questionId}
+	
+	</select>
+	
+	<!-- 좋아요 등록 -->
+	<insert id="like" parameterType="Map">
+	
+	INSERT INTO LIKES (LIKE_ID,MEMBER_ID,QUESTION_ID)
+	VALUES (SEQ_LIKES.NEXTVAL,#{memberId},#{questionId})
+	
+	</insert>
+	
+	<!-- 좋아요 삭제 -->
+	<delete id="unLike" parameterType="Map">
+	
+	DELETE FROM LIKES
+	WHERE MEMBER_ID=#{memberId} AND QUESTION_ID=#{questionId} 
+	
+	</delete >
 
+	<!--강의하기 질문별 좋아요 개수 -->
+	<update  id = "likeCount" parameterType="Map">
+	
+	UPDATE QUESTION
+	SET LIKE_COUNT = (SELECT COUNT(*) FROM LIKES WHERE QUESTION_ID=#{questionId} )
 
-
+	WHERE QUESTION_ID=#{questionId} 
+	
+	</update>
 
 
 </mapper>

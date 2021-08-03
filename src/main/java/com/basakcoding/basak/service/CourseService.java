@@ -150,9 +150,29 @@ public class CourseService {
 	public int updateQuestion(Map map) {
 		return courseMapper.updateQuestion(map);
 	}
-
+	//질문 상세보기
 	public Map questionDetails(String questionId) {
 		return courseMapper.questionDetails(questionId);
 	}
+	
+	//좋아요
+	public int likeCheck(Map map) {
+		return courseMapper.likeCheck(map);
+	}
+	
+	public int like(Map map) {
+		return courseMapper.like(map);
+	}
+	
+	public int unLike(Map map) {
+		return courseMapper.unLike(map);
+	}
+	public int likeCount(Map map) {
+		return courseMapper.likeCount(map);
+	}
+	
+	
+	
+	
 
 }

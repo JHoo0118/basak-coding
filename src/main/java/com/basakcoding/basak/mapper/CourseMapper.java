@@ -95,5 +95,13 @@ public interface CourseMapper {
 
 	//강의 질문 상세보기
 	Map questionDetails(String questionId);
+	
+	
+	//좋아요
+	int likeCheck(Map map);
+	int like(Map map);
+	int unLike(Map map);
+	int likeCount(Map map);
+	
 
 }

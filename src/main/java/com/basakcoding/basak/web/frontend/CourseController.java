@@ -152,6 +152,7 @@ public class CourseController {
 		List<QuestionDTO> questionList = courseService.questionList(courseId);
 		//System.out.println("qestionList:"+questionList);
 		for(QuestionDTO questionDate : questionList) {
+			/*
 			Date today = new Date();
 			SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
 			Calendar baseTime = new GregorianCalendar();
@@ -166,17 +167,12 @@ public class CourseController {
 			
 			questionDate.setUpdateDays(diffDays);
 			questionDate.setUpdateHours(diffHours);
-			
+			*/
 		}
 		
-		
+		//System.out.println("questionList:"+questionList);
 		
 			
-		System.out.println("questionList:"+questionList);
-		
-		
-		
-		
 		model.addAttribute("courseId",courseId);
 		model.addAttribute("questionList", questionList);
 		model.addAttribute("cssFileList", cssFileList);
@@ -428,36 +424,86 @@ public class CourseController {
 	   @ResponseBody
 	   public Map questionSelect(@RequestBody Map map, Authentication auth,Model model) {
 		  
-//		  String memberId = null;
-//	      if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-//	         MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
-//	         memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
-//	      } else {
-//	         memberId = ((UserDetails) auth.getPrincipal()).getUsername();
-//	      }
+		  String memberId = null;
+	      if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+	         MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+	         memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+	      } else {
+	         memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+	      }
+	      map.put("memberId", memberId);
+	      System.out.println("질문 클릭시:map안 요소:"+map);
+	      
 	   
-	      //System.out.println(map);
+	      
+	    
 	      String questionId = map.get("questionId").toString();
 	      //System.out.println(questionId);
 	      
 	      String path;
 	      // 질문
 	      Map questionDetails = courseService.questionDetails(questionId);
-	      //System.out.println(questionDetails);
-
+	      //질문 클릭시 질문당 좋아요 확인
+	      int likeCheck = courseService.likeCheck(map);
+	      questionDetails.put("likeCheck", likeCheck);
+	      
+	      model.addAttribute("likeCheck",likeCheck);
+	      
+	      System.out.println("questionDetails"+ questionDetails);
+	      
 	      // 댓글
 	      List<MyCommentDTO> commentLists = memberService.commentList(questionId);
-	      
-	      System.out.println(commentLists);
+	      //System.out.println(commentLists);
+	     
 	      for (MyCommentDTO dto : commentLists) {
 	         dto.setAdminPath(dto.getAdminAvatarImagePath());
 	         path=dto.getMemberAvatarImagePath();
 	         dto.setMemberPath(path);
 	      }
 	      questionDetails.put("commentList", commentLists);
+	      
+	      
 	      return questionDetails;
 		     
 	   }
 
-
+	 //좋아요 안좋아요
+		@PostMapping("/course/count_like")
+		public @ResponseBody int course(Authentication auth , @RequestBody Map map) throws IOException {
+			
+		      String memberId = null;
+		      if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+		         MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+		         memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+		      } else {
+		         memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+		      }
+		      map.put("memberId", memberId);
+		      
+		      System.out.println("좋아요 map안 요소들:"+map);
+		      
+			
+			int likeCheck;
+			int affected;
+			
+			
+				
+				likeCheck = courseService.likeCheck(map);
+				
+				if(likeCheck == 0) {//좋아요 등록이 안돼있으면
+					courseService.like(map);
+					courseService.likeCount(map);
+					return affected=0;
+				
+				}//작은 if
+				else {//likeCheck 결과 값이 1일떄 (이미 좋아요가 등록이 돼있을때)
+					courseService.unLike(map);
+					courseService.likeCount(map);
+					
+					return affected=1;
+				
+				}//작은 else
+	
+		}///courseLike
+		
 }
