@@ -487,7 +487,6 @@
 								console.log("로그인 후 결제 완료하고 리뷰 작성한 아이디");
 								$('#reviewModal').modal({backdrop: 'static'}) ;
 								$('#reviewModal').modal('show');
-								$('#content').text(data.reviewContent);
 								$('input[id="'+data.star+'"]').each(function() {
     							$(this).prop('checked', true);
     							

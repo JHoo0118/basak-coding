@@ -16,13 +16,13 @@ public class QuestionDTO {
 	private Integer questionId;
 	private Integer memberId;
 	private Integer courseId;
-	private String name;
 	private String title;
 	private String content;
 	private Date createdAt;
 	private int likeCount;
 	private int commentCount;
 	
+	private String name;
 	private String userName;
 	private String courseTitle;
 	private String questionTitle;
@@ -30,7 +30,7 @@ public class QuestionDTO {
 	private long updateDays;
 	private long updateHours;
 	
-	List<CommentDTO> comments = new ArrayList<CommentDTO>();
+
 
 
 

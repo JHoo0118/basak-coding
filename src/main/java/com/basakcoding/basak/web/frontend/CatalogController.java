@@ -151,7 +151,8 @@ public class CatalogController {
 		
 		map.put("star",star);
 		
-
+		
+		
 		model.addAttribute("course",map);
 		
 		model.addAttribute("reviewList",map1);
