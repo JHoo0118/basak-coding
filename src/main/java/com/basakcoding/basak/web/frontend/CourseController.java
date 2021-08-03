@@ -170,6 +170,13 @@ public class CourseController {
 		}
 		
 		
+		
+			
+		System.out.println("questionList:"+questionList);
+		
+		
+		
+		
 		model.addAttribute("courseId",courseId);
 		model.addAttribute("questionList", questionList);
 		model.addAttribute("cssFileList", cssFileList);
@@ -326,9 +333,8 @@ public class CourseController {
 		return Integer.toString(result);
 		
 	}
-	
-	
-	
+
+
 	   //질문 등록하기
 	   @PostMapping("/newQuestion.do")
 	   @ResponseBody
@@ -345,7 +351,7 @@ public class CourseController {
 	      int result= courseService.newQuestion(map);
 	      return result;
 	   }
-	   
+
 	 //답변 등록하기
 	   @PostMapping("/newComment.do")
 	   @ResponseBody
@@ -452,5 +458,6 @@ public class CourseController {
 	      return questionDetails;
 		     
 	   }
+
 
 }

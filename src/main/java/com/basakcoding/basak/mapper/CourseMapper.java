@@ -95,4 +95,5 @@ public interface CourseMapper {
 
 	//강의 질문 상세보기
 	Map questionDetails(String questionId);
+
 }
