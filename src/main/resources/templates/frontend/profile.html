@@ -251,11 +251,11 @@
                               class="button button--rounded button--sm button--orange editButton">수정하기</button>
                         </div>
                      </div>
-                     <div class="col-md-6 edit__password">
+                     <div class="col-md-6 edit__password" th:if="${clientName.equals('Email')}">
                         <div class="form-group form__group p-0 position-relative">
                            <div class="p-0">
                               <label class="labe__text">비밀번호 변경</label>
-                              <input id="userpass" oninput="passwordedit()" type="password" autocomplete="off"
+                              <input th:disabled="${clientName.equals('Google') || clientName.equals('Kakao')}" id="userpass" oninput="passwordedit()" type="password" autocomplete="off"
                                  class="form-control form__input input__payment input__payment--border"
                                  placeholder="현재 비밀번호를 입력해 주세요" name="password" />
                            </div>
@@ -279,9 +279,9 @@
                         <div class="payment__state col-sm-2">
                            <div class="state__upper">
                               <span>[[${myPayments.PAYMENT_STATE}]]</span></div>
-                           <div class="state__lower">
-                              <h4>주문번호</h4>
-                              <span id="viewDetails">[[${myPayments.PAYMENT_CODE}]]</span>
+                           <div class="state__lower iine-clamp">
+                              <h4 style="text-align:center;">주문번호</h4>
+                              <span class="iine-clamp" id="viewDetails">[[${myPayments.PAYMENT_CODE}]]</span>
                            </div>
                         </div>
                         <div class="payment__body col-sm-8">

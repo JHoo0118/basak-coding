@@ -82,5 +82,22 @@ public class AndroidCourseService {
 	public int updateSeen(Map params) {
 		return androidCourseMapper.updateSeen(params);
 	}
+
+
+	public int alreadyPayment(Map params) {
+		return androidCourseMapper.alreadyPayment(params);
+	}
+
+	
+	// 결제하기
+	public int insertPayment(Map<String, String> map) {
+		return androidCourseMapper.insertPayment(map);
+	}
+
+
+	// 결제내역
+	public Map paymentResult(Map<String, String> map) {
+		return androidCourseMapper.paymentResult(map);
+	}
 	
 }

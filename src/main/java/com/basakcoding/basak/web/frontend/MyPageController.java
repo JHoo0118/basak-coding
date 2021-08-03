@@ -133,6 +133,12 @@ public class MyPageController {
    @GetMapping("/profile")
    public String profile(@RequestParam(required = false, defaultValue = "1") int nowPage,@RequestParam (required = false, defaultValue = "1")int where,Model model, Authentication auth) {
       userInfo(model, auth);
+      if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+          MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+          model.addAttribute("clientName", oauth2User.getClientName());
+      } else {
+    	  model.addAttribute("clientName", "Email");
+      }
       // 내결제
       int userId = (int) model.getAttribute("userId");
       ListPagingData listPayment = memberService.myPayment(userId,nowPage,where);
