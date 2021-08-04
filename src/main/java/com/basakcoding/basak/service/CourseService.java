@@ -170,6 +170,16 @@ public class CourseService {
 	public int likeCount(Map map) {
 		return courseMapper.likeCount(map);
 	}
+
+	public int commentCount(String questionId) {
+
+		return courseMapper.commentCount(questionId);
+	}
+
+	public String totalCommentCount(String questionId) {
+		
+		return courseMapper.totalCommentCount(questionId);
+	}
 	
 	
 	

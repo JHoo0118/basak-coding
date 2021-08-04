@@ -315,9 +315,9 @@
 	<!-- 강의 질문 상세보기 -->
 	<select id="questionDetails" parameterType="String" resultType="Map">
 		select m.avatar,
-		m.username,q.title,q.created_at,q.like_count,q.comment_count,to_char(q.content)question_content
-		from question q join members m on m.member_id=q.member_id
-		where q.question_id=#{questionId}
+      m.username,q.title,q.created_at,q.like_count,q.comment_count,to_char(q.content)question_content
+      from question q join members m on m.member_id=q.member_id
+      where q.question_id=#{questionId}
 	</select>
 	
 	
@@ -357,6 +357,20 @@
 	WHERE QUESTION_ID=#{questionId} 
 	
 	</update>
-
+	
+	<!--강의하기 질문별 댓글 개수 -->
+	<update  id = "commentCount" parameterType="String">
+	UPDATE QUESTION
+	SET comment_count = comment_count+1 
+	WHERE QUESTION_ID=#{questionId} 
+	</update>
+	
+	<!-- 강의 질문별 총 댓글수 -->
+	<select id="totalCommentCount" parameterType="String" resultType="String">
+	SELECT comment_count 
+	FROM Question
+	WHERE question_id=#{questionId} 
+	</select>
+	
 
 </mapper>
