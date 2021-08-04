@@ -102,6 +102,10 @@ public interface CourseMapper {
 	int like(Map map);
 	int unLike(Map map);
 	int likeCount(Map map);
+
+	int commentCount(String questionId);
+
+	String totalCommentCount(String questionId);
 	
 
 }

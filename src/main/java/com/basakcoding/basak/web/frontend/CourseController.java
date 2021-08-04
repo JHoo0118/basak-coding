@@ -152,7 +152,11 @@ public class CourseController {
 		List<QuestionDTO> questionList = courseService.questionList(courseId);
 		//System.out.println("qestionList:"+questionList);
 		for(QuestionDTO questionDate : questionList) {
+			
+			questionDate.setMemberPath(questionDate.getMemberAvatarImagePath());
+			
 			/*
+			
 			Date today = new Date();
 			SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
 			Calendar baseTime = new GregorianCalendar();
@@ -331,27 +335,33 @@ public class CourseController {
 	}
 
 
-	   //질문 등록하기
-	   @PostMapping("/newQuestion.do")
-	   @ResponseBody
-	   public int newQuestion(@RequestParam Map map,Authentication auth) {
-	      String memberId = null;
-	      if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-	         MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
-	         memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
-	      } else {
-	         memberId = ((UserDetails) auth.getPrincipal()).getUsername();
-	      }
-	      map.put("memberId", memberId);
-	      //System.out.println("map안 요소들:"+map);
-	      int result= courseService.newQuestion(map);
-	      return result;
-	   }
-
+	//질문 등록하기
+    @PostMapping("/newQuestion.do")
+    @ResponseBody
+    public Map newQuestion(@RequestParam Map map,Authentication auth) {
+       String memberId = null;
+       if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+          MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+          memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+       } else {
+          memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+       }
+       map.put("memberId", memberId);
+       int result= courseService.newQuestion(map);
+       //강의별 질문리스트
+       String courseId = map.get("courseId").toString();
+       List<QuestionDTO> questionList = courseService.questionList(courseId);
+       for (QuestionDTO dto : questionList) {
+          dto.setMemberPath(dto.getMemberAvatarImagePath());
+     }
+       map.put("questionLists", questionList);
+       map.put("result", result);
+       return map;
+    }
 	 //답변 등록하기
 	   @PostMapping("/newComment.do")
 	   @ResponseBody
-	   public int newComment(@RequestParam Map map,Authentication auth) {
+	   public Map newComment(@RequestParam Map map,Authentication auth) {
 	      String memberId = null;
 	      if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
 	         MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
@@ -360,17 +370,21 @@ public class CourseController {
 	         memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 	      }
 	      map.put("memberId", memberId);
+	      String questionId = map.get("questionId").toString();
 	      
-	     
 	      
-	      System.out.println("map안 요소들:"+map);
-	      int result= courseService.newComment(map);
-	      return result;
+	      int commentCount = courseService.commentCount(questionId);
+	      if (commentCount==1 ) {
+	    	  int result= courseService.newComment(map);
+	    	  map.put("result", result);
+	      }
+	      
+	      //촛댕글수 쿼리문 실행
+	      String totalCommentCount= courseService.totalCommentCount(questionId);
+	      map.put("totalCommentCount", totalCommentCount);
+	      
+	      return map;
 	   }
-	   
-	
-	   
-	   
 	   
 	   //질문 수정하기 전 값 뿌려주기
 	   @PostMapping("/clickUpdate.do")
@@ -419,53 +433,56 @@ public class CourseController {
 	   
 	   
 	   
-	   //질문 상세보기 
-	   @PostMapping("/course/questionSelect")
-	   @ResponseBody
-	   public Map questionSelect(@RequestBody Map map, Authentication auth,Model model) {
-		  
-		  String memberId = null;
-	      if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
-	         MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
-	         memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
-	      } else {
-	         memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+	 //질문 상세보기 
+	      @PostMapping("/course/questionSelect")
+	      @ResponseBody
+	      public Map questionSelect(@RequestBody Map map, Authentication auth,Model model) {
+	        
+	        String memberId = null;
+	         if (auth.getPrincipal().toString().contains("MemberOAuth2User")) {
+	            MemberOAuth2User oauth2User = (MemberOAuth2User) auth.getPrincipal();
+	            memberId = Integer.toString(memberService.getMemberByEmail(oauth2User.getEmail()).getMemberId());
+	         } else {
+	            memberId = ((UserDetails) auth.getPrincipal()).getUsername();
+	         }
+	         map.put("memberId", memberId);
+	         String questionId = map.get("questionId").toString();
+	         
+	         String path;
+	         // 질문
+	         Map questionDetails = courseService.questionDetails(questionId);
+	         
+	         String avatar = null;
+	         if (questionDetails.containsKey("AVATAR")) {
+		         avatar = questionDetails.get("AVATAR").toString();
+	         }
+	        
+	        
+	         String memberPath=null;
+	         if(avatar==null) {
+	            memberPath="/images/image4.jpg";
+	         }
+	         else memberPath ="/upload/member/" + memberId + "/" + avatar;
+	         questionDetails.put("memberPath", memberPath);
+	       
+	         
+	         //질문 클릭시 질문당 좋아요 확인
+	         int likeCheck = courseService.likeCheck(map);
+	         questionDetails.put("likeCheck", likeCheck);
+	         model.addAttribute("likeCheck",likeCheck);
+	         // 댓글
+	         List<MyCommentDTO> commentLists = memberService.commentList(questionId);
+	        
+	         for (MyCommentDTO dto : commentLists) {
+	            dto.setAdminPath(dto.getAdminAvatarImagePath());
+	            path=dto.getMemberAvatarImagePath();
+	            dto.setMemberPath(path);
+	         }
+	         questionDetails.put("commentList", commentLists);
+	         
+	         return questionDetails;
+	           
 	      }
-	      map.put("memberId", memberId);
-	      System.out.println("질문 클릭시:map안 요소:"+map);
-	      
-	   
-	      
-	    
-	      String questionId = map.get("questionId").toString();
-	      //System.out.println(questionId);
-	      
-	      String path;
-	      // 질문
-	      Map questionDetails = courseService.questionDetails(questionId);
-	      //질문 클릭시 질문당 좋아요 확인
-	      int likeCheck = courseService.likeCheck(map);
-	      questionDetails.put("likeCheck", likeCheck);
-	      
-	      model.addAttribute("likeCheck",likeCheck);
-	      
-	      System.out.println("questionDetails"+ questionDetails);
-	      
-	      // 댓글
-	      List<MyCommentDTO> commentLists = memberService.commentList(questionId);
-	      //System.out.println(commentLists);
-	     
-	      for (MyCommentDTO dto : commentLists) {
-	         dto.setAdminPath(dto.getAdminAvatarImagePath());
-	         path=dto.getMemberAvatarImagePath();
-	         dto.setMemberPath(path);
-	      }
-	      questionDetails.put("commentList", commentLists);
-	      
-	      
-	      return questionDetails;
-		     
-	   }
 
 	 //좋아요 안좋아요
 		@PostMapping("/course/count_like")
@@ -479,6 +496,8 @@ public class CourseController {
 		         memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 		      }
 		      map.put("memberId", memberId);
+		     // String questionId = map.get("questionId").toString();
+		     //map.put("questionId", questionId); 		      
 		      
 		      System.out.println("좋아요 map안 요소들:"+map);
 		      
@@ -486,23 +505,22 @@ public class CourseController {
 			int likeCheck;
 			int affected;
 			
+			likeCheck = courseService.likeCheck(map);
 			
+			if(likeCheck == 0) {//좋아요 등록이 안돼있으면
+				courseService.like(map);
+				courseService.likeCount(map);
+				 
+				return  affected=0;
+			
+			}//작은 if
+			else {//likeCheck 결과 값이 1일떄 (이미 좋아요가 등록이 돼있을때)
+				courseService.unLike(map);
+				courseService.likeCount(map);
 				
-				likeCheck = courseService.likeCheck(map);
-				
-				if(likeCheck == 0) {//좋아요 등록이 안돼있으면
-					courseService.like(map);
-					courseService.likeCount(map);
-					return affected=0;
-				
-				}//작은 if
-				else {//likeCheck 결과 값이 1일떄 (이미 좋아요가 등록이 돼있을때)
-					courseService.unLike(map);
-					courseService.likeCount(map);
-					
-					return affected=1;
-				
-				}//작은 else
+				return  affected=1;
+			
+			}//작은 else
 	
 		}///courseLike
 		
