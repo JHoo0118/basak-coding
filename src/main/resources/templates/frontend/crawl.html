@@ -27,9 +27,9 @@
             <h1 class="catalog__header">Youtube Courses</h1>
             <hr class="catalog__hr" />
             <div class="mb-5">
-	            <button type="button" id="defaultCrawling" onclick="crawling(this)" class="d-inline-block crawlButton button--square mr-2">자바스크립트</button>
-	            <button type="button" onclick="crawling(this)" class="d-inline-block crawlButton button--square mr-2">파이썬</button>
-	            <button type="button" onclick="crawling(this)" class="d-inline-block crawlButton button--square mr-2">자바</button>
+	            <button type="button" id="defaultCrawling" onclick="crawling(this)" class="d-inline-block crawlButton button--square mr-2">Javascript</button>
+	            <button type="button" onclick="crawling(this)" class="d-inline-block crawlButton button--square mr-2">Python</button>
+	            <button type="button" onclick="crawling(this)" class="d-inline-block crawlButton button--square mr-2">Java</button>
 	            <button type="button" onclick="crawling(this)" class="d-inline-block crawlButton button--square">C++</button>
             </div>
 
@@ -39,7 +39,7 @@
     </section>
     <!-- lecture 끝 -->
     <script>
-    	const baseUri = "https://e302479be24d.ngrok.io"
+    	const baseUri = "https://4d329dfe80a8.ngrok.io"
     	const youtubeCourses = document.getElementById("youtubeCourses");
     	const loadingCricle = document.querySelector(".loading-circle");
     	crawling(document.getElementById("defaultCrawling"));
@@ -64,15 +64,12 @@
     							<li class="col-lg-4 col-md-6 col-sm-6 lecture__item">
     	                    		<div style="position: relative;"  class="lecture-wrapper">
     									<a href="${element['url']}">
-    			                            <div class="card lecture">
+    			                            <div class="card lecture" style="min-height: 100px;">
     			                                <img src='${element['thumnail']}' class="card-img-top lecture__thumbnail"  alt="thumbnail" />
-    			                                <div class="card-body">
+    			                                <div class="card-body" style="height: 100px;">
     			                                    <h5 class="card-title lecture__title iine-clamp">
     			                                    	${element['title']}
     			                                    </h5>
-    			                                    <p class="card-text iine-clamp iine-clamp--4 lecture__text d-flex flex-columns justify-space-between">
-    														강의 설명 
-    			                                   </p>
     			                                </div>
     			                            </div>
     			                        </a>

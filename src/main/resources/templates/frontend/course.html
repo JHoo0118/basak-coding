@@ -29,7 +29,10 @@
 		<div class="container-fluid container--main d-flex align-items-center" style="max-width: 100%;">
 			<a class="navbar__brand" th:href="@{/}">BASAK CODING</a>
 			<div class="navbar__wrapper">
-				<a class="navbar__item" th:href="@{/catalog}">카탈로그</a>
+				<div>
+			        <a class="navbar__item" th:href="@{/catalog}">카탈로그</a>
+			        <a class="navbar__item" th:href="@{/crawl}">유튜브</a>
+		        </div>
 				<ul class="navbar__menu">
 					<!-- 로그인 전 -->
 					<li sec:authorize="isAnonymous()" th:if="${session.id == null}" class="navbar__item">
@@ -495,7 +498,7 @@
 					</div>
 				</div>
 				<form class="address-container d-flex pr-2">
-					<button type="button" class="mr-2 btn btn-link">
+					<button id="refreshButton" type="button" class="mr-2 btn btn-link">
 						<svg width="14" height="14" viewBox="0 0 14 14" class="d-block">
 							<path fill="#919191" fill-rule="evenodd"
 								d="M7 0c1.9 0 3.654.763 4.943 2.057L13.3.7v4.2H9.1l1.854-1.854C9.924 2.01 8.52 1.4 7 1.4 3.912 1.4 1.4 3.913 1.4 7c0 3.088 2.512 5.6 5.6 5.6 3.088 0 5.6-2.512 5.6-5.6H14c0 3.86-3.14 7-7 7s-7-3.14-7-7 3.14-7 7-7">
@@ -583,6 +586,7 @@
 		var myPlayer = videojs("my_video_1");
 		var seenCheck = false;
 		var courseId="[[${courseId}]]";
+		var savedCode = false;
 		
 		// 비디오 본 것 처리
 		myPlayer.on('timeupdate', function () {
@@ -638,6 +642,20 @@
 			$("#miniBrowser").draggable({
 				containment: 'parent'
 			});
+		});
+		// 미니브라우저 새로고침
+		const refreshButton = document.getElementById("refreshButton");
+		refreshButton.addEventListener('click', function() {
+			
+			saveCodeForCSS();
+			
+			/*
+			editor.onDidChangeModelContent(() => {
+				if (FILE_EXTENSION == 'html')
+					editorPreview.body.innerHTML = editor.getValue();
+			});
+			*/
+			
 		});
 
 		// 미니브라우저 열기
@@ -1206,6 +1224,30 @@
 					"videoId": "[[${currVideo.videoId}]]",
 					"currFilename": FILENAME,
 					"currFileContent": editor.getValue(),
+				}
+			});
+		}
+		
+		function saveCodeForCSS() {
+			$.post({
+				// 나중에 videoId로 고쳐야함
+				url: "[[@{/class/save-code}]]",
+				data: {
+					"videoId": "[[${currVideo.videoId}]]",
+					"currFilename": FILENAME,
+					"currFileContent": editor.getValue(),
+				},
+				success: function() {
+					editorPreview.head.innerHTML = '';
+					CSS_LINKS.forEach((linkURL) => {
+
+						
+						const link = document.createElement('link');
+						
+						link.href = linkURL;
+						link.rel = 'stylesheet';
+						editorPreview.head.appendChild(link);
+					});
 				}
 			});
 		}

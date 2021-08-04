@@ -60,7 +60,7 @@
 	
 	<!-- 메인 섹션 끝 -->
 	<script>
-		const chatbotUri = "https://e302479be24d.ngrok.io"
+		const chatbotUri = "https://4d329dfe80a8.ngrok.io"
 		const chatbotIcon = document.querySelector(".chatbot__icon");
 		const chatbotWrapper = document.querySelector(".chatbot__wrapper");
 		chatbotIcon.addEventListener("click", function() {
@@ -83,7 +83,7 @@
 		    //flask서버로부터 응답을 받으면 receiveResponse콜백함수가 호출됨
 		    function receiveResponse(data) {//data는 flask로부터 받은 응답 {'message':'다이얼로그플로우가 보내준값'}
 		      //chat-container에 bot의 응답 추가
-		      $('.chat-container').append('<div class="chat-message bot-message">'+data.message+'</div>')
+		      $('.chat-container').append('<div class="chat-message bot-message">'+data.message.replaceAll('\n', '<br/>')+'</div>')
 		      //스크롤바 아래로
 		      $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
 		
