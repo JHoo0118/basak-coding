@@ -197,8 +197,7 @@ public class AuthController {
               msg.setContent(content, "text/html;charset=UTF-8");    
               Transport.send(msg);
           } catch(Exception e){
-              e.printStackTrace();             
-                 System.out.println("오류입니다.");         
+              e.printStackTrace();     
           }
           return "frontend/signupConfirm";
       }///if
@@ -274,8 +273,7 @@ public class AuthController {
             msg.setContent(content, "text/html;charset=UTF-8");    
             Transport.send(msg);
         } catch(Exception e){
-            e.printStackTrace();             
-               System.out.println("오류입니다.");        
+            e.printStackTrace();       
         }
         return "frontend/signin";  
          }//if 

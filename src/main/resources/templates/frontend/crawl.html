@@ -30,7 +30,7 @@
 	            <button type="button" id="defaultCrawling" onclick="crawling(this)" class="d-inline-block crawlButton button--square mr-2">Javascript</button>
 	            <button type="button" onclick="crawling(this)" class="d-inline-block crawlButton button--square mr-2">Python</button>
 	            <button type="button" onclick="crawling(this)" class="d-inline-block crawlButton button--square mr-2">Java</button>
-	            <button type="button" onclick="crawling(this)" class="d-inline-block crawlButton button--square">C++</button>
+	            <button type="button" onclick="crawling(this)" class="d-inline-block crawlButton button--square">HTML</button>
             </div>
 
             <ul id="youtubeCourses" class="row p-0" style="list-style: none;"></ul>
@@ -39,7 +39,7 @@
     </section>
     <!-- lecture 끝 -->
     <script>
-    	const baseUri = "https://4d329dfe80a8.ngrok.io"
+    	const baseUri = "https://8220cc5adc0b.ngrok.io"
     	const youtubeCourses = document.getElementById("youtubeCourses");
     	const loadingCricle = document.querySelector(".loading-circle");
     	crawling(document.getElementById("defaultCrawling"));
@@ -66,10 +66,14 @@
     									<a href="${element['url']}">
     			                            <div class="card lecture" style="min-height: 100px;">
     			                                <img src='${element['thumnail']}' class="card-img-top lecture__thumbnail"  alt="thumbnail" />
-    			                                <div class="card-body" style="height: 100px;">
+    			                                <div class="card-body" style="height: 72px;">
     			                                    <h5 class="card-title lecture__title iine-clamp">
     			                                    	${element['title']}
     			                                    </h5>
+    			                                    <div class="d-flex justify-content-between align-items-center" style="color:#212529; opacity:0.8">
+    			                                    	<span>${element['name']}</span>
+    			                                    	<span>${element['time']}</span>
+    			                                    </div>
     			                                </div>
     			                            </div>
     			                        </a>
