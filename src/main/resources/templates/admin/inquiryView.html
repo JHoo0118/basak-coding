@@ -49,13 +49,13 @@
 			<div class="row">
 				<div class="col-md-offset-2 col-md-8">
 					<!-- .center-block 사용시 해당 블락의 크기를 지정하자 -->
-					<ul id="pillMenu" class="nav nav-pills center-block" style="width: 200px; margin-bottom: 10px">
-						<sec:authentication property="principal.username" var="username" />
-						<li><a th:href="@{/admin/inquiry/management/form}" class="btn btn-success">답변</a></li>
+					<ul id="pillMenu" class="nav nav-pills center-block d-flex w-100" style="margin-bottom: 10px">
+						<li th:if="${isAnswered < 1}"><a th:href="@{/admin/inquiry/management/form(no=${param.no})}" class="btn btn-success mr-3">답변</a></li>
 						<br>
-						<li><a href="javascript:isDelete();" class="btn btn-success">삭제</a></li>
+						<li><a href="javascript:isDelete();" class="btn btn-success mr-3">삭제</a></li>
 						<br>
 						<li><a th:href="@{/admin/inquiry/management}" class="btn btn-success">목록</a></li>
+						
 					</ul>
 				</div>
 			</div>

@@ -16,5 +16,6 @@ public class InquiryDTO {
 	private String Title;
 	private String classification;
 	private Date createdAt;
+	private int isAnswered;
+
 }
-	

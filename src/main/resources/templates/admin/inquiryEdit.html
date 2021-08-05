@@ -22,43 +22,25 @@
 	
 	
 	<section class="col-xl-10 col-md-9 ml-auto courseForm--section">
-		<h2 class="ml-3"><i class="fas fa-pen" style="color:#eb2f64"></i>&nbsp;답변 등록</h2>
-	
-	
-	
-	
-			<div class="nav nav-tabs mx-3" style="border-bottom-color: #333" id="nav-tab" role="tablist" >
-				<a class="nav-link active form__tab" id="nav-tab-1" data-toggle="tab" href="#createCourseOne">강의정보</a>				
-			</div>	
-
-						
+		<h2><i class="fas fa-pen" style="color:#eb2f64"></i>&nbsp;답변 등록</h2>
+		<form class="form-group row" th:action="@{/admin/inquiry/management/form/save}" method="post">
+			<input name="inquiryId" th:value="${inquiryId}" hidden/>
+			<div class="col-12 p-0">
+				<input type="text" th:value="${title}" class="form-control py-3 post-form__title py-3" placeholder="제목" name="title">
+			</div>
+			<small class="error" style="z-index:10;"></small>
 					
-						<div class="form-group row position-relative">
-							<div class="col-12">
-								<input type="text" th:value="${course_title}" class="form-control py-3 post-form__title py-3" placeholder="제목" name="courseTitle">
-							</div>
-							<small class="error" style="z-index:10;"></small>
-						</div>
-		
+			<div class="col-sm-12 p-0">
+				<textarea id="summernote" th:value="${content}" class="form-control py-3" name="content" rows="15" placeholder="내용을 입력해주세요"></textarea>
+			</div> 
+			<small></small>
+			
+			<div class="btn-group d-flex justify-content-end mt-3 w-100">
+				<button th:text="등록" type="submit" class="button button--purple mr-2"></button>
+				<button type="button" class="button button--light" onclick="javascript:history.back()">취소</button>
+			</div>
+		</form>
 						
-						
-						<div class="form-group row pb-2 position-relative">
-							<div class="col-sm-12">
-								<textarea id="summernote" th:value="${description}" class="form-control py-3" name="description" rows="15" placeholder="내용을 입력해주세요"></textarea>
-							</div> 
-							<small></small>
-						</div>
-						
-						
-						
-						<form class="form-group row" th:action="@{/admin/inquiry/management/form/save}" method="post">
-							<div class="col-sm-12">
-								<div class="btn-group d-flex justify-content-end mb-3" role="group">
-									<button th:text="등록" type="submit" class="button button--purple mr-2"></button>
-									<button type="button" class="button button--light" onclick="javascript:history.back()">취소</button>
-								</div>
-							</div>
-						</form>
 
 	</section>
 	

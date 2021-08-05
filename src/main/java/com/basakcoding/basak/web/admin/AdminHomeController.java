@@ -48,7 +48,9 @@ public class AdminHomeController {
 		
 		
 		if(adminService.loginAdmin(map)==1){ 
-			session.setAttribute("loginEmail",map.get("email"));
+			AdminDTO admin = adminService.getAdminByEmail(map.get("email").toString());
+			session.setAttribute("adminId",admin.getAdminId());
+			session.setAttribute("loginEmail",admin.getEmail());
             return "redirect:/admin";
         }
 		else{

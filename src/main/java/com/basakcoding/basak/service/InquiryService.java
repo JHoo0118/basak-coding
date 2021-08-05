@@ -42,26 +42,36 @@ public class InquiryService {
 	public ClassificationDTO getInquiryById(String clId) {
 		return inquiryMapper.getInquiryById(clId);
 	
-	}
+	}//2
 
 	
 	public int createInquiry(Map map) {
 		return inquiryMapper.createInquiry(map);
-	}
+	}//3
 
 	public int updateInquiry(Map map) {
 		return inquiryMapper.updateInquiry(map);
-	}
+	}//4
 
 	public int deleteMultpleInquiry(Map map) {
 		return inquiryMapper.deleteMultpleInquiry(map);
-	}
+	}//5
 
 
 	public List<ClassificationDTO> selectList() {
 		return inquiryMapper.selectList();
+	}//1
+	
+	
+	public int isAnswered(String inquiryId) {
+		return inquiryMapper.isAnswered(inquiryId);
 	}
 
-
+	public int createAnswer(Map map) {
+		return inquiryMapper.createAnswer(map);		
+	}
 	
+	public int updateAnswer(Map map) {
+		return inquiryMapper.updateAnswer(map);		
+	}
 }

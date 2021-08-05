@@ -50,7 +50,7 @@
 													<th>제목</th>
 													<th>작성자</th>
 													<th>작성 날짜</th>
-													<th>답변여부</th>
+													<th>답변여부</th>													
 												</tr>
 											</thead>
 											<tbody>
@@ -63,10 +63,12 @@
 													<td>[[${i.index+1}]]</td>
 													<td>[[${inquiry.classification}]]</td>
 													<td><a
-															th:href="@{/admin/inquiry/management/view(no=${inquiry.inquiryId})}">[[${inquiry.Title}]]</a>
+															th:href="@{/admin/inquiry/management/view(no=${inquiry.inquiryId},isAnswered=${inquiry.isAnswered})}">[[${inquiry.Title}]]</a>
 													</td>
 													<td>[[${inquiry.userName}]]</td>
 													<td>[[${inquiry.createdAt}]]</td>
+													<td th:if="${inquiry.isAnswered} == 0">미답변</td>
+													<td th:if="${inquiry.isAnswered} >= 1">답변 완료</td>
 												</tr>
 											</tbody>
 										</table>

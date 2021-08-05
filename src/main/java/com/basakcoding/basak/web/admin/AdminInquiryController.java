@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +36,11 @@ public class AdminInquiryController {
 	@GetMapping("/management")
 	public String inquiryList(Model model) {
 		List<InquiryDTO> listInquirys = inquiryService.inquirySelect();
+		for (InquiryDTO inquiry : listInquirys) {
+			int result = inquiryService.isAnswered(Integer.toString(inquiry.getInquiryId()));
+			inquiry.setIsAnswered(result);
+		}
+		
 		System.out.println(listInquirys);
 		model.addAttribute("listInquirys", listInquirys);
 		model.addAttribute("title", "문의 관리");
@@ -45,6 +52,7 @@ public class AdminInquiryController {
 	@RequestMapping("/management/view")
 	public String inquiryView(@RequestParam Map map,Model model) {
 		InquiryDTO inquiry = inquiryService.selectOne(map);
+		model.addAttribute("isAnswered", Integer.parseInt(map.get("isAnswered").toString()));
 		model.addAttribute("inquiry", inquiry);
 		if(map.get("page") != null) {
 			model.addAttribute("title", "문의 관리");
@@ -121,36 +129,41 @@ public class AdminInquiryController {
 			if ("edit".equals(action)) {
 				redirectAttributes.addAttribute("clId", map.get("target").toString());
 				return "redirect:/admin/inquiry/category/form";
-			} else {
+			} 
+			else {
 				map.put("target", target);
 				inquiryService.deleteMultpleInquiry(map);
 				redirectAttributes.addFlashAttribute("message", "카테고리가 삭제되었습니다.");
 				return "redirect:/admin/inquiry/category/management";
 			}
 		}	
-	
 		@GetMapping("/management/form")
 		public String memberForm(@RequestParam Map map, Model model) {
-//
-//			
-//			List<CategoryDTO> listCategories = courseService.categoryList();
-//			List<AdminDTO> listAdmin = AdminService.getAdminList();
-//			Map course = new HashMap<>();
-//			model.addAttribute("listAdmin", listAdmin);
-//			model.addAttribute("listCategories", listCategories);
-//			model.addAttribute("course", course);
-//			model.addAttribute("title", "강의 관리");
+
+			model.addAttribute("title", "문의 관리");
+			model.addAttribute("inquiryId", map.get("no"));
 			return "admin/inquiryEdit";
 		}
 		
 		
 		@PostMapping("/management/form/save")
-		public String memberForm2(@RequestParam Map map, Model model) {
-
-			return "admin/inquiryManagement";
+		public String memberForm2(@RequestParam Map map, HttpServletRequest res ,Model model, RedirectAttributes redirectAttributes) {
+		System.out.println(map);
+		map.put("adminId", res.getSession().getAttribute("adminId"));
+		
+		
+		if (map.get("inquiryId").equals("")) {
+			inquiryService.createAnswer(map);
+			redirectAttributes.addFlashAttribute("message", "문의내용이 등록되었습니다.");
+		}
+		else {
+			inquiryService.updateAnswer(map);
+			redirectAttributes.addFlashAttribute("message", "문의내용이 수정되었습니다.");
+		}
+			
+			return "redirect:/admin/inquiry/management";
 		}
 
-	
-	
-	
+
+		
 }//class

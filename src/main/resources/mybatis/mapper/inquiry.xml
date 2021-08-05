@@ -64,4 +64,17 @@
 		</foreach>
 	</delete>
 	
+	<select id="isAnswered" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM answer a JOIN inquiry i on i.inquiry_id = a.inquiry_id 
+		WHERE a.inquiry_id = #{inquiryId}
+	</select>
+	<insert id="createAnswer" parameterType="Map">
+		INSERT INTO answer VALUES(seq_answer.NEXTVAL, #{inquiryId}, #{adminId}, #{title}, #{content}, DEFAULT)
+	</insert>
+	
+	<insert id="updateAnswer" parameterType="Map">
+		INSERT INTO answer VALUES(seq_answer.NEXTVAL, #{inquiryId}, #{adminId}, #{title}, #{content}, DEFAULT)
+	</insert>
+	
+	
 </mapper>

@@ -35,8 +35,15 @@ public interface InquiryMapper {
 	public int deleteMultpleInquiry(Map map);
 	
 	public List<ClassificationDTO> selectList();
+	
+	
+	
+	public int isAnswered(String inquiryId);
+	public int createAnswer(Map map);
+	
+	public int updateAnswer(Map map);
+	
+	
 
-	
-	
 
 }
