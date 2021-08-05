@@ -180,6 +180,10 @@ public class CourseService {
 		
 		return courseMapper.totalCommentCount(questionId);
 	}
+
+	public MyCommentDTO getComment(Map map) {
+		return courseMapper.getComment(map);
+	}
 	
 	
 	

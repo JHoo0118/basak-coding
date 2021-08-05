@@ -236,15 +236,13 @@
 	
 
 	<!-- 질문별 댓글(COMMENTS 뿌려주기 -->
-	<select id="commentsList" parameterType="String" resultType="MyCommentDTO">
-		SELECT c.*,name,username
-		FROM COMMENTS c
-		FULL JOIN MEMBERS m
-		ON m.MEMBER_ID=c.MEMBER_ID
-		FULL JOIN ADMINS a
-		ON a.ADMIN_ID=c.ADMIN_ID
-		WHERE QUESTION_ID = #{quetionId}
-		ORDER BY COMMENT_ID
+	<select id="getComment" parameterType="Map" resultType="MyCommentDTO">
+		select c.created_at, c.content, a.admin_id, m.member_id, 
+		m.username,m.avatar memavatar,a.name,a.avatar
+		from comments c full join members m on c.member_id=m.member_id
+		full join admins a on c.admin_id=a.admin_id
+		where question_id=#{questionId} AND
+		c.comment_id = #{commentId}
 	</select>
 	
 	
@@ -290,9 +288,11 @@
 	
 	<!-- 강의 질문 등록하기 -->
    <insert id="newComment" parameterType="Map">
+      <selectKey keyProperty="commentId" resultType="int" order="BEFORE">
+			SELECT seq_comments.NEXTVAL FROM dual
+	  </selectKey>
       INSERT INTO comments 
-      VALUES(seq_comments.NEXTVAL,#{questionId},null,#{memberId},#{commentContent},DEFAULT)
-   			  
+      VALUES(#{commentId} ,#{questionId},null,#{memberId},#{commentContent},DEFAULT)
    </insert>
    
    

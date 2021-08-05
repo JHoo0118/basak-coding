@@ -12,6 +12,7 @@ import com.basakcoding.basak.service.CourseDTO;
 import com.basakcoding.basak.service.CurriculumDTO;
 import com.basakcoding.basak.service.FAQDTO;
 import com.basakcoding.basak.service.FileDTO;
+import com.basakcoding.basak.service.MyCommentDTO;
 import com.basakcoding.basak.service.QuestionDTO;
 import com.basakcoding.basak.service.VideoDTO;
 import com.basakcoding.basak.util.ListPagingData;
@@ -106,6 +107,7 @@ public interface CourseMapper {
 	int commentCount(String questionId);
 
 	String totalCommentCount(String questionId);
-	
+
+	MyCommentDTO getComment(Map map);
 
 }
