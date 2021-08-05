@@ -961,28 +961,48 @@
                type: 'post',
                dataType: "json",
                success: function (data) {
+                 
+                 console.log("질문 등록 data:",data)
                  var commentCount = Number.parseInt(data.totalCommentCount);
                   if (data.result == 1) {	
-                    
                      alert("답글이 작성 됐습니다.");
                      $('#questionCommentFormModal').modal('hide');
 				     $('#commentCount').html('<i class="far fa-comment-dots"></i>' + commentCount);
-
-					commentList.insertAdjacentHTML("afterbegin",
-					`
-						<li class="comment__item">
-	                        <div class="comment__user">
-	                           <img src="/images/user.png" />
-	                           <div class="user__info">
-	                              <h5  style="color: #0fd"></h5>
-	                              <h5  style="color: red"></h5>
-	                              <span>댓글 생성일</span>
-	                           </div>
-	                        </div>
-	                        <p class="qModal__content">댓글 내용 </p>
-	                   </li>
-					`
-					)
+					
+					if (data.myComment.memberId !== null) {
+						commentList.insertAdjacentHTML("afterbegin",
+							`
+								<li class="comment__item">
+			                        <div class="comment__user">
+			                           <img src="${data.myComment.memberPath}" />
+			                           <div class="user__info">
+			                              <h5 style="color: #FFF">${data.myComment.username}</h5>
+			                              <span>${data.myComment.createdAt}</span>
+			                           </div>
+			                        </div>
+			                        <p class="qModal__content">${data.myComment.content}</p>
+			                   </li>
+							`
+						)
+					}
+					else if (data.myComment.adminId !== null) {
+						commentList.insertAdjacentHTML("afterbegin",
+							`
+								<li class="comment__item">
+			                        <div class="comment__user">
+			                           <img src="${data.myComment.adminPath}" />
+			                           <div class="user__info">
+			                              <h5 style="color: #FFF">${data.myComment.name}</h5>
+			                              <span>${data.myComment.createdAt}</span>
+			                           </div>
+			                        </div>
+			                        <p class="qModal__content">${data.myComment.content}</p>
+			                   </li>
+							`
+						)
+					
+					}
+					
                   }
                   
                    if (currentQuestionId != -1) {

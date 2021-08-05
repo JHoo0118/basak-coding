@@ -370,18 +370,41 @@ public class CourseController {
 	         memberId = ((UserDetails) auth.getPrincipal()).getUsername();
 	      }
 	      map.put("memberId", memberId);
+	      
+	      String path;
 	      String questionId = map.get("questionId").toString();
 	      
-	      
+	      //오라클에 댓글 등록
 	      int commentCount = courseService.commentCount(questionId);
+	      
+	      
+	      // 댓글
+          
+       
+	      MyCommentDTO myComment = null;
 	      if (commentCount==1 ) {
 	    	  int result= courseService.newComment(map);
+	    	  myComment = courseService.getComment(map);
 	    	  map.put("result", result);
+	    	  
 	      }
+	      
+	       
+	      	myComment.setAdminPath(myComment.getAdminAvatarImagePath());
+            path=myComment.getMemberAvatarImagePath();
+            myComment.setMemberPath(path);
+	         
+            map.put("myComment", myComment);
+	         
+	      
+	      
+	      
 	      
 	      //촛댕글수 쿼리문 실행
 	      String totalCommentCount= courseService.totalCommentCount(questionId);
 	      map.put("totalCommentCount", totalCommentCount);
+	      
+	      System.out.println("답변 map:"+map);
 	      
 	      return map;
 	   }
@@ -470,6 +493,7 @@ public class CourseController {
 	         int likeCheck = courseService.likeCheck(map);
 	         questionDetails.put("likeCheck", likeCheck);
 	         model.addAttribute("likeCheck",likeCheck);
+	       
 	         // 댓글
 	         List<MyCommentDTO> commentLists = memberService.commentList(questionId);
 	        
